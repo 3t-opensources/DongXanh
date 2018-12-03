@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Feb 24, 2016 9:17:28 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="com.home.model.PromotionProduct" table="promotion_product" catalog="db_promotion" optimistic-lock="version">
+        <id name="id" type="java.lang.Integer">
+            <column name="id" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="product" class="com.home.model.Product" fetch="join">
+            <column name="product_id" not-null="true" />
+        </many-to-one>
+        <many-to-one name="promotion" class="com.home.model.Promotion" fetch="select">
+            <column name="promotion_id" not-null="true" />
+        </many-to-one>
+        <property name="maxQuantity" type="java.lang.Integer">
+            <column name="max_quantity" />
+        </property>
+        <property name="maxPoint" type="java.lang.Integer">
+            <column name="max_point" />
+        </property>
+    </class>
+</hibernate-mapping>

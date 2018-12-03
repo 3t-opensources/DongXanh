@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Apr 22, 2016 10:24:43 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="com.home.model.Statistic" table="statistic" catalog="db_promotion" optimistic-lock="version">
+        <id name="id" type="java.lang.Integer">
+            <column name="id" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="customerByCustomerCodeLevel1" class="com.home.model.Customer" fetch="join">
+            <column name="customer_code_level1" />
+        </many-to-one>
+        <many-to-one name="customerByCustomerCodeLevel2" class="com.home.model.Customer" fetch="join">
+            <column name="customer_code_level2" />
+        </many-to-one>
+        <many-to-one name="invoiceType" class="com.home.model.InvoiceType" fetch="join">
+            <column name="invoice_type_id" />
+        </many-to-one>
+        <many-to-one name="product" class="com.home.model.Product" fetch="join">
+            <column name="product_id" />
+        </many-to-one>
+        <many-to-one name="user" class="com.home.model.User" fetch="join">
+            <column name="user_id" />
+        </many-to-one>
+        <property name="dateReceived" type="date">
+            <column name="date_received" length="0" />
+        </property>
+        <property name="totalBox" type="java.lang.Float">
+            <column name="total_box" />
+        </property>
+        <property name="quantity" type="java.lang.Integer">
+            <column name="quantity" />
+        </property>
+        <property name="total" type="big_decimal">
+            <column name="total" precision="18" />
+        </property>
+    </class>
+</hibernate-mapping>

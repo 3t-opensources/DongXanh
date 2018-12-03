@@ -1,0 +1,276 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Jul 6, 2016 9:26:43 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="com.home.model.Customer" table="customer" catalog="db_promotion" optimistic-lock="version">
+        <id name="id" type="java.lang.Integer">
+            <column name="id" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="customerByCustomer5Level1Id" class="com.home.model.Customer" fetch="select">
+            <column name="customer5_level1_id" />
+        </many-to-one>
+        <many-to-one name="customerByCustomer4Level1Id" class="com.home.model.Customer" fetch="select">
+            <column name="customer4_level1_id" />
+        </many-to-one>
+        <many-to-one name="customerByCustomer2Level1Id" class="com.home.model.Customer" fetch="select">
+            <column name="customer2_level1_id" />
+        </many-to-one>
+        <many-to-one name="customerByCustomer3Level1Id" class="com.home.model.Customer" fetch="select">
+            <column name="customer3_level1_id" />
+        </many-to-one>
+        <many-to-one name="customerByCustomer1Level1Id" class="com.home.model.Customer" fetch="select">
+            <column name="customer1_level1_id" />
+        </many-to-one>
+        <many-to-one name="groupCustomer" class="com.home.model.GroupCustomer" fetch="join">
+            <column name="group_customer_id" />
+        </many-to-one>
+        <many-to-one name="user" class="com.home.model.User" fetch="join">
+            <column name="user_id" />
+        </many-to-one>
+        <property name="createTime" type="timestamp">
+            <column name="create_time" length="0" />
+        </property>
+        <property name="certificateNumber" type="string">
+            <column name="certificate_number" length="30" />
+        </property>
+        <property name="certificateDate" type="timestamp">
+            <column name="certificate_date" length="0" />
+        </property>
+        <property name="certificateAddress" type="string">
+            <column name="certificate_address" length="500" />
+        </property>
+        <property name="taxNumber" type="string">
+            <column name="tax_number" length="20" />
+        </property>
+        <property name="businessName" type="string">
+            <column name="business_name" length="200" />
+        </property>
+        <property name="statisticName" type="string">
+            <column name="statistic_name" length="200" />
+        </property>
+        <property name="budgetRegister" type="big_decimal">
+            <column name="budget_register" precision="18" />
+        </property>
+        <property name="telefone" type="string">
+            <column name="telefone" length="100" />
+        </property>
+        <property name="fax" type="string">
+            <column name="fax" length="20" />
+        </property>
+        <property name="email" type="string">
+            <column name="email" length="50" />
+        </property>
+        <property name="socialAddress" type="string">
+            <column name="social_address" length="50" />
+        </property>
+        <property name="businessAddress" type="string">
+            <column name="business_address" length="500" />
+        </property>
+        <property name="lawyer" type="string">
+            <column name="lawyer" length="200" />
+        </property>
+        <property name="adviser" type="string">
+            <column name="adviser" length="50" />
+        </property>
+        <property name="director" type="string">
+            <column name="director" length="500" />
+        </property>
+        <property name="directorMobile" type="string">
+            <column name="director_mobile" length="100" />
+        </property>
+        <property name="directorBirthday" type="timestamp">
+            <column name="director_birthday" length="0" />
+        </property>
+        <property name="directorBirthdayNotify" type="java.lang.Boolean">
+            <column name="director_birthday_notify" />
+        </property>
+        <property name="customerCode" type="string">
+            <column name="customer_code" length="40" />
+        </property>
+        <property name="directorDomicile" type="string">
+            <column name="director_domicile" length="500" />
+        </property>
+        <property name="sellMan" type="string">
+            <column name="sell_man" length="500" />
+        </property>
+        <property name="sellManMobile" type="string">
+            <column name="sell_man_mobile" length="50" />
+        </property>
+        <property name="budgetOriginal" type="java.lang.Integer">
+            <column name="budget_original" />
+        </property>
+        <property name="otherBusiness" type="string">
+            <column name="other_business" length="500" />
+        </property>
+        <property name="customer1Percent" type="java.lang.Float">
+            <column name="customer1_percent" precision="12" scale="0" />
+        </property>
+        <property name="customer2Percent" type="java.lang.Float">
+            <column name="customer2_percent" precision="12" scale="0" />
+        </property>
+        <property name="customer3Percent" type="java.lang.Float">
+            <column name="customer3_percent" precision="12" scale="0" />
+        </property>
+        <property name="customer4Percent" type="java.lang.Float">
+            <column name="customer4_percent" precision="12" scale="0" />
+        </property>
+        <property name="customer5Percent" type="java.lang.Float">
+            <column name="customer5_percent" precision="12" scale="0" />
+        </property>
+        <property name="revenue1" type="big_decimal">
+            <column name="revenue1" precision="12" />
+        </property>
+        <property name="revenue2" type="big_decimal">
+            <column name="revenue2" precision="12" />
+        </property>
+        <property name="revenueExpect1" type="big_decimal">
+            <column name="revenue_expect1" precision="12" />
+        </property>
+        <property name="revenueExpect2" type="big_decimal">
+            <column name="revenue_expect2" precision="12" />
+        </property>
+        <property name="revenueExpect3" type="big_decimal">
+            <column name="revenue_expect3" precision="12" />
+        </property>
+        <property name="percentProvide1" type="string">
+            <column name="percent_provide1" length="50" />
+        </property>
+        <property name="percentProvide2" type="string">
+            <column name="percent_provide2" length="50" />
+        </property>
+        <property name="percentProvide3" type="string">
+            <column name="percent_provide3" length="50" />
+        </property>
+        <property name="percentProvide4" type="string">
+            <column name="percent_provide4" length="50" />
+        </property>
+        <property name="productSell" type="string">
+            <column name="product_sell" length="500" />
+        </property>
+        <property name="product1Hot" type="string">
+            <column name="product1_hot" length="50" />
+        </property>
+        <property name="product2Hot" type="string">
+            <column name="product2_hot" length="50" />
+        </property>
+        <property name="product3Hot" type="string">
+            <column name="product3_hot" length="50" />
+        </property>
+        <property name="product4Hot" type="string">
+            <column name="product4_hot" length="50" />
+        </property>
+        <property name="product5Hot" type="string">
+            <column name="product5_hot" length="50" />
+        </property>
+        <property name="product6Hot" type="string">
+            <column name="product6_hot" length="50" />
+        </property>
+        <property name="farmProduct1" type="java.lang.Float">
+            <column name="farm_product1" precision="12" scale="0" />
+        </property>
+        <property name="farmProduct1Session" type="string">
+            <column name="farm_product1_session" length="100" />
+        </property>
+        <property name="farmProduct2" type="java.lang.Float">
+            <column name="farm_product2" precision="12" scale="0" />
+        </property>
+        <property name="farmProduct2Session" type="string">
+            <column name="farm_product2_session" length="100" />
+        </property>
+        <property name="farmProduct3" type="java.lang.Float">
+            <column name="farm_product3" precision="12" scale="0" />
+        </property>
+        <property name="farmProduct3Session" type="string">
+            <column name="farm_product3_session" length="100" />
+        </property>
+        <property name="farmProduct4" type="java.lang.Float">
+            <column name="farm_product4" precision="12" scale="0" />
+        </property>
+        <property name="farmProduct4Session" type="string">
+            <column name="farm_product4_session" length="100" />
+        </property>
+        <property name="totalVipCustomer" type="java.lang.Integer">
+            <column name="total_vip_customer" />
+        </property>
+        <property name="pathDocScan" type="string">
+            <column name="path_doc_scan" length="65535" />
+        </property>
+          <property name="imagesSignature" type="string">
+            <column name="images_signature" length="200" />
+        </property>
+        <property name="customerIsActive" type="java.lang.Boolean">
+            <column name="customer_is_active" />
+        </property>
+        <property name="customer_location" type="string">
+            <column name="customer_location" />
+        </property>
+        <!-- Start:-->
+        <property name="directAccess" type="string">
+            <column name="direct_access" />
+        </property>
+        <property name="phoneAccess" type="string">
+            <column name="phone_access" />
+        </property>
+        <property name="birthday" type="timestamp">
+            <column name="birthday" />
+        </property>
+        <property name="otherSuggestions" type="string">
+            <column name="other_suggestions" />
+        </property>
+        <property name="grpCusdetailId" type="java.lang.Integer">
+            <column name="grp_cusdetail_id" />
+        </property>
+        <!-- End:-->
+          
+        <set name="promotionRegisters" table="promotion_register" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="customer_id" not-null="true" />
+            </key>
+            <one-to-many class="com.home.model.PromotionRegister" />
+        </set>
+        <set name="customersForCustomer5Level1Id" table="customer" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="customer5_level1_id" />
+            </key>
+            <one-to-many class="com.home.model.Customer" />
+        </set>
+        <set name="statisticsForCustomerCodeLevel1" table="statistic" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="customer_code_level1" />
+            </key>
+            <one-to-many class="com.home.model.Statistic" />
+        </set>
+        <set name="statisticsForCustomerCodeLevel2" table="statistic" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="customer_code_level2" />
+            </key>
+            <one-to-many class="com.home.model.Statistic" />
+        </set>
+        <set name="customersForCustomer4Level1Id" table="customer" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="customer4_level1_id" />
+            </key>
+            <one-to-many class="com.home.model.Customer" />
+        </set>
+        <set name="customersForCustomer2Level1Id" table="customer" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="customer2_level1_id" />
+            </key>
+            <one-to-many class="com.home.model.Customer" />
+        </set>
+        <set name="customersForCustomer3Level1Id" table="customer" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="customer3_level1_id" />
+            </key>
+            <one-to-many class="com.home.model.Customer" />
+        </set>
+        <set name="customersForCustomer1Level1Id" table="customer" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="customer1_level1_id" />
+            </key>
+            <one-to-many class="com.home.model.Customer" />
+        </set>
+    </class>
+</hibernate-mapping>

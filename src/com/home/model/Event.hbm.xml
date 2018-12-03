@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.home.model.Event" table="events" catalog="db_promotion"
+		optimistic-lock="version">
+		<id name="id" type="java.lang.Integer">
+			<column name="event_id" />
+			<generator class="identity" />
+		</id>
+		<property column="start_date" name="start_date" type="timestamp" />
+		<property column="end_date" name="end_date" type="timestamp" />
+		<property column="event_name" name="text" type="java.lang.String" />
+		<property column="contact_type" name="contactType" type="java.lang.String" />
+		<property column="employee_id" name="employeeId" type="java.lang.Integer" />
+		<property column="customer_id" name="customerId" type="java.lang.Integer" />
+		<property column="type_of_day" name="typeOfDay" type="java.lang.Integer" />
+		<property column="contact_address" name="contactAddress" type="java.lang.String" />
+	</class>
+</hibernate-mapping>
