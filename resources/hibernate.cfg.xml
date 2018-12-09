@@ -59,5 +59,7 @@
         <mapping resource="com/home/model/EventsNote.hbm.xml" />
          <mapping resource="com/home/model/ContactType.hbm.xml" />
          <mapping resource="com/home/model/TimelineType.hbm.xml" />
+         <mapping resource="com/home/model/Management.hbm.xml" />
+         <mapping resource="com/home/model/InvoiceData.hbm.xml" />
     </session-factory>
 </hibernate-configuration>

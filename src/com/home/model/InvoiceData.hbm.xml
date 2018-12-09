@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Apr 22, 2016 10:24:43 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="com.home.model.InvoiceData" table="invoice_data" catalog="db_promotion" optimistic-lock="version">
+        <id name="id" type="java.lang.Integer">
+            <column name="id" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="management_id" class="com.home.model.Management" fetch="select">
+            <column name="management_id" />
+        </many-to-one>
+         <many-to-one name="invoice_type_id" class="com.home.model.InvoiceType" fetch="select">
+            <column name="invoice_type_id" />
+        </many-to-one>
+         <many-to-one name="customer_id" class="com.home.model.Customer" fetch="select">
+            <column name="customer_id" />
+        </many-to-one>
+         <property name="customer_name" type="string">
+            <column name="customer_name" length="200" />
+        </property>
+         <property name="invoice_name" type="string">
+            <column name="invoice_name" length="200" />
+        </property>
+        <many-to-one name="customer_id_level1" class="com.home.model.Customer" fetch="select">
+            <column name="customer_id_level1" />
+        </many-to-one>
+         <property name="customer_name_level1" type="string">
+            <column name="customer_name_level1" length="200" />
+        </property>
+         <many-to-one name="user_id" class="com.home.model.User" fetch="select">
+            <column name="user_id" />
+        </many-to-one>
+         <property name="user_name" type="string">
+            <column name="user_name" length="200" />
+        </property>
+        <property name="date_company_received" type="date">
+            <column name="date_company_received" length="0" />
+        </property>
+        <property name="date_product_received" type="date">
+            <column name="date_product_received" length="0" />
+        </property>
+        <property name="date_sent_late" type="java.lang.Integer">
+            <column name="date_sent_late" />
+        </property>
+         <property name="notes" type="string">
+            <column name="notes" />
+        </property>
+        <many-to-one name="product_id" class="com.home.model.Product" fetch="select">
+            <column name="product_id" />
+        </many-to-one>
+        <property name="product_name" type="string">
+            <column name="product_name" length="200" />
+        </property>
+        <property name="total_box" type="java.lang.Float">
+            <column name="total_box" />
+        </property>
+        <property name="quantity" type="java.lang.Integer">
+            <column name="quantity" />
+        </property>
+        <property name="total_price" type="big_decimal">
+            <column name="total_price" precision="18" />
+        </property>
+    </class>
+</hibernate-mapping>
