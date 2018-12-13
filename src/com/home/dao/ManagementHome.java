@@ -290,14 +290,14 @@ public class ManagementHome {
 		}
 	}
 	
-	public List<Management> getListManagements() throws Exception{
+	public List<Management> getAllJobCapture() throws Exception{
 		log.debug("retrieve list Product");
 		Transaction tx = null;
 		Session session = null;
 		try {
 			session = sessionFactory.openSession();
 			tx = session.beginTransaction();
-			Query query = session.createQuery("FROM Management WHERE step=1 AND duplicate_status=0 ORDER BY id");
+			Query query = session.createQuery("FROM Management WHERE step=1 AND duplicate_status=0 AND present_user=0 ORDER BY id");
 			List<Management> results = query.list();
 			tx.commit();
 			log.debug("retrieve list Management successful, result size: " + results.size());
@@ -305,6 +305,96 @@ public class ManagementHome {
 		} catch (Exception re) {
 			re.printStackTrace();
 			log.error("retrieve list Product failed", re);
+			throw re;
+		} finally{
+			try {
+				if(session != null){
+					session.close();
+				}
+			} catch (Exception e) {
+			}
+		}
+	}
+	
+	public List<Management> getJobCapture(int present_user, int limit) throws Exception{
+		log.debug("retrieve list Product");
+		Transaction tx = null;
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			tx = session.beginTransaction();
+			Query query = session.createQuery("FROM Management WHERE step=1 AND duplicate_status=0 AND present_user="+present_user+" ORDER BY id");
+			List<Management> results = query.list();
+			if(results == null || results.isEmpty()){
+				query = session.createQuery("FROM Management WHERE step=1 AND duplicate_status=0 AND present_user=0 ORDER BY id Limit " + limit);
+				results = query.list();
+				for (Management m : results) {
+					m.setPresent_user(present_user);
+					session.update(m);
+				}
+			}
+			tx.commit();
+			log.debug("retrieve list Management successful, result size: " + results.size());
+			return results;
+		} catch (Exception re) {
+			re.printStackTrace();
+			log.error("retrieve list Product failed", re);
+			throw re;
+		} finally{
+			try {
+				if(session != null){
+					session.close();
+				}
+			} catch (Exception e) {
+			}
+		}
+	}
+	
+	public void saveJobCapture(int management_id, InvoiceData data) throws Exception{
+		log.debug("saving InvoiceData");
+		Transaction tx = null;
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			tx = session.beginTransaction();
+			Management management = (Management)session.get(Management.class, management_id);
+			management.setStep(2);
+			management.setCapture_status(0);
+			
+			session.update(management);
+			session.update(data);
+			tx.commit();
+			log.debug("saveJobCapture successful");
+		} catch (Exception re) {
+			re.printStackTrace();
+			log.error("saveJobCapture failed", re);
+			throw re;
+		} finally{
+			try {
+				if(session != null){
+					session.close();
+				}
+			} catch (Exception e) {
+			}
+		}
+	}
+	
+	public void setJobDuplicate(int management_id) throws Exception{
+		log.debug("saving InvoiceData");
+		Transaction tx = null;
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			tx = session.beginTransaction();
+			Management management = (Management)session.get(Management.class, management_id);
+			management.setDuplicate_status(1);
+			management.setCapture_status(0);
+			session.update(management);
+			tx.commit();
+			log.debug("saveJobCapture successful");
+		} catch (Exception re) {
+			re.printStackTrace();
+			log.error("saveJobCapture failed", re);
 			throw re;
 		} finally{
 			try {

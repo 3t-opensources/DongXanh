@@ -47,20 +47,23 @@
          <property name="notes" type="string">
             <column name="notes" />
         </property>
-        <many-to-one name="product_id" class="com.home.model.Product" fetch="select">
-            <column name="product_id" />
-        </many-to-one>
-        <property name="product_name" type="string">
-            <column name="product_name" length="200" />
+        <property name="product_ids" type="string">
+            <column name="product_ids" />
         </property>
-        <property name="total_box" type="java.lang.Float">
-            <column name="total_box" />
+        <property name="product_names" type="string">
+            <column name="product_names" />
         </property>
-        <property name="quantity" type="java.lang.Integer">
-            <column name="quantity" />
+        <property name="total_boxs" type="string">
+            <column name="total_boxs" />
         </property>
-        <property name="total_price" type="big_decimal">
-            <column name="total_price" precision="18" />
+        <property name="quantitys" type="string">
+            <column name="quantitys" />
+        </property>
+         <property name="total_prices" type="string">
+            <column name="total_prices" />
+        </property>
+        <property name="sum_total_price" type="big_decimal">
+            <column name="sum_total_price" precision="18" />
         </property>
     </class>
 </hibernate-mapping>

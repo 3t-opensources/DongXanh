@@ -10,10 +10,12 @@ import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.util.ServletContextAware;
 import org.hibernate.SessionFactory;
 
+import com.home.dao.CustomerHome;
 import com.home.dao.InvoiceDataHome;
-import com.home.dao.ManagementHome;
+import com.home.dao.UserHome;
+import com.home.model.Customer;
 import com.home.model.InvoiceData;
-import com.home.model.Management;
+import com.home.model.User;
 import com.home.util.DateUtils;
 import com.home.util.HibernateUtil;
 import com.home.util.StringUtil;
@@ -24,9 +26,9 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 	private static final long serialVersionUID = 5109187855480607759L;
 	//servletcontext for getting the context
 	private ServletContext servletContext;
-	
-	private List<Management> managements;
-	private List<InvoiceData> datas;
+	private List<InvoiceData> listData;
+	private List<User> listEmployee;
+	private List<Customer> listCustomer;
 
 	public ServletContext getServletContext() {
 		return servletContext;
@@ -39,24 +41,43 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 
 	@Override
 	public void validate() {
-		//check whether at least one file was selected for upload
+		try {
+			loadLookupEmployee();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public SessionFactory getSessionFactory() {
 		return HibernateUtil.getSessionFactory();
 	}
+
+	public void loadLookupEmployee() {
+		UserHome userHome = new UserHome(getSessionFactory());
+		listEmployee = userHome.getLookupEmployee();
+	}
 	
-	public String getAllJob(){
+	public String loadLookupCustomer() {
 		try {
-			ManagementHome home = new ManagementHome(getSessionFactory());
-			managements = home.getListManagements();
-			System.out.println("Total job: " + managements.size());
+			// Fetch Data from User Table
+			int user_id;
+			try {
+				HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
+				user_id = Integer.parseInt(request.getParameter("user_id"));
+			} catch (Exception e) {
+				user_id = 0;
+			}
+			CustomerHome cusHome = new CustomerHome(getSessionFactory());
+			listCustomer = cusHome.getListCustomerByUserId(user_id);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ERROR;
 		}
 		return SUCCESS;
 	}
+	
+	
+	/////////////////////////////////////////REPORT//////////////////////////////////////////////////
 	
 	public String getAllData(){
 		try {
@@ -69,8 +90,8 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 				management_id = 5;
 			}
 			InvoiceDataHome home = new InvoiceDataHome(getSessionFactory());
-			datas = home.getListInvoiceData(management_id);
-			System.out.println("Total data: " + datas.size());
+			listData = home.getListInvoiceData(management_id);
+			System.out.println("Total data: " + listData.size());
 			//System.out.println(datas.get(0).getManagement_id().getFile_name());
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -105,8 +126,8 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 			}
 			
 			InvoiceDataHome home = new InvoiceDataHome(getSessionFactory());
-			datas = home.getListInvoiceData(date_company_received_from, date_company_received_to, invoice_type, user_id, customer_id, sent_late);
-			System.out.println("Total data: " + datas.size());
+			listData = home.getListInvoiceData(date_company_received_from, date_company_received_to, invoice_type, user_id, customer_id, sent_late);
+			System.out.println("Total data: " + listData.size());
 			//System.out.println(datas.get(0).getManagement_id().getFile_name());
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -117,12 +138,33 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 	
 	public static void main(String[] args) {
 		try {
-			new InvoiceDataAction().getAllJob();
 			new InvoiceDataAction().getAllData();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	
+	public List<InvoiceData> getListData() {
+		return listData;
+	}
+
+	public List<User> getListEmployee() {
+		return listEmployee;
+	}
+
+	public List<Customer> getListCustomer() {
+		return listCustomer;
+	}
+
+	public void setListData(List<InvoiceData> listData) {
+		this.listData = listData;
+	}
+
+	public void setListEmployee(List<User> listEmployee) {
+		this.listEmployee = listEmployee;
+	}
+
+	public void setListCustomer(List<Customer> listCustomer) {
+		this.listCustomer = listCustomer;
+	}
 }

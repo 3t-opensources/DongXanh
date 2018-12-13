@@ -32,5 +32,11 @@
         <property name="duplicate_status" type="java.lang.Integer">
             <column name="duplicate_status" />
         </property>
+        <property name="capture_status" type="java.lang.Integer">
+            <column name="capture_status" />
+        </property>
+        <property name="present_user" type="java.lang.Integer">
+            <column name="present_user" />
+        </property>
     </class>
 </hibernate-mapping>

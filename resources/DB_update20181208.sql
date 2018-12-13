@@ -8,6 +8,8 @@ CREATE TABLE IF NOT EXISTS `management` (
   `created_time` datetime DEFAULT NULL,
   `hash_file` varchar(200) NOT NULL,
   `duplicate_status` int(11) DEFAULT 0,
+  `capture_status` int(11) DEFAULT 0,
+  `present_user` int(11) DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
@@ -27,16 +29,16 @@ CREATE TABLE IF NOT EXISTS `invoice_data` (
    `date_product_received` datetime DEFAULT NULL,
    `date_sent_late` int(11) DEFAULT 0,
    `notes` text DEFAULT NULL,  
-  `product_id` int(11) DEFAULT NULL,
-  `product_name` varchar(200) DEFAULT NULL,
-  `total_box` float DEFAULT '0',
-  `quantity` int(11) DEFAULT '0',
-  `total_price` decimal(18,2) DEFAULT '0.00',
+  `product_ids` text DEFAULT NULL, 
+  `product_names` text DEFAULT NULL, 
+  `total_boxs` text DEFAULT NULL, 
+  `quantitys` text DEFAULT NULL, 
+  `total_prices` text DEFAULT NULL, 
+  `sum_total_price` decimal(18,2) DEFAULT '0.00',
   PRIMARY KEY (`id`),
   KEY `FK_invoice_data_management_id` (`management_id`),
   KEY `FK_invoice_data_user_idx` (`user_id`),
   KEY `FK_invoice_data_customer_idx` (`customer_id`),
   KEY `FK_invoice_data_customer1_idx` (`customer_id_level1`),
-  KEY `FK_invoice_data_product_idx` (`product_id`),
   KEY `FK_invoice_data_invoice_type_id` (`invoice_type_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;

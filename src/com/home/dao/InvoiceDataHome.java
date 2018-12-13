@@ -313,12 +313,11 @@ public class InvoiceDataHome {
 
 			String sql = 
 					"SELECT i.*, m.file_path, m.file_name, m.step, c.id as customer_id, c.statistic_name, c1.id as customer_id_level1, c1.statistic_name as statistic_name_level1, "
-					+ "p.product_name, p.product_code, p.unit_price, u.user_name, u.full_name, it.invoice_type " +
+					+ " u.user_name, u.full_name, it.invoice_type " +
 					" FROM invoice_data i "+
 					" JOIN management m ON m.id=i.management_id "+
 					" LEFT JOIN customer c ON i.customer_id=c.id "+
 					" LEFT JOIN customer c1 ON i.customer_id_level1=c1.id "+
-					" LEFT JOIN product p ON i.product_id=p.id "+
 					" LEFT JOIN user u ON i.user_id=u.id "+
 					" LEFT JOIN invoice_type it ON i.invoice_type_id=it.id "+
 					" WHERE  "
@@ -379,15 +378,12 @@ public class InvoiceDataHome {
 				invoice.setDate_sent_late(rs.getInt("date_sent_late"));
 				invoice.setNotes(rs.getString("notes"));
 				
-				Product product = new Product();
-				product.setId(rs.getInt("product_id"));
-				product.setProductCode(rs.getString("product_code"));
-				product.setProductName(rs.getString("product_name"));
-				invoice.setProduct_id(product);
-				invoice.setProduct_name(rs.getString("product_name"));
-				invoice.setTotal_box(rs.getFloat("total_box"));
-				invoice.setQuantity(rs.getInt("quantity"));
-				invoice.setTotal_price(rs.getBigDecimal("total_price"));
+				invoice.setProduct_ids(rs.getString("product_ids"));
+				invoice.setProduct_names(rs.getString("product_names"));
+				invoice.setTotal_boxs(rs.getString("total_boxs"));
+				invoice.setQuantitys(rs.getString("quantitys"));
+				invoice.setTotal_prices(rs.getString("total_prices"));
+				invoice.setSum_total_price(rs.getBigDecimal("sum_total_price"));
 				
 				results.add(invoice);
 			}

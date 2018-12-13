@@ -570,7 +570,7 @@ public class CustomerHome {
 			Connection conn = sessionImpl.connection();
 			try (Statement sta = conn.createStatement()) {
 				String query = "Select id, customer_code, business_name, director, statistic_name, telefone,business_address "
-						+ "From customer where user_id= "+user_id + " And customer_is_active="+CUSTOMER_IS_ACTIVE+" order by customer_code, business_name, statistic_name";
+						+ "From customer where (user_id= "+user_id + " or "+user_id+"=0) And customer_is_active="+CUSTOMER_IS_ACTIVE+" order by customer_code, business_name, statistic_name";
 				System.out.println(query);
 				try (ResultSet rs = sta.executeQuery(query)) {
 					while (rs.next()) {

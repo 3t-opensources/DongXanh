@@ -13,6 +13,21 @@ public class Management {
 	private Date created_time;
 	private String hash_file;
 	private Integer duplicate_status;
+	private Integer capture_status;
+	private Integer present_user;
+	
+	public Integer getCapture_status() {
+		return capture_status;
+	}
+	public void setCapture_status(Integer capture_status) {
+		this.capture_status = capture_status;
+	}
+	public Integer getPresent_user() {
+		return present_user;
+	}
+	public void setPresent_user(Integer present_user) {
+		this.present_user = present_user;
+	}
 	
 	public Integer getDuplicate_status() {
 		return duplicate_status;
