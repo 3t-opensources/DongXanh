@@ -5,6 +5,7 @@ package com.home.dao;
 import static org.hibernate.criterion.Example.create;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -343,6 +344,7 @@ public class UserHome {
 		}
 
 	}
+	
 	public HashMap<Integer, String> getFilterEmployee() {
 		log.debug("finding List User instance by full name");
 		 HashMap<Integer, String> results = new HashMap<>();
@@ -358,6 +360,46 @@ public class UserHome {
 						results.put(rs.getInt("id"), rs.getString("full_name"));
 					}
 				} 
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return results;
+		} catch (RuntimeException re) {
+			log.error("find by full name failed", re);
+			throw re;
+		} finally {
+			try {
+				if (session != null) {
+					session.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+	}
+	
+	public List<Object[]> lookupStaff(String search_staff) {
+		log.debug("lookupStaff");
+		List<Object[]> results = new ArrayList<Object[]>();
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			SessionImpl sessionImpl = (SessionImpl) session;
+			Connection conn = sessionImpl.connection();
+			try (Statement sta = conn.createStatement()) {
+				search_staff = search_staff.replace("'", "''");
+				String query = "Select id, user_name, full_name From user Where lower(user_name) Like ? OR lower(full_name) Like ? Order By user_name Limit 20";
+				try(PreparedStatement pre = conn.prepareStatement(query)){
+					pre.setString(1, "%"+search_staff.toLowerCase()+"%");
+					pre.setString(2, search_staff.toLowerCase()+"%");
+					
+					try (ResultSet rs = pre.executeQuery()) {
+						while (rs.next()) {
+							results.add(new Object[]{""+rs.getInt("id"), rs.getString("user_name"), rs.getString("full_name")});
+						}
+					} 
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

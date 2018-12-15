@@ -27,7 +27,7 @@
 
 
 		<!-- file upload action -->
-		<action name="uploadMultipleFile" class="com.home.action.ManagementAction">
+		<action name="uploadMultipleFileAction" class="com.home.action.ManagementAction">
 			<interceptor-ref name="defaultStack" />
 			<interceptor-ref name="fileUpload">
 				<param name="allowedTypes">image/png,image/gif,image/jpeg</param>
@@ -37,6 +37,55 @@
 			<result name="success">/invoice_capture_test.jsp</result>
 			<!-- input page for file upload -->
 			<result name="input">/invoice_capture_test.jsp</result>
+		</action>
+		
+		<action name="importDataCaptureAction" method="importDataCapture"
+			class="com.home.action.ManagementAction">
+			<result type="json" />
+		</action>
+		
+		<!-- show all job capture -->
+		<action name="showAllJobCaptureAction" method="getAllJob"
+			class="com.home.action.ManagementAction">
+			<result type="json" />
+		</action>
+		
+		
+		<!-- form capture invoice -->
+		<action name="getJobCaptureAction" method="getJobCapture"
+			class="com.home.action.ManagementAction">
+			<result type="json" />
+		</action>
+		
+		<action name="saveJobCaptureAction" method="saveJobCapture"
+			class="com.home.action.ManagementAction">
+			<result type="json" />
+		</action>
+		
+		<action name="badJobCaptureAction" method="badJobCapture"
+			class="com.home.action.ManagementAction">
+			<result type="json" />
+		</action>
+		
+		<!-- lookup -->
+		<action name="lookupCaptureInvoiceTypeAction" method="lookupInvoiceType"
+			class="com.home.action.ManagementAction">
+			<result type="json" />
+		</action>
+		
+		<action name="lookupCaptureCusStaffAction" method="lookupCustomerAndStaff"
+			class="com.home.action.ManagementAction">
+			<result type="json" />
+		</action>
+		
+		<action name="lookupCaptureCusAction" method="lookupCustomer"
+			class="com.home.action.ManagementAction">
+			<result type="json" />
+		</action>
+		
+		<action name="lookupStaffAction" method="lookupStaff"
+			class="com.home.action.ManagementAction">
+			<result type="json" />
 		</action>
 
 	</package>

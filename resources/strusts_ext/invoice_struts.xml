@@ -25,12 +25,27 @@
 			<result>/login.jsp</result>
 		</action>
 
+		<action name="openInvoiceDataReport1Action" method="execute"
+			class="com.home.action.InvoiceDataAction">
+			<result name="success">/invoice_data_report1.jsp</result>
+			<result name="error">/invoice_data_report1.jsp</result>
+		</action>
 
-		<action name="getAllJobCaptureAction" method="getAllJob"
+		<action name="loadStaffInvoiceReport1Action" method="loadListStaff"
 			class="com.home.action.InvoiceDataAction">
 			<result type="json" />
 		</action>
-		<action name="getAllDataCaptureAction" method="getAllData"
+		<action name="loadCusByStaffInvoiceReport1Action" method="loadListCustomerByStaff"
+			class="com.home.action.InvoiceDataAction">
+			<result type="json" />
+		</action>
+		
+		<action name="getAllInvoiceDataReport1Action" method="getAllInvoiceData"
+			class="com.home.action.InvoiceDataAction">
+			<result type="json" />
+		</action>
+		
+		<action name="getInvoiceDataFilterReport1Action" method="getInvoiceDataFilter"
 			class="com.home.action.InvoiceDataAction">
 			<result type="json" />
 		</action>

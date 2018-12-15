@@ -615,7 +615,7 @@ public class ProductHome {
 							p.setUnitPrice(rs.getBigDecimal("unit_price"));
 							p.setQuantity(rs.getInt("quantity"));
 							p.setPoint(rs.getInt("point"));
-							results.add(new Object[]{p.getId(), p.getProductName(), p.getProductCode(), p.getUnitPrice(), p.getQuantity()});
+							results.add(new Object[]{""+p.getId(), p.getProductName(), p.getProductCode(), p.getUnitPrice(), p.getQuantity()});
 						}
 					} 
 				}

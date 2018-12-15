@@ -27,7 +27,7 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 	//servletcontext for getting the context
 	private ServletContext servletContext;
 	private List<InvoiceData> listData;
-	private List<User> listEmployee;
+	private List<User> listStaff;
 	private List<Customer> listCustomer;
 
 	public ServletContext getServletContext() {
@@ -42,7 +42,7 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 	@Override
 	public void validate() {
 		try {
-			loadLookupEmployee();
+			loadListStaff();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -52,12 +52,18 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 		return HibernateUtil.getSessionFactory();
 	}
 
-	public void loadLookupEmployee() {
-		UserHome userHome = new UserHome(getSessionFactory());
-		listEmployee = userHome.getLookupEmployee();
+	public String loadListStaff() {
+		try {
+			UserHome userHome = new UserHome(getSessionFactory());
+			listStaff = userHome.getLookupEmployee();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ERROR;
+		}
+		return SUCCESS;
 	}
 	
-	public String loadLookupCustomer() {
+	public String loadListCustomerByStaff() {
 		try {
 			// Fetch Data from User Table
 			int user_id;
@@ -79,7 +85,7 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 	
 	/////////////////////////////////////////REPORT//////////////////////////////////////////////////
 	
-	public String getAllData(){
+	public String getAllInvoiceData(){
 		try {
 			// Fetch Data from User Table
 			int management_id;
@@ -138,7 +144,7 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 	
 	public static void main(String[] args) {
 		try {
-			new InvoiceDataAction().getAllData();
+			new InvoiceDataAction().getAllInvoiceData();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -149,7 +155,7 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 	}
 
 	public List<User> getListEmployee() {
-		return listEmployee;
+		return listStaff;
 	}
 
 	public List<Customer> getListCustomer() {
@@ -161,7 +167,7 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 	}
 
 	public void setListEmployee(List<User> listEmployee) {
-		this.listEmployee = listEmployee;
+		this.listStaff = listEmployee;
 	}
 
 	public void setListCustomer(List<Customer> listCustomer) {

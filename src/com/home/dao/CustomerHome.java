@@ -1086,7 +1086,61 @@ public class CustomerHome {
 							cus.setTelefone(StringUtil.notNull(rs.getString("telefone")));
 							cus.setBusinessAddress(StringUtil.notNull(rs.getString("business_address")));
 							//results.add(new Object[]{cus.getId(), cus.getCustomerCode(), cus.getBusinessName().replace("0.0", "").isEmpty()?cus.getStatisticName():cus.getBusinessName(), cus.getTelefone(), cus.getBusinessAddress()});
-							results.add(new Object[]{cus.getId(), cus.getStatisticName().isEmpty()?cus.getBusinessName().replace("0.0", ""):cus.getStatisticName(), cus.getTelefone(), cus.getBusinessAddress()});
+							results.add(new Object[]{""+cus.getId(), cus.getStatisticName().isEmpty()?cus.getBusinessName().replace("0.0", ""):cus.getStatisticName(), cus.getTelefone(), cus.getBusinessAddress()});
+						}
+					} 
+				}
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+				throw e;
+			}
+			return results;
+		} catch (Exception re) {
+			log.error("find by Customer failed", re);
+			throw re;
+		} finally {
+			try {
+				if (session != null) {
+					session.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public List<Object[]> lookupCustomerAndStaff(String cusName, String groupCustomer) throws Exception {
+		//log.debug("finding List Customer instance by full name");
+		List<Object[]> results = new ArrayList<Object[]>();
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			SessionImpl sessionImpl = (SessionImpl) session;
+			Connection conn = sessionImpl.connection();
+			try (Statement sta = conn.createStatement()) {
+				String query = "Select c.id as customer_id, c.customer_code, c.statistic_name, c.user_id, u.user_name, u.full_name, c1.id as customer1_id, c1.statistic_name as statistic1_name"
+						+ "From customer c "
+						+ "LEFT JOIN user u On c.user_id = u.id"
+						+ "LEFT JOIN customer c1 On c.customer1_level1_id = c1.id"
+						+ "Where group_customer_id in ("+(groupCustomer)+") "
+						+ " AND (lower(business_name) Like ? OR lower(statistic_name) Like ?) order by customer_code, statistic_name LIMIT 20";
+				//System.out.println(query);
+				try(PreparedStatement pre = conn.prepareStatement(query)){
+					pre.setString(1, "%"+cusName.toLowerCase()+"%");
+					pre.setString(2, "%"+cusName.toLowerCase()+"%");
+					try (ResultSet rs = pre.executeQuery()) {
+						while (rs.next()) {
+							results.add(new Object[]{
+									""+rs.getInt("customer_id"),
+									StringUtil.notNull(rs.getString("customer_code")),
+									StringUtil.notNull(rs.getString("statistic_name")),
+									""+rs.getInt("customer1_id"),
+									StringUtil.notNull(rs.getString("statistic1_name")),
+									""+rs.getInt("user_id"),
+									StringUtil.notNull(rs.getString("user_name")),
+									StringUtil.notNull(rs.getString("full_name"))
+							});
 						}
 					} 
 				}

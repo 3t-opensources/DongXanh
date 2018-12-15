@@ -33,13 +33,25 @@ public class RedisUtil {
 	}
 	
 	public void connect(String host, int port, String auth_pass){
-		jedis = new Jedis(host, port);
-		if(auth_pass != null && auth_pass.length() > 0){
-			jedis.auth(auth_pass);	
+		try {
+			jedis = new Jedis(host, port);
+			if(auth_pass != null && auth_pass.length() > 0){
+				jedis.auth(auth_pass);	
+			}
+			System.out.println("Connection to server sucessfully"); 
+			//check whether server is running or not 
+			System.out.println("Server is running: "+jedis.ping());
+		} catch (Exception e) {
+			e.printStackTrace();
+		} 
+	}
+	
+	public boolean isConnected(){
+		try {
+			return jedis.isConnected();
+		} catch (Exception e) {
+			return false;
 		}
-		System.out.println("Connection to server sucessfully"); 
-		//check whether server is running or not 
-		System.out.println("Server is running: "+jedis.ping()); 
 	}
 	
 	public static void main(String[] args) { 
