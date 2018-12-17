@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+	<package name="management" namespace="/" extends="struts-default">
+		<interceptors>
+			<interceptor name="authentication"
+				class="com.home.listener.AuthenticationInterceptor"></interceptor>
+			<interceptor-stack name="authStack">
+				<interceptor-ref name="authentication"></interceptor-ref>
+				<interceptor-ref name="defaultStack"></interceptor-ref>
+			</interceptor-stack>
+		</interceptors>
+
+		<default-interceptor-ref name="authStack"></default-interceptor-ref>
+
+		<global-results>
+			<result name="login" type="redirect">/dongxanh.action</result>
+		</global-results>
+
+		<action name="dongxanh">
+			<interceptor-ref name="defaultStack"></interceptor-ref>
+			<result>/login.jsp</result>
+		</action>
+
+
+		<!-- file upload action -->
+		<action name="uploadMultipleFileAction" class="com.home.action.ManagementAction">
+			<interceptor-ref name="defaultStack" />
+			<interceptor-ref name="fileUpload">
+				<param name="allowedTypes">image/png,image/gif,image/jpeg</param>
+				<param name="maximumSize">10485760</param>
+			</interceptor-ref>
+			<!-- redirect to input page for file upload again -->
+			<result name="success">/invoice_capture_test.jsp</result>
+			<!-- input page for file upload -->
+			<result name="input">/invoice_capture_test.jsp</result>
+		</action>
+		
+		<action name="importDataCaptureAction" method="importDataCapture"
+			class="com.home.action.ManagementAction">
+			<result type="json" />
+		</action>
+		
+		<!-- show all job capture -->
+		<action name="showAllJobCaptureAction" method="getAllJob"
+			class="com.home.action.ManagementAction">
+			<result type="json" />
+		</action>
+		
+		
+		<!-- form capture invoice -->
+		<action name="getJobCaptureAction" method="getJobCapture"
+			class="com.home.action.ManagementAction">
+			<result type="json" />
+		</action>
+		
+		<action name="saveJobCaptureAction" method="saveJobCapture"
+			class="com.home.action.ManagementAction">
+			<result type="json" />
+		</action>
+		
+		<action name="badJobCaptureAction" method="badJobCapture"
+			class="com.home.action.ManagementAction">
+			<result type="json" />
+		</action>
+		
+		<!-- lookup -->
+		<action name="lookupCaptureInvoiceTypeAction" method="lookupInvoiceType"
+			class="com.home.action.ManagementAction">
+			<result type="json" />
+		</action>
+		
+		<action name="lookupCaptureCusStaffAction" method="lookupCustomerAndStaff"
+			class="com.home.action.ManagementAction">
+			<result type="json" />
+		</action>
+		
+		<action name="lookupCaptureCusAction" method="lookupCustomer"
+			class="com.home.action.ManagementAction">
+			<result type="json" />
+		</action>
+		
+		<action name="lookupStaffAction" method="lookupStaff"
+			class="com.home.action.ManagementAction">
+			<result type="json" />
+		</action>
+
+	</package>
+</struts>

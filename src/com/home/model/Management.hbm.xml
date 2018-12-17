@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Feb 24, 2016 9:17:28 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="com.home.model.Management" table="management" catalog="db_promotion" optimistic-lock="version">
+        <id name="id" type="java.lang.Integer">
+            <column name="id" />
+            <generator class="identity" />
+        </id>
+        <property name="file_path" type="string">
+            <column name="file_path" length="500" />
+        </property>
+        <property name="file_name" type="string">
+            <column name="file_name" length="200" />
+        </property>
+        <property name="step" type="java.lang.Integer">
+            <column name="step" />
+        </property>
+        <property name="status" type="java.lang.Integer">
+            <column name="status" />
+        </property>
+         <property name="created_by" type="string">
+            <column name="created_by" length="100" />
+        </property>
+        <property name="created_time" type="timestamp">
+            <column name="created_time" length="0" />
+        </property>
+         <property name="hash_file" type="string">
+            <column name="hash_file" length="200" />
+        </property>
+        <property name="duplicate_status" type="java.lang.Integer">
+            <column name="duplicate_status" />
+        </property>
+        <property name="capture_status" type="java.lang.Integer">
+            <column name="capture_status" />
+        </property>
+        <property name="present_user" type="java.lang.Integer">
+            <column name="present_user" />
+        </property>
+    </class>
+</hibernate-mapping>

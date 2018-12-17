@@ -51,6 +51,8 @@
 	<include file="strusts_ext/report_struts.xml"></include>
 	<include file="strusts_ext/employee_struts.xml"></include>
 	<include file="strusts_ext/customer_struts.xml"></include>
-	<include file="strusts_ext/statistic_struts.xml"></include>
-	
+	<include file="strusts_ext/statistic_struts.xml"></include>	
+	<include file="strusts_ext/management_struts.xml"></include>
+	<include file="strusts_ext/invoice_struts.xml"></include>
+
 </struts>
