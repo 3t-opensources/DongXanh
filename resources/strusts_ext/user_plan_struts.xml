@@ -119,6 +119,20 @@
 				<param name="bufferSize">2048</param>
 			</result>
 		</action>
+		
+		<action name="themmoi" class="com.home.action.UserPlanAction" method="editor_custom">
+			<result name="success">/xuan_themmoi.jsp</result>
+		</action>
+		
+		<action name="nhap" class="com.home.action.UserPlanAction" method="editor_custom">
+			<result name="success">/xuan_nhap.jsp</result>
+		</action>
+			
+		
+		<action name="thongkehoadon" class="com.home.action.UserPlanAction" method="editor_custom">
+			<result name="success">/xuan_thongkehoadon.jsp</result>
+		</action>
+		
 	</package>
 	
 </struts>

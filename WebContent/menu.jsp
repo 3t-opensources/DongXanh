@@ -71,8 +71,7 @@
 								href="%{csURL4}" theme="bootstrap"> Doanh số NVTT </s:a></li>
 					</ul></li>
 			</s:if>
-			<li><a><i class="fa fa-calendar"></i> Lịch công tác <span
-					class="fa fa-chevron-down"></span></a>
+			<li><a><i class="fa fa-calendar"></i> Lịch công tác <span class="fa fa-chevron-down"></span></a>
 				<ul class="nav child_menu" style="display: none">
 					<li><s:url action="UserPlan" var="getUserPlanURL" /> <s:a
 							href="%{getUserPlanURL}" theme="bootstrap"> Lên lịch tuần </s:a></li>
@@ -89,6 +88,18 @@
 							href="%{userPlanHistory}" theme="bootstrap"> Lịch sử thay đổi</s:a></li>
 					</s:if>
 				</ul></li>
+				
+			<!-- 	phan xuan them  -->
+			
+			<li><a><i class="fa fa-users"></i> Hóa đơn <span
+					class="fa fa-chevron-down"></span></a>
+				<ul class="nav child_menu" style="display: none">
+					<li><s:url action="themmoi"       var="billAdd">      </s:url><s:a href="%{billAdd}"> Thêm mới </s:a></li>
+					<li><s:url action="nhap"          var="billInput" />     <s:a href="%{billInput}"> Nhập hóa đơn </s:a></li>					
+					<li><s:url action="thongkehoadon" var="billstatic"></s:url>	<s:a href="%{billstatic}"> Thống kê hóa đơn</s:a></li>
+				
+				</ul></li>
+				
 		</ul>
 	</div>
 
