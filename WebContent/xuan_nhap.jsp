@@ -19,14 +19,16 @@
 <link rel="stylesheet" href="css/pretty-split-pane.css"/>
 <link rel="stylesheet" href="css/split-pane.css"/> 
 <link href="css/jquery.dataTables.min.css" rel="stylesheet">
-
+<script type="text/javascript" src="js/docs-js-jquery-1.7.1.min.js"></script>	
 <script src="js/bootstrap.min.js"></script>
 <script type="text/javascript" src="js/jquery-ui.min.js"></script> 
 <script src="js/bootstrap-datepicker.min.js"></script>
- <script type="text/javascript" src="js/docs-js-jquery-1.7.1.min.js"></script>	
 
-  <script src="js/jquery.dataTables.min.js"></script>
 
+<script src="js/jquery.dataTables.min.js"></script>
+	<!-- LOOKUP DATA -->
+<link href="css/awesomplete.css" type="text/css" rel="stylesheet">
+<script src="js/awesomplete.js"></script>
 
  
 <style type="text/css">
@@ -38,7 +40,7 @@
 }
 .viewer {
     height: 100%;
-    overflow: hidden!important;
+   /*  overflow: hidden!important; */
     position: relative;
     width: 100%;
 }
@@ -842,17 +844,23 @@ table {
   padding-left: 5px;
   float: left;
 }
+.well {
+  margin: 0px!important;
+  float: right;
+}
 
 </style>
 </head>
 <body>
-
+ <%
+  String data ="['August Beck GmbH & Co. KG|0000010367|DE72600501010004763594|EUR','Bedrunka & Hirth GmbH|0000014053|DE90694500650240012576|EUR','Bilz Werkzeugfabrik GmbH & Co. KG|0000010078|DE69600501017456500267|EUR','C.+ E. Fein GmbH|0000010399|DE51600700700110213600|EUR','E D E Einkaufsbüro Deutscher|0000015179|DE68300306008003800300|EUR','Fechtel Transportgeräte GmbH|0000013582|DE90480620510214900100|EUR','Gühring KG|0000010431|DE09653700750010412500|EUR','Jörn Detjens GmbH|0000017273|DE24200505501352122855|EUR','KLW Karl Lutz GmbH & Co. KG|0000010655|DE84600501010008800130|EUR','LOKOMA Lorenz Kollmann GmbH|0000010600|DE52722515200000554405|EUR','Owt Osnabrücker Werkzeugtechnik Gmb|0000017826|DE57265501050000280271|EUR','Rhodius GmbH & Co. KG|0000013325|DE80570200860004768507|EUR','Robert Bosch Power Tools GmbH|0000012810|DE24600501010002250315|EUR','Scheuerlein-Motorentechnik|0000020074|DE49760693720007217714|EUR','Stanley Black & Decker|0000018939|DE10500400000123900300|EUR','Ultra-Präzision Messzeuge GmbH|0000011948|DE41795500000000300848|EUR','Walter Deutschland GmbH|0000011900|DE21500700100341203800|EUR','Wera Werkzeuge GmbH|0000012128|DE97330700900093182400|EUR']";
+  String data_postion ="['Abroad|Abroad|surcharge','Administration|Administration|surcharge','bulky goods|bulky goods|surcharge','Cash discount|Cash discount|surcharge','Cash on delivery|C.O.D. cash on delivery service|surcharge','Customization|Customization|surcharge','Customs|Customs|surcharge','Deposit|Deposit|surcharge','Express|Express|surcharge','Extra isle-charge|Surcharge for islands.|surcharge','Fracht|Freight|surcharge','Frachtkosten|Freight|surcharge','Frachtspesen|Freight|surcharge','Freight|Freight|surcharge','Handling|Handling|surcharge','Insurance|Insurance|surcharge','Minimum quantitiy Surcharge|Minimum quantitiy Surcharge|surcharge','Packing|Packing|surcharge','Partial Quantity|Partial Quantity|surcharge','Period-bonus|Period-bonus (e.g. annual bonus)|allowance','Postage|Postage|surcharge','Project-bonus|Project-bonus|allowance','Rebate|Rebate|allowance','Recycling|Recycling|surcharge','Surcharge|Surcharge|surcharge','Surcharge for material|Surcharge for material|surcharge','Verpackung|Packing|surcharge']";
+ %>
   
    <div id="header">  
 		<div class="navbar nav_title" style="border: 0;">
 			<a class="site_title" href="homeAction">
-				<img width="50" height="50" alt="ĐỒNG XANH" src="./images/logo_dongxanh.png">
-				<span>ĐỒNG XANH</span>
+				<img width="27%" height="70%" alt="ĐỒNG XANH" src="./images/banner_dongxanh.png" style="padding-top: 10px">
 			</a>
 		</div>
 	</div>
@@ -863,9 +871,7 @@ table {
 <div class="pretty-split-pane-frame">
   <div class="split-pane fixed-left" id="split-pane-1">
     <div class="split-pane-component diagram-section" id="left-component">     
-      <%--   <img src="<%= request.getAttribute("fullFileName")%>"/> --%>
-      <input type="hidden" name="fullFileName_view" id ="fullFileName_view" value="<%=request.getAttribute("fullFileName")%>" />
-      <div class="pretty-split-pane-component-inner">
+    <div class="pretty-split-pane-component-inner">
 						<div id="wrapper" style="width : 100%; height : 100%; float: left">
 							<div class="row">
 								<div class="col-lg-12">
@@ -888,13 +894,23 @@ table {
       <div class="split-pane fixed-bottom diagram-section" id="split-pane-2">
 
     	<form name = "form-field" id = "form-text-field" action = "saveform" method = "post" onsubmit = "return confirmwhensubmit()">
+    	                <div class="well"><p align="center">				            
+				                 <button type="button" class="btn btn-success" onclick="searchDetail();">Xóa toa/bảng kê</button>			  
+				            	 <button type="button" class="btn btn-success" onclick="searchDetail();">Lưu toa/bảng kê</button>			  
+                      	</div>
 						<div id="wrapper" style="width : 100%; height : 100%; float: right">
 							<!-- <div class="panel-heading" style="color: blue;font-weight: bold;">META DATA </div> -->
 									<div class="metadata" style="z-index: 1">									    
 									        <div class="row " >
 	                                       		  <div class="col-lg-2" ><span>Loại bảng kê  </span>  </div>	                                       		  
-	                                       		  <div class="col-lg-4">			                                       									
-				                                          <input value = "" id = "loaibangke" name="loaibangke" class="form-control" ondblclick = "getIdTag(this)" tabindex="1"/>				                                         
+	                                       		  <div class="col-lg-4">	
+	                                       		   <select id="cbb_loaibangke" name="cbb_loaibangke"  class="cbb_search" style="width: 100% ; height: 27px">
+										                 <option value="">All</option>	
+										                 <option value="">All</option>	
+										                 <option value="">All</option>	
+										                 <option value="">All</option>	
+										                 <option value="">All</option>				                  
+										           </select>
 	                                       		  </div>	 
 	                                       		  
 	                                       		  <div class="col-lg-2" ><span>Tên bảng kê  </span>  </div>	                                       		  
@@ -923,7 +939,7 @@ table {
 	                                       		  
 	                                       		 <div class="col-lg-2" ><span>NVTT </span>  </div>	                                       		  
 	                                       		  <div class="col-lg-4">			                                       									
-				                                          <input value = "" id = "NVT" name="NVTT" class="form-control" ondblclick = "getIdTag(this)" tabindex="1"/>				                                         
+				                                          <input value = "" id = "NVTT" name="NVTT" class="form-control" ondblclick = "getIdTag(this)" tabindex="1"/>				                                         
 	                                       		  </div>	                                                 		  
 	                                        </div>
 										     <div class="clear"></div>	
@@ -979,24 +995,24 @@ table {
 		                                    <td id = "stt_<%=i %>">	<%=i %></td>
 											
 											<td>
-												<input value = "" id = "masanpham_0"    name="masanpham_0"  class="custom-input-debitor form-control" ondblclick = "getIdTag(this)" tabindex=""/>
+												<input value = "" id = "masanpham_<%=i %>"    name="masanpham_<%=i %>"  class="custom-input-debitor form-control" ondblclick = "getIdTag(this)" tabindex=""/>
 											</td>
 											<td>
-												<input value = "" id = "tensanpham_0"   name="tensanpham_0" class="custom-input-debitor form-control" ondblclick = "getIdTag(this)" tabindex=""/>
+												<input value = "" id = "tensanpham_<%=i %>"   name="tensanpham_<%=i %>" class="custom-input-debitor form-control" ondblclick = "getIdTag(this)" tabindex=""/>
 											</td>
 											<td>
-												<input value = "" id = "soluong_0"      name="soluong_0"    class="custom-input-debitor form-control" ondblclick = "getIdTag(this)" tabindex=""/>
+												<input value = "" id = "soluong_<%=i %>"      name="soluong_<%=i %>"    class="custom-input-debitor form-control" ondblclick = "getIdTag(this)" tabindex=""/>
 											</td>
 											<td>
-												<input value = "" id = "sothung_0"      name="sothung_0"     class="custom-input-debitor form-control" ondblclick = "getIdTag(this)" tabindex=""/>
-											</td>
-											
-											<td>
-												<input value = "" id = "dongia_0"        name="dongia_0"     class="custom-input-debitor form-control" ondblclick = "getIdTag(this)" tabindex=""/>
+												<input value = "" id = "sothung_<%=i %>"      name="sothung_<%=i %>"     class="custom-input-debitor form-control" ondblclick = "getIdTag(this)" tabindex=""/>
 											</td>
 											
 											<td>
-												<input value = "" id = "thanhtien_0"      name="thanhtien_0" class="custom-input-debitor form-control" ondblclick = "getIdTag(this)" tabindex=""/>
+												<input value = "" id = "dongia_<%=i %>"        name="dongia_<%=i %>"     class="custom-input-debitor form-control" ondblclick = "getIdTag(this)" tabindex=""/>
+											</td>
+											
+											<td>
+												<input value = "" id = "thanhtien_<%=i %>"      name="thanhtien_<%=i %>" class="custom-input-debitor form-control" ondblclick = "getIdTag(this)" tabindex=""/>
 											</td>
 											<td>
 											   <div style="padding-top: 4px; padding-left: 2px; padding-right: 2px">
@@ -1012,10 +1028,7 @@ table {
 							        </table>
 							      </div>
 							  </div>   
-				            <div class="well"><p align="center">				            
-				                 <button type="button" class="btn btn-success" onclick="searchDetail();">Xóa toa/bảng kê</button>			  
-				            	 <button type="button" class="btn btn-success" onclick="searchDetail();">Lưu toa/bảng kê</button>			  
-                      		</div>
+				          
                       		
 						</div>
 						</div>
@@ -1042,7 +1055,8 @@ table {
            
 		</div>
 	</div>	
-
+<script type="text/javascript" src="js/jquery.mousewheel.min.js" ></script>
+<script type="text/javascript" src="js/jquery.iviewer.js" ></script>  
 <script type="text/javascript">
 function addRow(id){
 	var stt =1;
@@ -1050,17 +1064,15 @@ function addRow(id){
 	
 	 $('#table_position > tbody  > tr').each(function() {
 		 stt++;
-		 if(this.getAttribute("id")==id){
-			
-			index = stt;
-			
+		 if(this.getAttribute("id")==id){			
+			index = stt;			
 		 }
 		 
 	 });
 	
-	 var table = document.getElementById("table_position");
-	 var row = table.insertRow(index);
-	 var stt        = row.insertCell(0);
+	  var table = document.getElementById("table_position");
+	  var row = table.insertRow(index);
+	  var stt        = row.insertCell(0);
 	  var masp      = row.insertCell(1);
 	  var tensp     = row.insertCell(2);
 	  var soluong   = row.insertCell(3);
@@ -1086,10 +1098,19 @@ function addRow(id){
 	      add_remove  +="</div>";
 	      
 	  addremove.innerHTML =add_remove;
+	  
+	    var nebenkosten = document.getElementById("masanpham_"+time_id);
+		var nebenkosten_betrag = document.getElementById("tensanpham_"+time_id);
+		var nebenkosten_type = document.getElementById("soluong_"+time_id);
+		
+		new LookupKreditor(nebenkosten, nebenkosten_betrag, nebenkosten_type, null, 4, {
+			list : <%=data_postion%>
+		});
+		
 	  stt =0;
 	  $('#table_position > tbody  > tr').each(function() {
-			 stt++;		
-			  document.getElementById("stt_"+this.getAttribute("id")).value  = stt;        
+			  stt++;	
+			  document.getElementById("stt_"+this.getAttribute("id")).innerHTML  = stt;        
 			 
 			 
 		 });
@@ -1097,7 +1118,26 @@ function addRow(id){
 }
 
 function moveRow(id){
-	alert("chuong trinh them moi moveRow:"+id);
+	var result = confirm("bạn có chắt chắn chắn xóa dòng này?");
+	if (result) {
+		var stt =1;
+		var index =-1;	
+		 $('#table_position > tbody  > tr').each(function() {
+			 stt;
+			 if(this.getAttribute("id")==id){			
+				index = stt;			
+			 }		 
+		 });	
+		  var table = document.getElementById("table_position");
+		  table.deleteRow(index);	 
+		  stt =0;
+		  $('#table_position > tbody  > tr').each(function() {
+				  stt++;	
+				  document.getElementById("stt_"+this.getAttribute("id")).innerHTML  = stt;
+			 });
+		
+	}
+	
 }
 /*!
 
@@ -1504,10 +1544,11 @@ function confirmwhensubmit(){
     
     <script type="text/javascript">
        		
-       		<%-- var imagePath = "<%=fullFilePath%>"; --%>
-       		var imagePath = "";
+       	
+       		var imagePath = "https://i-giaitri.vnecdn.net/2018/12/19/rowing2-1545228554-4160-1545228557_500x300.jpg";
             var $ = jQuery;
             $(document).ready(function(){
+            
                 var iv = $("#viewer").iviewer({
               	   src : imagePath,
                      update_on_resize: true,
@@ -1523,12 +1564,43 @@ function confirmwhensubmit(){
                 $("#orig").click(function(){ iv1.iviewer('set_zoom', 100); });
                 $("#update").click(function(){ iv1.iviewer('update_container_info'); });
           });
+        	
+        		var kreditor_name = document.getElementById("maKH");
+        		var kreditor_id   = document.getElementById("tenKH");
+        		var iban          = document.getElementById("KHcap1");
+        		var currency      = document.getElementById("NVTT");
+        		
+        		new LookupKreditor(kreditor_name, kreditor_id, iban, currency, 1, {
+        			list: <%=data%>
+        		});
+        		
+        		  $('#table_position > tbody  > tr').each(function() {
+        			    var nebenkosten = document.getElementById("masanpham_"+this.getAttribute("id"));
+        				var nebenkosten_betrag = document.getElementById("tensanpham_"+this.getAttribute("id"));
+        				var nebenkosten_type = document.getElementById("soluong_"+this.getAttribute("id"));
+        				
+        				new LookupKreditor(nebenkosten, nebenkosten_betrag, nebenkosten_type, null, 4, {
+        					list : <%=data_postion%>
+        				});
+        				
+        				
+        				new LookupKreditor(nebenkosten_type,nebenkosten, nebenkosten_betrag, null, 4, {
+        					list : <%=data_postion%>
+        				});
+        				
+        				new LookupKreditor(nebenkosten_betrag,nebenkosten_type,nebenkosten, null, 4, {
+        					list : <%=data_postion%>
+        				});
+    				 
+    				  
+    			 });
+        		
+        		  $(function(){
+        	   			$("#viewer").jScrollPane();
+        	   		});
+        	
     </script>
-    <script type="text/javascript">
-    	$(function(){
-   			$("#viewer").jScrollPane();
-   		});
-    </script>
+    
     
     
 </body>
