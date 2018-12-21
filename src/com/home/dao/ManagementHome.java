@@ -6,6 +6,7 @@ import static org.hibernate.criterion.Example.create;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -294,11 +295,20 @@ public class ManagementHome {
 		log.debug("retrieve list Product");
 		Transaction tx = null;
 		Session session = null;
+		List<Management> results = new ArrayList<Management>();
 		try {
 			session = sessionFactory.openSession();
 			tx = session.beginTransaction();
-			Query query = session.createQuery("FROM Management WHERE step=1 AND duplicate_status=0 AND present_user=0 ORDER BY id");
-			List<Management> results = query.list();
+			
+			SessionImpl sessionImpl = (SessionImpl) session;
+			Connection conn = sessionImpl.connection();
+			Statement st = conn.createStatement();
+			
+			//Query query = session.createQuery("FROM Management WHERE step=1 AND duplicate_status=0 AND present_user=0 ORDER BY id");
+			//List<Management> results = query.list();
+			try(ResultSet rs1 = st.executeQuery("Select * From management WHERE step=1 AND duplicate_status=0 AND present_user=0 ORDER BY id")) {
+				results = ResultSetUtils.parserResultSet(rs1, Management.class);
+			}
 			tx.commit();
 			log.debug("retrieve list Management successful, result size: " + results.size());
 			return results;
@@ -320,20 +330,32 @@ public class ManagementHome {
 		log.debug("retrieve list Product");
 		Transaction tx = null;
 		Session session = null;
+		List<Management> results = new ArrayList<Management>();
 		try {
 			session = sessionFactory.openSession();
 			tx = session.beginTransaction();
-			Query query = session.createQuery("FROM Management WHERE step=1 AND duplicate_status=0 AND present_user="+present_user+" ORDER BY id");
-			List<Management> results = query.list();
-			if(results == null || results.isEmpty()){
-				query = session.createQuery("FROM Management WHERE step=1 AND duplicate_status=0 AND present_user=0 ORDER BY id Limit " + limit);
-				results = query.list();
-				for (Management m : results) {
-					m.setPresent_user(present_user);
-					session.update(m);
+			
+			SessionImpl sessionImpl = (SessionImpl) session;
+			Connection conn = sessionImpl.connection();
+			Statement st = conn.createStatement();
+			
+			//Query query = session.createQuery("FROM Management WHERE step=1 AND duplicate_status=0 AND present_user="+present_user+" ORDER BY id");
+			try(ResultSet rs1 = st.executeQuery("Select * From management WHERE step=1 AND duplicate_status=0 AND present_user="+present_user+" ORDER BY id")) {
+				results = ResultSetUtils.parserResultSet(rs1, Management.class);
+				if(results == null || results.isEmpty()){
+					//query = session.createQuery("FROM Management WHERE step=1 AND duplicate_status=0 AND present_user=0 ORDER BY id Limit " + limit);
+					try(ResultSet rs2 = st.executeQuery("Select * From management WHERE step=1 AND duplicate_status=0 AND present_user=0 ORDER BY id Limit " + limit)){
+						 results = ResultSetUtils.parserResultSet(rs2, Management.class);
+						 for (Management m : results) {
+							 m.setPresent_user(present_user);
+							 session.update(m);
+						 }
+					}
+					
 				}
-			}
+			} 
 			tx.commit();
+			st.close();
 			log.debug("retrieve list Management successful, result size: " + results.size());
 			return results;
 		} catch (Exception re) {

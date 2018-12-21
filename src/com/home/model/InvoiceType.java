@@ -10,10 +10,10 @@ import java.util.Set;
  */
 public class InvoiceType implements java.io.Serializable {
 
-	private Integer id;
-	private String invoiceType;
-	private String description;
-	private Set<Statistic> statistics = new HashSet<Statistic>(0);
+	public Integer id;
+	public String invoiceType;
+	public String description;
+	public Set<Statistic> statistics = new HashSet<Statistic>(0);
 
 	public InvoiceType() {
 	}

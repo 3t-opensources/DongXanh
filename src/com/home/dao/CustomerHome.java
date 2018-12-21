@@ -1070,12 +1070,14 @@ public class CustomerHome {
 			Connection conn = sessionImpl.connection();
 			try (Statement sta = conn.createStatement()) {
 				String query = "Select id, customer_code, business_name, statistic_name, business_address, telefone "
-						+ "From customer "
-						+ "Where group_customer_id in ("+(groupCustomer)+") AND (lower(business_name) Like ? OR lower(statistic_name) Like ?) order by customer_code, business_name, statistic_name LIMIT 20";
+						+ " From customer "
+						+ " Where group_customer_id in ("+(groupCustomer)+") AND (lower(business_name) Like ? OR lower(statistic_name) Like ?) order by customer_code, business_name, statistic_name LIMIT 20";
 				//System.out.println(query);
 				try(PreparedStatement pre = conn.prepareStatement(query)){
 					pre.setString(1, "%"+cusName.toLowerCase()+"%");
 					pre.setString(2, "%"+cusName.toLowerCase()+"%");
+					
+					System.out.println(pre.toString());		
 					try (ResultSet rs = pre.executeQuery()) {
 						while (rs.next()) {
 							Customer cus = new Customer();
@@ -1120,15 +1122,17 @@ public class CustomerHome {
 			Connection conn = sessionImpl.connection();
 			try (Statement sta = conn.createStatement()) {
 				String query = "Select c.id as customer_id, c.customer_code, c.statistic_name, c.user_id, u.user_name, u.full_name, c1.id as customer1_id, c1.statistic_name as statistic1_name"
-						+ "From customer c "
-						+ "LEFT JOIN user u On c.user_id = u.id"
-						+ "LEFT JOIN customer c1 On c.customer1_level1_id = c1.id"
-						+ "Where group_customer_id in ("+(groupCustomer)+") "
+						+ " From customer c "
+						+ " LEFT JOIN user u On c.user_id = u.id"
+						+ " LEFT JOIN customer c1 On c.customer1_level1_id = c1.id"
+						+ " Where group_customer_id in ("+(groupCustomer)+") "
 						+ " AND (lower(business_name) Like ? OR lower(statistic_name) Like ?) order by customer_code, statistic_name LIMIT 20";
 				//System.out.println(query);
 				try(PreparedStatement pre = conn.prepareStatement(query)){
 					pre.setString(1, "%"+cusName.toLowerCase()+"%");
 					pre.setString(2, "%"+cusName.toLowerCase()+"%");
+					
+					System.out.println(pre.toString());					
 					try (ResultSet rs = pre.executeQuery()) {
 						while (rs.next()) {
 							results.add(new Object[]{
@@ -1174,19 +1178,21 @@ public class CustomerHome {
 			Connection conn = sessionImpl.connection();
 			try (Statement sta = conn.createStatement()) {
 				String query = "Select id, customer_code, business_name, statistic_name, business_address, telefone "
-						+ "From customer "
-						+ "Where group_customer_id ="+MyConts.CUS_L2+" AND (lower(business_name) Like ? OR lower(statistic_name) Like ?) "
-						+ "AND ("
-						+ "(COALESCE(customer1_level1_id, 0) = "+cusId1+") OR"
-						+ "(COALESCE(customer2_level1_id, 0) = "+cusId1+") OR"
-						+ "(COALESCE(customer3_level1_id, 0) = "+cusId1+") OR"
-						+ "(COALESCE(customer4_level1_id, 0) = "+cusId1+") OR"
-						+ "(COALESCE(customer5_level1_id, 0) = "+cusId1+") )"
-						+ "Order by customer_code, business_name, statistic_name LIMIT 20";
-				System.out.println(query);
+						+ " From customer "
+						+ " Where group_customer_id ="+MyConts.CUS_L2+" AND (lower(business_name) Like ? OR lower(statistic_name) Like ?) "
+						+ " AND ("
+						+ " (COALESCE(customer1_level1_id, 0) = "+cusId1+") OR"
+						+ " (COALESCE(customer2_level1_id, 0) = "+cusId1+") OR"
+						+ " (COALESCE(customer3_level1_id, 0) = "+cusId1+") OR"
+						+ " (COALESCE(customer4_level1_id, 0) = "+cusId1+") OR"
+						+ " (COALESCE(customer5_level1_id, 0) = "+cusId1+") )"
+						+ " Order by customer_code, business_name, statistic_name LIMIT 20";
+				//System.out.println(query);
 				try(PreparedStatement pre = conn.prepareStatement(query)){
 					pre.setString(1, "%"+cusName2.toLowerCase()+"%");
 					pre.setString(2, "%"+cusName2.toLowerCase()+"%");
+					
+					System.out.println(pre.toString());		
 					try (ResultSet rs = pre.executeQuery()) {
 						while (rs.next()) {
 							Customer cus = new Customer();

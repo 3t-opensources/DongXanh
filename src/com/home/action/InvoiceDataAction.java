@@ -1,6 +1,7 @@
 package com.home.action;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletContext;
@@ -10,11 +11,13 @@ import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.util.ServletContextAware;
 import org.hibernate.SessionFactory;
 
+import com.google.gson.Gson;
 import com.home.dao.CustomerHome;
 import com.home.dao.InvoiceDataHome;
 import com.home.dao.UserHome;
 import com.home.model.Customer;
 import com.home.model.InvoiceData;
+import com.home.model.ResultMessage;
 import com.home.model.User;
 import com.home.util.DateUtils;
 import com.home.util.HibernateUtil;
@@ -26,10 +29,21 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 	private static final long serialVersionUID = 5109187855480607759L;
 	//servletcontext for getting the context
 	private ServletContext servletContext;
-	private List<InvoiceData> listData;
-	private List<User> listStaff;
-	private List<Customer> listCustomer;
+	private List<InvoiceData> listData = new ArrayList<InvoiceData>();
+	private List<User> listStaff = new ArrayList<User>();
+	private List<Customer> listCustomer = new ArrayList<Customer>();
+	private String result;
+	private ResultMessage rsMess = new ResultMessage();
+	
+	
+	public String getResult() {
+		return result;
+	}
 
+	public void setResult(String result) {
+		this.result = result;
+	}
+	
 	public ServletContext getServletContext() {
 		return servletContext;
 	}
@@ -56,9 +70,13 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 		try {
 			UserHome userHome = new UserHome(getSessionFactory());
 			listStaff = userHome.getLookupEmployee();
+			result = new Gson().toJson(listStaff);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return ERROR;
+			rsMess.setStatus(1);
+			rsMess.setMessage(e.getMessage());
+			result = rsMess.toString();
+			//return ERROR;
 		}
 		return SUCCESS;
 	}
@@ -75,9 +93,13 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 			}
 			CustomerHome cusHome = new CustomerHome(getSessionFactory());
 			listCustomer = cusHome.getListCustomerByUserId(user_id);
+			result = new Gson().toJson(listCustomer);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return ERROR;
+			rsMess.setStatus(1);
+			rsMess.setMessage(e.getMessage());
+			result = rsMess.toString();
+			//return ERROR;
 		}
 		return SUCCESS;
 	}
@@ -97,11 +119,15 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 			}
 			InvoiceDataHome home = new InvoiceDataHome(getSessionFactory());
 			listData = home.getListInvoiceData(management_id);
+			result = new Gson().toJson(listData);
 			System.out.println("Total data: " + listData.size());
 			//System.out.println(datas.get(0).getManagement_id().getFile_name());
 		} catch (Exception e) {
 			e.printStackTrace();
-			return ERROR;
+			rsMess.setStatus(1);
+			rsMess.setMessage(e.getMessage());
+			result = rsMess.toString();
+			//return ERROR;
 		}
 		return SUCCESS;
 	}
@@ -133,11 +159,15 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 			
 			InvoiceDataHome home = new InvoiceDataHome(getSessionFactory());
 			listData = home.getListInvoiceData(date_company_received_from, date_company_received_to, invoice_type, user_id, customer_id, sent_late);
+			result = new Gson().toJson(listData);
 			System.out.println("Total data: " + listData.size());
 			//System.out.println(datas.get(0).getManagement_id().getFile_name());
 		} catch (Exception e) {
 			e.printStackTrace();
-			return ERROR;
+			rsMess.setStatus(1);
+			rsMess.setMessage(e.getMessage());
+			result = rsMess.toString();
+			//return ERROR;
 		}
 		return SUCCESS;
 	}

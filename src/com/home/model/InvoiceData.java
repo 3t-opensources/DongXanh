@@ -4,25 +4,25 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 public class InvoiceData {
-	private Integer id;
-	private Management management_id;
-	private InvoiceType invoice_type_id;
-	private Customer customer_id;
-	private String customer_name;
-	private String invoice_name;
-	private Customer customer_id_level1;
-	private String customer_name_level1;
-	private User user_id;
-	private String user_name;
-	private Date date_company_received;
-	private Date date_product_received;
-	private Integer date_sent_late;
-	private String notes;
-	private String product_ids;
-	private String product_names;
-	private String total_boxs;
-	private String quantitys;
-	private String total_prices;
+	public Integer id;
+	public Management management_id;
+	public InvoiceType invoice_type_id;
+	public Customer customer_id;
+	public String customer_name;
+	public String invoice_name;
+	public Customer customer_id_level1;
+	public String customer_name_level1;
+	public User user_id;
+	public String user_name;
+	public Date date_company_received;
+	public Date date_product_received;
+	public Integer date_sent_late;
+	public String notes;
+	public String product_ids;
+	public String product_names;
+	public String total_boxs;
+	public String quantitys;
+	public String total_prices;
 	public BigDecimal sum_total_price;
 	
 	

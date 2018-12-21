@@ -42,7 +42,7 @@ public class RedisUtil {
 			//check whether server is running or not 
 			System.out.println("Server is running: "+jedis.ping());
 		} catch (Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		} 
 	}
 	

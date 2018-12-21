@@ -6,6 +6,7 @@ import static org.hibernate.criterion.Example.create;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -233,6 +234,40 @@ public class InvoiceTypeHome {
 			tx = session.beginTransaction();
 			Query query = session.createQuery("FROM InvoiceType ORDER BY id");
 			List<InvoiceType> results = query.list();
+			tx.commit();
+			log.debug("retrieve list InvoiceType successful, result size: " + results.size());
+			return results;
+		} catch (Exception re) {
+			re.printStackTrace();
+			log.error("retrieve list Product failed", re);
+			throw re;
+		} finally{
+			try {
+				if(session != null){
+					session.close();
+				}
+			} catch (Exception e) {
+			}
+		}
+	}
+	
+	public List<InvoiceType> getListInvoiceType2() throws Exception{
+		log.debug("retrieve list Product");
+		Transaction tx = null;
+		Session session = null;
+		List<InvoiceType> results = new ArrayList<InvoiceType>();
+		try {
+			session = sessionFactory.openSession();
+			tx = session.beginTransaction();
+			
+			SessionImpl sessionImpl = (SessionImpl) session;
+			Connection conn = sessionImpl.connection();
+			try (Statement sta = conn.createStatement()) {
+				String sql = "Select * From InvoiceType ORDER BY id";
+				try(ResultSet rs = sta.executeQuery(sql)){
+					results = ResultSetUtils.parserResultSet(rs, InvoiceType.class);
+				}
+			}
 			tx.commit();
 			log.debug("retrieve list InvoiceType successful, result size: " + results.size());
 			return results;

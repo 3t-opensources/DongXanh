@@ -7,6 +7,7 @@ import static org.hibernate.criterion.Example.create;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -274,11 +275,19 @@ public class InvoiceDataHome {
 		log.debug("retrieve list Product");
 		Transaction tx = null;
 		Session session = null;
+		List<InvoiceData> results = new ArrayList<InvoiceData>();
 		try {
 			session = sessionFactory.openSession();
 			tx = session.beginTransaction();
-			Query query = session.createQuery("FROM InvoiceData WHERE management_id="+management_id+" ORDER BY id");
-			List<InvoiceData> results = query.list();
+			
+			SessionImpl sessionImpl = (SessionImpl) session;
+			Connection conn = sessionImpl.connection();
+			try (Statement sta = conn.createStatement()) {
+				String sql = "Select * FROM invoice_data WHERE management_id="+management_id+" ORDER BY id";
+				try(ResultSet rs = sta.executeQuery(sql)){
+					results = ResultSetUtils.parserResultSet(rs, InvoiceData.class);
+				}
+			}
 			tx.commit();
 			log.debug("retrieve list InvoiceData successful, result size: " + results.size());
 			return results;
@@ -323,12 +332,12 @@ public class InvoiceDataHome {
 					" WHERE  "
 					+ " (0="+(start_day==null?0:1)+" Or (date_company_received >= ? And date_company_received <= ?))"
 					+ " AND (0="+(invoice_type<=0?0:1)+" Or (invoice_type=?))"
-					+ " AND (0="+(user_id<=0?0:1)+" Or (user_id=?))"
+					+ " AND (0="+(user_id<=0?0:1)+" Or (i.user_id=?))"
 					+ " AND (0="+(customer_id<=0?0:1)+" Or (customer_id=?))"
-					+ " AND (0="+(sent_late<=0?0:1)+" Or (sent_late>0))"
+					+ " AND (0="+(sent_late<=0?0:1)+" Or (date_sent_late>0))"
 					+ " Order by date_company_received, id";
 			
-			System.out.println(sql);
+			//System.out.println(sql);
 			PreparedStatement pre = conn.prepareStatement(sql);
 			pre.setDate(1, start_day);
 			pre.setDate(2, end_day);

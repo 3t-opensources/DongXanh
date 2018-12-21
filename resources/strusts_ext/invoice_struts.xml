@@ -30,24 +30,43 @@
 			<result name="success">/invoice_data_report1.jsp</result>
 			<result name="error">/invoice_data_report1.jsp</result>
 		</action>
+	</package>
 
+	<package name="invoiceJson" namespace="/" extends="json-default">
+		<interceptors>
+			<interceptor-stack name="defaultStack">
+				<interceptor-ref name="json">
+					<param name="enableSMD">true</param>
+				</interceptor-ref>
+			</interceptor-stack>
+		</interceptors>
+		<default-interceptor-ref name="defaultStack" />
+		
 		<action name="loadStaffInvoiceReport1Action" method="loadListStaff"
 			class="com.home.action.InvoiceDataAction">
-			<result type="json" />
+			<result type="json">
+				<param name="root">result</param>
+			</result>
 		</action>
 		<action name="loadCusByStaffInvoiceReport1Action" method="loadListCustomerByStaff"
 			class="com.home.action.InvoiceDataAction">
-			<result type="json" />
+			<result type="json">
+				<param name="root">result</param>
+			</result>
 		</action>
 		
 		<action name="getAllInvoiceDataReport1Action" method="getAllInvoiceData"
 			class="com.home.action.InvoiceDataAction">
-			<result type="json" />
+			<result type="json">
+				<param name="root">result</param>
+			</result>
 		</action>
 		
 		<action name="getInvoiceDataFilterReport1Action" method="getInvoiceDataFilter"
 			class="com.home.action.InvoiceDataAction">
-			<result type="json" />
+			<result type="json">
+				<param name="root">result</param>
+			</result>
 		</action>
 		
 

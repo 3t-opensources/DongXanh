@@ -4,17 +4,17 @@ import java.util.Date;
 
 public class Management {
 	
-	private Integer id;
-	private String file_path;
-	private String file_name;
-	private Integer step;
-	private Integer status;
-	private String created_by;
-	private Date created_time;
-	private String hash_file;
-	private Integer duplicate_status;
-	private Integer capture_status;
-	private Integer present_user;
+	public Integer id;
+	public String file_path;
+	public String file_name;
+	public Integer step;
+	public Integer status;
+	public String created_by;
+	public Date created_time;
+	public String hash_file;
+	public Integer duplicate_status;
+	public Integer capture_status;
+	public Integer present_user;
 	
 	public Integer getCapture_status() {
 		return capture_status;
