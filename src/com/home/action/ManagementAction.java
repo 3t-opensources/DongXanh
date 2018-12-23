@@ -11,8 +11,10 @@ import javax.imageio.ImageIO;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.struts2.ServletActionContext;
+import org.apache.struts2.dispatcher.multipart.MultiPartRequestWrapper;
 import org.apache.struts2.util.ServletContextAware;
 import org.hibernate.SessionFactory;
 
@@ -28,6 +30,7 @@ import com.home.entity.EntInvoiceData;
 import com.home.model.Customer;
 import com.home.model.InvoiceData;
 import com.home.model.InvoiceType;
+import com.home.model.JobImport;
 import com.home.model.Management;
 import com.home.model.ResultMessage;
 import com.home.model.User;
@@ -50,9 +53,28 @@ public class ManagementAction extends ActionSupport implements ServletContextAwa
 	private List<Object[]> listCustomer = new ArrayList<Object[]>();
 	private List<Object[]> listStaff = new ArrayList<Object[]>();
 	private List<Object[]> listProduct = new ArrayList<Object[]>();
-	private String result;
+	private Object result;
 	private ResultMessage rsMess = new ResultMessage();
 	private List<InvoiceType> listInvoiceType = new ArrayList<InvoiceType>();
+	private List<JobImport> jobs = new ArrayList<JobImport>();;
+	private EntInvoiceData invoice_data = new EntInvoiceData();
+	
+
+	public EntInvoiceData getInvoice_data() {
+		return invoice_data;
+	}
+
+	public void setInvoice_data(EntInvoiceData invoice_data) {
+		this.invoice_data = invoice_data;
+	}
+
+	public List<JobImport> getJobs() {
+		return jobs;
+	}
+
+	public void setJobs(List<JobImport> jobs) {
+		this.jobs = jobs;
+	}
 
 	public List<InvoiceType> getListInvoiceType() {
 		return listInvoiceType;
@@ -62,11 +84,11 @@ public class ManagementAction extends ActionSupport implements ServletContextAwa
 		this.listInvoiceType = listInvoiceType;
 	}
 
-	public String getResult() {
+	public Object getResult() {
 		return result;
 	}
 
-	public void setResult(String result) {
+	public void setResult(Object result) {
 		this.result = result;
 	}
 
@@ -116,39 +138,86 @@ public class ManagementAction extends ActionSupport implements ServletContextAwa
 		this.servletContext = servletContext;
 	}
 
-	public String importDataCapture(){
+	public String importImagesCapture1(){
 		try {
-			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
-			String file_name = request.getParameter("file_name");
-			String base64 = request.getParameter("base64");
-			String user_name = request.getParameter("user_name");
-			BufferedImage buff = Base64Util.decodeToImage(base64);
+			StringBuilder strMess = new StringBuilder();
+			int rsStatus = 0;
+			for (JobImport job : jobs) {
+				BufferedImage buff = Base64Util.decodeToImage(job.getBase64());
 
-			File dir = new File(SystemUtil.getUserDir() + "/DX_Images/"+DateUtils.getDateToString(new Date(), "dd/MM/yyyy"));
+				File dir = new File(SystemUtil.getUserDir() + "/DX_Images/"+DateUtils.getDateToString(new Date(), "ddMMyyyy") + "/" + new Date().getTime());
+				if (!dir.exists()) {
+					dir.mkdirs();
+				}
+
+				ManagementHome managementHome = new ManagementHome(getSessionFactory()); 
+				File output = new File(dir.getAbsolutePath() + "/" + job.getFile_name());
+				ImageIO.write(buff, FilenameUtils.getExtension(job.getFile_name()).toLowerCase().replace("jpg", "jpeg"), output);
+				String hash_file = HashGeneratorUtils.generateMD5(output);
+				if(notDuplicate(managementHome, hash_file)){
+					importImage2DB(managementHome, output, hash_file, job.getUser_name());
+					strMess.append("Import successed["+output.getName()+"];");
+				}else{
+					rsStatus = 1;
+					strMess.append("File duplicate["+output.getName()+"];");
+				}	
+			}
+			rsMess.setStatusError(rsStatus);
+			rsMess.setMessage(strMess.toString());
+			result = rsMess;//rsMess.toString();
+		} catch (Exception e) {
+			e.printStackTrace();
+			rsMess.setStatusError(1);
+			rsMess.setMessage(e.toString());
+			result = rsMess;//rsMess.toString();
+			//return ERROR;
+		}
+		return SUCCESS;
+	}
+
+	public String importImagesCapture2(){
+		try {
+			ManagementHome managementHome = new ManagementHome(getSessionFactory()); 
+			String user_name;
+			MultiPartRequestWrapper multiWrapper = (MultiPartRequestWrapper) ServletActionContext.getRequest();
+			String[] fileName = multiWrapper.getFileNames("file");
+//			for(String s : fileName) {
+//				System.out.println(s);
+//			}
+			user_name = multiWrapper.getParameter("user_name");
+			if(user_name == null){
+				throw new Exception("user_name is null");
+			}
+
+			File dir = new File(SystemUtil.getUserDir() + "/DX_Images/"+DateUtils.getDateToString(new Date(), "ddMMyyyy") + "/" + new Date().getTime());
 			if (!dir.exists()) {
 				dir.mkdirs();
 			}
 
-			ManagementHome managementHome = new ManagementHome(getSessionFactory()); 
-			File output = new File(dir.getAbsolutePath() + "/" + file_name);
-			String hash_file = HashGeneratorUtils.generateMD5(output);
-			if(notDuplicate(managementHome, hash_file)){
-				ImageIO.write(buff, FilenameUtils.getExtension(file_name).toLowerCase().replace("jpg", "jpeg"), output);
-				importImage2DB(managementHome, output, hash_file, user_name);
-				rsMess.setStatus(0);
-				rsMess.setMessage("Import done!");
-				result = rsMess.toString();
-			}else{
-				System.out.println("File duplicate: " + output);
-				rsMess.setStatus(1);
-				rsMess.setMessage("File duplicate: " + output);
-				result = rsMess.toString();
-			}			
+			// Get a Files[] object for the uploaded File
+			File[] files = multiWrapper.getFiles("file");
+			StringBuilder strMess = new StringBuilder();
+			int rsStatus = 0;
+			for(int i = 0; i < files.length; i++) {
+				File output = new File(dir.getAbsolutePath() + "/" + fileName[i]);
+				FileUtils.copyFile(files[i], output);
+				String hash_file = HashGeneratorUtils.generateMD5(output);
+				if(notDuplicate(managementHome, hash_file)){
+					importImage2DB(managementHome, output, hash_file, user_name);
+					strMess.append("Import successed["+output.getName()+"];");
+				}else{
+					rsStatus = 1;
+					strMess.append("File duplicate["+output.getName()+"];");
+				}	
+			}
+			rsMess.setStatusError(rsStatus);
+			rsMess.setMessage(strMess.toString());
+			result = rsMess;//rsMess.toString();
 		} catch (Exception e) {
 			e.printStackTrace();
-			rsMess.setStatus(1);
-			rsMess.setMessage(e.getMessage());
-			result = rsMess.toString();
+			rsMess.setStatusError(1);
+			rsMess.setMessage(e.toString());
+			result = rsMess;//rsMess.toString();
 			//return ERROR;
 		}
 		return SUCCESS;
@@ -192,16 +261,18 @@ public class ManagementAction extends ActionSupport implements ServletContextAwa
 		return false;
 	}
 
-	private void importImage2DB(ManagementHome managementHome, File file, String hash_file, String user_name){
+	private void importImage2DB(ManagementHome managementHome, File file, String hash_file, String user_name) throws Exception{
 		try {
 			Management management = new Management();
 			management.setFile_path(file.getParent().replace("\\", "/"));
 			management.setFile_name(file.getName());
-			management.setCreated_time(new Date());
+			management.setCreated_time(new java.sql.Date(new Date().getTime()));
 			management.setCreated_by(user_name);
 			management.setHash_file(hash_file);
 			management.setStep(1);
 			management.setStatus(0);
+			management.setPresent_user(0);
+			management.setCapture_status(0);
 			management.setDuplicate_status(0);
 			managementHome.attachDirty(management);
 			//System.out.println(management.getId());
@@ -212,6 +283,7 @@ public class ManagementAction extends ActionSupport implements ServletContextAwa
 			System.out.println("File " + file.getName() + " imported!");
 		} catch (Exception e) {
 			e.printStackTrace();
+			throw e;
 		}
 	}
 
@@ -219,17 +291,17 @@ public class ManagementAction extends ActionSupport implements ServletContextAwa
 	 * Show list job have not capture
 	 * @return
 	 */
-	public String getAllJob(){
+	public String getPendingJobs(){
 		try {
 			ManagementHome home = new ManagementHome(getSessionFactory());
 			managements = home.getAllJobCapture();			
-			result = new Gson().toJson(managements);
+			result = managements;//new Gson().toJson(managements);
 			System.out.println("Total job: " + managements.size());
 		} catch (Exception e) {
 			e.printStackTrace();
-			rsMess.setStatus(1);
-			rsMess.setMessage(e.getMessage());
-			result = rsMess.toString();
+			rsMess.setStatusError(1);
+			rsMess.setMessage(e.toString());
+			result = rsMess;//rsMess.toString();
 			//return ERROR;
 		}
 		return SUCCESS;
@@ -244,17 +316,17 @@ public class ManagementAction extends ActionSupport implements ServletContextAwa
 				HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
 				user_id = Integer.parseInt(request.getParameter("user_id"));
 			} catch (Exception e) {
-				user_id = 0;
+				throw new Exception("Param: user_id invalid, " + e.toString());
 			}
 			ManagementHome home = new ManagementHome(getSessionFactory());
 			managements = home.getJobCapture(user_id, 3);
-			result = new Gson().toJson(managements);
+			result = managements;//new Gson().toJson(managements);
 			System.out.println("Total job: " + managements.size());
 		} catch (Exception e) {
 			e.printStackTrace();
-			rsMess.setStatus(1);
-			rsMess.setMessage(e.getMessage());
-			result = rsMess.toString();
+			rsMess.setStatusError(1);
+			rsMess.setMessage(e.toString());
+			result = rsMess;//rsMess.toString();
 			//return ERROR;
 		}
 		return SUCCESS;
@@ -263,17 +335,22 @@ public class ManagementAction extends ActionSupport implements ServletContextAwa
 	public String saveJobCapture(){
 		try {
 			ManagementHome home = new ManagementHome(getSessionFactory());
-			int management_id;
-			EntInvoiceData data;
-			
-			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
-			management_id = Integer.parseInt(request.getParameter("management_id"));
-			data = EntInvoiceData.fromJson(StringUtil.notNull(request.getParameter("invoice_data")));
+			EntInvoiceData data = this.invoice_data;
+			int management_id = data.getManagement_id();
+
+//			try {
+//				HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
+//				management_id = Integer.parseInt(request.getParameter("management_id"));
+//				data = EntInvoiceData.fromJson(StringUtil.notNull(request.getParameter("invoice_data")));
+//			} catch (Exception e) {
+//				throw new Exception("List params[management_id/invoice_data] invalid, error: " + e.toString());
+//			}
 
 			Management management = new Management();
 			management.setId(management_id);
 
 			InvoiceData invoice_data = new InvoiceData();
+			invoice_data.setId(data.getId());
 			invoice_data.setManagement_id(management);
 
 			InvoiceType invoice_type_id = new InvoiceType();
@@ -310,14 +387,14 @@ public class ManagementAction extends ActionSupport implements ServletContextAwa
 			home.saveJobCapture(management_id, invoice_data);
 
 			System.out.println("Save job done!");
-			rsMess.setStatus(0);
+			rsMess.setStatusError(0);
 			rsMess.setMessage("Save job done!");
-			result = rsMess.toString();
+			result = rsMess;//rsMess.toString();
 		} catch (Exception e) {
 			e.printStackTrace();
-			rsMess.setStatus(1);
-			rsMess.setMessage(e.getMessage());
-			result = rsMess.toString();
+			rsMess.setStatusError(1);
+			rsMess.setMessage(e.toString());
+			result = rsMess;//rsMess.toString();
 			//return ERROR;
 		}
 		return SUCCESS;
@@ -326,20 +403,24 @@ public class ManagementAction extends ActionSupport implements ServletContextAwa
 	public String badJobCapture(){
 		try {
 			int management_id;
-			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
-			management_id = Integer.parseInt(request.getParameter("management_id"));
+			try {
+				HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
+				management_id = Integer.parseInt(request.getParameter("management_id"));
+			} catch (Exception e) {
+				throw new Exception("Param: management_id invalid, " + e.toString());
+			}
 			ManagementHome home = new ManagementHome(getSessionFactory());
 			home.setJobDuplicate(management_id);
 
 			System.out.println("Bad job done!");
-			rsMess.setStatus(0);
+			rsMess.setStatusError(0);
 			rsMess.setMessage("Bad job done!");
-			result = rsMess.toString();
+			result = rsMess;//rsMess.toString();
 		} catch (Exception e) {
 			e.printStackTrace();
-			rsMess.setStatus(1);
-			rsMess.setMessage(e.getMessage());
-			result = rsMess.toString();
+			rsMess.setStatusError(1);
+			rsMess.setMessage(e.toString());
+			result = rsMess;//rsMess.toString();
 			//return ERROR;
 		}
 		return SUCCESS;
@@ -354,12 +435,12 @@ public class ManagementAction extends ActionSupport implements ServletContextAwa
 		try {
 			InvoiceTypeHome home = new InvoiceTypeHome(HibernateUtil.getSessionFactory());
 			listInvoiceType = home.getListInvoiceType2();
-			result = new Gson().toJson(listInvoiceType);
+			result = listInvoiceType;//new Gson().toJson(listInvoiceType);
 		} catch (Exception e) {
 			e.printStackTrace();
-			rsMess.setStatus(1);
-			rsMess.setMessage(e.getMessage());
-			result = rsMess.toString();
+			rsMess.setStatusError(1);
+			rsMess.setMessage(e.toString());
+			result = rsMess;//rsMess.toString();
 			//return ERROR;
 		}
 		return SUCCESS;
@@ -369,8 +450,13 @@ public class ManagementAction extends ActionSupport implements ServletContextAwa
 		try {
 			CustomerHome cusHome = new CustomerHome(HibernateUtil.getSessionFactory());
 
-			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
-			String search_cus = StringUtil.notNull(request.getParameter("search_cus"));
+			String search_cus;
+			try {
+				HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
+				search_cus = StringUtil.notNull(request.getParameter("search_cus"));
+			} catch (Exception e) {
+				throw new Exception("Param: search_cus invalid, " + e.toString());
+			}
 
 			if(!redis.isConnected()){
 				redis.connect(REDIS_SERVER, REDIS_PORT, REDIS_AUTH);
@@ -387,12 +473,12 @@ public class ManagementAction extends ActionSupport implements ServletContextAwa
 			}else{
 				listCustomer = cusHome.lookupCustomerAndStaff(search_cus, ""+MyConts.CUS_L1);
 			}
-			result = new Gson().toJson(listCustomer);
+			result = listCustomer;//new Gson().toJson(listCustomer);
 		} catch (Exception e) {
 			e.printStackTrace();
-			rsMess.setStatus(1);
-			rsMess.setMessage(e.getMessage());
-			result = rsMess.toString();
+			rsMess.setStatusError(1);
+			rsMess.setMessage(e.toString());
+			result = rsMess;//rsMess.toString();
 			//return ERROR;
 		}
 		return SUCCESS;
@@ -402,8 +488,13 @@ public class ManagementAction extends ActionSupport implements ServletContextAwa
 		try {
 			CustomerHome cusHome = new CustomerHome(HibernateUtil.getSessionFactory());
 
-			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
-			String search_cus = StringUtil.notNull(request.getParameter("search_cus"));
+			String search_cus;
+			try {
+				HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
+				search_cus = StringUtil.notNull(request.getParameter("search_cus"));
+			} catch (Exception e) {
+				throw new Exception("Param: search_cus invalid, " + e.toString());
+			}
 
 			if(!redis.isConnected()){
 				redis.connect(REDIS_SERVER, REDIS_PORT, REDIS_AUTH);
@@ -420,12 +511,12 @@ public class ManagementAction extends ActionSupport implements ServletContextAwa
 			}else{
 				listCustomer = cusHome.lookupCustomer(search_cus, ""+MyConts.CUS_L1);
 			}
-			result = new Gson().toJson(listCustomer);
+			result = listCustomer;//new Gson().toJson(listCustomer);
 		} catch (Exception e) {
 			e.printStackTrace();
-			rsMess.setStatus(1);
-			rsMess.setMessage(e.getMessage());
-			result = rsMess.toString();
+			rsMess.setStatusError(1);
+			rsMess.setMessage(e.toString());
+			result = rsMess;//rsMess.toString();
 			//return ERROR;
 		}
 		return SUCCESS;
@@ -435,8 +526,13 @@ public class ManagementAction extends ActionSupport implements ServletContextAwa
 		try {
 			UserHome userHome = new UserHome(HibernateUtil.getSessionFactory());
 
-			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
-			String search_staff = StringUtil.notNull(request.getParameter("search_start"));
+			String search_staff;
+			try {
+				HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
+				search_staff = StringUtil.notNull(request.getParameter("search_start"));
+			} catch (Exception e) {
+				throw new Exception("Param: search_staff invalid, " + e.toString());
+			}
 
 			if(!redis.isConnected()){
 				redis.connect(REDIS_SERVER, REDIS_PORT, REDIS_AUTH);
@@ -454,12 +550,12 @@ public class ManagementAction extends ActionSupport implements ServletContextAwa
 
 				listStaff =  userHome.lookupStaff(search_staff);
 			}
-			result = new Gson().toJson(listStaff);
+			result = listStaff;//new Gson().toJson(listStaff);
 		} catch (Exception e) {
 			e.printStackTrace();
-			rsMess.setStatus(1);
-			rsMess.setMessage(e.getMessage());
-			result = rsMess.toString();
+			rsMess.setStatusError(1);
+			rsMess.setMessage(e.toString());
+			result = rsMess;//rsMess.toString();
 			//return ERROR;
 		}
 		return SUCCESS;
@@ -469,8 +565,13 @@ public class ManagementAction extends ActionSupport implements ServletContextAwa
 		try {
 			ProductHome proHome = new ProductHome(HibernateUtil.getSessionFactory());
 
-			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
-			String search_product = StringUtil.notNull(request.getParameter("search_product"));
+			String search_product;
+			try {
+				HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
+				search_product = StringUtil.notNull(request.getParameter("search_product"));
+			} catch (Exception e) {
+				throw new Exception("Param: search_product invalid, " + e.toString());
+			}
 
 			if(!redis.isConnected()){
 				redis.connect(REDIS_SERVER, REDIS_PORT, REDIS_AUTH);
@@ -488,12 +589,12 @@ public class ManagementAction extends ActionSupport implements ServletContextAwa
 
 				listProduct = proHome.lookupProduct(search_product);
 			}
-			result = new Gson().toJson(listProduct);
+			result = listProduct;//new Gson().toJson(listProduct);
 		} catch (Exception e) {
 			e.printStackTrace();
-			rsMess.setStatus(1);
-			rsMess.setMessage(e.getMessage());
-			result = rsMess.toString();
+			rsMess.setStatusError(1);
+			rsMess.setMessage(e.toString());
+			result = rsMess;//rsMess.toString();
 			//return ERROR;
 		}
 		return SUCCESS;

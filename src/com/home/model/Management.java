@@ -1,6 +1,6 @@
 package com.home.model;
 
-import java.util.Date;
+import java.sql.Date;
 
 public class Management {
 	

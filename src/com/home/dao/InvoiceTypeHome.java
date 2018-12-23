@@ -263,7 +263,7 @@ public class InvoiceTypeHome {
 			SessionImpl sessionImpl = (SessionImpl) session;
 			Connection conn = sessionImpl.connection();
 			try (Statement sta = conn.createStatement()) {
-				String sql = "Select * From InvoiceType ORDER BY id";
+				String sql = "Select * From invoice_type ORDER BY id";
 				try(ResultSet rs = sta.executeQuery(sql)){
 					results = ResultSetUtils.parserResultSet(rs, InvoiceType.class);
 				}
