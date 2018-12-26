@@ -5,9 +5,11 @@ package com.home.dao;
 import static org.hibernate.criterion.Example.create;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -348,6 +350,9 @@ public class ManagementHome {
 						 results = ResultSetUtils.parserResultSet(rs2, Management.class);
 						 for (Management m : results) {
 							 m.setPresent_user(present_user);
+							 if(m.getCreated_time() == null){
+								 m.setCreated_time(new java.sql.Date(new Date().getTime()));
+							 }
 							 session.update(m);
 						 }
 					}
@@ -428,21 +433,30 @@ public class ManagementHome {
 		}
 	}
 	
-	public boolean isImageDuplicate(String hash_file) {
+	public boolean isImageDuplicate(String hash_file) throws Exception {
 		log.debug("Checking Statistic duplicate with: ");
 		Transaction tx = null;
 		Session session = null;
 		try {
 			session = sessionFactory.openSession();
 			tx = session.beginTransaction();
-			Criteria cre = session.createCriteria(Management.class);
-			cre.add(Restrictions.eq("hash_file", hash_file));
-			Management instance = (Management) cre.uniqueResult();
+			//Criteria cre = session.createCriteria(Management.class);
+			//cre.add(Restrictions.eq("hash_file", hash_file));
+			//Management instance = (Management) cre.uniqueResult();
+			SessionImpl sessionImpl = (SessionImpl) session;
+			Connection conn = sessionImpl.connection();
+			boolean isExist = false;
+			try(PreparedStatement pre = conn.prepareStatement("Select * From management Where hash_file = ? Limit 1")){
+				pre.setString(1, hash_file);
+				try(ResultSet rs = pre.executeQuery()){
+					if(rs.next()){
+						isExist = true;
+					}
+				}
+			}
 			tx.commit();
-			if (instance == null)
-				return false;
-			return true;
-		} catch (RuntimeException re) {
+			return isExist;
+		} catch (Exception re) {
 			log.error("get failed", re);
 			throw re;
 		} finally {

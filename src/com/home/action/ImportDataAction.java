@@ -143,12 +143,14 @@ public class ImportDataAction extends ActionSupport implements ServletContextAwa
 			Management management = new Management();
 			management.setFile_path(file.getParent().replace("\\", "/"));
 			management.setFile_name(file.getName());
-			management.setCreated_time(new Date());
+			management.setCreated_time(new java.sql.Date(new Date().getTime()));
 			management.setCreated_by(user_name);
 			management.setHash_file(hash_file);
 			management.setStep(1);
 			management.setStatus(0);
 			management.setDuplicate_status(0);
+			management.setPresent_user(0);
+			management.setCapture_status(0);
 			managementHome.attachDirty(management);
 			//System.out.println(management.getId());
 			

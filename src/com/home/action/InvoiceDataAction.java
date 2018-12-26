@@ -11,7 +11,6 @@ import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.util.ServletContextAware;
 import org.hibernate.SessionFactory;
 
-import com.google.gson.Gson;
 import com.home.dao.CustomerHome;
 import com.home.dao.InvoiceDataHome;
 import com.home.dao.UserHome;
@@ -32,18 +31,18 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 	private List<InvoiceData> listData = new ArrayList<InvoiceData>();
 	private List<User> listStaff = new ArrayList<User>();
 	private List<Customer> listCustomer = new ArrayList<Customer>();
-	private String result;
+	private Object result;
 	private ResultMessage rsMess = new ResultMessage();
-	
-	
-	public String getResult() {
+
+
+	public Object getResult() {
 		return result;
 	}
 
-	public void setResult(String result) {
+	public void setResult(Object result) {
 		this.result = result;
 	}
-	
+
 	public ServletContext getServletContext() {
 		return servletContext;
 	}
@@ -70,17 +69,18 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 		try {
 			UserHome userHome = new UserHome(getSessionFactory());
 			listStaff = userHome.getLookupEmployee();
-			result = new Gson().toJson(listStaff);
+			result = listStaff;//new Gson().toJson(listStaff);
+			System.out.println(result);
 		} catch (Exception e) {
 			e.printStackTrace();
-			rsMess.setStatus(1);
-			rsMess.setMessage(e.getMessage());
-			result = rsMess.toString();
+			rsMess.setStatusError(1);
+			rsMess.setMessage(e.toString());
+			result = rsMess;//rsMess.toString();
 			//return ERROR;
 		}
 		return SUCCESS;
 	}
-	
+
 	public String loadListCustomerByStaff() {
 		try {
 			// Fetch Data from User Table
@@ -89,49 +89,49 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 				HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
 				user_id = Integer.parseInt(request.getParameter("user_id"));
 			} catch (Exception e) {
-				user_id = 0;
+				throw new Exception("Param: user_id invalid, " + e.toString());
 			}
 			CustomerHome cusHome = new CustomerHome(getSessionFactory());
 			listCustomer = cusHome.getListCustomerByUserId(user_id);
-			result = new Gson().toJson(listCustomer);
+			result = listCustomer;//new Gson().toJson(listCustomer);
 		} catch (Exception e) {
 			e.printStackTrace();
-			rsMess.setStatus(1);
-			rsMess.setMessage(e.getMessage());
-			result = rsMess.toString();
+			rsMess.setStatusError(1);
+			rsMess.setMessage(e.toString());
+			result = rsMess;//rsMess.toString();
 			//return ERROR;
 		}
 		return SUCCESS;
 	}
-	
-	
+
+
 	/////////////////////////////////////////REPORT//////////////////////////////////////////////////
-	
+
 	public String getAllInvoiceData(){
 		try {
 			// Fetch Data from User Table
-			int management_id;
+			int management_id = 0;
+			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
 			try {
-				HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
 				management_id = Integer.parseInt(request.getParameter("management_id"));
 			} catch (Exception e) {
-				management_id = 5;
+				throw new Exception("Param: management_id invalid, " + e.toString());
 			}
 			InvoiceDataHome home = new InvoiceDataHome(getSessionFactory());
 			listData = home.getListInvoiceData(management_id);
-			result = new Gson().toJson(listData);
+			result = listData;//new Gson().toJson(listData);
 			System.out.println("Total data: " + listData.size());
 			//System.out.println(datas.get(0).getManagement_id().getFile_name());
 		} catch (Exception e) {
 			e.printStackTrace();
-			rsMess.setStatus(1);
-			rsMess.setMessage(e.getMessage());
-			result = rsMess.toString();
+			rsMess.setStatusError(1);
+			rsMess.setMessage(e.toString());
+			result = rsMess;//rsMess.toString();
 			//return ERROR;
 		}
 		return SUCCESS;
 	}
-	
+
 	public String getInvoiceDataFilter(){
 		try {
 			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
@@ -154,32 +154,32 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 				customer_id =  Integer.parseInt(StringUtil.notNull(request.getParameter("customer_id")));
 				sent_late =  Integer.parseInt(StringUtil.notNull(request.getParameter("sent_late")));
 			} catch (Exception e) {
-				e.printStackTrace();
+				throw new Exception("List params[start_day/end_day/invoice_type/user_id/customer_id/sent_late] invalid, error: " + e.toString());
 			}
-			
+
 			InvoiceDataHome home = new InvoiceDataHome(getSessionFactory());
 			listData = home.getListInvoiceData(date_company_received_from, date_company_received_to, invoice_type, user_id, customer_id, sent_late);
-			result = new Gson().toJson(listData);
+			result = listData;//new Gson().toJson(listData);
 			System.out.println("Total data: " + listData.size());
 			//System.out.println(datas.get(0).getManagement_id().getFile_name());
 		} catch (Exception e) {
 			e.printStackTrace();
-			rsMess.setStatus(1);
-			rsMess.setMessage(e.getMessage());
-			result = rsMess.toString();
+			rsMess.setStatusError(1);
+			rsMess.setMessage(e.toString());
+			result = rsMess;//rsMess.toString();
 			//return ERROR;
 		}
 		return SUCCESS;
 	}
-	
+
 	public static void main(String[] args) {
 		try {
-			new InvoiceDataAction().getAllInvoiceData();
+			new InvoiceDataAction().loadListStaff();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public List<InvoiceData> getListData() {
 		return listData;
 	}

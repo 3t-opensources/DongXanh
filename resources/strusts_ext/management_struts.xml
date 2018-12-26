@@ -50,15 +50,24 @@
 		</interceptors>
 		<default-interceptor-ref name="defaultStack" />
 		
-		<action name="importDataCaptureAction" method="importDataCapture"
+		<action name="importImages1CaptureAction" method="importImagesCapture1"
 			class="com.home.action.ManagementAction">
+    		<interceptor-ref name="json"/>
 			<result type="json">
 				<param name="root">result</param>
 			</result>
 		</action>
 		
-		<!-- show all job capture -->
-		<action name="showAllJobCaptureAction" method="getAllJob"
+		<action name="importImages2CaptureAction" method="importImagesCapture2"
+			class="com.home.action.ManagementAction">
+    		<interceptor-ref name="defaultStack" />
+			<result type="json">
+				<param name="root">result</param>
+			</result>
+		</action>
+		
+		<!-- show all pending job capture -->
+		<action name="getPendingJobsCaptureAction" method="getPendingJobs"
 			class="com.home.action.ManagementAction">
 			<result type="json">
 				<param name="root">result</param>
@@ -76,6 +85,7 @@
 		
 		<action name="saveJobCaptureAction" method="saveJobCapture"
 			class="com.home.action.ManagementAction">
+			<interceptor-ref name="json"/>
 			<result type="json">
 				<param name="root">result</param>
 			</result>
@@ -110,7 +120,14 @@
 			</result>
 		</action>
 		
-		<action name="lookupStaffAction" method="lookupStaff"
+		<action name="lookupCaptureStaffAction" method="lookupStaff"
+			class="com.home.action.ManagementAction">
+			<result type="json">
+				<param name="root">result</param>
+			</result>
+		</action>
+		
+		<action name="lookupCaptureProductAction" method="lookupProduct"
 			class="com.home.action.ManagementAction">
 			<result type="json">
 				<param name="root">result</param>

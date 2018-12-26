@@ -1,19 +1,20 @@
 package com.home.model;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 
 public class ResultMessage {
-	private int status;
+	private int status_error;
 	private String message;
 	
-	public int getStatus() {
-		return status;
+	public int getStatusError() {
+		return status_error;
 	}
 	public String getMessage() {
 		return message;
 	}
-	public void setStatus(int status) {
-		this.status = status;
+	public void setStatusError(int status) {
+		this.status_error = status;
 	}
 	public void setMessage(String message) {
 		this.message = message;
@@ -24,7 +25,12 @@ public class ResultMessage {
 		return new Gson().toJson(this);
 	}
 	
+	public JsonElement toJsonTree() {
+		return new Gson().toJsonTree(this);
+	}
+	
 	public static void main(String[] args) {
 		System.out.println(new ResultMessage());
+		System.out.println(new ResultMessage().toJsonTree());
 	}
 }
