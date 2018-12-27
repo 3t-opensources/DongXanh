@@ -74,7 +74,7 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 		} catch (Exception e) {
 			e.printStackTrace();
 			rsMess.setStatusError(1);
-			rsMess.setMessage(e.toString());
+			rsMess.setMessage(StringUtil.getError(e));
 			result = rsMess;//rsMess.toString();
 			//return ERROR;
 		}
@@ -97,7 +97,7 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 		} catch (Exception e) {
 			e.printStackTrace();
 			rsMess.setStatusError(1);
-			rsMess.setMessage(e.toString());
+			rsMess.setMessage(StringUtil.getError(e));
 			result = rsMess;//rsMess.toString();
 			//return ERROR;
 		}
@@ -125,7 +125,7 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 		} catch (Exception e) {
 			e.printStackTrace();
 			rsMess.setStatusError(1);
-			rsMess.setMessage(e.toString());
+			rsMess.setMessage(StringUtil.getError(e));
 			result = rsMess;//rsMess.toString();
 			//return ERROR;
 		}
@@ -165,7 +165,7 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 		} catch (Exception e) {
 			e.printStackTrace();
 			rsMess.setStatusError(1);
-			rsMess.setMessage(e.toString());
+			rsMess.setMessage(StringUtil.getError(e));
 			result = rsMess;//rsMess.toString();
 			//return ERROR;
 		}

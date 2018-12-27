@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS `invoice_data` (
    `customer_name` varchar(200) DEFAULT NULL,
    `invoice_name` varchar(200) DEFAULT NULL,
    `customer_id_level1` int(11) DEFAULT NULL,
-   `customer_name_level1` int(11) DEFAULT NULL,
+   `customer_name_level1` varchar(200) DEFAULT NULL,
    `user_id` int(11) DEFAULT NULL,
    `user_name` varchar(200) DEFAULT NULL,
    `date_company_received` datetime DEFAULT NULL,
