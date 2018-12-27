@@ -79,7 +79,23 @@ public class StringUtil {
 		return v;
 	}
 	
+	public static String getError(Exception ex ){
+		if(ex != null){
+			StringBuilder errorTemp = new StringBuilder(ex.toString());
+			for(int i=0;i<ex.getStackTrace().length && i<=3;i++) {
+				errorTemp.append(";");
+				errorTemp.append(ex.getStackTrace()[i]);
+			}
+			return errorTemp.toString();
+		}
+		return "";
+	}	
+	
 	public static void main(String[] args) {
-		System.out.println(roundZero("12345", 2));
+		try {
+			System.out.println(0/0);
+		} catch (Exception e) {
+			System.out.println(getError(e));
+		}
 	}
 }

@@ -168,7 +168,7 @@ public class ManagementAction extends ActionSupport implements ServletContextAwa
 		} catch (Exception e) {
 			e.printStackTrace();
 			rsMess.setStatusError(1);
-			rsMess.setMessage(e.toString());
+			rsMess.setMessage(StringUtil.getError(e));
 			result = rsMess;//rsMess.toString();
 			//return ERROR;
 		}
@@ -216,7 +216,7 @@ public class ManagementAction extends ActionSupport implements ServletContextAwa
 		} catch (Exception e) {
 			e.printStackTrace();
 			rsMess.setStatusError(1);
-			rsMess.setMessage(e.toString());
+			rsMess.setMessage(StringUtil.getError(e));
 			result = rsMess;//rsMess.toString();
 			//return ERROR;
 		}
@@ -266,7 +266,7 @@ public class ManagementAction extends ActionSupport implements ServletContextAwa
 			Management management = new Management();
 			management.setFile_path(file.getParent().replace("\\", "/"));
 			management.setFile_name(file.getName());
-			management.setCreated_time(new java.sql.Date(new Date().getTime()));
+			management.setCreated_time(new java.sql.Timestamp(new Date().getTime()));
 			management.setCreated_by(user_name);
 			management.setHash_file(hash_file);
 			management.setStep(1);
@@ -300,7 +300,7 @@ public class ManagementAction extends ActionSupport implements ServletContextAwa
 		} catch (Exception e) {
 			e.printStackTrace();
 			rsMess.setStatusError(1);
-			rsMess.setMessage(e.toString());
+			rsMess.setMessage(StringUtil.getError(e));
 			result = rsMess;//rsMess.toString();
 			//return ERROR;
 		}
@@ -325,7 +325,7 @@ public class ManagementAction extends ActionSupport implements ServletContextAwa
 		} catch (Exception e) {
 			e.printStackTrace();
 			rsMess.setStatusError(1);
-			rsMess.setMessage(e.toString());
+			rsMess.setMessage(StringUtil.getError(e));
 			result = rsMess;//rsMess.toString();
 			//return ERROR;
 		}
@@ -393,7 +393,7 @@ public class ManagementAction extends ActionSupport implements ServletContextAwa
 		} catch (Exception e) {
 			e.printStackTrace();
 			rsMess.setStatusError(1);
-			rsMess.setMessage(e.toString());
+			rsMess.setMessage(StringUtil.getError(e));
 			result = rsMess;//rsMess.toString();
 			//return ERROR;
 		}
@@ -419,7 +419,7 @@ public class ManagementAction extends ActionSupport implements ServletContextAwa
 		} catch (Exception e) {
 			e.printStackTrace();
 			rsMess.setStatusError(1);
-			rsMess.setMessage(e.toString());
+			rsMess.setMessage(StringUtil.getError(e));
 			result = rsMess;//rsMess.toString();
 			//return ERROR;
 		}
@@ -439,7 +439,7 @@ public class ManagementAction extends ActionSupport implements ServletContextAwa
 		} catch (Exception e) {
 			e.printStackTrace();
 			rsMess.setStatusError(1);
-			rsMess.setMessage(e.toString());
+			rsMess.setMessage(StringUtil.getError(e));
 			result = rsMess;//rsMess.toString();
 			//return ERROR;
 		}
@@ -477,7 +477,7 @@ public class ManagementAction extends ActionSupport implements ServletContextAwa
 		} catch (Exception e) {
 			e.printStackTrace();
 			rsMess.setStatusError(1);
-			rsMess.setMessage(e.toString());
+			rsMess.setMessage(StringUtil.getError(e));
 			result = rsMess;//rsMess.toString();
 			//return ERROR;
 		}
@@ -515,7 +515,7 @@ public class ManagementAction extends ActionSupport implements ServletContextAwa
 		} catch (Exception e) {
 			e.printStackTrace();
 			rsMess.setStatusError(1);
-			rsMess.setMessage(e.toString());
+			rsMess.setMessage(StringUtil.getError(e));
 			result = rsMess;//rsMess.toString();
 			//return ERROR;
 		}
@@ -554,7 +554,7 @@ public class ManagementAction extends ActionSupport implements ServletContextAwa
 		} catch (Exception e) {
 			e.printStackTrace();
 			rsMess.setStatusError(1);
-			rsMess.setMessage(e.toString());
+			rsMess.setMessage(StringUtil.getError(e));
 			result = rsMess;//rsMess.toString();
 			//return ERROR;
 		}
@@ -593,7 +593,7 @@ public class ManagementAction extends ActionSupport implements ServletContextAwa
 		} catch (Exception e) {
 			e.printStackTrace();
 			rsMess.setStatusError(1);
-			rsMess.setMessage(e.toString());
+			rsMess.setMessage(StringUtil.getError(e));
 			result = rsMess;//rsMess.toString();
 			//return ERROR;
 		}

@@ -3,6 +3,7 @@ package com.home.action;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.sql.Timestamp;
 import java.util.Date;
 
 import javax.servlet.ServletContext;
@@ -143,7 +144,7 @@ public class ImportDataAction extends ActionSupport implements ServletContextAwa
 			Management management = new Management();
 			management.setFile_path(file.getParent().replace("\\", "/"));
 			management.setFile_name(file.getName());
-			management.setCreated_time(new java.sql.Date(new Date().getTime()));
+			management.setCreated_time(new java.sql.Timestamp(new Date().getTime()));
 			management.setCreated_by(user_name);
 			management.setHash_file(hash_file);
 			management.setStep(1);

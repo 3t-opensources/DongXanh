@@ -1,6 +1,7 @@
 package com.home.model;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 public class Management {
 	
@@ -10,12 +11,19 @@ public class Management {
 	public Integer step;
 	public Integer status;
 	public String created_by;
-	public Date created_time;
+	public Timestamp created_time;
 	public String hash_file;
 	public Integer duplicate_status;
 	public Integer capture_status;
 	public Integer present_user;
+	public Integer invoice_data_id;
 	
+	public Integer getInvoice_data_id() {
+		return invoice_data_id;
+	}
+	public void setInvoice_data_id(Integer invoice_data_id) {
+		this.invoice_data_id = invoice_data_id;
+	}
 	public Integer getCapture_status() {
 		return capture_status;
 	}
@@ -77,10 +85,10 @@ public class Management {
 	public void setCreated_by(String created_by) {
 		this.created_by = created_by;
 	}
-	public Date getCreated_time() {
+	public Timestamp getCreated_time() {
 		return created_time;
 	}
-	public void setCreated_time(Date created_time) {
+	public void setCreated_time(Timestamp created_time) {
 		this.created_time = created_time;
 	}
 	
