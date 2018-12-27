@@ -17,7 +17,7 @@ pageEncoding="UTF-8"%>
 			      <div class="form-group">			      
 			       <div class="col-md-2 form_title" >Tên đường dẫn </div>
 				   <div class="col-md-5 input_upload" >
-				        <input type="file" id="fileUpload" name="fileList[]" webkitRelativePath  multiple  /> 
+				        <input type="file" id="fileUpload" name="fileList[]" webkitRelativePath  multiple onchange='main(this)' /> 
 				    </div>
 				    <div class="col-md-2" >  <button type="button" class="btn btn-success" onclick="uploadImages();">Upload</button>			  </div>
 			      </div>
@@ -135,7 +135,7 @@ pageEncoding="UTF-8"%>
 
  <!-- daterangepicker -->
  
-
+ 
 
  <script type="text/javascript">
  	function wait(ms) {
@@ -176,17 +176,10 @@ pageEncoding="UTF-8"%>
     }
 	
 	
-	document.getElementById("fileUpload").addEventListener("change", async function(event) {
-		
-		   let files = event.target.files;		
-		   for (var i=0; i<files.length; i++) {
-			   addrow(i,files[i]);			  
-			   await wait(500);
-		   };
-		}, false);
+	
 	
 	async function main(event){
-	
+		console.log("111111");
 		   let files = event.target.files;		
 		   for (var i=0; i<files.length; i++) {
 			   addrow(i,files[i]);
@@ -197,30 +190,24 @@ pageEncoding="UTF-8"%>
 	
  
 	
-	async  function uploadImages(){	
+   function uploadImages(){
+	 // alert("toi la nguyen truong xuan");
 	   $('#table_list_file > tbody  > tr').each(function() {
 		   console.log(document.getElementById("img_"+this.getAttribute("id")).getAttribute("src"));
-		   $(this).addClass("display");
-		   
-		    $.ajax({
-		       async: true,
-		       crossDomain: true,
-		       method: "POST",
-	           url : 'importImages1CaptureAction',
-	           data : {
-	           	images : document.getElementById("img_"+this.getAttribute("id")).getAttribute("src") ,
-	           	username : document.getElementById("profile_username").textContent	  
-	           },
-	           headers: {
-	        	    "content-type": "application/json"
-	        	  },
-	           success : function(responseText) {	               
-	        	   LoadTableDetail();
-	           }
-	       });  
+		  
 	   });
 	   
-	  
+	   $.ajax({
+           type: "POST",
+           url : 'searchGeneral',
+           data : {
+           	form_date_search_General : document.getElementById("form_date_search_General").value ,
+           	to_date_search_General : document.getElementById("to_date_search_General").value	  
+           },
+           success : function(responseText) {	               
+        	   LoadTableDetail();
+           }
+       }); 
 	  
 	   
    }
@@ -256,12 +243,7 @@ pageEncoding="UTF-8"%>
    	 
 </script>
     
-<style type="text/css">
-.display{
-	display: none!important;
-	
-}
-</style>
+
 
 </body>
 
