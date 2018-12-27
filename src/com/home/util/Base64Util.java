@@ -31,6 +31,8 @@ public class Base64Util {
 	}
 	
 	public static BufferedImage decodeToImage(String imageString) throws Exception {
+		
+		
         BufferedImage image = null;
         byte[] imageByte;
         try {

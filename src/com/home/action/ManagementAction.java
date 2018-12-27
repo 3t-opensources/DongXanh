@@ -143,12 +143,17 @@ public class ManagementAction extends ActionSupport implements ServletContextAwa
 			StringBuilder strMess = new StringBuilder();
 			int rsStatus = 0;
 			for (JobImport job : jobs) {
-				BufferedImage buff = Base64Util.decodeToImage(job.getBase64());
+				String imageString = job.getBase64();
+				if(imageString.split(",").length>1){
+					imageString = imageString.split(",")[1];
+				}
+				BufferedImage buff = Base64Util.decodeToImage(imageString);
 
 				File dir = new File(SystemUtil.getUserDir() + "/DX_Images/"+DateUtils.getDateToString(new Date(), "ddMMyyyy") + "/" + new Date().getTime());
 				if (!dir.exists()) {
 					dir.mkdirs();
 				}
+				System.out.println("===============156:"+dir);
 
 				ManagementHome managementHome = new ManagementHome(getSessionFactory()); 
 				File output = new File(dir.getAbsolutePath() + "/" + job.getFile_name());
