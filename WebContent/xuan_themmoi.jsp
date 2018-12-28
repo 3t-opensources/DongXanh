@@ -44,7 +44,7 @@ pageEncoding="UTF-8"%>
 		    
 			      </div>
 			 </form>
-
+             <div class="tieude"> Danh sách hình chưa nhập</div>
 			  <div class="detail_data_table detail_data_table_final" id ="detail_data_table">	
 			    <table id="table_detail" class="table table-striped table-bordered table table-hover" cellspacing="0" width="100%">
 		        <thead>
@@ -92,7 +92,7 @@ pageEncoding="UTF-8"%>
 <script src="js/bootstrap.min.js"></script>
 <script type="text/javascript" src="js/jquery-ui.min.js"></script> 
 <script src="js/bootstrap-datepicker.min.js"></script>
-<script src = "https://cdnjs.cloudflare.com/ajax/libs/es6-promise/4.1.1/es6-promise.auto.js"></script>
+<script src = "js/es6-promise.auto.js"></script>
 <link rel="stylesheet" href="css/hoadon_themmoi.css"/>
 
 
@@ -234,14 +234,7 @@ pageEncoding="UTF-8"%>
 	        	  
 	           }
 		   });
-	        
-		   
-		   
-		    
 	   });
-	  
-	  
-	  
    }
  
         $(document).ready(function () {  
@@ -337,6 +330,16 @@ pageEncoding="UTF-8"%>
   padding: 10px;
   min-height: 500px;
 }
+.tieude {
+    background-color: #fff;
+    background-repeat: repeat-x;
+    border: 1px solid #becfe6;
+  /*   border-radius: 4px; */
+    clear: both;
+    margin-top: 10px;
+    padding-top: 10px;
+    font-size: 20px;
+    font-weight: bold;
 </style>
 
 </body>

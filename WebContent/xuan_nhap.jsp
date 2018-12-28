@@ -19,9 +19,18 @@
 <link rel="stylesheet" href="css/pretty-split-pane.css"/>
 <link rel="stylesheet" href="css/split-pane.css"/> 
 <link href="css/jquery.dataTables.min.css" rel="stylesheet">
-<script type="text/javascript" src="js/docs-js-jquery-1.7.1.min.js"></script>	
-<script src="js/bootstrap.min.js"></script>
+
+
+
+
+<link rel="stylesheet" href="css/datepicker.min.css"/>
+<link rel="stylesheet" href="css/stylesDilog2.css"/>
+
+
+
+<script type="text/javascript" src="js/docs-js-jquery-1.7.1.min.js"></script>
 <script type="text/javascript" src="js/jquery-ui.min.js"></script> 
+<script src="js/bootstrap.min.js"></script>
 <script src="js/bootstrap-datepicker.min.js"></script>
 
 
@@ -76,9 +85,18 @@
       <div class="split-pane fixed-bottom diagram-section" id="split-pane-2">
 
     	<form name = "form-field" id = "form-text-field" action = "saveform" method = "post" onsubmit = "return confirmwhensubmit()">
-    	                <div class="well"><p align="center">				            
+    	              <input type="hidden" id="id" name="id" value="123">
+        			  <input type="hidden" id="management_id" name="management_id" value="456">
+        			  <input type="hidden" id="invoice_type_id" name="invoice_type_id" value="789">
+        			   <input type="hidden" id="user_id" name="user_id" value="user_id">
+        			  <input type="hidden" id="user_name" name="user_name" value="user_name">
+        			   <input type="hidden" id="KHcap1_id" name="KHcap1_id" value="KHcap1_id">
+        			  
+        			  
+    	                <div class="well"><p align="center">
+    	                         <button type="button" class="btn btn-success" onclick="getjob();">Nhập bảng kê</button>						            
 				                 <button type="button" class="btn btn-success" onclick="searchDetail();">Xóa toa/bảng kê</button>			  
-				            	 <button type="button" class="btn btn-success" onclick="searchDetail();">Lưu toa/bảng kê</button>			  
+				            	 <button type="button" class="btn btn-success" onclick="saveData();">Lưu toa/bảng kê</button>			  
                       	</div>
 						<div id="wrapper" style="width : 100%; height : 100%; float: right">
 							<!-- <div class="panel-heading" style="color: blue;font-weight: bold;">META DATA </div> -->
@@ -87,11 +105,11 @@
 	                                       		  <div class="col-lg-2" ><span>Loại bảng kê  </span>  </div>	                                       		  
 	                                       		  <div class="col-lg-4">	
 	                                       		   <select id="cbb_loaibangke" name="cbb_loaibangke"  class="cbb_search" style="width: 100% ; height: 27px">
-										                 <option value="">All</option>	
-										                 <option value="">All</option>	
-										                 <option value="">All</option>	
-										                 <option value="">All</option>	
-										                 <option value="">All</option>				                  
+										                 <option value="1">1</option>	
+										                 <option value="2">2</option>	
+										                 <option value="3">3</option>	
+										                 <option value="4">4</option>	
+										                 <option value="5">5</option>				                  
 										           </select>
 	                                       		  </div>	 
 	                                       		  
@@ -127,13 +145,21 @@
 										     <div class="clear"></div>	
 										      <div class="row " >
 	                                       		  <div class="col-lg-2 no_margin_right" ><span>Ngày nhận toa </span>  </div>	                                       		  
-	                                       		  <div class="col-lg-4">			                                       									
-				                                          <input value = "" id = "ngaynhantoa" name="ngaynhantoa" class="form-control" ondblclick = "getIdTag(this)" tabindex="1"/>				                                         
-	                                       		  </div>	   
+	                                       		  <div class="col-lg-4">
+			                                       		   <div class="input-group input-append date" id="ngaynhantoa_datePicker">
+												                <input type="text" class="form-control" name="ngaynhantoa"  id= "ngaynhantoa"/>
+												                <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
+												            </div>
+	                                       		  </div>
 	                                       		  
 	                                       		 <div class="col-lg-2 no_margin_right" ><span>Ngày nhận hàng </span>  </div>	                                       		  
-	                                       		  <div class="col-lg-4">			                                       									
-				                                          <input value = "" id = "ngaynhanhang" name="ngaynhanhang" class="form-control" ondblclick = "getIdTag(this)" tabindex="1"/>				                                         
+	                                       		  <div class="col-lg-4">
+	                                       		          <div class="input-group input-append date" id="ngaynhanhang_datePicker">
+												                <input type="text" class="form-control" name="ngaynhanhang"  id= "ngaynhanhang"/>
+												                <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
+												            </div>
+												            			                                       									
+				                                          
 	                                       		  </div>	                                          		  
 	                                        </div>
 	                                        
@@ -141,12 +167,12 @@
 										      <div class="row " >
 	                                       		  <div class="col-lg-2 no_margin_right" ><span>Số ngày gởi trể</span>  </div>	                                       		  
 	                                       		  <div class="col-lg-4">			                                       									
-				                                          <input value = "" id = "kreditor_name" name="kreditor_name" class="form-control" ondblclick = "getIdTag(this)" tabindex="1"/>				                                         
+				                                          <input value = "" id = "date_sent_late" name="date_sent_late" class="form-control" ondblclick = "getIdTag(this)" tabindex="1"/>				                                         
 	                                       		  </div>	   
 	                                       		  
 	                                       		 <div class="col-lg-2" ><span>Ghi chú </span>  </div>	                                       		  
 	                                       		  <div class="col-lg-4">			                                       									
-				                                          <input value = "" id = "kreditor_name" name="kreditor_name" class="form-control" ondblclick = "getIdTag(this)" tabindex="1"/>				                                         
+				                                          <input value = "" id = "notes" name="notes" class="form-control" ondblclick = "getIdTag(this)" tabindex="1"/>				                                         
 	                                       		  </div>	                                          		  
 	                                        </div>
 										     <div class="clear"></div>
@@ -172,7 +198,7 @@
 							            </tr>
 							          </thead>
 							          <tbody>
-							          <% for(int i = 1; i < 10; i++) {%> 
+							          <% for(int i = 1; i < 3; i++) {%> 
 		                                <tr class="odd gradeX" id = "<%=i %>" >
 		                                    <td id = "stt_<%=i %>">	<%=i %></td>
 											
@@ -240,6 +266,115 @@
 <script type="text/javascript" src="js/jquery.mousewheel.min.js" ></script>
 <script type="text/javascript" src="js/jquery.iviewer.js" ></script>  
 <script type="text/javascript">
+function saveData(){
+	  var id_invoice               = document.getElementById("id").value ;
+	  var management_id            = document.getElementById("management_id").value ;
+	  var invoice_type_id          = document.getElementById("invoice_type_id").value ;
+	  var user_id                  = document.getElementById("user_id").value ;
+	  var user_name                = document.getElementById("user_name").value ;
+	 
+	  
+	  var invoice_type             = document.getElementById("cbb_loaibangke").value ;
+	  var customer_id              = document.getElementById("maKH").value ;
+	  var customer_name            = document.getElementById("tenKH").value ;
+	  var invoice_name             = document.getElementById("tenbangke").value ;
+	 
+	  
+	  var customer_id_level1       = document.getElementById("KHcap1_id").value ;
+	  var customer_name_level1     = document.getElementById("KHcap1").value ;
+	  
+	  var date_company_received    = document.getElementById("ngaynhantoa").value ;
+	  var date_product_received    = document.getElementById("ngaynhanhang").value ;
+	  var date_sent_late           = document.getElementById("date_sent_late").value ;
+	  var notes                    = document.getElementById("notes").value ;
+	 
+	  
+	  
+	  var product_ids="";
+	  var product_names="";
+	  var total_boxs="";
+	  var quantitys="";
+	  var product_prices="";
+	  var total_prices="";
+	  var sum_total_price="1000";
+	  
+	  
+	  id_invoice =240;
+	  management_id =240;
+	  invoice_type_id =1;
+	  customer_id=1;
+	  customer_id_level1 =1; 
+	  customer_name_level1 ="Nguyen truong xuan";
+	  user_id =23;
+	  if(date_company_received.length==10){
+		  date_company_received = date_company_received.substring(6,10)+"-"+date_company_received.substring(3,5)+"-"+date_company_received.substring(0,2)+"T00:00:00";		
+	  }
+	  if(date_product_received.length==10){
+		  date_product_received = date_product_received.substring(6,10)+"-"+date_product_received.substring(3,5)+"-"+date_product_received.substring(0,2)+"T00:00:00";		
+	  }
+	 
+	  $('#table_position > tbody  > tr').each(function() {
+		  var id        =   this.getAttribute("id");
+		  var masp      =   document.getElementById("masanpham_"+id).value;
+		  var tensp     =   document.getElementById("tensanpham_"+id).value;
+		  var soluong   =   document.getElementById("soluong_"+id).value;
+		  var sothung   =   document.getElementById("sothung_"+id).value;
+		  var dongia    =   document.getElementById("dongia_"+id).value;
+		  var thanhtien =   document.getElementById("thanhtien_"+id).value;
+		  
+		  product_ids      = product_ids        +masp       +"`";
+		  product_names    = product_names      +tensp      +"`";			 
+		  quantitys        = quantitys          +soluong    +"`";  
+		  total_boxs       = total_boxs         +sothung    +"`";
+		  product_prices   = product_prices     +dongia     +"`";
+		  total_prices     = total_prices       +thanhtien  +"`";
+		  
+		  
+		 
+	 });
+	
+	  alert(date_company_received+"==========="+date_product_received);
+	  $.ajax({
+		  async: false,
+          dataType: 'json',
+          contentType: "application/json",
+	       type: "POST",
+          url : 'saveJobCaptureAction',	          
+          data: JSON.stringify({
+        	  invoice_data:{
+        		    "id": id_invoice,
+        		    "management_id": management_id,
+        		    "invoice_type_id": invoice_type_id,
+        		    "invoice_type": invoice_type,
+        		    "customer_id": customer_id,
+        		    "customer_name": customer_name,
+        		    "invoice_name": invoice_name,
+        		    "customer_id_level1": customer_id_level1,
+        		    "customer_name_level1": customer_name_level1,
+        		    "user_id": user_id,
+        		    "user_name": user_name,
+        		    "date_company_received": date_company_received,
+        		    "date_product_received": date_product_received,
+        		    "date_sent_late": date_sent_late,
+        		    "notes": notes,
+        		    "product_ids": product_ids,
+        		    "product_names": product_names,
+        		    "total_boxs": total_boxs,
+        		    "quantitys": quantitys,
+        		    "total_prices": total_prices,
+        		    "sum_total_price":sum_total_price
+		 	    } 
+		 	         
+		   	}) ,	           
+          success : function(responseText) {	   
+       	   console.log(responseText);
+          }
+	   });
+	  
+	  
+	  
+}
+
 function addRow(id){
 	var stt =1;
 	var index =1;
@@ -730,6 +865,21 @@ function confirmwhensubmit(){
        		var imagePath = "https://i-giaitri.vnecdn.net/2018/12/19/rowing2-1545228554-4160-1545228557_500x300.jpg";
             var $ = jQuery;
             $(document).ready(function(){
+            	
+            	 $('#ngaynhantoa_datePicker').datepicker({
+     	            format: 'dd/mm/yyyy'
+     	        }).on('changeDate', function(e) {
+     	            // Revalidate the date field
+     	            $('#eventForm').formValidation('revalidateField', 'eventDate');
+     	        });		   
+     	        $('#ngaynhanhang_datePicker').datepicker({
+     	            format: 'dd/mm/yyyy'
+     	        }).on('changeDate', function(e) {
+     	            // Revalidate the date field
+     	            $('#eventForm').formValidation('revalidateField', 'eventDate');
+     	        });
+     	                                    
+     	        
             
                 var iv = $("#viewer").iviewer({
               	   src : imagePath,
@@ -780,6 +930,26 @@ function confirmwhensubmit(){
         		  $(function(){
         	   			$("#viewer").jScrollPane();
         	   		});
+        		  
+        		  
+        		  
+        		  
+        		  function getjob(){
+        				 $.ajax({  		
+        		 		       type: "GET",
+        		 	           url     : 'getJobCaptureAction?user_id=23',	          
+        		 	           data    : "",
+        		 	           success : function(responseText) {	
+        		 	        	
+        		 	        	console.log(responseText)
+        		 	        	  
+        		 	           }
+        		 		   });
+        			 
+        		   }
+        		  
+        		  
+        		
         	
     </script>
     
