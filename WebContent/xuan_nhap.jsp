@@ -312,8 +312,8 @@ function saveData(){
 	  if(date_product_received.length==10){
 		  date_product_received = date_product_received.substring(6,10)+"-"+date_product_received.substring(3,5)+"-"+date_product_received.substring(0,2)+"T00:00:00";		
 	  }
-	 
-	  $('#table_position > tbody  > tr').each(function() {
+	  var row =0;
+	  $('#table_position > tbody  > tr').each(function() {		
 		  var id        =   this.getAttribute("id");
 		  var masp      =   document.getElementById("masanpham_"+id).value;
 		  var tensp     =   document.getElementById("tensanpham_"+id).value;
@@ -328,12 +328,14 @@ function saveData(){
 		  total_boxs       = total_boxs         +sothung    +"`";
 		  product_prices   = product_prices     +dongia     +"`";
 		  total_prices     = total_prices       +thanhtien  +"`";
-		  
+		  row++;
+		  checkRow(id,row);
 		  
 		 
 	 });
 	
 	  alert(date_company_received+"==========="+date_product_received);
+	  
 	  $.ajax({
 		  async: false,
           dataType: 'json',
@@ -375,6 +377,35 @@ function saveData(){
 	  
 }
 
+function checkRow(id , row){
+	  var masp      =   document.getElementById("masanpham_"+id).value;
+	  var tensp     =   document.getElementById("tensanpham_"+id).value;
+	  var soluong   =   document.getElementById("soluong_"+id).value;
+	  var sothung   =   document.getElementById("sothung_"+id).value;
+	  var dongia    =   document.getElementById("dongia_"+id).value;
+	  var thanhtien =   document.getElementById("thanhtien_"+id).value;
+	  var result ="";
+	   if(masp===""){
+		    result = result +" mã sản phẩm không được rỗng.";
+	    }
+		if(tensp===""){
+			 result = result +" tên sản phẩm không được rỗng.";	  
+	    }
+		if(soluong==="" &&  sothung===""){
+			 result = result +" số lượng hoặc số thùng không được rỗng.";
+		}
+		if(dongia===""){
+			 result = result +" đơn giá không được rỗng.";
+		}
+		if(thanhtien===""){
+			 result = result +" thành tiền không được rỗng.";
+		}
+		if(result!=""){
+			result =  "dòng "+ row +"không hợp lệ /n"+result;
+		}
+		alert(result);
+	  
+}
 function addRow(id){
 	var stt =1;
 	var index =1;
