@@ -415,15 +415,17 @@ _.ITEM = function (text, input, item_id) {
 	}
 	
 	if(this.field1 != null && this.field2 != null && this.field3 != null && this.field4!= null && this.field5 != null && this.field6 != null){
+		
+		
 		rowData = 
 			"<html>" +
 				"<table style=' width: 600px;margin:0px' class='table table-bordered'>" +
 					"<tr>" +
  	        		
-							"<td class = 'awesome-three-column width100'>"+html.split('|')[0]+"</td>" +						
-							"<td class = 'awesome-three-column width150'>"+html.split('|')[2]+"</td>" +						
-							"<td class = 'awesome-three-column width150'>"+html.split('|')[4]+"</td>" +						
-							"<td class = 'awesome-three-column width150'>"+html.split('|')[6]+"</td>" +
+							"<td class = 'awesome-three-column width100'>"+html.split('|')[1]+"</td>" +	   //invoice_name						
+							"<td class = 'awesome-three-column width150'>"+html.split('|')[2]+"</td>" +	   //customer_name					
+							"<td class = 'awesome-three-column width150'>"+html.split('|')[4]+"</td>" +    //customer_name_level1				
+							"<td class = 'awesome-three-column width150'>"+html.split('|')[6]+"</td>" +    //user_name
 					"</tr>"+
 				"</table>" +
 			"</html>";
@@ -483,13 +485,30 @@ _.REPLACE = function (text) {
 		}
 		
 		if(this.field1 != null && this.field2 != null && this.field3 != null && this.field4 != null && this.field5 != null && this.field6 != null){
-			this.input.value = text.value.split('|')[0];
-			this.field1.value = text.value.split('|')[1];
-			this.field2.value = text.value.split('|')[2];
-			this.field3.value = text.value.split('|')[3];	
-			this.field4.value = text.value.split('|')[4];
-			this.field5.value = text.value.split('|')[5];
-			this.field6.value = text.value.split('|')[6];	
+			
+//			data = data +responseText[i][0]+"|";//customer_id
+//     		data = data +responseText[i][1]+"|";//invoice_name			 	        	
+//     		data = data +responseText[i][2]+"|";//customer_name
+//     		data = data +responseText[i][3]+"|";//customer_id_level1
+//     		data = data +responseText[i][4]+"|";//customer_name_level1
+//     		data = data +responseText[i][5]+"|";//user_id
+//     		data = data +responseText[i][6]+"";//user_name
+     		
+			this.input.value = text.value.split('|')[1];//maKH
+			this.field1.value = text.value.split('|')[2];//tenKH
+			this.field2.value = text.value.split('|')[4];//customer_name_level1
+			this.field3.value = text.value.split('|')[6];//nvtt_name	
+			this.field4.value = text.value.split('|')[3];//customer_id_level1_hidden
+			this.field5.value = text.value.split('|')[5];//nvtt_id_hidden
+			this.field6.value = text.value.split('|')[0];//invoice_name_hidden	
+			
+//			var maKH                          = document.getElementById("maKH");
+//			var tenKH                         = document.getElementById("tenKH");
+//			var customer_name_level1          = document.getElementById("customer_name_level1");
+//			var nvtt_name                     = document.getElementById("nvtt_name");
+//			var customer_id_level1_hidden     = document.getElementById("customer_id_level1_hidden");
+//			var nvtt_id_hidden                = document.getElementById("nvtt_id_hidden"); 
+//			var invoice_name_hidden           = document.getElementById("invoice_name_hidden"); 
 		}
 	}
 	//SETTING is_show_form_lookup = true để tránh việc nhảy field khi nhấn phím qua lại lên xuống.

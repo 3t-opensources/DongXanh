@@ -97,8 +97,8 @@
     	              <input type="hidden" id="id" name="id" value="123">
         			  <input type="hidden" id="management_id" name="management_id" value="456">
         			  <input type="hidden" id="invoice_type_id" name="invoice_type_id" value="789">
-        			   <input type="hidden" id="invoice_name_hidden" name="invoice_name_hidden" value="789">
-        			 
+        			   <input type="hidden" id="customer_id_hidden" name="customer_id_hidden" value="789">
+        			  
         			  <input type="hidden" id="user_id" name="user_id" value="<%= userSes.getId()%>">
         			  <input type="hidden" id="user_name" name="user_name" value="<%= userSes.getUserName()%>">
         			  
@@ -129,10 +129,7 @@
 										           </select>
 	                                       		  </div>	 
 	                                       		  
-	                                       		  <div class="col-lg-2" ><span>Tên bảng kê  </span>  </div>	                                       		  
-	                                       		  <div class="col-lg-4">			                                       									
-				                                          <input value = "" id = "tenbangke" name="tenbangke" class="form-control" ondblclick = "getIdTag(this)" tabindex="1" readonly=false/>				                                         
-	                                       		  </div>	                                        		  
+	                                       			                                        		  
 	                                        </div>
 										     <div class="clear"></div>										     
 										      <div class="row " >
@@ -150,7 +147,8 @@
 										      <div class="row " >
 	                                       		  <div class="col-lg-2" ><span>KH Cấp 1 </span>  </div>	                                       		  
 	                                       		  <div class="col-lg-4">	
-	                                       		         <input type="hidden"  value = "" id = "customer_id_level1_hidden"  name="customer_id_level1_hidden"    class="form-control" ondblclick = "getIdTag(this)" tabindex="1"/> 		                                       									
+	                                       		          <input type="hidden"  value = "" id = "customer_id_level1_hidden"  name="customer_id_level1_hidden"   /> 	
+	                                       		          <input type="hidden"  value = "" id = "customer_code_level1_hidden"  name="customer_code_level1_hidden"    /> 		                                       									
 				                                          <input value = "" id = "customer_name_level1" name="customer_name_level1" class="form-control" ondblclick = "getIdTag(this)" tabindex="1"/>				                                         
 	                                       		  </div>	   
 	                                       		  
@@ -307,12 +305,25 @@ function getjob(){
         	 checkGetJob(false);
         	 var invoice_data_id = responseText[0].responseText;
         	 var id              = responseText[0].id;
-        	 document.getElementById("id").value           = id;
-       	     document.getElementById("management_id").value   = id ;
-       	     document.getElementById("invoice_type_id").value = invoice_data_id ;
-       	  
-        	 console.log(responseText);
-        	
+        	 document.getElementById("id").value               = id;
+       	     document.getElementById("management_id").value    = id ;
+       	     document.getElementById("invoice_type_id").value  = invoice_data_id ;
+       	     var imagePath_hidden ="";
+       	     var file_path        = responseText[0].file_path.split("/DX_Images/");
+       	     var file_name        = responseText[0].file_name;
+       	     if(file_path.length>1){
+       	    	imagePath_hidden = file_path[1] +"/"+file_name;
+       	     }
+       	    
+       	     var url = window.location.href.toString();
+       	     if(url.includes("localhost")){
+       	    	 imagePath_hidden = "http://nv.dongxanhvn.com:8077/DX_Images/test_image2.jpg";
+       	     }else{
+       	    	imagePath_hidden = "http://nv.dongxanhvn.com:8077/DX_Images/"+imagePath_hidden;
+       	     }
+       	    
+       	     $('#viewer').iviewer('loadImage', imagePath_hidden);
+	       	
            }
 	   });
 
@@ -334,7 +345,7 @@ function checkGetJob(flag){
 		$("#maKH").prop('readonly', flag);
 		$("#tenKH").prop('readonly', flag);
 		$("#tenbangke").prop('readonly', flag);
-		$("#customer_id_level1_hidden").prop('readonly', flag);
+		
 		$("#customer_name_level1").prop('readonly', flag);
 		$("#nvtt_name").prop('readonly', flag);
 		 
@@ -363,20 +374,29 @@ function checkGetJob(flag){
 	
 }
 function resetData(){
-	
-	 document.getElementById("maKH").value ="";
-	 document.getElementById("tenKH").value ="";
-	 document.getElementById("tenbangke").value="" ;
+	 document.getElementById("id").value="" ;
+	 document.getElementById("management_id").value="" ;
+	 document.getElementById("invoice_type_id").value="" ;	
+	 
+	  document.getElementById("customer_id").value ="" ;
+	  document.getElementById("maKH").value="" ;
+	  document.getElementById("tenKH").value="" ;
+	  
+	  
+	  document.getElementById("customer_id").value ="" ;
+	  document.getElementById("customer_code_level1_hidden").value ="" ;
+	  document.getElementById("customer_name_level1").value  ="" ;
+	 
+	  document.getElementById("nvtt_id_hidden").value ="" ;
+	  document.getElementById("nvtt_name").value ="" ;
 	 
 	  
-	 document.getElementById("customer_id_level1_hidden").value ="";
-     document.getElementById("customer_name_level1").value ="";
-	  
-	 document.getElementById("ngaynhantoa").value="" ;
-	 document.getElementById("ngaynhanhang").value ="";
-	 document.getElementById("date_sent_late").value ="";
-	 document.getElementById("notes").value ="";
-	  $('#table_position > tbody  > tr').each(function() {		
+	  document.getElementById("ngaynhantoa").value="" ;
+	  document.getElementById("ngaynhanhang").value ="";
+	  document.getElementById("date_sent_late").value ="";
+      document.getElementById("notes").value ="";
+	 
+	  $('#table_position > tbody  > tr').each(function(){		
 		  var id        =   this.getAttribute("id");	
 		  $("#"+id).remove(); 
 	  });
@@ -393,43 +413,43 @@ var maxRow =0;
 function saveData(){
 	maxRow =0;
 	 if (checktable()) {
+			
+		  var id_invoice               = parseInt(document.getElementById("id").value) ;//id
+		  var management_id            = parseInt(document.getElementById("management_id").value) ;//management_id
+		  var invoice_type_id          = parseInt( document.getElementById("invoice_type_id").value) ;//invoice_type_id
+		  var invoice_type             = document.getElementById("cbb_loaibangke").value ; //invoice_type
+		  
+		  
+		  var customer_id              = document.getElementById("customer_id").value ; //customer_id
+		  var customer_code            = document.getElementById("maKH").value ; //customer_code
+		  var customer_name            = document.getElementById("tenKH").value ;//customer_name
+		  
+		  
+		  var customer_id_level1       = document.getElementById("customer_id").value ; //customer_id_level1
+		  var customer_code_level1     = document.getElementById("customer_code_level1_hidden").value ; //customer_code_level1
+		  var customer_name_level1     = document.getElementById("customer_name_level1").value ;//customer_name_level1	  
+		 
+		  var staff_id                 = document.getElementById("nvtt_id_hidden").value ;//staff_id
+		  var staff_name               = document.getElementById("nvtt_name").value ;//staff_name
+		 
+		  
+		  var date_company_received    = document.getElementById("ngaynhantoa").value ;//date_company_received
+		  var date_product_received    = document.getElementById("ngaynhanhang").value ;//date_product_received
+		  var date_sent_late           = document.getElementById("date_sent_late").value ;//date_sent_late
+		  var notes                    = document.getElementById("notes").value ;//notes
+		 
+		  
 		
-		  var id_invoice               = parseInt(document.getElementById("id").value) ;
-		  var management_id            = parseInt(document.getElementById("management_id").value) ;
-		  var invoice_type_id          = parseInt( document.getElementById("invoice_type_id").value) ;
-		  var user_id                  = document.getElementById("user_id").value ;
-		  var user_name                = document.getElementById("user_name").value ;
-		 
-		  
-		  var invoice_type             = document.getElementById("cbb_loaibangke").value ;
-		  var customer_id              = document.getElementById("maKH").value ;
-		  var customer_name            = document.getElementById("tenKH").value ;
-		  var invoice_name             = document.getElementById("tenbangke").value ;
-		 
-		  
-		  var customer_id_level1_hidden       = document.getElementById("customer_id_level1_hidden").value ;
-		  var customer_name_level1     = document.getElementById("customer_name_level1").value ;
-		  
-		  var date_company_received    = document.getElementById("ngaynhantoa").value ;
-		  var date_product_received    = document.getElementById("ngaynhanhang").value ;
-		  var date_sent_late           = document.getElementById("date_sent_late").value ;
-		  var notes                    = document.getElementById("notes").value ;
-		 
-		  
-		
-		  var product_ids="";
+		  var product_ids="";//product_ids
 		  var product_names="";
 		  var total_boxs="";
 		  var quantitys="";
 		  var product_prices="";
 		  var total_prices="";
-		  var sum_total_price="1000";
+		  var sum_total_price=0;
 		 
 		
-		  invoice_type_id =1;
-		  customer_id=1;
-		  customer_id_level1 =1; 
-		  customer_name_level1 ="Nguyen truong xuan";
+		
 		
 		  if(date_company_received.length==10){
 			  date_company_received = date_company_received.substring(6,10)+"-"+date_company_received.substring(3,5)+"-"+date_company_received.substring(0,2)+"T00:00:00";		
@@ -446,15 +466,17 @@ function saveData(){
 			  var sothung   =   document.getElementById("sothung_"+id).value;
 			  var dongia    =   document.getElementById("dongia_"+id).value;
 			  var thanhtien =   document.getElementById("thanhtien_"+id).value;
-			  if(dongia!="" && thanhtien !="" && soluong !=""){
-				  
+			  if(dongia!="" && thanhtien !="" && tensp !=""){
+				 
+				  product_ids      = product_ids        +masp       +"`";
+				  product_names    = product_names      +tensp      +"`";			 
+				  quantitys        = quantitys          +soluong    +"`";  
+				  total_boxs       = total_boxs         +sothung    +"`";
+				  product_prices   = product_prices     +dongia     +"`";
+				  total_prices     = total_prices       +thanhtien  +"`";
+				  sum_total_price = parseFloat(sum_total_price) + parseFloat(thanhtien);
 			  }
-			  product_ids      = product_ids        +masp       +"`";
-			  product_names    = product_names      +tensp      +"`";			 
-			  quantitys        = quantitys          +soluong    +"`";  
-			  total_boxs       = total_boxs         +sothung    +"`";
-			  product_prices   = product_prices     +dongia     +"`";
-			  total_prices     = total_prices       +thanhtien  +"`";
+			 
 			  row++;
 			  if(row==maxRow){
 				  $.ajax({
@@ -465,20 +487,21 @@ function saveData(){
 			          url : 'saveJobCaptureAction',	          
 			          data: JSON.stringify({
 			        	  invoice_data:{
-			        		    "id": id_invoice,
+			        		    "id": id,
 			        		    "management_id": management_id,
 			        		    "invoice_type_id": invoice_type_id,
 			        		    "invoice_type": invoice_type,
 			        		    "customer_id": customer_id,
-			        		    "customer_name": customer_name,
-			        		    "invoice_name": invoice_name,
+			        		    "customer_code": customer_code,
+			        		    "customer_name": customer_code,
 			        		    "customer_id_level1": customer_id_level1,
+			        		    "customer_code_level1": customer_code_level1,
 			        		    "customer_name_level1": customer_name_level1,
-			        		    "user_id": user_id,
-			        		    "user_name": user_name,
-			        		    "date_company_received": date_company_received,
+			        		    "staff_id": staff_id,
+			        		    "staff_name": staff_name,
+			        		    "date_company_received":date_company_received,
 			        		    "date_product_received": date_product_received,
-			        		    "date_sent_late": date_sent_late,
+			        		    "date_sent_late": 0,
 			        		    "notes": notes,
 			        		    "product_ids": product_ids,
 			        		    "product_names": product_names,
@@ -486,11 +509,12 @@ function saveData(){
 			        		    "quantitys": quantitys,
 			        		    "total_prices": total_prices,
 			        		    "sum_total_price":sum_total_price
+			        		    
 					 	    } 
 					 	         
 					   	}) ,	           
 			          success : function(responseText) {
-			           alert(responseText);
+			          
 			           resetData();
 			       	   console.log(responseText);
 			       	   getjob();
@@ -700,23 +724,29 @@ $(document).ready(function() {
            onStartDrag: function(ev, coords) { return true },
            onDrag: function(ev, coords) { return true }
       });
-      $("#in").click(function(){ iv1.iviewer('zoom_by', 1); });
-      $("#out").click(function(){ iv1.iviewer('zoom_by', -1); });
-      $("#fit").click(function(){ iv1.iviewer('fit'); });
-      $("#orig").click(function(){ iv1.iviewer('set_zoom', 100); });
-      $("#update").click(function(){ iv1.iviewer('update_container_info'); });
+      $("#in").click(function(){ iv.iviewer('zoom_by', 1); });
+      $("#out").click(function(){ iv.iviewer('zoom_by', -1); });
+      $("#fit").click(function(){ iv.iviewer('fit'); });
+      $("#orig").click(function(){ iv.iviewer('set_zoom', 100); });
+      $("#update").click(function(){ iv.iviewer('update_container_info'); });
     
 });
-	
-		var maKH                 = document.getElementById("maKH");
-		var tenKH                = document.getElementById("tenKH");
-		var customer_name_level1 = document.getElementById("customer_name_level1");
-		var nvtt_name            = document.getElementById("nvtt_name");
-		var customer_id_level1_hidden     = document.getElementById("customer_id_level1_hidden");
+        var customer_id_hidden            = document.getElementById("customer_id_hidden");
+		var maKH                          = document.getElementById("maKH");
+		var tenKH                         = document.getElementById("tenKH");
+		var customer_name_level1          = document.getElementById("customer_name_level1");
+		var nvtt_name                     = document.getElementById("nvtt_name");
+		var customer_code_level1_hidden   = document.getElementById("customer_code_level1_hidden");
 		var nvtt_id_hidden                = document.getElementById("nvtt_id_hidden"); 
-		var invoice_name_hidden            = document.getElementById("invoice_name_hidden"); 
+	 
 		
-		var khachhang = new LookupKhachHang(maKH, tenKH, customer_name_level1, nvtt_name,customer_id_level1_hidden,nvtt_id_hidden,invoice_name_hidden, 1, {		
+		var khachhang_ma = new LookupKhachHang(maKH, tenKH, customer_name_level1, nvtt_name,customer_code_level1_hidden,nvtt_id_hidden,customer_id_hidden, 1, {		
+			  minChars: 1,
+			  maxItems: 20,
+			  autoFirst: true
+		});
+		
+		var khachhang_ten = new LookupKhachHang(tenKH, maKH, customer_name_level1, nvtt_name,customer_code_level1_hidden,nvtt_id_hidden,customer_id_hidden, 2, {		
 			  minChars: 1,
 			  maxItems: 20,
 			  autoFirst: true
@@ -728,47 +758,57 @@ $(document).ready(function() {
 		            return;
 		        }else{
 		        	 var user_id                  = document.getElementById("maKH").value ;
-					 $.ajax({  		
-					       type: "GET",
-				           url     : 'lookupCaptureCusStaffAction?search_cus='+ user_id,	          
-				           data    : "",
-				           success : function(responseText) {
-				        	
-				        	 var stt =0;
-				        	 var resultjson = [];
-			 	        	 for (i in responseText) { 
-			 	        		 console.log(responseText);
-			 	        		data ="";		 	        	
-			 	        		data = data +responseText[i][1]+"|";//invoice_name
-			 	        		data = data +responseText[i][0]+"|";//customer_id
-			 	        		data = data +responseText[i][2]+"|";//customer_name
-			 	        		data = data +responseText[i][3]+"|";//customer_id_level1
-			 	        		data = data +responseText[i][4]+"|";//customer_name_level1
-			 	        		data = data +responseText[i][5]+"|";//user_id
-			 	        		data = data +responseText[i][6]+"";//user_name
-			 	        		resultjson.push(data);
-			 	        		stt++;
-			 	        		
-			 	        		}
-			 	        	
-			 	        	if(stt>1){
-			 	        		
-			 	        		khachhang.list = resultjson ;
-		 	        		}else{
-		 	        			
-		 	        		}
-			 	        	
-				        	
-				           }
-					   });
-					 
+		        	 loolupKhachHang(user_id ,khachhang_ma);
 		        }
-			  
-			   
-				 
-				 
-			 
 			});
+		
+		$( "#tenKH" ).keyup(function(e) {
+			  var code = (e.keyCode || e.which);      
+		        if (code === 37 || code === 38 || code === 39 || code === 40 || code === 27 || code === 13) {
+		            return;
+		        }else{
+		        	 var tenKH                  = document.getElementById("tenKH").value ;
+		        	 loolupKhachHang(tenKH,khachhang_ten);
+		        }
+			});
+		
+		
+		function loolupKhachHang(name ,khachhang){
+			 $.ajax({  		
+			       type: "GET",
+		           url     : 'lookupCaptureCusStaffAction?search_cus='+ name,	          
+		           data    : "",
+		           success : function(responseText) {
+		        	
+		        	 var stt =0;
+		        	 var resultjson = [];
+	 	        	 for (i in responseText) { 
+	 	        		 console.log(responseText);
+	 	        		data ="";	
+	 	        		data = data +responseText[i][0]+"|";//customer_id
+	 	        		data = data +responseText[i][1]+"|";//invoice_name			 	        	
+	 	        		data = data +responseText[i][2]+"|";//customer_name
+	 	        		data = data +responseText[i][3]+"|";//customer_id_level1
+	 	        		data = data +responseText[i][4]+"|";//customer_name_level1
+	 	        		data = data +responseText[i][5]+"|";//user_id
+	 	        		data = data +responseText[i][6]+"";//user_name
+	 	        		resultjson.push(data);
+	 	        		stt++;
+	 	        		
+	 	        		}
+	 	        	
+	 	        	if(stt>1){
+	 	        		
+	 	        		khachhang.list = resultjson ;
+	        		}else{
+	        			
+	        		}
+	 	        	
+		        	
+		           }
+			   });
+			 
+		}
 		
 		  $('#table_position > tbody  > tr').each(function() {
 			    var nebenkosten = document.getElementById("masanpham_"+this.getAttribute("id"));
