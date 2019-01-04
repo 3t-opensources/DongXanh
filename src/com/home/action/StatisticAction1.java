@@ -113,6 +113,22 @@ public class StatisticAction1 extends ActionSupport implements Action, UserAware
 		}
 	}
 
+	  public String xuan_them_moi(){
+	        listInvoiceType = new ArrayList<InvoiceType>();
+	        System.out.println("http://localhost:8080/DongXanh/ xuan them moi");
+	        listInvoiceType.add(new InvoiceType(MyConts.INVOICE_STATISTIC_CUS_L2, "Hóa đơn BH cấp 2"));
+	        listInvoiceType.add(new InvoiceType(MyConts.INVOICE_STATISTIC_CUS_L1, "Hóa đơn BH cấp 1"));
+	       
+	        HttpSession httpSession = ServletActionContext.getRequest().getSession();
+	        if(httpSession.getAttribute(MyConts.LOGIN_SESSION) != null){
+	            statistic.setUser((User)httpSession.getAttribute(MyConts.LOGIN_SESSION));
+	        }else{
+	           
+	        }
+	       
+	        return SUCCESS;
+	    }
+	  
 	public String lookupCustomerL1Statistic(){
 		try {
 			String cusName = searchCusName;

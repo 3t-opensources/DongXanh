@@ -1,3 +1,6 @@
+<%@page import="com.home.model.User"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="com.home.model.InvoiceType"%>
 <%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"    pageEncoding="UTF-8"%>
 <%@ page session="false"%>
@@ -24,7 +27,7 @@
 
 
 <link rel="stylesheet" href="css/datepicker.min.css"/>
-<link rel="stylesheet" href="css/stylesDilog2.css"/>
+
 
 
 
@@ -37,21 +40,27 @@
 <script src="js/jquery.dataTables.min.js"></script>
 	<!-- LOOKUP DATA -->
 <link href="css/awesomplete.css" type="text/css" rel="stylesheet">
-<script src="js/awesomplete.js"></script>
+<script src="js/awesomplete_new.js"></script>
 
  
 
 </head>
 <body>
  <%
-  String data ="['August Beck GmbH & Co. KG|0000010367|DE72600501010004763594|EUR','Bedrunka & Hirth GmbH|0000014053|DE90694500650240012576|EUR','Bilz Werkzeugfabrik GmbH & Co. KG|0000010078|DE69600501017456500267|EUR','C.+ E. Fein GmbH|0000010399|DE51600700700110213600|EUR','E D E Einkaufsbüro Deutscher|0000015179|DE68300306008003800300|EUR','Fechtel Transportgeräte GmbH|0000013582|DE90480620510214900100|EUR','Gühring KG|0000010431|DE09653700750010412500|EUR','Jörn Detjens GmbH|0000017273|DE24200505501352122855|EUR','KLW Karl Lutz GmbH & Co. KG|0000010655|DE84600501010008800130|EUR','LOKOMA Lorenz Kollmann GmbH|0000010600|DE52722515200000554405|EUR','Owt Osnabrücker Werkzeugtechnik Gmb|0000017826|DE57265501050000280271|EUR','Rhodius GmbH & Co. KG|0000013325|DE80570200860004768507|EUR','Robert Bosch Power Tools GmbH|0000012810|DE24600501010002250315|EUR','Scheuerlein-Motorentechnik|0000020074|DE49760693720007217714|EUR','Stanley Black & Decker|0000018939|DE10500400000123900300|EUR','Ultra-Präzision Messzeuge GmbH|0000011948|DE41795500000000300848|EUR','Walter Deutschland GmbH|0000011900|DE21500700100341203800|EUR','Wera Werkzeuge GmbH|0000012128|DE97330700900093182400|EUR']";
+ 
+ List<InvoiceType> listInvoice =  (ArrayList<InvoiceType>) request.getAttribute("listInvoiceType");
+ User userSes                  =  ( User) request.getAttribute("userSes");	
+  String datatest ="['August Beck GmbH & Co. KG|0000010367|DE72600501010004763594|EUR','Bedrunka & Hirth GmbH|0000014053|DE90694500650240012576|EUR','Bilz Werkzeugfabrik GmbH & Co. KG|0000010078|DE69600501017456500267|EUR','C.+ E. Fein GmbH|0000010399|DE51600700700110213600|EUR','E D E Einkaufsbüro Deutscher|0000015179|DE68300306008003800300|EUR','Fechtel Transportgeräte GmbH|0000013582|DE90480620510214900100|EUR','Gühring KG|0000010431|DE09653700750010412500|EUR','Jörn Detjens GmbH|0000017273|DE24200505501352122855|EUR','KLW Karl Lutz GmbH & Co. KG|0000010655|DE84600501010008800130|EUR','LOKOMA Lorenz Kollmann GmbH|0000010600|DE52722515200000554405|EUR','Owt Osnabrücker Werkzeugtechnik Gmb|0000017826|DE57265501050000280271|EUR','Rhodius GmbH & Co. KG|0000013325|DE80570200860004768507|EUR','Robert Bosch Power Tools GmbH|0000012810|DE24600501010002250315|EUR','Scheuerlein-Motorentechnik|0000020074|DE49760693720007217714|EUR','Stanley Black & Decker|0000018939|DE10500400000123900300|EUR','Ultra-Präzision Messzeuge GmbH|0000011948|DE41795500000000300848|EUR','Walter Deutschland GmbH|0000011900|DE21500700100341203800|EUR','Wera Werkzeuge GmbH|0000012128|DE97330700900093182400|EUR']";
+ 
   String data_postion ="['Abroad|Abroad|surcharge','Administration|Administration|surcharge','bulky goods|bulky goods|surcharge','Cash discount|Cash discount|surcharge','Cash on delivery|C.O.D. cash on delivery service|surcharge','Customization|Customization|surcharge','Customs|Customs|surcharge','Deposit|Deposit|surcharge','Express|Express|surcharge','Extra isle-charge|Surcharge for islands.|surcharge','Fracht|Freight|surcharge','Frachtkosten|Freight|surcharge','Frachtspesen|Freight|surcharge','Freight|Freight|surcharge','Handling|Handling|surcharge','Insurance|Insurance|surcharge','Minimum quantitiy Surcharge|Minimum quantitiy Surcharge|surcharge','Packing|Packing|surcharge','Partial Quantity|Partial Quantity|surcharge','Period-bonus|Period-bonus (e.g. annual bonus)|allowance','Postage|Postage|surcharge','Project-bonus|Project-bonus|allowance','Rebate|Rebate|allowance','Recycling|Recycling|surcharge','Surcharge|Surcharge|surcharge','Surcharge for material|Surcharge for material|surcharge','Verpackung|Packing|surcharge']";
  %>
   
    <div id="header">  
 		<div class="navbar nav_title" style="border: 0;">
 			<a class="site_title" href="homeAction">
-				<img width="27%" height="70%" alt="ĐỒNG XANH" src="./images/banner_dongxanh.png" style="padding-top: 10px">
+				<img width="27%" height="70%" alt="ĐỒNG XANH" src="./images/banner_dongxanh.png" style="padding-top: 10px ; display: none;">
+				
+				<img width="27%" height="70%" alt="ĐỒNG XANH" src="https://digi-texx.vn/wp-content/uploads/2018/06/Logo_DIGI-TEXX_2015-e1530520430447.png" style="padding-top: 10px">
 			</a>
 		</div>
 	</div>
@@ -88,15 +97,16 @@
     	              <input type="hidden" id="id" name="id" value="123">
         			  <input type="hidden" id="management_id" name="management_id" value="456">
         			  <input type="hidden" id="invoice_type_id" name="invoice_type_id" value="789">
-        			   <input type="hidden" id="user_id" name="user_id" value="user_id">
-        			  <input type="hidden" id="user_name" name="user_name" value="user_name">
-        			   <input type="hidden" id="KHcap1_id" name="KHcap1_id" value="KHcap1_id">
+        			   <input type="hidden" id="invoice_name_hidden" name="invoice_name_hidden" value="789">
+        			 
+        			  <input type="hidden" id="user_id" name="user_id" value="<%= userSes.getId()%>">
+        			  <input type="hidden" id="user_name" name="user_name" value="<%= userSes.getUserName()%>">
         			  
         			  
     	                <div class="well"><p align="center">
-    	                         <button type="button" class="btn btn-success" onclick="getjob();">Nhập bảng kê</button>						            
-				                 <button type="button" class="btn btn-success" onclick="searchDetail();">Xóa toa/bảng kê</button>			  
-				            	 <button type="button" class="btn btn-success" onclick="saveData();">Lưu toa/bảng kê</button>			  
+    	                         <button type="button" id ="btn_nhapbangke" class="btn btn-success" onclick="getjob()">Nhập bảng kê</button>						            
+				                 <button type="button" id ="btn_xoabangke"  class="btn btn-success" onclick="searchDetail();">Xóa toa/bảng kê</button>			  
+				            	 <button type="button" id ="btn_Luubangke"  class="btn btn-success" onclick="saveData();">Lưu toa/bảng kê</button>			  
                       	</div>
 						<div id="wrapper" style="width : 100%; height : 100%; float: right">
 							<!-- <div class="panel-heading" style="color: blue;font-weight: bold;">META DATA </div> -->
@@ -104,18 +114,24 @@
 									        <div class="row " >
 	                                       		  <div class="col-lg-2" ><span>Loại bảng kê  </span>  </div>	                                       		  
 	                                       		  <div class="col-lg-4">	
+	                                       		  
 	                                       		   <select id="cbb_loaibangke" name="cbb_loaibangke"  class="cbb_search" style="width: 100% ; height: 27px">
-										                 <option value="1">1</option>	
-										                 <option value="2">2</option>	
-										                 <option value="3">3</option>	
-										                 <option value="4">4</option>	
-										                 <option value="5">5</option>				                  
+										              <%										             									
+										              for(InvoiceType item : listInvoice){ %>
+										            	<option value="<%= item.id%>"><%= item.invoiceType %></option>
+										            	
+										            	
+										             <%   
+										              }	
+										             
+										              %>
+										              	                  
 										           </select>
 	                                       		  </div>	 
 	                                       		  
 	                                       		  <div class="col-lg-2" ><span>Tên bảng kê  </span>  </div>	                                       		  
 	                                       		  <div class="col-lg-4">			                                       									
-				                                          <input value = "" id = "tenbangke" name="tenbangke" class="form-control" ondblclick = "getIdTag(this)" tabindex="1"/>				                                         
+				                                          <input value = "" id = "tenbangke" name="tenbangke" class="form-control" ondblclick = "getIdTag(this)" tabindex="1" readonly=false/>				                                         
 	                                       		  </div>	                                        		  
 	                                        </div>
 										     <div class="clear"></div>										     
@@ -133,13 +149,16 @@
 										     <div class="clear"></div>										     
 										      <div class="row " >
 	                                       		  <div class="col-lg-2" ><span>KH Cấp 1 </span>  </div>	                                       		  
-	                                       		  <div class="col-lg-4">			                                       									
-				                                          <input value = "" id = "KHcap1" name="KHcap1" class="form-control" ondblclick = "getIdTag(this)" tabindex="1"/>				                                         
+	                                       		  <div class="col-lg-4">	
+	                                       		         <input type="hidden"  value = "" id = "customer_id_level1_hidden"  name="customer_id_level1_hidden"    class="form-control" ondblclick = "getIdTag(this)" tabindex="1"/> 		                                       									
+				                                          <input value = "" id = "customer_name_level1" name="customer_name_level1" class="form-control" ondblclick = "getIdTag(this)" tabindex="1"/>				                                         
 	                                       		  </div>	   
 	                                       		  
 	                                       		 <div class="col-lg-2" ><span>NVTT </span>  </div>	                                       		  
-	                                       		  <div class="col-lg-4">			                                       									
-				                                          <input value = "" id = "NVTT" name="NVTT" class="form-control" ondblclick = "getIdTag(this)" tabindex="1"/>				                                         
+	                                       		  <div class="col-lg-4">
+	                                       		  
+        			  			                          <input type="hidden"  value = "" id = "nvtt_id_hidden"  name="nvtt_id_hidden"    class="form-control" ondblclick = "getIdTag(this)" tabindex="1"/>             									
+				                                          <input value = "" id = "nvtt_name" name="nvtt_name" class="form-control" ondblclick = "getIdTag(this)" tabindex="1"/>				                                         
 	                                       		  </div>	                                                 		  
 	                                        </div>
 										     <div class="clear"></div>	
@@ -209,23 +228,26 @@
 												<input value = "" id = "tensanpham_<%=i %>"   name="tensanpham_<%=i %>" class="custom-input-debitor form-control" ondblclick = "getIdTag(this)" tabindex=""/>
 											</td>
 											<td>
-												<input value = "" id = "soluong_<%=i %>"      name="soluong_<%=i %>"    class="custom-input-debitor form-control" ondblclick = "getIdTag(this)" tabindex=""/>
+											   <input type="number" value="" min="0" step="1" data-number-to-fixed="2" data-number-stepfactor="100" id = "soluong_<%=i %>"   name="soluong_<%=i %>" class="custom-input-debitor form-control currency" "/>
+											
 											</td>
 											<td>
-												<input value = "" id = "sothung_<%=i %>"      name="sothung_<%=i %>"     class="custom-input-debitor form-control" ondblclick = "getIdTag(this)" tabindex=""/>
+											  <input type="number" value="" min="0" step="1" data-number-to-fixed="2" data-number-stepfactor="100" id = "sothung_<%=i %>"   name="sothung_<%=i %>" class="custom-input-debitor form-control currency"  />
 											</td>
 											
 											<td>
-												<input value = "" id = "dongia_<%=i %>"        name="dongia_<%=i %>"     class="custom-input-debitor form-control" ondblclick = "getIdTag(this)" tabindex=""/>
+											  <input type="number" value="" min="0" step="1" data-number-to-fixed="2" data-number-stepfactor="100" id = "dongia_<%=i %>"   name="dongia_<%=i %>" class="custom-input-debitor form-control currency"  />
+											
 											</td>
 											
 											<td>
-												<input value = "" id = "thanhtien_<%=i %>"      name="thanhtien_<%=i %>" class="custom-input-debitor form-control" ondblclick = "getIdTag(this)" tabindex=""/>
+											  <input type="number" value="" min="0" step="1" data-number-to-fixed="2" data-number-stepfactor="100" id = "thanhtien_<%=i %>"   name="thanhtien_<%=i %>" class="custom-input-debitor form-control currency"  />
+											
 											</td>
 											<td>
 											   <div style="padding-top: 4px; padding-left: 2px; padding-right: 2px">
-											        <button type="button" class="btn btn-success btn-sm" onclick="addRow(<%=i %>)"><span class="glyphicon glyphicon-plus"></span></button>
-                                                    <button type="button" class="btn btn-danger btn-sm"  onclick="moveRow(<%=i %>)"><span class="glyphicon glyphicon-remove"></span></button>											
+											        <button type="button" class="btn btn-success btn-sm" onclick="addRow(<%=i %>)"   id ="addRow_<%=i %>"><span class="glyphicon glyphicon-plus"></span></button>
+                                                    <button type="button" class="btn btn-danger btn-sm"  onclick="moveRow(<%=i %>)"  id ="moveRow_<%=i %>"><span class="glyphicon glyphicon-remove"></span></button>											
 											   </div>
 												
 											</td>
@@ -233,6 +255,7 @@
 										</tr>
 										<% } %>			 		
 							          </tbody>
+							          
 							        </table>
 							      </div>
 							  </div>   
@@ -264,56 +287,249 @@
 		</div>
 	</div>	
 <script type="text/javascript" src="js/jquery.mousewheel.min.js" ></script>
-<script type="text/javascript" src="js/jquery.iviewer.js" ></script>  
+<script type="text/javascript" src="js/jquery.iviewer.js" ></script> 
+<script type="text/javascript" src="js/hoadon_nhap.js" ></script>   
 <script type="text/javascript">
+function formattedNumberField(event){
+	 var x = event.which || event.keyCode;
+	 console.log(x);
+	 return false;
+}
+function getjob(){
+	
+	 var user_id                  = document.getElementById("user_id").value ;
+	 $.ajax({  		
+	       type: "GET",
+           url     : 'getJobCaptureAction?user_id='+ user_id,	          
+           data    : "",
+           success : function(responseText) {	
+        	  
+        	 checkGetJob(false);
+        	 var invoice_data_id = responseText[0].responseText;
+        	 var id              = responseText[0].id;
+        	 document.getElementById("id").value           = id;
+       	     document.getElementById("management_id").value   = id ;
+       	     document.getElementById("invoice_type_id").value = invoice_data_id ;
+       	  
+        	 console.log(responseText);
+        	
+           }
+	   });
+
+}
+
+
+
+
+function checkGetJob(flag){
+
+		
+		$("#id").prop('readonly', flag);
+		$("#management_id").prop('readonly', flag);
+		$("#invoice_type_id").prop('readonly', flag);
+		$("#user_id").prop('readonly', flag);
+		$("#user_name").prop('readonly', flag);
+		$('#cbb_loaibangke').attr("disabled", flag); 
+		
+		$("#maKH").prop('readonly', flag);
+		$("#tenKH").prop('readonly', flag);
+		$("#tenbangke").prop('readonly', flag);
+		$("#customer_id_level1_hidden").prop('readonly', flag);
+		$("#customer_name_level1").prop('readonly', flag);
+		$("#nvtt_name").prop('readonly', flag);
+		 
+		$("#ngaynhantoa").prop('readonly', flag);
+		$("#ngaynhanhang").prop('readonly', flag);
+		$("#date_sent_late").prop('readonly', flag);
+		$("#notes").prop('readonly', flag);
+		
+		$("#btn_nhapbangke").prop('disabled', !flag);
+		$("#btn_xoabangke").prop('disabled', flag);
+		$("#btn_Luubangke").prop('disabled', flag);
+	
+		  $('#table_position > tbody  > tr').each(function() {		
+			  var id        =   this.getAttribute("id");			 
+			  $("#masanpham_"+id).prop('readonly', flag);
+			  $("#tensanpham_"+id).prop('readonly', flag);
+			  $("#soluong_"+id).prop('readonly', flag);
+			  $("#sothung_"+id).prop('readonly', flag);
+			  $("#dongia_"+id).prop('readonly', flag);
+			  $("#thanhtien_"+id).prop('readonly', flag);
+			  $("#addRow_"+id).prop('disabled', flag);
+			  $("#moveRow_"+id).prop('disabled', flag);
+			 
+		  });
+		
+	
+}
+function resetData(){
+	
+	 document.getElementById("maKH").value ="";
+	 document.getElementById("tenKH").value ="";
+	 document.getElementById("tenbangke").value="" ;
+	 
+	  
+	 document.getElementById("customer_id_level1_hidden").value ="";
+     document.getElementById("customer_name_level1").value ="";
+	  
+	 document.getElementById("ngaynhantoa").value="" ;
+	 document.getElementById("ngaynhanhang").value ="";
+	 document.getElementById("date_sent_late").value ="";
+	 document.getElementById("notes").value ="";
+	  $('#table_position > tbody  > tr').each(function() {		
+		  var id        =   this.getAttribute("id");	
+		  $("#"+id).remove(); 
+	  });
+	  addRow(0);
+	  addRow(0);
+	  stt =0;
+	  $('#table_position > tbody  > tr').each(function() {
+		  stt++;	
+		  document.getElementById("stt_"+this.getAttribute("id")).innerHTML  = stt;      
+	 });
+	
+}
+var maxRow =0;
 function saveData(){
-	  var id_invoice               = document.getElementById("id").value ;
-	  var management_id            = document.getElementById("management_id").value ;
-	  var invoice_type_id          = document.getElementById("invoice_type_id").value ;
-	  var user_id                  = document.getElementById("user_id").value ;
-	  var user_name                = document.getElementById("user_name").value ;
-	 
+	maxRow =0;
+	 if (checktable()) {
+		
+		  var id_invoice               = parseInt(document.getElementById("id").value) ;
+		  var management_id            = parseInt(document.getElementById("management_id").value) ;
+		  var invoice_type_id          = parseInt( document.getElementById("invoice_type_id").value) ;
+		  var user_id                  = document.getElementById("user_id").value ;
+		  var user_name                = document.getElementById("user_name").value ;
+		 
+		  
+		  var invoice_type             = document.getElementById("cbb_loaibangke").value ;
+		  var customer_id              = document.getElementById("maKH").value ;
+		  var customer_name            = document.getElementById("tenKH").value ;
+		  var invoice_name             = document.getElementById("tenbangke").value ;
+		 
+		  
+		  var customer_id_level1_hidden       = document.getElementById("customer_id_level1_hidden").value ;
+		  var customer_name_level1     = document.getElementById("customer_name_level1").value ;
+		  
+		  var date_company_received    = document.getElementById("ngaynhantoa").value ;
+		  var date_product_received    = document.getElementById("ngaynhanhang").value ;
+		  var date_sent_late           = document.getElementById("date_sent_late").value ;
+		  var notes                    = document.getElementById("notes").value ;
+		 
+		  
+		
+		  var product_ids="";
+		  var product_names="";
+		  var total_boxs="";
+		  var quantitys="";
+		  var product_prices="";
+		  var total_prices="";
+		  var sum_total_price="1000";
+		 
+		
+		  invoice_type_id =1;
+		  customer_id=1;
+		  customer_id_level1 =1; 
+		  customer_name_level1 ="Nguyen truong xuan";
+		
+		  if(date_company_received.length==10){
+			  date_company_received = date_company_received.substring(6,10)+"-"+date_company_received.substring(3,5)+"-"+date_company_received.substring(0,2)+"T00:00:00";		
+		  }
+		  if(date_product_received.length==10){
+			  date_product_received = date_product_received.substring(6,10)+"-"+date_product_received.substring(3,5)+"-"+date_product_received.substring(0,2)+"T00:00:00";		
+		  }
+		  var row =0;
+		  $('#table_position > tbody  > tr').each(function() {		
+			  var id        =   this.getAttribute("id");
+			  var masp      =   document.getElementById("masanpham_"+id).value;
+			  var tensp     =   document.getElementById("tensanpham_"+id).value;
+			  var soluong   =   document.getElementById("soluong_"+id).value;
+			  var sothung   =   document.getElementById("sothung_"+id).value;
+			  var dongia    =   document.getElementById("dongia_"+id).value;
+			  var thanhtien =   document.getElementById("thanhtien_"+id).value;
+			  if(dongia!="" && thanhtien !="" && soluong !=""){
+				  
+			  }
+			  product_ids      = product_ids        +masp       +"`";
+			  product_names    = product_names      +tensp      +"`";			 
+			  quantitys        = quantitys          +soluong    +"`";  
+			  total_boxs       = total_boxs         +sothung    +"`";
+			  product_prices   = product_prices     +dongia     +"`";
+			  total_prices     = total_prices       +thanhtien  +"`";
+			  row++;
+			  if(row==maxRow){
+				  $.ajax({
+					  async: false,
+			          dataType: 'json',
+			          contentType: "application/json",
+				       type: "POST",
+			          url : 'saveJobCaptureAction',	          
+			          data: JSON.stringify({
+			        	  invoice_data:{
+			        		    "id": id_invoice,
+			        		    "management_id": management_id,
+			        		    "invoice_type_id": invoice_type_id,
+			        		    "invoice_type": invoice_type,
+			        		    "customer_id": customer_id,
+			        		    "customer_name": customer_name,
+			        		    "invoice_name": invoice_name,
+			        		    "customer_id_level1": customer_id_level1,
+			        		    "customer_name_level1": customer_name_level1,
+			        		    "user_id": user_id,
+			        		    "user_name": user_name,
+			        		    "date_company_received": date_company_received,
+			        		    "date_product_received": date_product_received,
+			        		    "date_sent_late": date_sent_late,
+			        		    "notes": notes,
+			        		    "product_ids": product_ids,
+			        		    "product_names": product_names,
+			        		    "total_boxs": total_boxs,
+			        		    "quantitys": quantitys,
+			        		    "total_prices": total_prices,
+			        		    "sum_total_price":sum_total_price
+					 	    } 
+					 	         
+					   	}) ,	           
+			          success : function(responseText) {
+			           alert(responseText);
+			           resetData();
+			       	   console.log(responseText);
+			       	   getjob();
+			          }
+				   });
+			  }
+			
+			  
+			 
+		 });
+		
+		
+		 
+		  
+		  
+	}
+	
 	  
-	  var invoice_type             = document.getElementById("cbb_loaibangke").value ;
-	  var customer_id              = document.getElementById("maKH").value ;
-	  var customer_name            = document.getElementById("tenKH").value ;
-	  var invoice_name             = document.getElementById("tenbangke").value ;
-	 
-	  
-	  var customer_id_level1       = document.getElementById("KHcap1_id").value ;
-	  var customer_name_level1     = document.getElementById("KHcap1").value ;
-	  
+}
+
+function checktable(){
+	  var row =0;
+	  var flag =true;
 	  var date_company_received    = document.getElementById("ngaynhantoa").value ;
 	  var date_product_received    = document.getElementById("ngaynhanhang").value ;
-	  var date_sent_late           = document.getElementById("date_sent_late").value ;
-	  var notes                    = document.getElementById("notes").value ;
-	 
-	  
-	  
-	  var product_ids="";
-	  var product_names="";
-	  var total_boxs="";
-	  var quantitys="";
-	  var product_prices="";
-	  var total_prices="";
-	  var sum_total_price="1000";
-	  
-	  
-	  id_invoice =240;
-	  management_id =240;
-	  invoice_type_id =1;
-	  customer_id=1;
-	  customer_id_level1 =1; 
-	  customer_name_level1 ="Nguyen truong xuan";
-	  user_id =23;
-	  if(date_company_received.length==10){
-		  date_company_received = date_company_received.substring(6,10)+"-"+date_company_received.substring(3,5)+"-"+date_company_received.substring(0,2)+"T00:00:00";		
+	  if(date_company_received.length !=10){
+		  alert("Ngày nhận toa không được rỗng!");
+			flag = false;
+			return false;
 	  }
-	  if(date_product_received.length==10){
-		  date_product_received = date_product_received.substring(6,10)+"-"+date_product_received.substring(3,5)+"-"+date_product_received.substring(0,2)+"T00:00:00";		
+	  
+	  if(date_product_received.length !=10){
+		  alert("Ngày nhận hàng không được rỗng!");
+			flag = false;
+			return false;
 	  }
-	  var row =0;
 	  $('#table_position > tbody  > tr').each(function() {		
+		  row ++;
+		  maxRow ++;
 		  var id        =   this.getAttribute("id");
 		  var masp      =   document.getElementById("masanpham_"+id).value;
 		  var tensp     =   document.getElementById("tensanpham_"+id).value;
@@ -322,88 +538,33 @@ function saveData(){
 		  var dongia    =   document.getElementById("dongia_"+id).value;
 		  var thanhtien =   document.getElementById("thanhtien_"+id).value;
 		  
-		  product_ids      = product_ids        +masp       +"`";
-		  product_names    = product_names      +tensp      +"`";			 
-		  quantitys        = quantitys          +soluong    +"`";  
-		  total_boxs       = total_boxs         +sothung    +"`";
-		  product_prices   = product_prices     +dongia     +"`";
-		  total_prices     = total_prices       +thanhtien  +"`";
-		  row++;
-		  checkRow(id,row);
-		  
-		 
+		  var result ="";
+		   if(masp===""){
+			    result = result +" mã sản phẩm không được rỗng.\n";
+		    }
+			if(tensp===""){
+				 result = result +" tên sản phẩm không được rỗng.\n";	  
+		    }
+			if(soluong==="" &&  sothung===""){
+				 result = result +" số lượng hoặc số thùng không được rỗng.\n";
+			}
+			if(dongia===""){
+				 result = result +" đơn giá không được rỗng.\n";
+			}
+			if(thanhtien===""){
+				 result = result +" thành tiền không được rỗng.\n";
+			}
+			
+			if (result!="") {
+				result =  "Dòng "+ row +" không hợp lệ \n"+result;
+				alert(result);
+				flag = false;
+				return false;
+			} 
 	 });
+	  return flag;
 	
-	  alert(date_company_received+"==========="+date_product_received);
-	  
-	  $.ajax({
-		  async: false,
-          dataType: 'json',
-          contentType: "application/json",
-	       type: "POST",
-          url : 'saveJobCaptureAction',	          
-          data: JSON.stringify({
-        	  invoice_data:{
-        		    "id": id_invoice,
-        		    "management_id": management_id,
-        		    "invoice_type_id": invoice_type_id,
-        		    "invoice_type": invoice_type,
-        		    "customer_id": customer_id,
-        		    "customer_name": customer_name,
-        		    "invoice_name": invoice_name,
-        		    "customer_id_level1": customer_id_level1,
-        		    "customer_name_level1": customer_name_level1,
-        		    "user_id": user_id,
-        		    "user_name": user_name,
-        		    "date_company_received": date_company_received,
-        		    "date_product_received": date_product_received,
-        		    "date_sent_late": date_sent_late,
-        		    "notes": notes,
-        		    "product_ids": product_ids,
-        		    "product_names": product_names,
-        		    "total_boxs": total_boxs,
-        		    "quantitys": quantitys,
-        		    "total_prices": total_prices,
-        		    "sum_total_price":sum_total_price
-		 	    } 
-		 	         
-		   	}) ,	           
-          success : function(responseText) {	   
-       	   console.log(responseText);
-          }
-	   });
-	  
-	  
-	  
-}
-
-function checkRow(id , row){
-	  var masp      =   document.getElementById("masanpham_"+id).value;
-	  var tensp     =   document.getElementById("tensanpham_"+id).value;
-	  var soluong   =   document.getElementById("soluong_"+id).value;
-	  var sothung   =   document.getElementById("sothung_"+id).value;
-	  var dongia    =   document.getElementById("dongia_"+id).value;
-	  var thanhtien =   document.getElementById("thanhtien_"+id).value;
-	  var result ="";
-	   if(masp===""){
-		    result = result +" mã sản phẩm không được rỗng.";
-	    }
-		if(tensp===""){
-			 result = result +" tên sản phẩm không được rỗng.";	  
-	    }
-		if(soluong==="" &&  sothung===""){
-			 result = result +" số lượng hoặc số thùng không được rỗng.";
-		}
-		if(dongia===""){
-			 result = result +" đơn giá không được rỗng.";
-		}
-		if(thanhtien===""){
-			 result = result +" thành tiền không được rỗng.";
-		}
-		if(result!=""){
-			result =  "dòng "+ row +"không hợp lệ /n"+result;
-		}
-		alert(result);
+	
 	  
 }
 function addRow(id){
@@ -430,19 +591,20 @@ function addRow(id){
 	  var addremove = row.insertCell(7);
 	  var time_id   = new Date().getTime();
 	  
-	  row.id =time_id;
-	  stt.id             ="stt_"+time_id;
-	  stt.innerHTML       = "";
-	  masp.innerHTML      = "<input value = '' id = 'masanpham_"+time_id+"'     name='masanpham_"+time_id+"'  class='custom-input-debitor form-control' ondblclick = 'getIdTag(this)' tabindex=''/>";
-	  tensp.innerHTML     = "<input value = '' id = 'tensanpham_"+time_id+"'    name='tensanpham_"+time_id+"' class='custom-input-debitor form-control' ondblclick = 'getIdTag(this)' tabindex=''/>";
-	  soluong.innerHTML   = "<input value = '' id = 'soluong_"+time_id+"'       name='soluong_"+time_id+"'    class='custom-input-debitor form-control' ondblclick = 'getIdTag(this)' tabindex=''/>";
-	  sothung.innerHTML   = "<input value = '' id = 'sothung_"+time_id+"'       name='sothung_"+time_id+"'    class='custom-input-debitor form-control' ondblclick = 'getIdTag(this)' tabindex=''/>";
-	  dongia.innerHTML    = "<input value = '' id = 'dongia_"+time_id+"'        name='dongia_"+time_id+"'     class='custom-input-debitor form-control' ondblclick = 'getIdTag(this)' tabindex=''/>";
-	  thanhtien.innerHTML = "<input value = '' id = 'thanhtien_"+time_id+"'     name='thanhtien_"+time_id+"'  class='custom-input-debitor form-control' ondblclick = 'getIdTag(this)' tabindex=''/>";
-	 
+	  row.id        = time_id;
+	  stt.id        = "stt_"+time_id;
+	  stt.innerHTML = "";
+	
+	  masp.innerHTML      = "<input  value = '' min='0' step='1' data-number-to-fixed='2' data-number-stepfactor='100' id = 'masanpham_"+time_id+"'     name='masanpham_"+time_id+"'  class='custom-input-debitor form-control '/>";
+	  tensp.innerHTML     = "<input  value = '' min='0' step='1' data-number-to-fixed='2' data-number-stepfactor='100' id = 'tensanpham_"+time_id+"'    name='tensanpham_"+time_id+"' class='custom-input-debitor form-control '/>";
+	  soluong.innerHTML   = "<input  type='number' value = '' min='0' step='1' data-number-to-fixed='2' data-number-stepfactor='100' id = 'soluong_"+time_id+"'       name='soluong_"+time_id+"'    class='custom-input-debitor form-control currency'/>";
+	  sothung.innerHTML   = "<input  type='number' value = '' min='0' step='1' data-number-to-fixed='2' data-number-stepfactor='100' id = 'sothung_"+time_id+"'       name='sothung_"+time_id+"'    class='custom-input-debitor form-control currency'/>";
+	  dongia.innerHTML    = "<input  type='number' value = '' min='0' step='1' data-number-to-fixed='2' data-number-stepfactor='100' id = 'dongia_"+time_id+"'        name='dongia_"+time_id+"'     class='custom-input-debitor form-control currency'/>";
+	  thanhtien.innerHTML = "<input  type='number' value = '' min='0' step='1' data-number-to-fixed='2' data-number-stepfactor='100' id = 'thanhtien_"+time_id+"'     name='thanhtien_"+time_id+"'  class='custom-input-debitor form-control currency'/>";
+	      
 	  var add_remove  = "<div style='padding-top: 4px; padding-left: 2px; padding-right: 2px'>  ";   
-	      add_remove  +="<button type='button' class='btn btn-success btn-sm' onclick='addRow("+time_id+")'><span class='glyphicon glyphicon-plus'></span></button> ";
-	      add_remove  +="<button type='button' class='btn btn-danger btn-sm'  onclick='moveRow("+time_id+")'><span class='glyphicon glyphicon-remove'></span></button>";
+	      add_remove  +="<button type='button' class='btn btn-success btn-sm' onclick='addRow("+time_id+")'   id ='addRow_"+time_id+"' ><span class='glyphicon glyphicon-plus' ></span></button> ";
+	      add_remove  +="<button type='button' class='btn btn-danger btn-sm'  onclick='moveRow("+time_id+")'  id ='moveRow_"+time_id+"' ><span class='glyphicon glyphicon-remove'></span></button>";
 	      add_remove  +="</div>";
 	      
 	  addremove.innerHTML =add_remove;
@@ -451,27 +613,30 @@ function addRow(id){
 		var nebenkosten_betrag = document.getElementById("tensanpham_"+time_id);
 		var nebenkosten_type = document.getElementById("soluong_"+time_id);
 		
-		new LookupKreditor(nebenkosten, nebenkosten_betrag, nebenkosten_type, null, 4, {
+		new LookupKhachHang(nebenkosten, nebenkosten_betrag, nebenkosten_type, null, 4, {
 			list : <%=data_postion%>
 		});
-		
-	  stt =0;
-	  $('#table_position > tbody  > tr').each(function() {
-			  stt++;	
-			  document.getElementById("stt_"+this.getAttribute("id")).innerHTML  = stt;        
-			 
-			 
-		 });
+	
+	if(id!=0){
+		stt =0;
+		  $('#table_position > tbody  > tr').each(function() {
+				  stt++;	
+				  document.getElementById("stt_"+this.getAttribute("id")).innerHTML  = stt;        
+				 
+				 
+			 });
+	}
+	  
 	
 }
 
 function moveRow(id){
 	var result = confirm("bạn có chắt chắn chắn xóa dòng này?");
 	if (result) {
-		var stt =1;
-		var index =-1;	
+		var stt   = -1;
+		var index = -1;	
 		 $('#table_position > tbody  > tr').each(function() {
-			 stt;
+			 stt++;
 			 if(this.getAttribute("id")==id){			
 				index = stt;			
 			 }		 
@@ -487,360 +652,9 @@ function moveRow(id){
 	}
 	
 }
-/*!
-
-Split Pane v0.5.0
-
-Copyright (c) 2014 Simon Hagström
-
-Released under the MIT license
-https://raw.github.com/shagstrom/split-pane/master/LICENSE
-
-*/
-(function($) {
-
-  $.fn.splitPane = function() {
-    var $splitPanes = this;
-    $splitPanes.each(setMinHeightAndMinWidth);
-    $splitPanes.append('<div class="split-pane-resize-shim">');
-    var eventType = ('ontouchstart' in document) ? 'touchstart' : 'mousedown';
-    $splitPanes.children('.split-pane-divider').html('<div class="split-pane-divider-inner"></div>');
-    $splitPanes.children('.split-pane-divider').bind(eventType, mousedownHandler);
-    setTimeout(function() {
-      // Doing this later because of an issue with Chrome (v23.0.1271.64) returning split-pane width = 0
-      // and triggering multiple resize events when page is being opened from an <a target="_blank"> .
-      $splitPanes.each(function() {
-        $(this).bind('_splitpaneparentresize', createParentresizeHandler($(this)));
-      });
-      $(window).trigger('resize');
-    }, 100);
-  };
-
-  var SPLITPANERESIZE_HANDLER = '_splitpaneparentresizeHandler';
-
-  /**
-   * A special event that will "capture" a resize event from the parent split-pane or window.
-   * The event will NOT propagate to grandchildren.
-   */
-  jQuery.event.special._splitpaneparentresize = {
-    setup: function(data, namespaces) {
-      var element = this,
-        parent = $(this).parent().closest('.split-pane')[0] || window;
-      $(this).data(SPLITPANERESIZE_HANDLER, function(event) {
-        var target = event.target === document ? window : event.target;
-        if (target === parent) {
-          event.type = "_splitpaneparentresize";
-          jQuery.event.dispatch.apply(element, arguments);
-        } else {
-          event.stopPropagation();
-        }
-      });
-      $(parent).bind('resize', $(this).data(SPLITPANERESIZE_HANDLER));
-    },
-    teardown: function(namespaces) {
-      var parent = $(this).parent().closest('.split-pane')[0] || window;
-      $(parent).unbind('resize', $(this).data(SPLITPANERESIZE_HANDLER));
-      $(this).removeData(SPLITPANERESIZE_HANDLER);
-    }
-  };
-
-  function setMinHeightAndMinWidth() {
-    var $splitPane = $(this),
-      $firstComponent = $splitPane.children('.split-pane-component:first'),
-      $divider = $splitPane.children('.split-pane-divider'),
-      $lastComponent = $splitPane.children('.split-pane-component:last');
-    if ($splitPane.is('.fixed-top, .fixed-bottom, .horizontal-percent')) {
-      $splitPane.css('min-height', (minHeight($firstComponent) + minHeight($lastComponent) + $divider.height()) + 'px');
-    } else {
-      $splitPane.css('min-width', (minWidth($firstComponent) + minWidth($lastComponent) + $divider.width()) + 'px');
-    }
-  }
-
-  function mousedownHandler(event) {
-    event.preventDefault();
-    var isTouchEvent = event.type.match(/^touch/),
-      moveEvent = isTouchEvent ? 'touchmove' : 'mousemove',
-      endEvent = isTouchEvent ? 'touchend' : 'mouseup',
-      $divider = $(this),
-      $splitPane = $divider.parent(),
-      $resizeShim = $divider.siblings('.split-pane-resize-shim');
-    $resizeShim.show();
-    $divider.addClass('dragged');
-    if (isTouchEvent) {
-      $divider.addClass('touch');
-    }
-    var moveEventHandler = createMousemove($splitPane, pageXof(event), pageYof(event));
-    $(document).on(moveEvent, moveEventHandler);
-    $(document).one(endEvent, function(event) {
-      $(document).unbind(moveEvent, moveEventHandler);
-      $divider.removeClass('dragged touch');
-      $resizeShim.hide();
-    });
-  }
-
-  function createParentresizeHandler($splitPane) {
-    var splitPane = $splitPane[0],
-      firstComponent = $splitPane.children('.split-pane-component:first')[0],
-      divider = $splitPane.children('.split-pane-divider')[0],
-      lastComponent = $splitPane.children('.split-pane-component:last')[0];
-    if ($splitPane.is('.fixed-top')) {
-      var lastComponentMinHeight = minHeight(lastComponent);
-      return function(event) {
-        var maxfirstComponentHeight = splitPane.offsetHeight - lastComponentMinHeight - divider.offsetHeight;
-        if (firstComponent.offsetHeight > maxfirstComponentHeight) {
-          setTop(firstComponent, divider, lastComponent, maxfirstComponentHeight + 'px');
-        }
-        $splitPane.resize();
-      };
-    } else if ($splitPane.is('.fixed-bottom')) {
-      var firstComponentMinHeight = minHeight(firstComponent);
-      return function(event) {
-        var maxLastComponentHeight = splitPane.offsetHeight - firstComponentMinHeight - divider.offsetHeight;
-        if (lastComponent.offsetHeight > maxLastComponentHeight) {
-          setBottom(firstComponent, divider, lastComponent, maxLastComponentHeight + 'px')
-        }
-        $splitPane.resize();
-      };
-    } else if ($splitPane.is('.horizontal-percent')) {
-      var lastComponentMinHeight = minHeight(lastComponent),
-        firstComponentMinHeight = minHeight(firstComponent);
-      return function(event) {
-        var maxLastComponentHeight = splitPane.offsetHeight - firstComponentMinHeight - divider.offsetHeight;
-        if (lastComponent.offsetHeight > maxLastComponentHeight) {
-          setBottom(firstComponent, divider, lastComponent, (maxLastComponentHeight / splitPane.offsetHeight * 100) + '%');
-        } else {
-          if (splitPane.offsetHeight - firstComponent.offsetHeight - divider.offsetHeight < lastComponentMinHeight) {
-            setBottom(firstComponent, divider, lastComponent, (lastComponentMinHeight / splitPane.offsetHeight * 100) + '%');
-          }
-        }
-        $splitPane.resize();
-      };
-    } else if ($splitPane.is('.fixed-left')) {
-      var lastComponentMinWidth = minWidth(lastComponent);
-      return function(event) {
-        var maxFirstComponentWidth = splitPane.offsetWidth - lastComponentMinWidth - divider.offsetWidth;
-        if (firstComponent.offsetWidth > maxFirstComponentWidth) {
-          setLeft(firstComponent, divider, lastComponent, maxFirstComponentWidth + 'px');
-        }
-        $splitPane.resize();
-      };
-    } else if ($splitPane.is('.fixed-right')) {
-      var firstComponentMinWidth = minWidth(firstComponent);
-      return function(event) {
-        var maxLastComponentWidth = splitPane.offsetWidth - firstComponentMinWidth - divider.offsetWidth;
-        if (lastComponent.offsetWidth > maxLastComponentWidth) {
-          setRight(firstComponent, divider, lastComponent, maxLastComponentWidth + 'px');
-        }
-        $splitPane.resize();
-      };
-    } else if ($splitPane.is('.vertical-percent')) {
-      var lastComponentMinWidth = minWidth(lastComponent),
-        firstComponentMinWidth = minWidth(firstComponent);
-      return function(event) {
-        var maxLastComponentWidth = splitPane.offsetWidth - firstComponentMinWidth - divider.offsetWidth;
-        if (lastComponent.offsetWidth > maxLastComponentWidth) {
-          setRight(firstComponent, divider, lastComponent, (maxLastComponentWidth / splitPane.offsetWidth * 100) + '%');
-        } else {
-          if (splitPane.offsetWidth - firstComponent.offsetWidth - divider.offsetWidth < lastComponentMinWidth) {
-            setRight(firstComponent, divider, lastComponent, (lastComponentMinWidth / splitPane.offsetWidth * 100) + '%');
-          }
-        }
-        $splitPane.resize();
-      };
-    }
-  }
-
-  function createMousemove($splitPane, pageX, pageY) {
-    var splitPane = $splitPane[0],
-      firstComponent = $splitPane.children('.split-pane-component:first')[0],
-      divider = $splitPane.children('.split-pane-divider')[0],
-      lastComponent = $splitPane.children('.split-pane-component:last')[0];
-    if ($splitPane.is('.fixed-top')) {
-      var firstComponentMinHeight = minHeight(firstComponent),
-        maxFirstComponentHeight = splitPane.offsetHeight - minHeight(lastComponent) - divider.offsetHeight,
-        topOffset = divider.offsetTop - pageY;
-      return function(event) {
-        event.preventDefault();
-        var top = Math.min(Math.max(firstComponentMinHeight, topOffset + pageYof(event)), maxFirstComponentHeight);
-        setTop(firstComponent, divider, lastComponent, top + 'px');
-        $splitPane.resize();
-      };
-    } else if ($splitPane.is('.fixed-bottom')) {
-      var lastComponentMinHeight = minHeight(lastComponent),
-        maxLastComponentHeight = splitPane.offsetHeight - minHeight(firstComponent) - divider.offsetHeight,
-        bottomOffset = lastComponent.offsetHeight + pageY;
-      return function(event) {
-        event.preventDefault();
-        var bottom = Math.min(Math.max(lastComponentMinHeight, bottomOffset - pageYof(event)), maxLastComponentHeight);
-        setBottom(firstComponent, divider, lastComponent, bottom + 'px');
-        $splitPane.resize();
-      };
-    } else if ($splitPane.is('.horizontal-percent')) {
-      var splitPaneHeight = splitPane.offsetHeight,
-        lastComponentMinHeight = minHeight(lastComponent),
-        maxLastComponentHeight = splitPaneHeight - minHeight(firstComponent) - divider.offsetHeight,
-        bottomOffset = lastComponent.offsetHeight + pageY;
-      return function(event) {
-        event.preventDefault();
-        var bottom = Math.min(Math.max(lastComponentMinHeight, bottomOffset - pageYof(event)), maxLastComponentHeight);
-        setBottom(firstComponent, divider, lastComponent, (bottom / splitPaneHeight * 100) + '%');
-        $splitPane.resize();
-      };
-    } else if ($splitPane.is('.fixed-left')) {
-      var firstComponentMinWidth = minWidth(firstComponent),
-        maxFirstComponentWidth = splitPane.offsetWidth - minWidth(lastComponent) - divider.offsetWidth,
-        leftOffset = divider.offsetLeft - pageX;
-      return function(event) {
-        event.preventDefault();
-        var left = Math.min(Math.max(firstComponentMinWidth, leftOffset + pageXof(event)), maxFirstComponentWidth);
-        setLeft(firstComponent, divider, lastComponent, left + 'px')
-        $splitPane.resize();
-      };
-    } else if ($splitPane.is('.fixed-right')) {
-      var lastComponentMinWidth = minWidth(lastComponent),
-        maxLastComponentWidth = splitPane.offsetWidth - minWidth(firstComponent) - divider.offsetWidth,
-        rightOffset = lastComponent.offsetWidth + pageX;
-      return function(event) {
-        event.preventDefault();
-        var right = Math.min(Math.max(lastComponentMinWidth, rightOffset - pageXof(event)), maxLastComponentWidth);
-        setRight(firstComponent, divider, lastComponent, right + 'px');
-        $splitPane.resize();
-      };
-    } else if ($splitPane.is('.vertical-percent')) {
-      var splitPaneWidth = splitPane.offsetWidth,
-        lastComponentMinWidth = minWidth(lastComponent),
-        maxLastComponentWidth = splitPaneWidth - minWidth(firstComponent) - divider.offsetWidth,
-        rightOffset = lastComponent.offsetWidth + pageX;
-      return function(event) {
-        event.preventDefault();
-        var right = Math.min(Math.max(lastComponentMinWidth, rightOffset - pageXof(event)), maxLastComponentWidth);
-        setRight(firstComponent, divider, lastComponent, (right / splitPaneWidth * 100) + '%');
-        $splitPane.resize();
-      };
-    }
-  }
-
-  function pageXof(event) {
-    return event.pageX || event.originalEvent.pageX;
-  }
-
-  function pageYof(event) {
-    return event.pageY || event.originalEvent.pageY;
-  }
-
-  function minHeight(element) {
-    return parseInt($(element).css('min-height')) || 0;
-  }
-
-  function minWidth(element) {
-    return parseInt($(element).css('min-width')) || 0;
-  }
-
-  function setTop(firstComponent, divider, lastComponent, top) {
-    firstComponent.style.height = top;
-    divider.style.top = top;
-    lastComponent.style.top = top;
-  }
-
-  function setBottom(firstComponent, divider, lastComponent, bottom) {
-    firstComponent.style.bottom = bottom;
-    divider.style.bottom = bottom;
-    lastComponent.style.height = bottom;
-  }
-
-  function setLeft(firstComponent, divider, lastComponent, left) {
-    firstComponent.style.width = left;
-    divider.style.left = left;
-    lastComponent.style.left = left;
-  }
-
-  function setRight(firstComponent, divider, lastComponent, right) {
-    firstComponent.style.right = right;
-    divider.style.right = right;
-    lastComponent.style.width = right;
-  }
-
-})(jQuery);
-
-// end of plugin js
-
-$(function() {
-  $('div.split-pane').splitPane();
-  $('.diagram').click(function() {
-
-    $('#left-component').css('width', '0px');
-    $('#right-component').css('left', '0px');
-    $('#vertical-divider').css('left', '0px');
-
-    $('#top-component-2').css('bottom', '0px');
-    $('#bottom-component-2').css('height', '0px');
-    $('#horizontal-divider-2').css('bottom', '0px');
-  });
-
-  $('.props').click(function() {
-
-    var winWidth = $('.split-pane').width();
-    var winHeight = $('.split-pane').height();
-
-    $('#left-component').css('width', '0px');
-    $('#right-component').css('left', '0px');
-    $('#vertical-divider').css('left', '0px');
-
-    $('#top-component-2').css('bottom', winHeight - 5 + 'px');
-    $('#bottom-component-2').css('height', winHeight - 5 + 'px');
-    $('#horizontal-divider-2').css('bottom', winHeight - 5 + 'px');
-  });
-
-  $('.code').click(function() {
-
-    var winWidth = $('.split-pane').width();
-    var winHeight = $('.split-pane').height();
-
-    $('#left-component').css('width', winWidth - 5 + 'px');
-    $('#right-component').css('left', winWidth - 5 + 'px');
-    $('#vertical-divider').css('left', winWidth - 5 + 'px');
-
-    $('#top-component-1').css('bottom', '0px');
-    $('#bottom-component-1').css('height', '0px');
-    $('#horizontal-divider-1').css('bottom', '0px');
-  });
-
-  $('.console').click(function() {
-
-    var winWidth = $('.split-pane').width();
-    var winHeight = $('.split-pane').height();
-
-    $('#left-component').css('width', winWidth - 5 + 'px');
-    $('#right-component').css('left', winWidth - 5 + 'px');
-    $('#vertical-divider').css('left', winWidth - 5 + 'px');
-
-    $('#top-component-1').css('bottom', winHeight - 5 + 'px');
-    $('#bottom-component-1').css('height', winHeight - 5 + 'px');
-    $('#horizontal-divider-1').css('bottom', winHeight - 5 + 'px');
-  });
-  
-    $('.reset').click(function() {
-
-    var winWidth = $('.split-pane').width();
-    var winHeight = $('.split-pane').height();
-
-    $('#left-component').css('width', winWidth / 2 + 'px');
-    $('#right-component').css('left', winWidth / 2  + 'px');
-    $('#vertical-divider').css('left', winWidth / 2 + 'px');
-
-    $('#top-component-1').css('bottom', winHeight / 2 + 'px');
-    $('#bottom-component-1').css('height', winHeight / 2 + 'px');
-    $('#horizontal-divider-1').css('bottom', winHeight / 2 + 'px');
-      
-    $('#top-component-2').css('bottom', winHeight / 3 + 'px');
-    $('#bottom-component-2').css('height', winHeight / 3 + 'px');
-    $('#horizontal-divider-2').css('bottom', winHeight / 3 + 'px'); 
-  });
-
-});
-
-
 $(document).ready(function() {
+	var imagePath = "http://nv.dongxanhvn.com:8077/DX_Images/test_image.jpg";
+	checkGetJob(true);
 	 var winWidth = $('.split-pane').width();
 	  var winHeight = $('.split-pane').height();
 
@@ -856,10 +670,124 @@ $(document).ready(function() {
 	  $('#bottom-component-2').css('height', winHeight / 3 + 'px');
 	  $('#horizontal-divider-2').css('bottom', winHeight / 3 + 'px');
 	
-	  $('#table_position').DataTable({
+	  var table = $('#table_position').DataTable({
 		  "scrollY": "360px",
-		  "scrollCollapse": true,
+		  "scrollCollapse": true,	
+		  
 	   });
+	
+	  $('#ngaynhantoa_datePicker').datepicker({
+           format: 'dd/mm/yyyy'
+       }).on('changeDate', function(e) {
+           // Revalidate the date field
+           $('#eventForm').formValidation('revalidateField', 'eventDate');
+       });		   
+       $('#ngaynhanhang_datePicker').datepicker({
+           format: 'dd/mm/yyyy'
+       }).on('changeDate', function(e) {
+           // Revalidate the date field
+           $('#eventForm').formValidation('revalidateField', 'eventDate');
+       });
+                                   
+       
+  
+      var iv = $("#viewer").iviewer({
+    	   src : imagePath,
+           update_on_resize: true,
+           zoom_animation: true,
+           mousewheel: false,
+           onMouseMove: function(ev, coords) { return true },
+           onStartDrag: function(ev, coords) { return true },
+           onDrag: function(ev, coords) { return true }
+      });
+      $("#in").click(function(){ iv1.iviewer('zoom_by', 1); });
+      $("#out").click(function(){ iv1.iviewer('zoom_by', -1); });
+      $("#fit").click(function(){ iv1.iviewer('fit'); });
+      $("#orig").click(function(){ iv1.iviewer('set_zoom', 100); });
+      $("#update").click(function(){ iv1.iviewer('update_container_info'); });
+    
+});
+	
+		var maKH                 = document.getElementById("maKH");
+		var tenKH                = document.getElementById("tenKH");
+		var customer_name_level1 = document.getElementById("customer_name_level1");
+		var nvtt_name            = document.getElementById("nvtt_name");
+		var customer_id_level1_hidden     = document.getElementById("customer_id_level1_hidden");
+		var nvtt_id_hidden                = document.getElementById("nvtt_id_hidden"); 
+		var invoice_name_hidden            = document.getElementById("invoice_name_hidden"); 
+		
+		var khachhang = new LookupKhachHang(maKH, tenKH, customer_name_level1, nvtt_name,customer_id_level1_hidden,nvtt_id_hidden,invoice_name_hidden, 1, {		
+			  minChars: 1,
+			  maxItems: 20,
+			  autoFirst: true
+		});
+		
+		$( "#maKH" ).keyup(function(e) {
+			  var code = (e.keyCode || e.which);      
+		        if (code === 37 || code === 38 || code === 39 || code === 40 || code === 27 || code === 13) {
+		            return;
+		        }else{
+		        	 var user_id                  = document.getElementById("maKH").value ;
+					 $.ajax({  		
+					       type: "GET",
+				           url     : 'lookupCaptureCusStaffAction?search_cus='+ user_id,	          
+				           data    : "",
+				           success : function(responseText) {
+				        	
+				        	 var stt =0;
+				        	 var resultjson = [];
+			 	        	 for (i in responseText) { 
+			 	        		 console.log(responseText);
+			 	        		data ="";		 	        	
+			 	        		data = data +responseText[i][1]+"|";//invoice_name
+			 	        		data = data +responseText[i][0]+"|";//customer_id
+			 	        		data = data +responseText[i][2]+"|";//customer_name
+			 	        		data = data +responseText[i][3]+"|";//customer_id_level1
+			 	        		data = data +responseText[i][4]+"|";//customer_name_level1
+			 	        		data = data +responseText[i][5]+"|";//user_id
+			 	        		data = data +responseText[i][6]+"";//user_name
+			 	        		resultjson.push(data);
+			 	        		stt++;
+			 	        		
+			 	        		}
+			 	        	
+			 	        	if(stt>1){
+			 	        		
+			 	        		khachhang.list = resultjson ;
+		 	        		}else{
+		 	        			
+		 	        		}
+			 	        	
+				        	
+				           }
+					   });
+					 
+		        }
+			  
+			   
+				 
+				 
+			 
+			});
+		
+		  $('#table_position > tbody  > tr').each(function() {
+			    var nebenkosten = document.getElementById("masanpham_"+this.getAttribute("id"));
+				var nebenkosten_betrag = document.getElementById("tensanpham_"+this.getAttribute("id"));
+				var nebenkosten_type = document.getElementById("soluong_"+this.getAttribute("id"));
+				
+				new LookupKhachHang(nebenkosten, nebenkosten_betrag, nebenkosten_type, null, 4, {
+					list : <%=data_postion%>
+				});
+				
+				
+				new LookupKhachHang(nebenkosten_type,nebenkosten, nebenkosten_betrag, null, 4, {
+					list : <%=data_postion%>
+				});
+				
+				new LookupKhachHang(nebenkosten_betrag,nebenkosten_type,nebenkosten, null, 4, {
+					list : <%=data_postion%>
+				});
+			 
 	
 	 
 	
@@ -887,102 +815,21 @@ function confirmwhensubmit(){
 	
 	return true;
 }
+
+
 </script> 
- <!-- VIEW IMAGE -->
+
     
-    <script type="text/javascript">
-       		
-       	
-       		var imagePath = "https://i-giaitri.vnecdn.net/2018/12/19/rowing2-1545228554-4160-1545228557_500x300.jpg";
-            var $ = jQuery;
-            $(document).ready(function(){
-            	
-            	 $('#ngaynhantoa_datePicker').datepicker({
-     	            format: 'dd/mm/yyyy'
-     	        }).on('changeDate', function(e) {
-     	            // Revalidate the date field
-     	            $('#eventForm').formValidation('revalidateField', 'eventDate');
-     	        });		   
-     	        $('#ngaynhanhang_datePicker').datepicker({
-     	            format: 'dd/mm/yyyy'
-     	        }).on('changeDate', function(e) {
-     	            // Revalidate the date field
-     	            $('#eventForm').formValidation('revalidateField', 'eventDate');
-     	        });
-     	                                    
-     	        
-            
-                var iv = $("#viewer").iviewer({
-              	   src : imagePath,
-                     update_on_resize: true,
-                     zoom_animation: true,
-                     mousewheel: false,
-                     onMouseMove: function(ev, coords) { return true },
-                     onStartDrag: function(ev, coords) { return true },
-                     onDrag: function(ev, coords) { return true }
-                });
-                $("#in").click(function(){ iv1.iviewer('zoom_by', 1); });
-                $("#out").click(function(){ iv1.iviewer('zoom_by', -1); });
-                $("#fit").click(function(){ iv1.iviewer('fit'); });
-                $("#orig").click(function(){ iv1.iviewer('set_zoom', 100); });
-                $("#update").click(function(){ iv1.iviewer('update_container_info'); });
-          });
-        	
-        		var kreditor_name = document.getElementById("maKH");
-        		var kreditor_id   = document.getElementById("tenKH");
-        		var iban          = document.getElementById("KHcap1");
-        		var currency      = document.getElementById("NVTT");
-        		
-        		new LookupKreditor(kreditor_name, kreditor_id, iban, currency, 1, {
-        			list: <%=data%>
-        		});
-        		
-        		  $('#table_position > tbody  > tr').each(function() {
-        			    var nebenkosten = document.getElementById("masanpham_"+this.getAttribute("id"));
-        				var nebenkosten_betrag = document.getElementById("tensanpham_"+this.getAttribute("id"));
-        				var nebenkosten_type = document.getElementById("soluong_"+this.getAttribute("id"));
-        				
-        				new LookupKreditor(nebenkosten, nebenkosten_betrag, nebenkosten_type, null, 4, {
-        					list : <%=data_postion%>
-        				});
-        				
-        				
-        				new LookupKreditor(nebenkosten_type,nebenkosten, nebenkosten_betrag, null, 4, {
-        					list : <%=data_postion%>
-        				});
-        				
-        				new LookupKreditor(nebenkosten_betrag,nebenkosten_type,nebenkosten, null, 4, {
-        					list : <%=data_postion%>
-        				});
-    				 
-    				  
-    			 });
-        		
-        		  $(function(){
-        	   			$("#viewer").jScrollPane();
-        	   		});
-        		  
-        		  
-        		  
-        		  
-        		  function getjob(){
-        				 $.ajax({  		
-        		 		       type: "GET",
-        		 	           url     : 'getJobCaptureAction?user_id=23',	          
-        		 	           data    : "",
-        		 	           success : function(responseText) {	
-        		 	        	
-        		 	        	console.log(responseText)
-        		 	        	  
-        		 	           }
-        		 		   });
-        			 
-        		   }
-        		  
-        		  
-        		
-        	
-    </script>
+ <style type="text/css">
+
+input.currency {
+    text-align: right;
+    padding-right: 0px;
+}
+
+ 
+ 
+ </style>
     
     
     

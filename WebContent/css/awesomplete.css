@@ -1,14 +1,34 @@
-.awesome-three-column{
-	min-width : 200px;
+.width100{
+	width : 100px!important;
+}
+
+.width150{
+	width : 150px!important;
 }
 
 .awesome-two-column{
 	min-width : 300px
 }
 
-.awesome-four-column-nomal{
-	min-width : 200px
+.awesome-four-column-nomal50{
+	min-width : 50px
 }
+.awesome-four-column-nomal70{
+	min-width : 70px
+}
+.awesome-four-column-nomal90{
+	min-width : 90px
+}
+.awesome-four-column-nomal100{
+	min-width : 100px
+}
+.awesome-four-column-nomal130{
+	min-width : 130px
+}
+.awesome-four-column-nomal150{
+	min-width : 150px
+}
+
 
 .awesome-four-column-small{
 	min-width : 100px
@@ -96,7 +116,7 @@
 
 	.awesomplete > ul > li {
 		position: relative;
-		padding: .2em .5em;
+		padding:0px;
 		cursor: pointer;
 	}
 	

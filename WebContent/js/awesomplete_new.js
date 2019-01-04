@@ -7,12 +7,12 @@
 
 (function () {
 	
-	var _ = function (input, field1, field2, field3, debitor_nummer, o) {
+	var _ = function (input, field1, field2, field3, field4, field5, field6, debitor_nummer, o) {
 		var me = this;
 	    // Keep track of number of instances for unique IDs
 	
-	    LookupKreditor.count = (LookupKreditor.count || 0) + 1;
-	    this.count = LookupKreditor.count;
+	    LookupKhachHang.count = (LookupKhachHang.count || 0) + 1;
+	    this.count = LookupKhachHang.count;
 	    LookupDebitor.count = (LookupDebitor.count || 0) + 1;
 	    this.count = LookupDebitor.count;
 		// Setup
@@ -35,6 +35,16 @@
 			this.field3 = $(field3);
 		}
 		
+		if (field4 != null) {
+			this.field4 = $(field4);
+		}
+		if(field5 != null){
+			this.field5 = $(field5);
+		}
+		if(field6 != null){
+			this.field6 = $(field6);
+		}
+		
 		this.debitor_nummer = $(debitor_nummer);
 		this.input.setAttribute("autocomplete", "off");
 		this.input.setAttribute("aria-owns", "awesomplete_list_" + this.count);
@@ -44,10 +54,10 @@
 
 		configure(this, {
 			minChars: 1,
-			maxItems: 10,
+			maxItems: 20,
 			autoFirst: true,
 			data: _.DATA,
-			filter: _.FILTER_STARTSWITH,
+			filter: _.FILTER_CONTAINS,
 			sort: o.sort === false ? false : _.SORT_BYLENGTH,
 			item: _.ITEM,
 			replace: _.REPLACE
@@ -144,6 +154,7 @@
 
 _.prototype = {
 	set list(list) {
+		
 		if (Array.isArray(list)) {
 			this._list = list;
 		}
@@ -151,6 +162,7 @@ _.prototype = {
 				this._list = list.split(/\s*,\s*/);
 		}
 		else { // Element or CSS selector
+			
 			list = $(list);
 
 			if (list && list.children) {
@@ -402,18 +414,31 @@ _.ITEM = function (text, input, item_id) {
 		"</html>";
 	}
 	
-	if(this.field1 != null && this.field2 != null && this.field3 != null){
+	if(this.field1 != null && this.field2 != null && this.field3 != null && this.field4!= null && this.field5 != null && this.field6 != null){
 		rowData = 
 			"<html>" +
-				"<table>" +
+				"<table style=' width: 600px;margin:0px' class='table table-bordered'>" +
 					"<tr>" +
-							"<td class = 'awesome-four-column-nomal'>"+html.split('|')[0]+"</td>" +
-							"<td class = 'awesome-four-column-small'>"+html.split('|')[1]+"</td>" +
-							"<td class = 'awesome-four-column-small'>"+html.split('|')[3]+"</td>" +
-							"<td class = 'awesome-four-column-nomal'>"+html.split('|')[2]+"</td>" +
+ 	        		
+							"<td class = 'awesome-three-column width100'>"+html.split('|')[0]+"</td>" +						
+							"<td class = 'awesome-three-column width150'>"+html.split('|')[2]+"</td>" +						
+							"<td class = 'awesome-three-column width150'>"+html.split('|')[4]+"</td>" +						
+							"<td class = 'awesome-three-column width150'>"+html.split('|')[6]+"</td>" +
 					"</tr>"+
 				"</table>" +
 			"</html>";
+//		rowData = 
+//			"<html>" +
+//				"<table style=' width: 600px;' class='table table-striped'>" +
+//					"<tr>" +
+// 	        		
+//							"<td class = 'awesome-three-column width100'>"+html.split('|')[0]+"</td>" +						
+//							"<td class = 'awesome-three-column width150'>"+html.split('|')[2]+"</td>" +						
+//							"<td class = 'awesome-three-column width150'>"+html.split('|')[4]+"</td>" +						
+//							"<td class = 'awesome-three-column width150'>"+html.split('|')[6]+"</td>" +
+//					"</tr>"+
+//				"</table>" +
+//			"</html>";
 	}
 	//SETTING is_show_form_lookup = false để tránh việc nhảy field khi nhấn phím qua lại lên xuống. 
 	is_show_form_lookup = false;
@@ -457,11 +482,14 @@ _.REPLACE = function (text) {
 			this.field2.value = text.value.split('|')[2];	
 		}
 		
-		if(this.field1 != null && this.field2 != null && this.field3 != null){
+		if(this.field1 != null && this.field2 != null && this.field3 != null && this.field4 != null && this.field5 != null && this.field6 != null){
 			this.input.value = text.value.split('|')[0];
 			this.field1.value = text.value.split('|')[1];
 			this.field2.value = text.value.split('|')[2];
 			this.field3.value = text.value.split('|')[3];	
+			this.field4.value = text.value.split('|')[4];
+			this.field5.value = text.value.split('|')[5];
+			this.field6.value = text.value.split('|')[6];	
 		}
 	}
 	//SETTING is_show_form_lookup = true để tránh việc nhảy field khi nhấn phím qua lại lên xuống.
@@ -518,6 +546,8 @@ function configure(instance, properties, o) {
 var slice = Array.prototype.slice;
 
 function $(expr, con) {
+	console.log(expr);
+	console.log(con);
 	return typeof expr === "string"? (con || document).querySelector(expr) : expr || null;
 }
 
@@ -619,16 +649,16 @@ if (typeof Document !== "undefined") {
 _.$ = $;
 _.$$ = $$;
 
-// Make sure to export LookupKreditor on self when in a browser
+// Make sure to export LookupKhachHang on self when in a browser
 if (typeof self !== "undefined") {
-	self.LookupKreditor = _;
+	self.LookupKhachHang = _;
 }
 
 if (typeof self !== "undefined") {
 	self.LookupDebitor = _;
 }
 
-// Expose LookupKreditor as a CJS module
+// Expose LookupKhachHang as a CJS module
 if (typeof module === "object" && module.exports) {
 	module.exports = _;
 }
