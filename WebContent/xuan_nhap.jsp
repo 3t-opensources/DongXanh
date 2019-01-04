@@ -97,7 +97,7 @@
     	              <input type="hidden" id="id" name="id" value="123">
         			  <input type="hidden" id="management_id" name="management_id" value="456">
         			  <input type="hidden" id="invoice_type_id" name="invoice_type_id" value="789">
-        			   <input type="hidden" id="customer_id_hidden" name="customer_id_hidden" value="789">
+        			
         			  
         			  <input type="hidden" id="user_id" name="user_id" value="<%= userSes.getId()%>">
         			  <input type="hidden" id="user_name" name="user_name" value="<%= userSes.getUserName()%>">
@@ -134,7 +134,8 @@
 										     <div class="clear"></div>										     
 										      <div class="row " >
 	                                       		  <div class="col-lg-2" ><span>Mã KH </span>  </div>	                                       		  
-	                                       		  <div class="col-lg-4">			                                       									
+	                                       		  <div class="col-lg-4">	
+	                                       		          <input type="hidden" id="customer_id_hidden" name="customer_id_hidden" value="789">		                                       									
 				                                          <input value = "" id = "maKH" name="maKH" class="form-control" ondblclick = "getIdTag(this)" tabindex="1"/>				                                         
 	                                       		  </div>	   
 	                                       		  
@@ -301,7 +302,7 @@ function getjob(){
            url     : 'getJobCaptureAction?user_id='+ user_id,	          
            data    : "",
            success : function(responseText) {	
-        	  
+        	  console.log(responseText);
         	 checkGetJob(false);
         	 var invoice_data_id = responseText[0].responseText;
         	 var id              = responseText[0].id;
@@ -378,12 +379,12 @@ function resetData(){
 	 document.getElementById("management_id").value="" ;
 	 document.getElementById("invoice_type_id").value="" ;	
 	 
-	  document.getElementById("customer_id").value ="" ;
+	  document.getElementById("customer_id_hidden").value ="" ;
 	  document.getElementById("maKH").value="" ;
 	  document.getElementById("tenKH").value="" ;
 	  
 	  
-	  document.getElementById("customer_id").value ="" ;
+	  document.getElementById("customer_id_level1_hidden").value ="" ;
 	  document.getElementById("customer_code_level1_hidden").value ="" ;
 	  document.getElementById("customer_name_level1").value  ="" ;
 	 
@@ -395,18 +396,8 @@ function resetData(){
 	  document.getElementById("ngaynhanhang").value ="";
 	  document.getElementById("date_sent_late").value ="";
       document.getElementById("notes").value ="";
+      getjob();
 	 
-	  $('#table_position > tbody  > tr').each(function(){		
-		  var id        =   this.getAttribute("id");	
-		  $("#"+id).remove(); 
-	  });
-	  addRow(0);
-	  addRow(0);
-	  stt =0;
-	  $('#table_position > tbody  > tr').each(function() {
-		  stt++;	
-		  document.getElementById("stt_"+this.getAttribute("id")).innerHTML  = stt;      
-	 });
 	
 }
 var maxRow =0;
@@ -420,12 +411,12 @@ function saveData(){
 		  var invoice_type             = document.getElementById("cbb_loaibangke").value ; //invoice_type
 		  
 		  
-		  var customer_id              = document.getElementById("customer_id").value ; //customer_id
+		  var customer_id              = document.getElementById("customer_id_hidden").value ; //customer_id
 		  var customer_code            = document.getElementById("maKH").value ; //customer_code
 		  var customer_name            = document.getElementById("tenKH").value ;//customer_name
 		  
 		  
-		  var customer_id_level1       = document.getElementById("customer_id").value ; //customer_id_level1
+		  var customer_id_level1       = document.getElementById("customer_id_level1_hidden").value ; //customer_id_level1
 		  var customer_code_level1     = document.getElementById("customer_code_level1_hidden").value ; //customer_code_level1
 		  var customer_name_level1     = document.getElementById("customer_name_level1").value ;//customer_name_level1	  
 		 
@@ -476,7 +467,10 @@ function saveData(){
 				  total_prices     = total_prices       +thanhtien  +"`";
 				  sum_total_price = parseFloat(sum_total_price) + parseFloat(thanhtien);
 			  }
-			 
+			 console.log('management_id==='+management_id);
+			 console.log('customer_id==='+customer_id);
+			 console.log('customer_id_level1==='+customer_id_level1);
+			 console.log('staff_id==='+staff_id);
 			  row++;
 			  if(row==maxRow){
 				  $.ajax({
@@ -486,29 +480,29 @@ function saveData(){
 				       type: "POST",
 			          url : 'saveJobCaptureAction',	          
 			          data: JSON.stringify({
-			        	  invoice_data:{
-			        		    "id": id,
-			        		    "management_id": management_id,
-			        		    "invoice_type_id": invoice_type_id,
-			        		    "invoice_type": invoice_type,
-			        		    "customer_id": customer_id,
-			        		    "customer_code": customer_code,
-			        		    "customer_name": customer_code,
-			        		    "customer_id_level1": customer_id_level1,
-			        		    "customer_code_level1": customer_code_level1,
-			        		    "customer_name_level1": customer_name_level1,
-			        		    "staff_id": staff_id,
-			        		    "staff_name": staff_name,
-			        		    "date_company_received":date_company_received,
-			        		    "date_product_received": date_product_received,
-			        		    "date_sent_late": 0,
-			        		    "notes": notes,
-			        		    "product_ids": product_ids,
-			        		    "product_names": product_names,
-			        		    "total_boxs": total_boxs,
-			        		    "quantitys": quantitys,
-			        		    "total_prices": total_prices,
-			        		    "sum_total_price":sum_total_price
+			        	  invoice_data:{			        		 
+			        		  "id": id_invoice,
+			        		  "management_id": management_id,
+			        		  "invoice_type_id": 1,
+			        		  "invoice_type": invoice_type,
+			        		  "customer_id": customer_id,
+			        		  "customer_code": customer_code,
+			        		  "customer_name": customer_name,
+			        		  "customer_id_level1": 1,
+			        		  "customer_code_level1": customer_code_level1,
+			        		  "customer_name_level1": customer_name_level1,
+			        		  "staff_id": 23,
+			        		  "staff_name": staff_name,
+			        		  "date_company_received":date_company_received,
+			        		  "date_product_received": date_product_received,
+			        		  "date_sent_late": 0,
+			        		  "notes": notes,
+			        		  "product_ids": product_ids,
+			        		  "product_names": product_names,
+			        		  "total_boxs": total_boxs,
+			        		  "quantitys": quantitys,
+			        		  "total_prices": total_prices,
+			        		  "sum_total_price":sum_total_price
 			        		    
 					 	    } 
 					 	         
@@ -517,7 +511,7 @@ function saveData(){
 			          
 			           resetData();
 			       	   console.log(responseText);
-			       	   getjob();
+			       	  
 			          }
 				   });
 			  }
