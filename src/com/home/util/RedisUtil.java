@@ -56,8 +56,8 @@ public class RedisUtil {
 	
 	public static void main(String[] args) { 
 		//Connecting to Redis server on localhost 
-		Jedis jedis = new Jedis("sit-elrond.digi-texx.vn", 7379);
-		jedis.auth("0d6a9242c11b99ddadcfb6e86a850b6ba487530a");
+		Jedis jedis = new Jedis("nv.dongxanhvn.com", 7379);
+		//jedis.auth("0d6a9242c11b99ddadcfb6e86a850b6ba487530a");
 		System.out.println("Connection to server sucessfully"); 
 		//check whether server is running or not 
 		System.out.println("Server is running: "+jedis.ping()); 

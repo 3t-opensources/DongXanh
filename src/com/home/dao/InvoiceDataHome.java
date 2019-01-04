@@ -309,7 +309,7 @@ public class InvoiceDataHome {
 			java.sql.Date start_day, 
 			java.sql.Date end_day, 
 			int invoice_type,
-			int user_id,
+			int staff_id,
 			int customer_id,
 			int sent_late) throws Exception{
 		log.debug("retrieve list InvoiceData");
@@ -321,18 +321,14 @@ public class InvoiceDataHome {
 			Connection conn = sessionImpl.connection();
 
 			String sql = 
-					"SELECT i.*, m.file_path, m.file_name, m.step, c.id as customer_id, c.statistic_name, c1.id as customer_id_level1, c1.statistic_name as statistic_name_level1, "
-					+ " u.user_name, u.full_name, it.invoice_type " +
+					"SELECT i.*, m.file_path, m.file_name, m.step, it.invoice_type " +
 					" FROM invoice_data i "+
 					" JOIN management m ON m.id=i.management_id "+
-					" LEFT JOIN customer c ON i.customer_id=c.id "+
-					" LEFT JOIN customer c1 ON i.customer_id_level1=c1.id "+
-					" LEFT JOIN user u ON i.user_id=u.id "+
 					" LEFT JOIN invoice_type it ON i.invoice_type_id=it.id "+
 					" WHERE  "
 					+ " (0="+(start_day==null?0:1)+" Or (date_company_received >= ? And date_company_received <= ?))"
-					+ " AND (0="+(invoice_type<=0?0:1)+" Or (invoice_type=?))"
-					+ " AND (0="+(user_id<=0?0:1)+" Or (i.user_id=?))"
+					+ " AND (0="+(invoice_type<=0?0:1)+" Or (invoice_type_id=?))"
+					+ " AND (0="+(staff_id<=0?0:1)+" Or (i.staff_id=?))"
 					+ " AND (0="+(customer_id<=0?0:1)+" Or (customer_id=?))"
 					+ " AND (0="+(sent_late<=0?0:1)+" Or (date_sent_late>0))"
 					+ " Order by date_company_received, id";
@@ -342,7 +338,7 @@ public class InvoiceDataHome {
 			pre.setDate(1, start_day);
 			pre.setDate(2, end_day);
 			pre.setInt(3, invoice_type);
-			pre.setInt(4, user_id);
+			pre.setInt(4, staff_id);
 			pre.setInt(5, customer_id);
 			System.out.println(pre.toString());
 			ResultSet rs = pre.executeQuery();
@@ -365,22 +361,25 @@ public class InvoiceDataHome {
 
 				Customer cus = new Customer();
 				cus.setId(rs.getInt("customer_id"));
-				cus.setStatisticName(rs.getString("statistic_name"));
+				cus.setCustomerCode(rs.getString("customer_code"));
+				cus.setStatisticName(rs.getString("customer_name"));
 				invoice.setCustomer_id(cus);
+				invoice.setCustomer_code(rs.getString("customer_code"));
 				invoice.setCustomer_name(rs.getString("customer_name"));
 				
 				Customer cus1 = new Customer();
 				cus1.setId(rs.getInt("customer_id_level1"));
-				cus1.setStatisticName(rs.getString("statistic_name_level1"));
+				cus1.setCustomerCode(rs.getString("customer_code_level1"));
+				cus1.setStatisticName(rs.getString("customer_name_level1"));
 				invoice.setCustomer_id_level1(cus1);
+				invoice.setCustomer_code_level1(rs.getString("customer_code_level1"));
 				invoice.setCustomer_name_level1(rs.getString("customer_name_level1"));
 				
 				User user = new User();
-				user.setId(rs.getInt("user_id"));
-				user.setUserName(rs.getString("user_name"));
-				user.setFullName(rs.getString("full_name"));
-				invoice.setUser_id(user);
-				invoice.setUser_name(rs.getString("user_name"));
+				user.setId(rs.getInt("staff_id"));
+				user.setUserName(rs.getString("staff_name"));
+				invoice.setStaff_id(user);
+				invoice.setStaff_name(rs.getString("staff_name"));
 				
 				invoice.setDate_company_received(rs.getDate("date_company_received"));
 				invoice.setDate_product_received(rs.getDate("date_product_received"));

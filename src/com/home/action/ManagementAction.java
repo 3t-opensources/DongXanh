@@ -365,18 +365,19 @@ public class ManagementAction extends ActionSupport implements ServletContextAwa
 			Customer customer_id = new Customer();
 			customer_id.setId(data.getCustomer_id());
 			invoice_data.setCustomer_id(customer_id);
+			invoice_data.setCustomer_code(data.getCustomer_code()) ;
 			invoice_data.setCustomer_name(data.getCustomer_name()) ;
-			invoice_data.setInvoice_name(data.getInvoice_name()) ;
 
 			Customer customer_id_level1 = new Customer();
 			customer_id_level1.setId(data.getCustomer_id_level1());
 			invoice_data.setCustomer_id_level1(customer_id_level1) ;
+			invoice_data.setCustomer_code_level1(data.getCustomer_code_level1());
 			invoice_data.setCustomer_name_level1(data.getCustomer_name_level1());
 
 			User user = new User();
-			user.setId(data.getUser_id());
-			invoice_data.setUser_id(user);
-			invoice_data.setUser_name(data.getUser_name()) ;
+			user.setId(data.getStaff_id());
+			invoice_data.setStaff_id(user);
+			invoice_data.setStaff_name(data.getStaff_name()) ;
 			invoice_data.setDate_company_received(data.getDate_company_received());
 			invoice_data.setDate_product_received(data.getDate_product_received()) ;
 			invoice_data.setDate_sent_late(data.getDate_sent_late());

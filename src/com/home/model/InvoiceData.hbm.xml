@@ -17,23 +17,26 @@
          <many-to-one name="customer_id" class="com.home.model.Customer" fetch="select">
             <column name="customer_id" />
         </many-to-one>
+         <property name="customer_code" type="string">
+            <column name="customer_code" length="200" />
+        </property>
          <property name="customer_name" type="string">
             <column name="customer_name" length="200" />
-        </property>
-         <property name="invoice_name" type="string">
-            <column name="invoice_name" length="200" />
         </property>
         <many-to-one name="customer_id_level1" class="com.home.model.Customer" fetch="select">
             <column name="customer_id_level1" />
         </many-to-one>
+         <property name="customer_code_level1" type="string">
+            <column name="customer_code_level1" length="200" />
+        </property>
          <property name="customer_name_level1" type="string">
             <column name="customer_name_level1" length="200" />
         </property>
-         <many-to-one name="user_id" class="com.home.model.User" fetch="select">
-            <column name="user_id" />
+         <many-to-one name="staff_id" class="com.home.model.User" fetch="select">
+            <column name="staff_id" />
         </many-to-one>
-         <property name="user_name" type="string">
-            <column name="user_name" length="200" />
+         <property name="staff_name" type="string">
+            <column name="staff_name" length="200" />
         </property>
         <property name="date_company_received" type="date">
             <column name="date_company_received" length="0" />

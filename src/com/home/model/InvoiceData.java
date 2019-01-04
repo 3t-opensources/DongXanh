@@ -4,16 +4,18 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 public class InvoiceData {
+	
 	public Integer id;
 	public Management management_id;
 	public InvoiceType invoice_type_id;
 	public Customer customer_id;
+	public String customer_code;
 	public String customer_name;
-	public String invoice_name;
 	public Customer customer_id_level1;
+	public String customer_code_level1;
 	public String customer_name_level1;
-	public User user_id;
-	public String user_name;
+	public User staff_id;
+	public String staff_name;
 	public Date date_company_received;
 	public Date date_product_received;
 	public Integer date_sent_late;
@@ -24,7 +26,6 @@ public class InvoiceData {
 	public String quantitys;
 	public String total_prices;
 	public BigDecimal sum_total_price;
-	
 	
 	public Integer getId() {
 		return id;
@@ -38,23 +39,26 @@ public class InvoiceData {
 	public Customer getCustomer_id() {
 		return customer_id;
 	}
+	public String getCustomer_code() {
+		return customer_code;
+	}
 	public String getCustomer_name() {
 		return customer_name;
-	}
-	public String getInvoice_name() {
-		return invoice_name;
 	}
 	public Customer getCustomer_id_level1() {
 		return customer_id_level1;
 	}
+	public String getCustomer_code_level1() {
+		return customer_code_level1;
+	}
 	public String getCustomer_name_level1() {
 		return customer_name_level1;
 	}
-	public User getUser_id() {
-		return user_id;
+	public User getStaff_id() {
+		return staff_id;
 	}
-	public String getUser_name() {
-		return user_name;
+	public String getStaff_name() {
+		return staff_name;
 	}
 	public Date getDate_company_received() {
 		return date_company_received;
@@ -98,23 +102,26 @@ public class InvoiceData {
 	public void setCustomer_id(Customer customer_id) {
 		this.customer_id = customer_id;
 	}
+	public void setCustomer_code(String customer_code) {
+		this.customer_code = customer_code;
+	}
 	public void setCustomer_name(String customer_name) {
 		this.customer_name = customer_name;
-	}
-	public void setInvoice_name(String invoice_name) {
-		this.invoice_name = invoice_name;
 	}
 	public void setCustomer_id_level1(Customer customer_id_level1) {
 		this.customer_id_level1 = customer_id_level1;
 	}
+	public void setCustomer_code_level1(String customer_code_level1) {
+		this.customer_code_level1 = customer_code_level1;
+	}
 	public void setCustomer_name_level1(String customer_name_level1) {
 		this.customer_name_level1 = customer_name_level1;
 	}
-	public void setUser_id(User user_id) {
-		this.user_id = user_id;
+	public void setStaff_id(User staff_id) {
+		this.staff_id = staff_id;
 	}
-	public void setUser_name(String user_name) {
-		this.user_name = user_name;
+	public void setStaff_name(String staff_name) {
+		this.staff_name = staff_name;
 	}
 	public void setDate_company_received(Date date_company_received) {
 		this.date_company_received = date_company_received;
@@ -147,4 +154,5 @@ public class InvoiceData {
 		this.sum_total_price = sum_total_price;
 	}
 	
+		
 }
