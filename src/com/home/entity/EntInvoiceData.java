@@ -5,38 +5,39 @@ import java.util.Date;
 import com.google.gson.Gson;
 
 public class EntInvoiceData {
-	private int id;
-	private int management_id;
-	private int invoice_type_id;
+	private String id;
+	private String management_id;
+	private String invoice_type_id;
 	private String invoice_type;
-	private int customer_id;
+	private String customer_id;
 	private String customer_code;
 	private String customer_name;
-	private int customer_id_level1;
+	private String customer_id_level1;
 	private String customer_code_level1;
 	private String customer_name_level1;
-	private int staff_id;
+	private String staff_id;
 	private String staff_name;
 	private Date date_company_received;
 	private Date date_product_received;
-	private int date_sent_late;
+	private String date_sent_late;
 	private String notes;
 	private String product_ids;
 	private String product_names;
 	private String total_boxs;
 	private String quantitys;
 	private String total_prices;
-	public double sum_total_price;
+	public String sum_total_price;
 	
-	public int getId() {
+
+	public String getId() {
 		return id;
 	}
 
-	public int getManagement_id() {
+	public String getManagement_id() {
 		return management_id;
 	}
 
-	public int getInvoice_type_id() {
+	public String getInvoice_type_id() {
 		return invoice_type_id;
 	}
 
@@ -44,7 +45,7 @@ public class EntInvoiceData {
 		return invoice_type;
 	}
 
-	public int getCustomer_id() {
+	public String getCustomer_id() {
 		return customer_id;
 	}
 
@@ -56,7 +57,7 @@ public class EntInvoiceData {
 		return customer_name;
 	}
 
-	public int getCustomer_id_level1() {
+	public String getCustomer_id_level1() {
 		return customer_id_level1;
 	}
 
@@ -68,7 +69,7 @@ public class EntInvoiceData {
 		return customer_name_level1;
 	}
 
-	public int getStaff_id() {
+	public String getStaff_id() {
 		return staff_id;
 	}
 
@@ -84,7 +85,7 @@ public class EntInvoiceData {
 		return date_product_received;
 	}
 
-	public int getDate_sent_late() {
+	public String getDate_sent_late() {
 		return date_sent_late;
 	}
 
@@ -112,19 +113,19 @@ public class EntInvoiceData {
 		return total_prices;
 	}
 
-	public double getSum_total_price() {
+	public String getSum_total_price() {
 		return sum_total_price;
 	}
 
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
-	public void setManagement_id(int management_id) {
+	public void setManagement_id(String management_id) {
 		this.management_id = management_id;
 	}
 
-	public void setInvoice_type_id(int invoice_type_id) {
+	public void setInvoice_type_id(String invoice_type_id) {
 		this.invoice_type_id = invoice_type_id;
 	}
 
@@ -132,7 +133,7 @@ public class EntInvoiceData {
 		this.invoice_type = invoice_type;
 	}
 
-	public void setCustomer_id(int customer_id) {
+	public void setCustomer_id(String customer_id) {
 		this.customer_id = customer_id;
 	}
 
@@ -144,7 +145,7 @@ public class EntInvoiceData {
 		this.customer_name = customer_name;
 	}
 
-	public void setCustomer_id_level1(int customer_id_level1) {
+	public void setCustomer_id_level1(String customer_id_level1) {
 		this.customer_id_level1 = customer_id_level1;
 	}
 
@@ -156,7 +157,7 @@ public class EntInvoiceData {
 		this.customer_name_level1 = customer_name_level1;
 	}
 
-	public void setStaff_id(int staff_id) {
+	public void setStaff_id(String staff_id) {
 		this.staff_id = staff_id;
 	}
 
@@ -172,7 +173,7 @@ public class EntInvoiceData {
 		this.date_product_received = date_product_received;
 	}
 
-	public void setDate_sent_late(int date_sent_late) {
+	public void setDate_sent_late(String date_sent_late) {
 		this.date_sent_late = date_sent_late;
 	}
 
@@ -200,7 +201,7 @@ public class EntInvoiceData {
 		this.total_prices = total_prices;
 	}
 
-	public void setSum_total_price(double sum_total_price) {
+	public void setSum_total_price(String sum_total_price) {
 		this.sum_total_price = sum_total_price;
 	}
 

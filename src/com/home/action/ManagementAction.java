@@ -341,7 +341,7 @@ public class ManagementAction extends ActionSupport implements ServletContextAwa
 		try {
 			ManagementHome home = new ManagementHome(getSessionFactory());
 			EntInvoiceData data = this.invoice_data;
-			int management_id = data.getManagement_id();
+			int management_id = Integer.parseInt(data.getManagement_id());
 
 //			try {
 //				HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
@@ -355,32 +355,44 @@ public class ManagementAction extends ActionSupport implements ServletContextAwa
 			management.setId(management_id);
 
 			InvoiceData invoice_data = new InvoiceData();
-			invoice_data.setId(data.getId());
+			invoice_data.setId(Integer.parseInt(data.getId()));
 			invoice_data.setManagement_id(management);
 
 			InvoiceType invoice_type_id = new InvoiceType();
-			invoice_type_id.setId(data.getInvoice_type_id());
+			invoice_type_id.setId(Integer.parseInt(data.getInvoice_type_id()));
 			invoice_data.setInvoice_type_id(invoice_type_id);
 
-			Customer customer_id = new Customer();
-			customer_id.setId(data.getCustomer_id());
-			invoice_data.setCustomer_id(customer_id);
+			try {
+				Customer customer_id = new Customer();
+				customer_id.setId(Integer.parseInt(data.getCustomer_id()));
+				invoice_data.setCustomer_id(customer_id);
+			} catch (Exception e) {
+				invoice_data.setCustomer_id(null);
+			}
 			invoice_data.setCustomer_code(data.getCustomer_code()) ;
 			invoice_data.setCustomer_name(data.getCustomer_name()) ;
 
-			Customer customer_id_level1 = new Customer();
-			customer_id_level1.setId(data.getCustomer_id_level1());
-			invoice_data.setCustomer_id_level1(customer_id_level1) ;
+			try {
+				Customer customer_id_level1 = new Customer();
+				customer_id_level1.setId(Integer.parseInt(data.getCustomer_id_level1()));
+				invoice_data.setCustomer_id_level1(customer_id_level1) ;
+			} catch (Exception e) {
+				invoice_data.setCustomer_id_level1(null) ;
+			}
 			invoice_data.setCustomer_code_level1(data.getCustomer_code_level1());
 			invoice_data.setCustomer_name_level1(data.getCustomer_name_level1());
 
-			User user = new User();
-			user.setId(data.getStaff_id());
-			invoice_data.setStaff_id(user);
+			try {
+				User user = new User();
+				user.setId(Integer.parseInt(data.getStaff_id()));
+				invoice_data.setStaff_id(user);
+			} catch (Exception e) {
+				invoice_data.setStaff_id(null);
+			}
 			invoice_data.setStaff_name(data.getStaff_name()) ;
 			invoice_data.setDate_company_received(data.getDate_company_received());
 			invoice_data.setDate_product_received(data.getDate_product_received()) ;
-			invoice_data.setDate_sent_late(data.getDate_sent_late());
+			invoice_data.setDate_sent_late(Integer.parseInt(data.getDate_sent_late()));
 			invoice_data.setNotes(data.getNotes());
 
 			invoice_data.setProduct_ids(data.getProduct_ids()) ;

@@ -363,7 +363,7 @@ public class InvoiceDataHome {
 				cus.setId(rs.getInt("customer_id"));
 				cus.setCustomerCode(rs.getString("customer_code"));
 				cus.setStatisticName(rs.getString("customer_name"));
-				invoice.setCustomer_id(cus);
+				//invoice.setCustomer_id(cus);
 				invoice.setCustomer_code(rs.getString("customer_code"));
 				invoice.setCustomer_name(rs.getString("customer_name"));
 				
@@ -371,14 +371,14 @@ public class InvoiceDataHome {
 				cus1.setId(rs.getInt("customer_id_level1"));
 				cus1.setCustomerCode(rs.getString("customer_code_level1"));
 				cus1.setStatisticName(rs.getString("customer_name_level1"));
-				invoice.setCustomer_id_level1(cus1);
+				//invoice.setCustomer_id_level1(cus1);
 				invoice.setCustomer_code_level1(rs.getString("customer_code_level1"));
 				invoice.setCustomer_name_level1(rs.getString("customer_name_level1"));
 				
 				User user = new User();
 				user.setId(rs.getInt("staff_id"));
 				user.setUserName(rs.getString("staff_name"));
-				invoice.setStaff_id(user);
+				//invoice.setStaff_id(user);
 				invoice.setStaff_name(rs.getString("staff_name"));
 				
 				invoice.setDate_company_received(rs.getDate("date_company_received"));
