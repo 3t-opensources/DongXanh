@@ -392,7 +392,11 @@ public class ManagementAction extends ActionSupport implements ServletContextAwa
 			invoice_data.setStaff_name(data.getStaff_name()) ;
 			invoice_data.setDate_company_received(data.getDate_company_received());
 			invoice_data.setDate_product_received(data.getDate_product_received()) ;
-			invoice_data.setDate_sent_late(Integer.parseInt(data.getDate_sent_late()));
+			try {
+				invoice_data.setDate_sent_late(Integer.parseInt(data.getDate_sent_late()));
+			} catch (Exception e) {
+				invoice_data.setDate_sent_late(0);
+			}
 			invoice_data.setNotes(data.getNotes());
 
 			invoice_data.setProduct_ids(data.getProduct_ids()) ;
