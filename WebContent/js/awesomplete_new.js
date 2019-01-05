@@ -358,6 +358,10 @@ _.prototype = {
 _.all = [];
 
 _.FILTER_CONTAINS = function (text, input) {
+	
+	input = change_alias(input);
+	text   = change_alias(text);
+	//return true;
 	return RegExp($.regExpEscape(input.trim()), "i").test(text);
 };
 
@@ -378,42 +382,6 @@ _.ITEM = function (text, input, item_id) {
 	
 	var html = input.trim() === "" ? text : text.replace(RegExp($.regExpEscape(input.trim()), "gi"), "<mark>$&</mark>");
 	
-	if(this.field1 == null && this.field2 == null && this.field3 == null){
-		rowData =
-			"<html>" +
-				"<table>" +
-					"<tr>" +
-							"<td>"+html+"</td>" +
-					"</tr>"+
-				"</table>" +
-			"</html>";
-	}
-	
-	if(this.field1 != null && this.field2 == null && this.field3 == null){
-		rowData = 
-		"<html>" +
-			"<table>" +
-				"<tr>" +
-						"<td class = 'awesome-two-column'>"+html.split('|')[0]+"</td>" +
-						"<td class = 'awesome-two-column'>"+html.split('|')[1]+"</td>" +
-				"</tr>"+
-			"</table>" +
-		"</html>";
-	}
-	
-	if(this.field1 != null && this.field2 != null && this.field3 == null){
-	rowData = 
-		"<html>" +
-			"<table>" +
-				"<tr>" +
-						"<td class = 'awesome-three-column'>"+html.split('|')[0]+"</td>" +
-						"<td class = 'awesome-three-column'>"+html.split('|')[1]+"</td>" +
-						"<td class = 'awesome-three-column'>"+html.split('|')[2]+"</td>" +
-				"</tr>"+
-			"</table>" +
-		"</html>";
-	}
-	
 	if(this.field1 != null && this.field2 != null && this.field3 != null && this.field4!= null && this.field5 != null && this.field6 != null){
 		
 		
@@ -429,18 +397,20 @@ _.ITEM = function (text, input, item_id) {
 					"</tr>"+
 				"</table>" +
 			"</html>";
-//		rowData = 
-//			"<html>" +
-//				"<table style=' width: 600px;' class='table table-striped'>" +
-//					"<tr>" +
-// 	        		
-//							"<td class = 'awesome-three-column width100'>"+html.split('|')[0]+"</td>" +						
-//							"<td class = 'awesome-three-column width150'>"+html.split('|')[2]+"</td>" +						
-//							"<td class = 'awesome-three-column width150'>"+html.split('|')[4]+"</td>" +						
-//							"<td class = 'awesome-three-column width150'>"+html.split('|')[6]+"</td>" +
-//					"</tr>"+
-//				"</table>" +
-//			"</html>";
+
+	}else if(this.debitor_nummer==3){
+		
+		rowData = 
+			"<html>" +
+				"<table style=' width: 400px;margin:0px' class='table table-bordered'>" +
+					"<tr>" +
+ 	        		
+					"<td class = 'awesome-three-column width100'>"+html.split('|')[0]+"</td>" +	   //customer_id_level1_hidden						
+					"<td class = 'awesome-three-column width150'>"+html.split('|')[1]+"</td>" +	   //customer_code_level1_hidden					
+					"<td class = 'awesome-three-column width150'>"+html.split('|')[2]+"</td>" +    //customer_name_level1		
+					"</tr>"+
+				"</table>" +
+			"</html>";
 	}
 	//SETTING is_show_form_lookup = false để tránh việc nhảy field khi nhấn phím qua lại lên xuống. 
 	is_show_form_lookup = false;
@@ -452,64 +422,43 @@ _.ITEM = function (text, input, item_id) {
 };
 
 _.REPLACE = function (text) {
-	if(this.debitor_nummer == 4){
-		// PUT VALUE TO FIELD INDEX 0
-		this.input.value = text.value.split('|')[0];
-		this.field2.value = text.value.split('|')[2];
-	}else if(this.debitor_nummer == 3){
-		// PUT VALUE TO FIELD INDEX 1 & 2
-		if(this.field1 != null && this.field2 != null && this.field3 != null){
-			this.field1.value = text.value.split('|')[1];
-			this.field2.value = text.value.split('|')[2];
-		}
-	}else if(this.debitor_nummer == 2){
-		// PUT VALUE TO FIELD INDEX 0 & 2
-		if(this.field1 != null && this.field2 != null && this.field3 != null){
-			this.input.value = text.value.split('|')[0];
-			this.field2.value = text.value.split('|')[2];
-		}
-	}else if(this.debitor_nummer == 1){
-		if(this.field1 == null && this.field2 == null && this.field3 == null){
-			this.input.value = text.value;	
-		}
+
+	if(this.debitor_nummer==3){
+		this.input.value = text.value.split('|')[2];//customer_name_level1
+		this.field1.value = text.value.split('|')[0];//customer_id_level1_hidden	
+		this.field2.value = text.value.split('|')[1];//customer_code_level1_hidden
+	}else	if(this.field1 != null && this.field2 != null && this.field3 != null && this.field4 != null && this.field5 != null && this.field6 != null){
 		
-		if(this.field1 != null && this.field2 == null && this.field3 == null){
-			this.input.value = text.value.split('|')[0];
-			this.field1.value = text.value.split('|')[1];
-		}
-		
-		if(this.field1 != null && this.field2 != null && this.field3 == null){
-			this.input.value = text.value.split('|')[0];
-			this.field1.value = text.value.split('|')[1];
-			this.field2.value = text.value.split('|')[2];	
-		}
-		
-		if(this.field1 != null && this.field2 != null && this.field3 != null && this.field4 != null && this.field5 != null && this.field6 != null){
-			
-//			data = data +responseText[i][0]+"|";//customer_id
-//     		data = data +responseText[i][1]+"|";//invoice_name			 	        	
-//     		data = data +responseText[i][2]+"|";//customer_name
-//     		data = data +responseText[i][3]+"|";//customer_id_level1
-//     		data = data +responseText[i][4]+"|";//customer_name_level1
-//     		data = data +responseText[i][5]+"|";//user_id
-//     		data = data +responseText[i][6]+"";//user_name
-     		
+//		data = data +responseText[i][0]+"|";//customer_id
+// 		data = data +responseText[i][1]+"|";//invoice_name			 	        	
+// 		data = data +responseText[i][2]+"|";//customer_name
+// 		data = data +responseText[i][3]+"|";//customer_id_level1
+// 		data = data +responseText[i][4]+"|";//customer_name_level1
+// 		data = data +responseText[i][5]+"|";//user_id
+// 		data = data +responseText[i][6]+"";//user_name	
+
+		if(this.debitor_nummer ==1){
 			this.input.value = text.value.split('|')[1];//maKH
 			this.field1.value = text.value.split('|')[2];//tenKH
-			this.field2.value = text.value.split('|')[4];//customer_name_level1
-			this.field3.value = text.value.split('|')[6];//nvtt_name	
-			this.field4.value = text.value.split('|')[3];//customer_id_level1_hidden
-			this.field5.value = text.value.split('|')[5];//nvtt_id_hidden
-			this.field6.value = text.value.split('|')[0];//invoice_name_hidden	
-			
-//			var maKH                          = document.getElementById("maKH");
-//			var tenKH                         = document.getElementById("tenKH");
-//			var customer_name_level1          = document.getElementById("customer_name_level1");
-//			var nvtt_name                     = document.getElementById("nvtt_name");
-//			var customer_id_level1_hidden     = document.getElementById("customer_id_level1_hidden");
-//			var nvtt_id_hidden                = document.getElementById("nvtt_id_hidden"); 
-//			var invoice_name_hidden           = document.getElementById("invoice_name_hidden"); 
+		}else{
+			this.input.value = text.value.split('|')[2];//maKH
+			this.field1.value = text.value.split('|')[1];//tenKH
 		}
+		
+		
+		this.field2.value = text.value.split('|')[4];//customer_name_level1
+		this.field3.value = text.value.split('|')[6];//nvtt_name	
+		this.field4.value = text.value.split('|')[3];//customer_id_level1_hidden
+		this.field5.value = text.value.split('|')[5];//nvtt_id_hidden
+		this.field6.value = text.value.split('|')[0];//invoice_name_hidden	
+		
+//		var maKH                          = document.getElementById("maKH");
+//		var tenKH                         = document.getElementById("tenKH");
+//		var customer_name_level1          = document.getElementById("customer_name_level1");
+//		var nvtt_name                     = document.getElementById("nvtt_name");
+//		var customer_id_level1_hidden     = document.getElementById("customer_id_level1_hidden");
+//		var nvtt_id_hidden                = document.getElementById("nvtt_id_hidden"); 
+//		var invoice_name_hidden           = document.getElementById("invoice_name_hidden"); 
 	}
 	//SETTING is_show_form_lookup = true để tránh việc nhảy field khi nhấn phím qua lại lên xuống.
 	is_show_form_lookup = true;
@@ -685,3 +634,19 @@ if (typeof module === "object" && module.exports) {
 return _;
 
 }());
+
+function change_alias(alias) {
+    var str = alias;
+    str = str.toLowerCase();
+    str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g,"a"); 
+    str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g,"e"); 
+    str = str.replace(/ì|í|ị|ỉ|ĩ/g,"i"); 
+    str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g,"o"); 
+    str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g,"u"); 
+    str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g,"y"); 
+    str = str.replace(/đ/g,"d");
+    str = str.replace(/!|@|%|\^|\*|\(|\)|\+|\=|\<|\>|\?|\/|,|\.|\:|\;|\'|\"|\&|\#|\[|\]|~|\$|_|`|-|{|}|\||\\/g," ");
+    str = str.replace(/ + /g," ");
+    str = str.trim(); 
+return str;
+}

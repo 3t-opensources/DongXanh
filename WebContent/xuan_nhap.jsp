@@ -95,8 +95,8 @@
 
     	<form name = "form-field" id = "form-text-field" action = "saveform" method = "post" onsubmit = "return confirmwhensubmit()">
     	              <input type="hidden" id="id" name="id" value="123">
-        			  <input type="hidden" id="management_id" name="management_id" value="456">
-        			  <input type="hidden" id="invoice_type_id" name="invoice_type_id" value="789">
+        			  <input type="hidden" id="management_id" name="management_id" value="">
+        			  <input type="hidden" id="invoice_type_id" name="invoice_type_id" value="">
         			
         			  
         			  <input type="hidden" id="user_id" name="user_id" value="<%= userSes.getId()%>">
@@ -215,7 +215,7 @@
 							             <th class = "header-table-column  table-th" style="width: 80px"></th>
 							            </tr>
 							          </thead>
-							          <tbody>
+							          <tbody id ="tbody">
 							          <% for(int i = 1; i < 3; i++) {%> 
 		                                <tr class="odd gradeX" id = "<%=i %>" >
 		                                    <td id = "stt_<%=i %>">	<%=i %></td>
@@ -302,28 +302,36 @@ function getjob(){
            url     : 'getJobCaptureAction?user_id='+ user_id,	          
            data    : "",
            success : function(responseText) {	
+        	   console.log("==================305=================");
         	  console.log(responseText);
-        	 checkGetJob(false);
-        	 var invoice_data_id = responseText[0].responseText;
-        	 var id              = responseText[0].id;
-        	 document.getElementById("id").value               = id;
-       	     document.getElementById("management_id").value    = id ;
-       	     document.getElementById("invoice_type_id").value  = invoice_data_id ;
-       	     var imagePath_hidden ="";
-       	     var file_path        = responseText[0].file_path.split("/DX_Images/");
-       	     var file_name        = responseText[0].file_name;
-       	     if(file_path.length>1){
-       	    	imagePath_hidden = file_path[1] +"/"+file_name;
-       	     }
-       	    
-       	     var url = window.location.href.toString();
-       	     if(url.includes("localhost")){
-       	    	 imagePath_hidden = "http://nv.dongxanhvn.com:8077/DX_Images/test_image2.jpg";
-       	     }else{
-       	    	imagePath_hidden = "http://nv.dongxanhvn.com:8077/DX_Images/"+imagePath_hidden;
-       	     }
-       	    
-       	     $('#viewer').iviewer('loadImage', imagePath_hidden);
+        	
+        	 if(responseText.length>0){
+        		 checkGetJob(false);
+        		 var invoice_data_id = responseText[0].responseText;
+            	 var id              = responseText[0].id;
+            	 document.getElementById("id").value               = id;
+           	     document.getElementById("management_id").value    = id ;
+           	    
+           	     var imagePath_hidden ="";
+           	     var file_path        = responseText[0].file_path.split("/DX_Images/");
+           	     var file_name        = responseText[0].file_name;
+           	     if(file_path.length>1){
+           	    	imagePath_hidden = file_path[1] +"/"+file_name;
+           	     }
+           	    
+           	     var url = window.location.href.toString();
+           	     if(url.includes("localhost")){
+           	    	 imagePath_hidden = "http://nv.dongxanhvn.com:8077/DX_Images/test_image2.jpg";
+           	     }else{
+           	    	imagePath_hidden = "http://nv.dongxanhvn.com:8077/DX_Images/"+imagePath_hidden;
+           	     }
+           	    
+           	     $('#viewer').iviewer('loadImage', imagePath_hidden);
+        	 }else{
+        		 checkGetJob(true);
+        		 alert("Hết hóa đơn nhập!");
+        	 }
+        	
 	       	
            }
 	   });
@@ -396,6 +404,12 @@ function resetData(){
 	  document.getElementById("ngaynhanhang").value ="";
 	  document.getElementById("date_sent_late").value ="";
       document.getElementById("notes").value ="";
+    
+      $("#tbody").empty();
+    //  addRow(0);
+   //   addRow(0);
+   //   addRow(1);
+      
       getjob();
 	 
 	
@@ -407,7 +421,7 @@ function saveData(){
 			
 		  var id_invoice               = parseInt(document.getElementById("id").value) ;//id
 		  var management_id            = parseInt(document.getElementById("management_id").value) ;//management_id
-		  var invoice_type_id          = parseInt( document.getElementById("invoice_type_id").value) ;//invoice_type_id
+		  var invoice_type_id         = 1;//invoice_type_id
 		  var invoice_type             = document.getElementById("cbb_loaibangke").value ; //invoice_type
 		  
 		  
@@ -467,10 +481,11 @@ function saveData(){
 				  total_prices     = total_prices       +thanhtien  +"`";
 				  sum_total_price = parseFloat(sum_total_price) + parseFloat(thanhtien);
 			  }
-			 console.log('management_id==='+management_id);
+			 /* console.log('management_id==='+management_id);
 			 console.log('customer_id==='+customer_id);
 			 console.log('customer_id_level1==='+customer_id_level1);
 			 console.log('staff_id==='+staff_id);
+			 alert(management_id +"======="+customer_id); */
 			  row++;
 			  if(row==maxRow){
 				  $.ajax({
@@ -483,19 +498,19 @@ function saveData(){
 			        	  invoice_data:{			        		 
 			        		  "id": id_invoice,
 			        		  "management_id": management_id,
-			        		  "invoice_type_id": 1,
+			        		  "invoice_type_id": invoice_type_id,
 			        		  "invoice_type": invoice_type,
 			        		  "customer_id": customer_id,
 			        		  "customer_code": customer_code,
 			        		  "customer_name": customer_name,
-			        		  "customer_id_level1": 1,
+			        		  "customer_id_level1": customer_id_level1,
 			        		  "customer_code_level1": customer_code_level1,
 			        		  "customer_name_level1": customer_name_level1,
-			        		  "staff_id": 23,
+			        		  "staff_id": staff_id,
 			        		  "staff_name": staff_name,
 			        		  "date_company_received":date_company_received,
 			        		  "date_product_received": date_product_received,
-			        		  "date_sent_late": 0,
+			        		  "date_sent_late": date_sent_late,
 			        		  "notes": notes,
 			        		  "product_ids": product_ids,
 			        		  "product_names": product_names,
@@ -508,10 +523,10 @@ function saveData(){
 					 	         
 					   	}) ,	           
 			          success : function(responseText) {
-			          
-			           resetData();
-			       	   console.log(responseText);
-			       	  
+			        	  var url = window.location.href.toString();			        	
+			        		window.location.replace(url);
+			     
+			       
 			          }
 				   });
 			  }
@@ -588,15 +603,18 @@ function checktable(){
 function addRow(id){
 	var stt =1;
 	var index =1;
-	
-	 $('#table_position > tbody  > tr').each(function() {
-		 stt++;
-		 if(this.getAttribute("id")==id){			
-			index = stt;			
-		 }
-		 
-	 });
-	
+	if(id==0){
+		index=0;
+	}
+	if(id!=0){
+		 $('#table_position > tbody  > tr').each(function() {
+			 stt++;
+			 if(this.getAttribute("id")==id){			
+				index = stt;			
+			 }
+			 
+		 });
+	}
 	  var table = document.getElementById("table_position");
 	  var row = table.insertRow(index);
 	  var stt        = row.insertCell(0);
@@ -620,7 +638,7 @@ function addRow(id){
 	  dongia.innerHTML    = "<input  type='number' value = '' min='0' step='1' data-number-to-fixed='2' data-number-stepfactor='100' id = 'dongia_"+time_id+"'        name='dongia_"+time_id+"'     class='custom-input-debitor form-control currency'/>";
 	  thanhtien.innerHTML = "<input  type='number' value = '' min='0' step='1' data-number-to-fixed='2' data-number-stepfactor='100' id = 'thanhtien_"+time_id+"'     name='thanhtien_"+time_id+"'  class='custom-input-debitor form-control currency'/>";
 	      
-	  var add_remove  = "<div style='padding-top: 4px; padding-left: 2px; padding-right: 2px'>  ";   
+	  var add_remove  = "<div style='padding-top: 4px; padding-left: 2px; padding-right: 2px; width: 80px'>  ";   
 	      add_remove  +="<button type='button' class='btn btn-success btn-sm' onclick='addRow("+time_id+")'   id ='addRow_"+time_id+"' ><span class='glyphicon glyphicon-plus' ></span></button> ";
 	      add_remove  +="<button type='button' class='btn btn-danger btn-sm'  onclick='moveRow("+time_id+")'  id ='moveRow_"+time_id+"' ><span class='glyphicon glyphicon-remove'></span></button>";
 	      add_remove  +="</div>";
@@ -635,7 +653,7 @@ function addRow(id){
 			list : <%=data_postion%>
 		});
 	
-	if(id!=0){
+	if(id>0){
 		stt =0;
 		  $('#table_position > tbody  > tr').each(function() {
 				  stt++;	
@@ -672,7 +690,7 @@ function moveRow(id){
 }
 $(document).ready(function() {
 	var imagePath = "http://nv.dongxanhvn.com:8077/DX_Images/test_image.jpg";
-	checkGetJob(true);
+/* 	checkGetJob(true); */
 	 var winWidth = $('.split-pane').width();
 	  var winHeight = $('.split-pane').height();
 
@@ -688,11 +706,7 @@ $(document).ready(function() {
 	  $('#bottom-component-2').css('height', winHeight / 3 + 'px');
 	  $('#horizontal-divider-2').css('bottom', winHeight / 3 + 'px');
 	
-	  var table = $('#table_position').DataTable({
-		  "scrollY": "360px",
-		  "scrollCollapse": true,	
-		  
-	   });
+	
 	
 	  $('#ngaynhantoa_datePicker').datepicker({
            format: 'dd/mm/yyyy'
@@ -723,16 +737,22 @@ $(document).ready(function() {
       $("#fit").click(function(){ iv.iviewer('fit'); });
       $("#orig").click(function(){ iv.iviewer('set_zoom', 100); });
       $("#update").click(function(){ iv.iviewer('update_container_info'); });
+      
+      getjob();
     
 });
         var customer_id_hidden            = document.getElementById("customer_id_hidden");
 		var maKH                          = document.getElementById("maKH");
 		var tenKH                         = document.getElementById("tenKH");
-		var customer_name_level1          = document.getElementById("customer_name_level1");
+		
 		var nvtt_name                     = document.getElementById("nvtt_name");
-		var customer_code_level1_hidden   = document.getElementById("customer_code_level1_hidden");
+		
 		var nvtt_id_hidden                = document.getElementById("nvtt_id_hidden"); 
-	 
+		
+		
+		var customer_id_level1_hidden     = document.getElementById("customer_id_level1_hidden");
+		var customer_code_level1_hidden   = document.getElementById("customer_code_level1_hidden");
+		var customer_name_level1          = document.getElementById("customer_name_level1");
 		
 		var khachhang_ma = new LookupKhachHang(maKH, tenKH, customer_name_level1, nvtt_name,customer_code_level1_hidden,nvtt_id_hidden,customer_id_hidden, 1, {		
 			  minChars: 1,
@@ -741,6 +761,12 @@ $(document).ready(function() {
 		});
 		
 		var khachhang_ten = new LookupKhachHang(tenKH, maKH, customer_name_level1, nvtt_name,customer_code_level1_hidden,nvtt_id_hidden,customer_id_hidden, 2, {		
+			  minChars: 1,
+			  maxItems: 20,
+			  autoFirst: true
+		});
+		
+		var khachhang_cap1 = new LookupKhachHang(customer_name_level1, customer_id_level1_hidden, customer_code_level1_hidden, null,null,null,null, 3, {		
 			  minChars: 1,
 			  maxItems: 20,
 			  autoFirst: true
@@ -765,7 +791,50 @@ $(document).ready(function() {
 		        	 loolupKhachHang(tenKH,khachhang_ten);
 		        }
 			});
+		$( "#customer_name_level1" ).keyup(function(e) {
+			  var code = (e.keyCode || e.which);      
+		        if (code === 37 || code === 38 || code === 39 || code === 40 || code === 27 || code === 13) {
+		            return;
+		        }else{
+		        	 var customer_name_level1                  = document.getElementById("customer_name_level1").value ;
+		        	 loolupKhachHangCap1(customer_name_level1,khachhang_cap1);
+		        }
+			});
 		
+		function loolupKhachHangCap1(name ,khachhang){
+			 $.ajax({  		
+			       type: "GET",
+		           url     : 'lookupCaptureCusAction?search_cus='+ name,	          
+		           data    : "",
+		           success : function(responseText) {
+		        	
+		        	 var stt =0;
+		        	 var resultjson = [];
+	 	        	 for (i in responseText) { 
+	 	        		 
+	 	        		 console.log(responseText);
+	 	        		data ="";	
+	 	        		data = data +responseText[i][0]+"|";//customer_id_level1_hidden
+	 	        		data = data +responseText[i][1]+"|";//customer_code_level1_hidden	
+	 	        		data = data +responseText[i][2]+"|";//customer_name_level1	
+	 	        	
+	 	        		resultjson.push(data);
+	 	        		stt++;
+	 	        		
+	 	        		}
+	 	        	
+	 	        	if(stt>1){
+	 	        		
+	 	        		khachhang.list = resultjson ;
+	        		}else{
+	        			
+	        		}
+	 	        	
+		        	
+		           }
+			   });
+			 
+		}
 		
 		function loolupKhachHang(name ,khachhang){
 			 $.ajax({  		
@@ -862,6 +931,8 @@ input.currency {
 }
 
  
+
+
  
  </style>
     

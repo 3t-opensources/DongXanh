@@ -126,7 +126,7 @@
 	}
 	
 	.awesomplete > ul > li[aria-selected="true"] {
-		background: hsl(205, 40%, 40%);
+		background-color:#c6dfff;
 		color: white;
 	}
 	
