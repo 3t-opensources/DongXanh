@@ -1088,7 +1088,7 @@ public class CustomerHome {
 							cus.setTelefone(StringUtil.notNull(rs.getString("telefone")));
 							cus.setBusinessAddress(StringUtil.notNull(rs.getString("business_address")));
 							//results.add(new Object[]{cus.getId(), cus.getCustomerCode(), cus.getBusinessName().replace("0.0", "").isEmpty()?cus.getStatisticName():cus.getBusinessName(), cus.getTelefone(), cus.getBusinessAddress()});
-							results.add(new Object[]{""+cus.getId(), cus.getStatisticName().isEmpty()?cus.getBusinessName().replace("0.0", ""):cus.getStatisticName(), cus.getTelefone(), cus.getBusinessAddress()});
+							results.add(new Object[]{""+cus.getId(), cus.getCustomerCode(), cus.getStatisticName().isEmpty()?cus.getBusinessName().replace("0.0", ""):cus.getStatisticName(), cus.getTelefone(), cus.getBusinessAddress()});
 						}
 					} 
 				}
