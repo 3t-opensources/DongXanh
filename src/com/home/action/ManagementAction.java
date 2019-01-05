@@ -366,6 +366,9 @@ public class ManagementAction extends ActionSupport implements ServletContextAwa
 				Customer customer_id = new Customer();
 				customer_id.setId(Integer.parseInt(data.getCustomer_id()));
 				invoice_data.setCustomer_id(customer_id);
+				if(customer_id.getId() == 0){
+					invoice_data.setCustomer_id(null);
+				}
 			} catch (Exception e) {
 				invoice_data.setCustomer_id(null);
 			}
@@ -376,6 +379,9 @@ public class ManagementAction extends ActionSupport implements ServletContextAwa
 				Customer customer_id_level1 = new Customer();
 				customer_id_level1.setId(Integer.parseInt(data.getCustomer_id_level1()));
 				invoice_data.setCustomer_id_level1(customer_id_level1) ;
+				if(customer_id_level1.getId() == 0){
+					invoice_data.setCustomer_id(null);
+				}
 			} catch (Exception e) {
 				invoice_data.setCustomer_id_level1(null) ;
 			}
@@ -386,6 +392,9 @@ public class ManagementAction extends ActionSupport implements ServletContextAwa
 				User user = new User();
 				user.setId(Integer.parseInt(data.getStaff_id()));
 				invoice_data.setStaff_id(user);
+				if(user.getId() == 0){
+					invoice_data.setStaff_id(null);
+				}
 			} catch (Exception e) {
 				invoice_data.setStaff_id(null);
 			}
