@@ -467,12 +467,16 @@ public class ManagementAction extends ActionSupport implements ServletContextAwa
 			if(!redis.isConnected()){
 				redis.connect(REDIS_SERVER, REDIS_PORT, REDIS_AUTH);
 			}
+			//System.out.println("redis.isConnected(): " + redis.isConnected());
 			if(redis.isConnected()){
 				String key = "lookupCustomerAndStaff"+ search_cus;
 				String data_json = StringUtil.notNull(redis.get(key));
-				if(data_json.isEmpty()){
+				System.out.println("data_json: " + data_json);
+				if(!data_json.isEmpty()){
+					//System.out.println("XXX");
 					listCustomer = new Gson().fromJson(data_json, ArrayList.class);
 				}else{
+					//System.out.println("YYY");
 					listCustomer = cusHome.lookupCustomerAndStaff(search_cus, ""+MyConts.CUS_L1);
 					redis.set(key, new Gson().toJson(listCustomer));
 				}
@@ -508,7 +512,8 @@ public class ManagementAction extends ActionSupport implements ServletContextAwa
 			if(redis.isConnected()){
 				String key = "lookupCustomer"+ search_cus;
 				String data_json = StringUtil.notNull(redis.get(key));
-				if(data_json.isEmpty()){
+				System.out.println("data_json: " + data_json);
+				if(!data_json.isEmpty()){
 					listCustomer = new Gson().fromJson(data_json, ArrayList.class);
 				}else{
 					listCustomer = cusHome.lookupCustomer(search_cus, ""+MyConts.CUS_L1);
@@ -546,7 +551,8 @@ public class ManagementAction extends ActionSupport implements ServletContextAwa
 			if(redis.isConnected()){
 				String key = "lookupCareStaff"+ search_staff;
 				String data_json = StringUtil.notNull(redis.get(key));
-				if(data_json.isEmpty()){
+				System.out.println("data_json: " + data_json);
+				if(!data_json.isEmpty()){
 					listStaff = new Gson().fromJson(data_json, ArrayList.class);
 				}else{
 					listStaff =  userHome.lookupStaff(search_staff);
@@ -585,7 +591,8 @@ public class ManagementAction extends ActionSupport implements ServletContextAwa
 			if(redis.isConnected()){
 				String key = "lookupProduct"+ search_product;
 				String data_json = StringUtil.notNull(redis.get(key));
-				if(data_json.isEmpty()){
+				System.out.println("data_json: " + data_json);
+				if(!data_json.isEmpty()){
 					listProduct = new Gson().fromJson(data_json, ArrayList.class);
 				}else{
 					listProduct = proHome.lookupProduct(search_product);
