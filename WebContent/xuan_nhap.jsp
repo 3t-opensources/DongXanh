@@ -50,17 +50,13 @@
  
  List<InvoiceType> listInvoice =  (ArrayList<InvoiceType>) request.getAttribute("listInvoiceType");
  User userSes                  =  ( User) request.getAttribute("userSes");	
-  String datatest ="['August Beck GmbH & Co. KG|0000010367|DE72600501010004763594|EUR','Bedrunka & Hirth GmbH|0000014053|DE90694500650240012576|EUR','Bilz Werkzeugfabrik GmbH & Co. KG|0000010078|DE69600501017456500267|EUR','C.+ E. Fein GmbH|0000010399|DE51600700700110213600|EUR','E D E Einkaufsbüro Deutscher|0000015179|DE68300306008003800300|EUR','Fechtel Transportgeräte GmbH|0000013582|DE90480620510214900100|EUR','Gühring KG|0000010431|DE09653700750010412500|EUR','Jörn Detjens GmbH|0000017273|DE24200505501352122855|EUR','KLW Karl Lutz GmbH & Co. KG|0000010655|DE84600501010008800130|EUR','LOKOMA Lorenz Kollmann GmbH|0000010600|DE52722515200000554405|EUR','Owt Osnabrücker Werkzeugtechnik Gmb|0000017826|DE57265501050000280271|EUR','Rhodius GmbH & Co. KG|0000013325|DE80570200860004768507|EUR','Robert Bosch Power Tools GmbH|0000012810|DE24600501010002250315|EUR','Scheuerlein-Motorentechnik|0000020074|DE49760693720007217714|EUR','Stanley Black & Decker|0000018939|DE10500400000123900300|EUR','Ultra-Präzision Messzeuge GmbH|0000011948|DE41795500000000300848|EUR','Walter Deutschland GmbH|0000011900|DE21500700100341203800|EUR','Wera Werkzeuge GmbH|0000012128|DE97330700900093182400|EUR']";
- 
-  String data_postion ="['Abroad|Abroad|surcharge','Administration|Administration|surcharge','bulky goods|bulky goods|surcharge','Cash discount|Cash discount|surcharge','Cash on delivery|C.O.D. cash on delivery service|surcharge','Customization|Customization|surcharge','Customs|Customs|surcharge','Deposit|Deposit|surcharge','Express|Express|surcharge','Extra isle-charge|Surcharge for islands.|surcharge','Fracht|Freight|surcharge','Frachtkosten|Freight|surcharge','Frachtspesen|Freight|surcharge','Freight|Freight|surcharge','Handling|Handling|surcharge','Insurance|Insurance|surcharge','Minimum quantitiy Surcharge|Minimum quantitiy Surcharge|surcharge','Packing|Packing|surcharge','Partial Quantity|Partial Quantity|surcharge','Period-bonus|Period-bonus (e.g. annual bonus)|allowance','Postage|Postage|surcharge','Project-bonus|Project-bonus|allowance','Rebate|Rebate|allowance','Recycling|Recycling|surcharge','Surcharge|Surcharge|surcharge','Surcharge for material|Surcharge for material|surcharge','Verpackung|Packing|surcharge']";
  %>
   
    <div id="header">  
 		<div class="navbar nav_title" style="border: 0;">
 			<a class="site_title" href="homeAction">
-				<img width="27%" height="70%" alt="ĐỒNG XANH" src="./images/banner_dongxanh.png" style="padding-top: 10px ; display: none;">
-				
-				<img width="27%" height="70%" alt="ĐỒNG XANH" src="https://digi-texx.vn/wp-content/uploads/2018/06/Logo_DIGI-TEXX_2015-e1530520430447.png" style="padding-top: 10px">
+				<img width="27%" height="70%" alt="ĐỒNG XANH" src="./images/banner_dongxanh.png" style="padding-top: 10px ;">
+			
 			</a>
 		</div>
 	</div>
@@ -104,8 +100,8 @@
         			  
         			  
     	                <div class="well"><p align="center">
-    	                         <button type="button" id ="btn_nhapbangke" class="btn btn-success" onclick="getjob()">Nhập bảng kê</button>						            
-				                 <button type="button" id ="btn_xoabangke"  class="btn btn-success" onclick="searchDetail();">Xóa toa/bảng kê</button>			  
+    	                        				            
+				                 <button type="button" id ="btn_xoabangke"  class="btn btn-success" onclick="bad_images();">Xóa toa/bảng kê</button>			  
 				            	 <button type="button" id ="btn_Luubangke"  class="btn btn-success" onclick="saveData();">Lưu toa/bảng kê</button>			  
                       	</div>
 						<div id="wrapper" style="width : 100%; height : 100%; float: right">
@@ -141,7 +137,7 @@
 	                                       		  
 	                                       		 <div class="col-lg-2" ><span>Tên KH </span>  </div>	                                       		  
 	                                       		  <div class="col-lg-4">			                                       									
-				                                          <input value = "" id = "tenKH" name="tenKH" class="form-control" ondblclick = "getIdTag(this)" tabindex="1"/>				                                         
+				                                          <input value = "" id = "tenKH" name="tenKH" class="form-control" ondblclick = "getIdTag(this)" tabindex="2"/>				                                         
 	                                       		  </div>	                                       		  
 	                                        </div>
 										     <div class="clear"></div>										     
@@ -150,14 +146,14 @@
 	                                       		  <div class="col-lg-4">	
 	                                       		          <input type="hidden"  value = "" id = "customer_id_level1_hidden"  name="customer_id_level1_hidden"   /> 	
 	                                       		          <input type="hidden"  value = "" id = "customer_code_level1_hidden"  name="customer_code_level1_hidden"    /> 		                                       									
-				                                          <input value = "" id = "customer_name_level1" name="customer_name_level1" class="form-control" ondblclick = "getIdTag(this)" tabindex="1"/>				                                         
+				                                          <input value = "" id = "customer_name_level1" name="customer_name_level1" class="form-control" ondblclick = "getIdTag(this)" tabindex="3"/>				                                         
 	                                       		  </div>	   
 	                                       		  
 	                                       		 <div class="col-lg-2" ><span>NVTT </span>  </div>	                                       		  
 	                                       		  <div class="col-lg-4">
 	                                       		  
-        			  			                          <input type="hidden"  value = "" id = "nvtt_id_hidden"  name="nvtt_id_hidden"    class="form-control" ondblclick = "getIdTag(this)" tabindex="1"/>             									
-				                                          <input value = "" id = "nvtt_name" name="nvtt_name" class="form-control" ondblclick = "getIdTag(this)" tabindex="1"/>				                                         
+        			  			                          <input type="hidden"  value = "" id = "nvtt_id_hidden"  name="nvtt_id_hidden"    class="form-control" ondblclick = "getIdTag(this)" tabindex="4"/>             									
+				                                          <input value = "" id = "nvtt_name" name="nvtt_name" class="form-control" ondblclick = "getIdTag(this)" tabindex="4"/>				                                         
 	                                       		  </div>	                                                 		  
 	                                        </div>
 										     <div class="clear"></div>	
@@ -165,7 +161,7 @@
 	                                       		  <div class="col-lg-2 no_margin_right" ><span>Ngày nhận toa </span>  </div>	                                       		  
 	                                       		  <div class="col-lg-4">
 			                                       		   <div class="input-group input-append date" id="ngaynhantoa_datePicker">
-												                <input type="text" class="form-control" name="ngaynhantoa"  id= "ngaynhantoa"/>
+												                <input type="text" class="form-control" name="ngaynhantoa"  id= "ngaynhantoa" tabindex="5"/>
 												                <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
 												            </div>
 	                                       		  </div>
@@ -173,7 +169,7 @@
 	                                       		 <div class="col-lg-2 no_margin_right" ><span>Ngày nhận hàng </span>  </div>	                                       		  
 	                                       		  <div class="col-lg-4">
 	                                       		          <div class="input-group input-append date" id="ngaynhanhang_datePicker">
-												                <input type="text" class="form-control" name="ngaynhanhang"  id= "ngaynhanhang"/>
+												                <input type="text" class="form-control" name="ngaynhanhang"  id= "ngaynhanhang" tabindex="6"/>
 												                <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
 												            </div>
 												            			                                       									
@@ -185,12 +181,12 @@
 										      <div class="row " >
 	                                       		  <div class="col-lg-2 no_margin_right" ><span>Số ngày gởi trể</span>  </div>	                                       		  
 	                                       		  <div class="col-lg-4">			                                       									
-				                                          <input value = "" id = "date_sent_late" name="date_sent_late" class="form-control" ondblclick = "getIdTag(this)" tabindex="1"/>				                                         
+				                                          <input value = "" id = "date_sent_late" name="date_sent_late" class="form-control" ondblclick = "getIdTag(this)" tabindex="7"/>				                                         
 	                                       		  </div>	   
 	                                       		  
 	                                       		 <div class="col-lg-2" ><span>Ghi chú </span>  </div>	                                       		  
 	                                       		  <div class="col-lg-4">			                                       									
-				                                          <input value = "" id = "notes" name="notes" class="form-control" ondblclick = "getIdTag(this)" tabindex="1"/>				                                         
+				                                          <input value = "" id = "notes" name="notes" class="form-control" ondblclick = "getIdTag(this)" tabindex="8"/>				                                         
 	                                       		  </div>	                                          		  
 	                                        </div>
 										     <div class="clear"></div>
@@ -204,43 +200,45 @@
 							        <table  id="table_position" class="table table-fixed table-bordered table-inverse "  id="datatable-debitor">
 							          <thead>
 							            <tr>										            
-							             <th class = "header-table-column  table-th">STT</th>
-							             <th class = "header-table-column  table-th">Mã sản phẩm</th>
-							             <th class = "header-table-column  table-th">Tên sản phẩm</th>
-							             <th class = "header-table-column  table-th">Số lượng</th>
-							             <th class = "header-table-column  table-th">Số thùng</th>
-							             <th class = "header-table-column  table-th">Đơn giá</th>
-							             <th class = "header-table-column  table-th">Thành tiền</th>
+							             <th class = "header-table-column  table-th" >STT</th>
+							             <th class = "header-table-column  table-th " >Mã sản phẩm</th>
+							             <th class = "header-table-column  table-th"  style="width: 200px!important;">Tên sản phẩm</th>
+							             <th class = "header-table-column  table-th" >Số lượng</th>
+							             <th class = "header-table-column  table-th" >Số thùng</th>
+							             <th class = "header-table-column  table-th" >Đơn giá</th>
+							             <th class = "header-table-column  table-th" style="width: 70px!important;">Thành tiền</th>
 							            
 							             <th class = "header-table-column  table-th" style="width: 80px"></th>
 							            </tr>
 							          </thead>
-							          <tbody id ="tbody">
-							          <% for(int i = 1; i < 3; i++) {%> 
+							          <tbody id ="tbody" >
+							          <% 
+							          int lc =2;
+							          for(int i = 1; i < 10; i++) {%> 
 		                                <tr class="odd gradeX" id = "<%=i %>" >
 		                                    <td id = "stt_<%=i %>">	<%=i %></td>
 											
 											<td>
-												<input value = "" id = "masanpham_<%=i %>"    name="masanpham_<%=i %>"  class="custom-input-debitor form-control" ondblclick = "getIdTag(this)" tabindex=""/>
+												<input value = "" id = "masanpham_<%=i %>"    name="masanpham_<%=i %>"  class="custom-input-debitor form-control" ondblclick = "getIdTag(this)" tabindex="<%= (i*6) +1+lc%>"/>
 											</td>
 											<td>
-												<input value = "" id = "tensanpham_<%=i %>"   name="tensanpham_<%=i %>" class="custom-input-debitor form-control" ondblclick = "getIdTag(this)" tabindex=""/>
+												<input value = "" id = "tensanpham_<%=i %>"   name="tensanpham_<%=i %>" class="custom-input-debitor form-control" ondblclick = "getIdTag(this)" tabindex="<%= (i*6) +2+lc%>"/>
 											</td>
 											<td>
-											   <input type="number" value="" min="0" step="1" data-number-to-fixed="2" data-number-stepfactor="100" id = "soluong_<%=i %>"   name="soluong_<%=i %>" class="custom-input-debitor form-control currency" "/>
+											   <input type="number" value="" min="0" step="1" data-number-to-fixed="2" data-number-stepfactor="100" id = "soluong_<%=i %>"   name="soluong_<%=i %>" class="custom-input-debitor form-control currency" tabindex="<%= (i*6) +3+lc%>"/>
 											
 											</td>
 											<td>
-											  <input type="number" value="" min="0" step="1" data-number-to-fixed="2" data-number-stepfactor="100" id = "sothung_<%=i %>"   name="sothung_<%=i %>" class="custom-input-debitor form-control currency"  />
+											  <input type="number" value="" min="0" step="1" data-number-to-fixed="2" data-number-stepfactor="100" id = "sothung_<%=i %>"   name="sothung_<%=i %>" class="custom-input-debitor form-control currency" tabindex="<%= (i*6) +4+lc%>" />
 											</td>
 											
 											<td>
-											  <input type="number" value="" min="0" step="1" data-number-to-fixed="2" data-number-stepfactor="100" id = "dongia_<%=i %>"   name="dongia_<%=i %>" class="custom-input-debitor form-control currency"  />
+											  <input type="number" value="" min="0" step="1" data-number-to-fixed="2" data-number-stepfactor="100" id = "dongia_<%=i %>"   name="dongia_<%=i %>" class="custom-input-debitor form-control currency" tabindex="<%= (i*6) +5+lc%>" />
 											
 											</td>
 											
 											<td>
-											  <input type="number" value="" min="0" step="1" data-number-to-fixed="2" data-number-stepfactor="100" id = "thanhtien_<%=i %>"   name="thanhtien_<%=i %>" class="custom-input-debitor form-control currency"  />
+											  <input type="number" value="" min="0" step="1" data-number-to-fixed="2" data-number-stepfactor="100" id = "thanhtien_<%=i %>"   name="thanhtien_<%=i %>" class="custom-input-debitor form-control currency" tabindex="<%= (i*6) +6+lc%>" />
 											
 											</td>
 											<td>
@@ -302,8 +300,8 @@ function getjob(){
            url     : 'getJobCaptureAction?user_id='+ user_id,	          
            data    : "",
            success : function(responseText) {	
-        	   console.log("==================305=================");
-        	  console.log(responseText);
+        	 //  console.log("==================305=================");
+        	 // console.log(responseText);
         	
         	 if(responseText.length>0){
         		 checkGetJob(false);
@@ -327,6 +325,7 @@ function getjob(){
            	     }
            	    
            	     $('#viewer').iviewer('loadImage', imagePath_hidden);
+           	    document.getElementById("maKH").focus(); 
         	 }else{
         		 checkGetJob(true);
         		 alert("Hết hóa đơn nhập!");
@@ -336,6 +335,26 @@ function getjob(){
            }
 	   });
 
+}
+
+
+function bad_images(){	
+	var result = confirm("bạn có chắt chắn chắn xóa hóa đơn này?");
+	if (result) {
+		 var management_id                  = document.getElementById("management_id").value ;
+		 $.ajax({  		
+		       type: "GET",
+	          url     : 'badJobCaptureAction?management_id='+ management_id,	          
+	          data    : "",
+	          success : function(responseText) {	
+	        	  alert("Xóa bảng kê thành công!");
+	        	  var url = window.location.href.toString();			        	
+	      		  window.location.replace(url);
+	          }
+		   });
+
+	}
+	
 }
 
 
@@ -414,16 +433,27 @@ function resetData(){
 	 
 	
 }
+
+function getSelectedText(elementId) {
+    var elt = document.getElementById(elementId);
+
+    if (elt.selectedIndex == -1)
+        return null;
+
+    return elt.options[elt.selectedIndex].text;
+}
+
 var maxRow =0;
 function saveData(){
-	maxRow =0;
+	 maxRow =0;
+	
 	 if (checktable()) {
 			
 		  var id_invoice               = parseInt(document.getElementById("id").value) ;//id
 		  var management_id            = parseInt(document.getElementById("management_id").value) ;//management_id
-		  var invoice_type_id         = 1;//invoice_type_id
-		  var invoice_type             = document.getElementById("cbb_loaibangke").value ; //invoice_type
-		  
+		  var invoice_type_id          = document.getElementById("cbb_loaibangke").value; 
+		  var invoice_type             = getSelectedText("cbb_loaibangke"); //invoice_type
+		 
 		  
 		  var customer_id              = document.getElementById("customer_id_hidden").value ; //customer_id
 		  var customer_code            = document.getElementById("maKH").value ; //customer_code
@@ -523,7 +553,7 @@ function saveData(){
 					 	         
 					   	}) ,	           
 			          success : function(responseText) {
-			        	  var url = window.location.href.toString();			        	
+			        	   var url = window.location.href.toString();			        	
 			        		window.location.replace(url);
 			     
 			       
@@ -645,22 +675,71 @@ function addRow(id){
 	      
 	  addremove.innerHTML =add_remove;
 	  
-	    var nebenkosten = document.getElementById("masanpham_"+time_id);
-		var nebenkosten_betrag = document.getElementById("tensanpham_"+time_id);
-		var nebenkosten_type = document.getElementById("soluong_"+time_id);
-		
-		new LookupKhachHang(nebenkosten, nebenkosten_betrag, nebenkosten_type, null, 4, {
-			list : <%=data_postion%>
+	  var sanpham_id   = time_id; 
+	    var masp       = document.getElementById("masanpham_"+sanpham_id);
+		var tensp      = document.getElementById("tensanpham_"+sanpham_id);
+		var soluong    = document.getElementById("soluong_"+sanpham_id);
+		var sothung    = document.getElementById("sothung_"+sanpham_id);
+		var dongia     = document.getElementById("dongia_"+sanpham_id);
+	
+		var sanpham_ma = new LookupKhachHang(masp, tensp, dongia, sothung,null,null,null,null, 5, {		
+			  minChars: 1,
+			  maxItems: 20,
+			  autoFirst: true
 		});
+		
+		var sanpham_ten = new LookupKhachHang(tensp, masp, dongia, sothung,null,null,null,null, 6, {		
+			  minChars: 1,
+			  maxItems: 20,
+			  autoFirst: true
+		});
+		$( "#masanpham_"+sanpham_id ).keyup(function(e) {
+			  var code = (e.keyCode || e.which);      
+		        if (code === 37 || code === 38 || code === 39 || code === 40 || code === 27 || code === 13) {
+		            return;
+		        }else{				        	
+		        	 loolupSanPham(masp.value,sanpham_ma);
+		        }
+			});
+		
+		$( "#tensanpham_"+sanpham_id ).keyup(function(e) {
+			  var code = (e.keyCode || e.which);      
+		        if (code === 37 || code === 38 || code === 39 || code === 40 || code === 27 || code === 13) {
+		            return;
+		        }else{				        	
+		        	 loolupSanPham(tensp.value,sanpham_ten);
+		        }
+			});
+		
+
 	
 	if(id>0){
-		stt =0;
+		 var stt =0;
+		  var lc =2;
+		  var i=0;
 		  $('#table_position > tbody  > tr').each(function() {
-				  stt++;	
-				  document.getElementById("stt_"+this.getAttribute("id")).innerHTML  = stt;        
+				  stt++;
+				  i++;
+				  document.getElementById("stt_"+this.getAttribute("id")).innerHTML  = stt;
+				  var id               =  this.getAttribute("id");
+				  var index_ma         = (parseInt(stt)*6) +1+lc;
+				  var index_ten        = (parseInt(stt)*6) +2+lc;
+				  var index_sl         = (parseInt(stt)*6) +3+lc;
+				  var index_st         = (parseInt(stt)*6) +4+lc;
+				  var index_dongia     = (parseInt(stt)*6) +5+lc;
+				  var index_thanhtien  = (parseInt(stt)*6) +6+lc;
+				 document.getElementById("masanpham_"+id).tabIndex  = index_ma;
+				 document.getElementById("tensanpham_"+id).tabIndex = index_ten;
+				 document.getElementById("soluong_"+id).tabIndex    = index_sl;
+				 document.getElementById("sothung_"+id).tabIndex    = index_st;
+				 document.getElementById("dongia_"+id).tabIndex     = index_dongia;
+				 document.getElementById("thanhtien_"+id).tabIndex  = index_thanhtien;
 				 
 				 
+			
+				//masanpham.attr("tabindex",index_ma);
 			 });
+		
 	}
 	  
 	
@@ -674,15 +753,36 @@ function moveRow(id){
 		 $('#table_position > tbody  > tr').each(function() {
 			 stt++;
 			 if(this.getAttribute("id")==id){			
-				index = stt;			
+				index = stt;
+				index++;
 			 }		 
 		 });	
 		  var table = document.getElementById("table_position");
 		  table.deleteRow(index);	 
 		  stt =0;
+		  var lc =2;
+		  var i=0;
 		  $('#table_position > tbody  > tr').each(function() {
-				  stt++;	
+				  stt++;
+				  i++;
 				  document.getElementById("stt_"+this.getAttribute("id")).innerHTML  = stt;
+				  var id               =  this.getAttribute("id");
+				  var index_ma         = (parseInt(stt)*6) +1+lc;
+				  var index_ten        = (parseInt(stt)*6) +2+lc;
+				  var index_sl         = (parseInt(stt)*6) +3+lc;
+				  var index_st         = (parseInt(stt)*6) +4+lc;
+				  var index_dongia     = (parseInt(stt)*6) +5+lc;
+				  var index_thanhtien  = (parseInt(stt)*6) +6+lc;
+				 document.getElementById("masanpham_"+id).tabIndex  = index_ma;
+				 document.getElementById("tensanpham_"+id).tabIndex = index_ten;
+				 document.getElementById("soluong_"+id).tabIndex    = index_sl;
+				 document.getElementById("sothung_"+id).tabIndex    = index_st;
+				 document.getElementById("dongia_"+id).tabIndex     = index_dongia;
+				 document.getElementById("thanhtien_"+id).tabIndex  = index_thanhtien;
+				 
+				 
+			
+				//masanpham.attr("tabindex",index_ma);
 			 });
 		
 	}
@@ -738,6 +838,22 @@ $(document).ready(function() {
       $("#orig").click(function(){ iv.iviewer('set_zoom', 100); });
       $("#update").click(function(){ iv.iviewer('update_container_info'); });
       
+      $('input').keydown(function (e) {
+    	  
+    	    if (e.which === 13 ) {
+    	    	var tabindex = $(this).attr('tabindex');  
+    	    	if(tabindex>=9){
+    	    		 tabindex  = tabindex +6;
+        	    	 $("[tabindex='"+tabindex+"']").focus();
+    	    	}else {
+    	    		 tabindex  = tabindex + 1;
+    	    		// alert(tabindex);
+        	    	 $("[tabindex='"+tabindex+"']").focus();
+    	    	}
+    	    	
+    	    }
+               
+    	 });
       getjob();
     
 });
@@ -745,8 +861,7 @@ $(document).ready(function() {
 		var maKH                          = document.getElementById("maKH");
 		var tenKH                         = document.getElementById("tenKH");
 		
-		var nvtt_name                     = document.getElementById("nvtt_name");
-		
+		var nvtt_name                     = document.getElementById("nvtt_name");		
 		var nvtt_id_hidden                = document.getElementById("nvtt_id_hidden"); 
 		
 		
@@ -754,19 +869,25 @@ $(document).ready(function() {
 		var customer_code_level1_hidden   = document.getElementById("customer_code_level1_hidden");
 		var customer_name_level1          = document.getElementById("customer_name_level1");
 		
-		var khachhang_ma = new LookupKhachHang(maKH, tenKH, customer_name_level1, nvtt_name,customer_code_level1_hidden,nvtt_id_hidden,customer_id_hidden, 1, {		
+		var khachhang_ma = new LookupKhachHang(maKH, tenKH, customer_name_level1, nvtt_name,customer_code_level1_hidden,nvtt_id_hidden,customer_id_hidden,customer_code_level1_hidden, 1, {		
 			  minChars: 1,
 			  maxItems: 20,
 			  autoFirst: true
 		});
 		
-		var khachhang_ten = new LookupKhachHang(tenKH, maKH, customer_name_level1, nvtt_name,customer_code_level1_hidden,nvtt_id_hidden,customer_id_hidden, 2, {		
+		var khachhang_ten = new LookupKhachHang(tenKH, maKH, customer_name_level1, nvtt_name,customer_code_level1_hidden,nvtt_id_hidden,customer_id_hidden,customer_code_level1_hidden, 2, {		
 			  minChars: 1,
 			  maxItems: 20,
 			  autoFirst: true
 		});
 		
-		var khachhang_cap1 = new LookupKhachHang(customer_name_level1, customer_id_level1_hidden, customer_code_level1_hidden, null,null,null,null, 3, {		
+		var khachhang_nvtt = new LookupKhachHang(nvtt_name, nvtt_id_hidden, null, null,null,null,null,null, 4, {		
+			  minChars: 1,
+			  maxItems: 20,
+			  autoFirst: true
+		});
+		
+		var khachhang_cap1 = new LookupKhachHang(customer_name_level1, customer_id_level1_hidden, customer_code_level1_hidden, null,null,null,null,null, 3, {		
 			  minChars: 1,
 			  maxItems: 20,
 			  autoFirst: true
@@ -801,6 +922,51 @@ $(document).ready(function() {
 		        }
 			});
 		
+		$( "#nvtt_name" ).keyup(function(e) {
+			  var code = (e.keyCode || e.which);      
+		        if (code === 37 || code === 38 || code === 39 || code === 40 || code === 27 || code === 13) {
+		            return;
+		        }else{
+		        	 var nvtt_name                  = document.getElementById("nvtt_name").value ;
+		        	 loolupKhachHang_nvtt(nvtt_name,khachhang_nvtt);
+		        }
+			});
+		
+		
+		function loolupKhachHang_nvtt(name ,khachhang){
+			 $.ajax({  		
+			       type: "GET",
+		           url     : 'lookupCaptureStaffAction?search_start='+ name,	          
+		           data    : "",
+		           success : function(responseText) {
+		        	
+		        	 var stt =0;
+		        	 var resultjson = [];
+	 	        	 for (i in responseText) { 
+	 	        		 
+	 	        	//	 console.log(responseText);
+	 	        		data ="";	
+	 	        		data = data +responseText[i][0]+"|";//nvtt_id_hidden
+	 	        		data = data +responseText[i][1]+"";//nvtt_name	
+	 	        		
+	 	        		resultjson.push(data);
+	 	        		stt++;
+	 	        		
+	 	        		}
+	 	        	
+	 	        	if(stt>1){
+	 	        		
+	 	        		khachhang.list = resultjson ;
+	        		}else{
+	        			
+	        		}
+	 	        	
+		        	
+		           }
+			   });
+			 
+		}
+		
 		function loolupKhachHangCap1(name ,khachhang){
 			 $.ajax({  		
 			       type: "GET",
@@ -812,19 +978,17 @@ $(document).ready(function() {
 		        	 var resultjson = [];
 	 	        	 for (i in responseText) { 
 	 	        		 
-	 	        		 console.log(responseText);
+	 	        		// console.log(responseText);
 	 	        		data ="";	
 	 	        		data = data +responseText[i][0]+"|";//customer_id_level1_hidden
 	 	        		data = data +responseText[i][1]+"|";//customer_code_level1_hidden	
-	 	        		data = data +responseText[i][2]+"|";//customer_name_level1	
+	 	        		data = data +responseText[i][2]+"";//customer_name_level1	
 	 	        	
 	 	        		resultjson.push(data);
-	 	        		stt++;
-	 	        		
+	 	        		stt++;	 	        		
 	 	        		}
 	 	        	
-	 	        	if(stt>1){
-	 	        		
+	 	        	if(stt>1){	 	        		
 	 	        		khachhang.list = resultjson ;
 	        		}else{
 	        			
@@ -847,14 +1011,16 @@ $(document).ready(function() {
 		        	 var resultjson = [];
 	 	        	 for (i in responseText) { 
 	 	        		 console.log(responseText);
+	 	        	
 	 	        		data ="";	
 	 	        		data = data +responseText[i][0]+"|";//customer_id
-	 	        		data = data +responseText[i][1]+"|";//invoice_name			 	        	
+	 	        		data = data +responseText[i][1]+"|";//customer_code			 	        	
 	 	        		data = data +responseText[i][2]+"|";//customer_name
-	 	        		data = data +responseText[i][3]+"|";//customer_id_level1
-	 	        		data = data +responseText[i][4]+"|";//customer_name_level1
-	 	        		data = data +responseText[i][5]+"|";//user_id
-	 	        		data = data +responseText[i][6]+"";//user_name
+	 	        		data = data +responseText[i][3]+"|";//customer_id_level1	 	        		
+	 	        		data = data +responseText[i][5]+"|";//customer_name_level1
+	 	        		data = data +responseText[i][6]+"|";//user_id
+	 	        		data = data +responseText[i][7]+"";//user_name
+	 	        		data = data +responseText[i][4]+"|";//customer_code_level1_hidden
 	 	        		resultjson.push(data);
 	 	        		stt++;
 	 	        		
@@ -873,25 +1039,80 @@ $(document).ready(function() {
 			 
 		}
 		
-		  $('#table_position > tbody  > tr').each(function() {
-			    var nebenkosten = document.getElementById("masanpham_"+this.getAttribute("id"));
-				var nebenkosten_betrag = document.getElementById("tensanpham_"+this.getAttribute("id"));
-				var nebenkosten_type = document.getElementById("soluong_"+this.getAttribute("id"));
-				
-				new LookupKhachHang(nebenkosten, nebenkosten_betrag, nebenkosten_type, null, 4, {
-					list : <%=data_postion%>
-				});
-				
-				
-				new LookupKhachHang(nebenkosten_type,nebenkosten, nebenkosten_betrag, null, 4, {
-					list : <%=data_postion%>
-				});
-				
-				new LookupKhachHang(nebenkosten_betrag,nebenkosten_type,nebenkosten, null, 4, {
-					list : <%=data_postion%>
-				});
+		function loolupSanPham(name ,khachhang){
+			 $.ajax({  		
+			       type: "GET",
+		           url     : 'lookupCaptureProductAction?search_product='+ name,	          
+		           data    : "",
+		           success : function(responseText) {
+		        	// alert(responseText);
+		        	 var stt =0;
+		        	 var resultjson = [];
+	 	        	 for (i in responseText) { 
+	 	        		
+	 	        		data ="";	
+	 	        		data = data +responseText[i][2]+"|";//masp
+	 	        		data = data +responseText[i][1]+"|";//tensp	
+	 	        		
+	 	        		data = data +responseText[i][3]+"";//dongia
+	 	        		
+	 	        		//alert( data);
+	 	        		resultjson.push(data);
+	 	        		stt++;
+	 	        		
+	 	        		}
+	 	        	
+	 	        	if(stt>1){
+	 	        		
+	 	        		khachhang.list = resultjson ;
+	        		}else{
+	        			
+	        		}
+	 	        	
+		        	
+		           }
+			   });
 			 
-	
+		}
+		
+		
+		  $('#table_position > tbody  > tr').each(function() {
+			  var sanpham_id   =this.getAttribute("id"); 
+			    var masp       = document.getElementById("masanpham_"+sanpham_id);
+				var tensp      = document.getElementById("tensanpham_"+sanpham_id);
+				var soluong    = document.getElementById("soluong_"+sanpham_id);
+				var sothung    = document.getElementById("sothung_"+sanpham_id);
+				var dongia     = document.getElementById("dongia_"+sanpham_id);
+			
+				var sanpham_ma = new LookupKhachHang(masp, tensp, dongia, sothung,null,null,null,null, 5, {		
+					  minChars: 1,
+					  maxItems: 20,
+					  autoFirst: true
+				});
+				
+				var sanpham_ten = new LookupKhachHang(tensp, masp, dongia, sothung,null,null,null,null, 6, {		
+					  minChars: 1,
+					  maxItems: 20,
+					  autoFirst: true
+				});
+				$( "#masanpham_"+sanpham_id ).keyup(function(e) {
+					  var code = (e.keyCode || e.which);      
+				        if (code === 37 || code === 38 || code === 39 || code === 40 || code === 27 || code === 13) {
+				            return;
+				        }else{				        	
+				        	 loolupSanPham(masp.value,sanpham_ma);
+				        }
+					});
+				
+				$( "#tensanpham_"+sanpham_id ).keyup(function(e) {
+					  var code = (e.keyCode || e.which);      
+				        if (code === 37 || code === 38 || code === 39 || code === 40 || code === 27 || code === 13) {
+				            return;
+				        }else{				        	
+				        	 loolupSanPham(tensp.value,sanpham_ten);
+				        }
+					});
+				
 	 
 	
 });
@@ -930,7 +1151,12 @@ input.currency {
     padding-right: 0px;
 }
 
- 
+ .table-wrapper-scroll-y {
+display: block;
+height: 400px;
+overflow-y: auto;
+-ms-overflow-style: -ms-autohiding-scrollbar;
+}
 
 
  

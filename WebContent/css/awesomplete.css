@@ -60,7 +60,7 @@
 .awesomplete > ul {
     position: absolute;
     left: 0;
-    z-index: 99999;
+    z-index: 9999999!important;
     min-width: 100%;
     box-sizing: border-box;
     list-style: none;
@@ -126,12 +126,12 @@
 	}
 	
 	.awesomplete > ul > li[aria-selected="true"] {
-		background-color:#c6dfff;
+		background-color:#c6dfff!important;
 		color: white;
 	}
 	
 		.awesomplete mark {
-			background: hsl(65, 100%, 50%);
+			background-color:#c6dfff!important;
 		}
 		
 		.awesomplete li:hover mark {
@@ -139,7 +139,8 @@
 		}
 		
 		.awesomplete li[aria-selected="true"] mark {
-			background: hsl(86, 100%, 21%);
+			
+			background-color:#c6dfff!important;
 			color: inherit;
 		}
 /*# sourceMappingURL=awesomplete.css.map */

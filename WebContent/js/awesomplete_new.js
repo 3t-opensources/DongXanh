@@ -7,7 +7,7 @@
 
 (function () {
 	
-	var _ = function (input, field1, field2, field3, field4, field5, field6, debitor_nummer, o) {
+	var _ = function (input, field1, field2, field3, field4, field5, field6,field7, debitor_nummer, o) {
 		var me = this;
 	    // Keep track of number of instances for unique IDs
 	
@@ -44,7 +44,9 @@
 		if(field6 != null){
 			this.field6 = $(field6);
 		}
-		
+		if(field7 != null){
+			this.field7 = $(field7);
+		}
 		this.debitor_nummer = $(debitor_nummer);
 		this.input.setAttribute("autocomplete", "off");
 		this.input.setAttribute("aria-owns", "awesomplete_list_" + this.count);
@@ -316,7 +318,7 @@ _.prototype = {
 
 			this.suggestions = this._list
 				.map(function(item) {
-					console.log('aa:'+item);
+				
 					return new Suggestion(me.data(item, value));
 				})
 				.filter(function(item) {
@@ -381,7 +383,7 @@ _.ITEM = function (text, input, item_id) {
 	var rowData;
 	
 	var html = input.trim() === "" ? text : text.replace(RegExp($.regExpEscape(input.trim()), "gi"), "<mark>$&</mark>");
-	
+
 	if(this.field1 != null && this.field2 != null && this.field3 != null && this.field4!= null && this.field5 != null && this.field6 != null){
 		
 		
@@ -411,6 +413,34 @@ _.ITEM = function (text, input, item_id) {
 					"</tr>"+
 				"</table>" +
 			"</html>";
+	}else if(this.debitor_nummer==4){
+		
+		rowData = 
+			"<html>" +
+				"<table style=' width: 200px;margin:0px' class='table table-bordered'>" +
+					"<tr>" +
+ 	        		
+					"<td class = 'awesome-three-column width100'>"+html.split('|')[1]+"</td>" +	   //tennvtt						
+						
+					"</tr>"+
+				"</table>" +
+			"</html>";
+		
+    }else if(this.debitor_nummer==5 || this.debitor_nummer==6){
+		
+		rowData = 
+			"<html>" +
+				"<table style=' width: 400px;margin:0px' class='table table-bordered'>" +
+					"<tr>" +
+ 	        		
+					"<td class = 'awesome-three-column width100'>"+html.split('|')[0]+"</td>" +	   //masp	
+					"<td class = 'awesome-three-column width100'>"+html.split('|')[1]+"</td>" +	   //tensp	
+					"<td class = 'awesome-three-column width100' style =' text-align: right;'>"+html.split('|')[2]+"</td>" +	   //dongia
+						
+					"</tr>"+
+				"</table>" +
+			"</html>";
+			
 	}
 	//SETTING is_show_form_lookup = false để tránh việc nhảy field khi nhấn phím qua lại lên xuống. 
 	is_show_form_lookup = false;
@@ -427,7 +457,18 @@ _.REPLACE = function (text) {
 		this.input.value = text.value.split('|')[2];//customer_name_level1
 		this.field1.value = text.value.split('|')[0];//customer_id_level1_hidden	
 		this.field2.value = text.value.split('|')[1];//customer_code_level1_hidden
-	}else	if(this.field1 != null && this.field2 != null && this.field3 != null && this.field4 != null && this.field5 != null && this.field6 != null){
+	}else if (this.debitor_nummer==4) {
+		this.input.value  = text.value.split('|')[1];//tennvtt
+		this.field1.value = text.value.split('|')[0];//manvtt
+	} else if(this.debitor_nummer==5) {
+		this.input.value  = text.value.split('|')[0];//masp
+		this.field1.value = text.value.split('|')[1];//tensp
+		this.field2.value = text.value.split('|')[2];//dongia
+	} else if(this.debitor_nummer==6) {
+		this.input.value  = text.value.split('|')[1];//tensp
+		this.field1.value = text.value.split('|')[0];//masp
+		this.field2.value = text.value.split('|')[2];//dongia
+	}else if(this.field1 != null && this.field2 != null && this.field3 != null && this.field4 != null && this.field5 != null && this.field6 != null){
 		
 //		data = data +responseText[i][0]+"|";//customer_id
 // 		data = data +responseText[i][1]+"|";//invoice_name			 	        	
@@ -450,7 +491,8 @@ _.REPLACE = function (text) {
 		this.field3.value = text.value.split('|')[6];//nvtt_name	
 		this.field4.value = text.value.split('|')[3];//customer_id_level1_hidden
 		this.field5.value = text.value.split('|')[5];//nvtt_id_hidden
-		this.field6.value = text.value.split('|')[0];//invoice_name_hidden	
+		this.field6.value = text.value.split('|')[0];//customer_id	
+		this.field7.value = text.value.split('|')[7];//customer_code_level1_hidden	
 		
 //		var maKH                          = document.getElementById("maKH");
 //		var tenKH                         = document.getElementById("tenKH");
