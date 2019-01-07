@@ -358,6 +358,7 @@ public class InvoiceDataHome {
 				iv_type.setId(rs.getInt("invoice_type_id"));
 				iv_type.setInvoiceType(rs.getString("invoice_type"));
 				invoice.setInvoice_type_id(iv_type);
+				invoice.setInvoice_type_name(rs.getString("invoice_type_name"));
 
 				Customer cus = new Customer();
 				cus.setId(rs.getInt("customer_id"));

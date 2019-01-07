@@ -18,6 +18,7 @@ CREATE TABLE IF NOT EXISTS `invoice_data` (
    `id` int(11) NOT NULL AUTO_INCREMENT,
    `management_id` int(11) DEFAULT NULL,
    `invoice_type_id` int(11) DEFAULT NULL,
+   `invoice_type_name` varchar(200) DEFAULT NULL,
    `customer_id` int(11) DEFAULT NULL,
    `customer_code` varchar(200) DEFAULT NULL,
    `customer_name` varchar(200) DEFAULT NULL,

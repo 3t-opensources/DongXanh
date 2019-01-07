@@ -14,6 +14,9 @@
          <many-to-one name="invoice_type_id" class="com.home.model.InvoiceType" fetch="select">
             <column name="invoice_type_id" />
         </many-to-one>
+         <property name="invoice_type_name" type="string">
+            <column name="invoice_type_name" length="200" />
+        </property>
          <many-to-one name="customer_id" class="com.home.model.Customer" fetch="select">
             <column name="customer_id" />
         </many-to-one>

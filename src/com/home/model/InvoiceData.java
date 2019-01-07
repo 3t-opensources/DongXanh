@@ -8,6 +8,7 @@ public class InvoiceData {
 	public Integer id;
 	public Management management_id;
 	public InvoiceType invoice_type_id;
+	public String invoice_type_name;
 	public Customer customer_id;
 	public String customer_code;
 	public String customer_name;
@@ -27,6 +28,12 @@ public class InvoiceData {
 	public String total_prices;
 	public BigDecimal sum_total_price;
 	
+	public String getInvoice_type_name() {
+		return invoice_type_name;
+	}
+	public void setInvoice_type_name(String invoice_type_name) {
+		this.invoice_type_name = invoice_type_name;
+	}
 	public Integer getId() {
 		return id;
 	}

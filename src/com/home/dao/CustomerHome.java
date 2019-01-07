@@ -1121,7 +1121,8 @@ public class CustomerHome {
 			SessionImpl sessionImpl = (SessionImpl) session;
 			Connection conn = sessionImpl.connection();
 			try (Statement sta = conn.createStatement()) {
-				String query = "Select c.id as customer_id, c.customer_code, c.statistic_name, c.user_id, u.user_name, u.full_name, c1.id as customer1_id, c1.statistic_name as statistic1_name"
+				String query = "Select c.id as customer_id, c.customer_code, c.statistic_name, c.user_id, u.user_name, u.full_name, "
+						+ " c1.id as customer1_id, c1.customer_code as customer1_code, c1.statistic_name as statistic1_name"
 						+ " From customer c "
 						+ " LEFT JOIN user u On c.user_id = u.id"
 						+ " LEFT JOIN customer c1 On c.customer1_level1_id = c1.id"
@@ -1141,6 +1142,7 @@ public class CustomerHome {
 									StringUtil.notNull(rs.getString("customer_code")),
 									StringUtil.notNull(rs.getString("statistic_name")),
 									""+rs.getInt("customer1_id"),
+									StringUtil.notNull(rs.getString("customer1_code")),
 									StringUtil.notNull(rs.getString("statistic1_name")),
 									""+rs.getInt("user_id"),
 									StringUtil.notNull(rs.getString("user_name")),

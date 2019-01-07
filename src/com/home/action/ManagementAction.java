@@ -361,6 +361,7 @@ public class ManagementAction extends ActionSupport implements ServletContextAwa
 			InvoiceType invoice_type_id = new InvoiceType();
 			invoice_type_id.setId(Integer.parseInt(data.getInvoice_type_id()));
 			invoice_data.setInvoice_type_id(invoice_type_id);
+			invoice_data.setInvoice_type_name(data.getInvoice_type());
 
 			try {
 				Customer customer_id = new Customer();
