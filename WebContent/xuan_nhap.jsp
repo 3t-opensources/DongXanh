@@ -214,7 +214,7 @@
 							          <tbody id ="tbody" >
 							          <% 
 							          int lc =2;
-							          for(int i = 1; i < 10; i++) {%> 
+							          for(int i = 1; i < 15; i++) {%> 
 		                                <tr class="odd gradeX" id = "<%=i %>" >
 		                                    <td id = "stt_<%=i %>">	<%=i %></td>
 											
@@ -661,12 +661,12 @@ function addRow(id){
 	  stt.id        = "stt_"+time_id;
 	  stt.innerHTML = "";
 	
-	  masp.innerHTML      = "<input  value = '' min='0' step='1' data-number-to-fixed='2' data-number-stepfactor='100' id = 'masanpham_"+time_id+"'     name='masanpham_"+time_id+"'  class='custom-input-debitor form-control '/>";
-	  tensp.innerHTML     = "<input  value = '' min='0' step='1' data-number-to-fixed='2' data-number-stepfactor='100' id = 'tensanpham_"+time_id+"'    name='tensanpham_"+time_id+"' class='custom-input-debitor form-control '/>";
-	  soluong.innerHTML   = "<input  type='number' value = '' min='0' step='1' data-number-to-fixed='2' data-number-stepfactor='100' id = 'soluong_"+time_id+"'       name='soluong_"+time_id+"'    class='custom-input-debitor form-control currency'/>";
-	  sothung.innerHTML   = "<input  type='number' value = '' min='0' step='1' data-number-to-fixed='2' data-number-stepfactor='100' id = 'sothung_"+time_id+"'       name='sothung_"+time_id+"'    class='custom-input-debitor form-control currency'/>";
-	  dongia.innerHTML    = "<input  type='number' value = '' min='0' step='1' data-number-to-fixed='2' data-number-stepfactor='100' id = 'dongia_"+time_id+"'        name='dongia_"+time_id+"'     class='custom-input-debitor form-control currency'/>";
-	  thanhtien.innerHTML = "<input  type='number' value = '' min='0' step='1' data-number-to-fixed='2' data-number-stepfactor='100' id = 'thanhtien_"+time_id+"'     name='thanhtien_"+time_id+"'  class='custom-input-debitor form-control currency'/>";
+	  masp.innerHTML      = "<input  tabindex =''  value = '' min='0' step='1' data-number-to-fixed='2' data-number-stepfactor='100' id = 'masanpham_"+time_id+"'     name='masanpham_"+time_id+"'  class='custom-input-debitor form-control '/>";
+	  tensp.innerHTML     = "<input  tabindex =''  value = '' min='0' step='1' data-number-to-fixed='2' data-number-stepfactor='100' id = 'tensanpham_"+time_id+"'    name='tensanpham_"+time_id+"' class='custom-input-debitor form-control '/>";
+	  soluong.innerHTML   = "<input  tabindex =''  type='number' value = '' min='0' step='1' data-number-to-fixed='2' data-number-stepfactor='100' id = 'soluong_"+time_id+"'       name='soluong_"+time_id+"'    class='custom-input-debitor form-control currency'/>";
+	  sothung.innerHTML   = "<input  tabindex =''  type='number' value = '' min='0' step='1' data-number-to-fixed='2' data-number-stepfactor='100' id = 'sothung_"+time_id+"'       name='sothung_"+time_id+"'    class='custom-input-debitor form-control currency'/>";
+	  dongia.innerHTML    = "<input  tabindex =''  type='number' value = '' min='0' step='1' data-number-to-fixed='2' data-number-stepfactor='100' id = 'dongia_"+time_id+"'        name='dongia_"+time_id+"'     class='custom-input-debitor form-control currency'/>";
+	  thanhtien.innerHTML = "<input  tabindex =''  type='number' value = '' min='0' step='1' data-number-to-fixed='2' data-number-stepfactor='100' id = 'thanhtien_"+time_id+"'     name='thanhtien_"+time_id+"'  class='custom-input-debitor form-control currency'/>";
 	      
 	  var add_remove  = "<div style='padding-top: 4px; padding-left: 2px; padding-right: 2px; width: 80px'>  ";   
 	      add_remove  +="<button type='button' class='btn btn-success btn-sm' onclick='addRow("+time_id+")'   id ='addRow_"+time_id+"' ><span class='glyphicon glyphicon-plus' ></span></button> ";
@@ -739,6 +739,23 @@ function addRow(id){
 			
 				//masanpham.attr("tabindex",index_ma);
 			 });
+		  
+		  $('input').keydown(function (e) {	    	  
+			  if (e.which === 13 ) {
+			    	
+			    	var tabindex = $(this).attr('tabindex');  
+			    	
+			    	if(tabindex>=9){
+			    		 tabindex  = tabindex +6;
+		  	    	 $("[tabindex='"+tabindex+"']").focus();
+			    	}else {
+			    		 tabindex  = tabindex + 1;
+			    		// alert(tabindex);
+		  	    	 $("[tabindex='"+tabindex+"']").focus();
+			    	}
+			    	
+			    }             
+	    	 });
 		
 	}
 	  
@@ -839,20 +856,19 @@ $(document).ready(function() {
       $("#update").click(function(){ iv.iviewer('update_container_info'); });
       
       $('input').keydown(function (e) {
-    	  
-    	    if (e.which === 13 ) {
-    	    	var tabindex = $(this).attr('tabindex');  
-    	    	if(tabindex>=9){
-    	    		 tabindex  = tabindex +6;
-        	    	 $("[tabindex='"+tabindex+"']").focus();
-    	    	}else {
-    	    		 tabindex  = tabindex + 1;
-    	    		// alert(tabindex);
-        	    	 $("[tabindex='"+tabindex+"']").focus();
-    	    	}
-    	    	
-    	    }
-               
+    	  if (e.which === 13 ) {
+  	    	
+  	    	var tabindex = $(this).attr('tabindex');  
+  	    	
+  	    	if(tabindex>=9){
+  	    		 tabindex  = tabindex +6;
+    	    	 $("[tabindex='"+tabindex+"']").focus();
+  	    	}else {
+  	    		 tabindex  = tabindex + 1;  	    		
+    	    	 $("[tabindex='"+tabindex+"']").focus();
+  	    	}
+  	    	
+  	    }
     	 });
       getjob();
     
@@ -1140,6 +1156,10 @@ function confirmwhensubmit(){
 	return true;
 }
 
+function EnterData(e){
+	
+
+}
 
 </script> 
 

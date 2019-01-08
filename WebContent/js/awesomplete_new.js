@@ -430,7 +430,7 @@ _.ITEM = function (text, input, item_id) {
 		
 		rowData = 
 			"<html>" +
-				"<table style=' width: 400px;margin:0px' class='table table-bordered'>" +
+				"<table style=' width: 400px;margin:0px' class='table table-bordered ;  position: relative;' >" +
 					"<tr>" +
  	        		
 					"<td class = 'awesome-three-column width100'>"+html.split('|')[0]+"</td>" +	   //masp	
