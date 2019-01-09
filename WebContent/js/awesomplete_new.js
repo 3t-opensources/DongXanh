@@ -436,6 +436,7 @@ _.ITEM = function (text, input, item_id) {
 					"<td class = 'awesome-three-column width100'>"+html.split('|')[0]+"</td>" +	   //masp	
 					"<td class = 'awesome-three-column width100'>"+html.split('|')[1]+"</td>" +	   //tensp	
 					"<td class = 'awesome-three-column width100' style =' text-align: right;'>"+html.split('|')[2]+"</td>" +	   //dongia
+					"<td class = 'awesome-three-column width100' style =' text-align: right;'>"+html.split('|')[3]+"</td>" +	   //sochaitren1thung
 						
 					"</tr>"+
 				"</table>" +
@@ -464,10 +465,12 @@ _.REPLACE = function (text) {
 		this.input.value  = text.value.split('|')[0];//masp
 		this.field1.value = text.value.split('|')[1];//tensp
 		this.field2.value = text.value.split('|')[2];//dongia
+		this.field3.value = text.value.split('|')[3];//sochaitren1thung
 	} else if(this.debitor_nummer==6) {
 		this.input.value  = text.value.split('|')[1];//tensp
 		this.field1.value = text.value.split('|')[0];//masp
 		this.field2.value = text.value.split('|')[2];//dongia
+		this.field3.value = text.value.split('|')[2];//sochaitren1thung
 	}else if(this.field1 != null && this.field2 != null && this.field3 != null && this.field4 != null && this.field5 != null && this.field6 != null){
 		
 //		data = data +responseText[i][0]+"|";//customer_id

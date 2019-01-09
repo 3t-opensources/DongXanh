@@ -324,6 +324,66 @@ pageEncoding="UTF-8"%>
    			} 
    	 }
    	 
+   	function getInvoiceDataFilterReport(){   		
+	   	 var sent_late                  = "";
+		 var customer_id                  = "";
+		 var user_id                  = "";
+		 var invoice_type                  = "";
+		 var end_day                  = "";
+		 var start_day                ="";
+		 //"http://localhost:8081/DongXanh/getInvoiceDataFilterReport1Action?sent_late=0&customer_id=0&user_id=0&invoice_type=1&end_day=null&start_day=null"
+	   	 $.ajax({  		
+	   	       type: "GET",
+	              url     : "getInvoiceDataFilterReport1Action?sent_late="+sent_late+
+	            		    "&customer_id="+customer_id+
+	            		    "&user_id="+user_id+
+	            		    "&invoice_type="+invoice_type+
+	            		    "&end_day="+end_day+
+	            		    "&start_day="+start_day+",	          
+	              data    : "",
+	              success : function(responseText) {	
+	           	        console.log("==================getInvoiceDataFilterReport=================");
+	           	        console.log(responseText);
+	              }
+	   	   });
+   }
+   	
+   	
+	function loadCusByStaffInvoiceReport(){  
+		 var user_id                  = "";		
+	   	 $.ajax({  		
+	   	       type: "GET",
+	              url     : "loadCusByStaffInvoiceReport1Action?user_id="+user_id+,	          
+	              data    : "",
+	              success : function(responseText) {	
+	           	        console.log("==================loadCusByStaffInvoiceReport=================");
+	           	        console.log(responseText);
+	              }
+	   	   });
+  }
+	
+	
+	function loadStaffInvoiceReport(){   		
+	   	 var sent_late                  = "";
+		 var customer_id                  = "";
+		 var user_id                  = "";
+		 var invoice_type                  = "";
+		 var end_day                  = "";
+		 var start_day                ="";
+	   	 $.ajax({  		
+	   	       type: "GET",
+	              url     : "loadStaffInvoiceReport1Action",	          
+	              data    : "",
+	              success : function(responseText) {	
+	           	        console.log("==================loadStaffInvoiceReport=================");
+	           	        console.log(responseText);
+	              }
+	   	   });
+  }
+
+   	
+   	
+   	 
 </script>
     
 

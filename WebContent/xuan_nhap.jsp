@@ -181,7 +181,7 @@
 										      <div class="row " >
 	                                       		  <div class="col-lg-2 no_margin_right" ><span>Số ngày gởi trể</span>  </div>	                                       		  
 	                                       		  <div class="col-lg-4">			                                       									
-				                                          <input value = "" id = "date_sent_late" name="date_sent_late" class="form-control" ondblclick = "getIdTag(this)" tabindex="7"/>				                                         
+				                                          <input value = "" type="number" id = "date_sent_late" name="date_sent_late" class="form-control" ondblclick = "getIdTag(this)" tabindex="7"/>				                                         
 	                                       		  </div>	   
 	                                       		  
 	                                       		 <div class="col-lg-2" ><span>Ghi chú </span>  </div>	                                       		  
@@ -219,26 +219,27 @@
 		                                    <td id = "stt_<%=i %>">	<%=i %></td>
 											
 											<td>
-												<input value = "" id = "masanpham_<%=i %>"    name="masanpham_<%=i %>"  class="custom-input-debitor form-control" ondblclick = "getIdTag(this)" tabindex="<%= (i*6) +1+lc%>"/>
+												<input value = "" id = "masanpham_<%=i %>"    name="masanpham_<%=i %>"  class="custom-input-debitor form-control" onkeyup="tinhtong(<%=i %>)" tabindex="<%= (i*6) +1+lc%>"/>
 											</td>
 											<td>
-												<input value = "" id = "tensanpham_<%=i %>"   name="tensanpham_<%=i %>" class="custom-input-debitor form-control" ondblclick = "getIdTag(this)" tabindex="<%= (i*6) +2+lc%>"/>
+												<input value = "" id = "tensanpham_<%=i %>"   name="tensanpham_<%=i %>" class="custom-input-debitor form-control"  onkeyup="tinhtong(<%=i %>)" tabindex="<%= (i*6) +2+lc%>"/>
 											</td>
 											<td>
-											   <input type="number" value="" min="0" step="1" data-number-to-fixed="2" data-number-stepfactor="100" id = "soluong_<%=i %>"   name="soluong_<%=i %>" class="custom-input-debitor form-control currency" tabindex="<%= (i*6) +3+lc%>"/>
+											   <input type="number" value="" min="0" step="1" data-number-to-fixed="2" data-number-stepfactor="100" id = "soluong_<%=i %>"  onkeyup="tinhtong_sothung(<%=i %>)"  name="soluong_<%=i %>" class="custom-input-debitor form-control currency" tabindex="<%= (i*6) +3+lc%>"/>
 											
 											</td>
 											<td>
-											  <input type="number" value="" min="0" step="1" data-number-to-fixed="2" data-number-stepfactor="100" id = "sothung_<%=i %>"   name="sothung_<%=i %>" class="custom-input-debitor form-control currency" tabindex="<%= (i*6) +4+lc%>" />
+											  <input type="hidden"  value = "" id = "sochai_1thung_<%=i %>"   name="sochai_1thung_<%=i %>">
+											  <input type="number" value="" min="0" step="1" data-number-to-fixed="2" data-number-stepfactor="100" id = "sothung_<%=i %>"  onkeyup="tinhtong(<%=i %>)"  name="sothung_<%=i %>" class="custom-input-debitor form-control currency" tabindex="<%= (i*6) +4+lc%>" />
 											</td>
 											
 											<td>
-											  <input type="number" value="" min="0" step="1" data-number-to-fixed="2" data-number-stepfactor="100" id = "dongia_<%=i %>"   name="dongia_<%=i %>" class="custom-input-debitor form-control currency" tabindex="<%= (i*6) +5+lc%>" />
+											  <input type="number" value="" min="0" step="1" data-number-to-fixed="2" data-number-stepfactor="100" id = "dongia_<%=i %>"  onkeyup="tinhtong(<%=i %>)"  name="dongia_<%=i %>" class="custom-input-debitor form-control currency" tabindex="<%= (i*6) +5+lc%>" />
 											
 											</td>
 											
 											<td>
-											  <input type="number" value="" min="0" step="1" data-number-to-fixed="2" data-number-stepfactor="100" id = "thanhtien_<%=i %>"   name="thanhtien_<%=i %>" class="custom-input-debitor form-control currency" tabindex="<%= (i*6) +6+lc%>" />
+											  <input type="number" value="" min="0" step="1" data-number-to-fixed="2" data-number-stepfactor="100" id = "thanhtien_<%=i %>"  onkeyup="tinhtong(<%=i %>)"  name="thanhtien_<%=i %>" class="custom-input-debitor form-control currency" tabindex="<%= (i*6) +6+lc%>" />
 											
 											</td>
 											<td>
@@ -287,11 +288,7 @@
 <script type="text/javascript" src="js/jquery.iviewer.js" ></script> 
 <script type="text/javascript" src="js/hoadon_nhap.js" ></script>   
 <script type="text/javascript">
-function formattedNumberField(event){
-	 var x = event.which || event.keyCode;
-	 console.log(x);
-	 return false;
-}
+
 function getjob(){
 	
 	 var user_id                  = document.getElementById("user_id").value ;
@@ -357,7 +354,9 @@ function bad_images(){
 	
 }
 
-
+function isValidDate(d) {
+	  return d instanceof Date && !isNaN(d);
+}
 
 
 function checkGetJob(flag){
@@ -424,11 +423,7 @@ function resetData(){
 	  document.getElementById("date_sent_late").value ="";
       document.getElementById("notes").value ="";
     
-      $("#tbody").empty();
-    //  addRow(0);
-   //   addRow(0);
-   //   addRow(1);
-      
+      $("#tbody").empty();  
       getjob();
 	 
 	
@@ -511,11 +506,7 @@ function saveData(){
 				  total_prices     = total_prices       +thanhtien  +"`";
 				  sum_total_price = parseFloat(sum_total_price) + parseFloat(thanhtien);
 			  }
-			 /* console.log('management_id==='+management_id);
-			 console.log('customer_id==='+customer_id);
-			 console.log('customer_id_level1==='+customer_id_level1);
-			 console.log('staff_id==='+staff_id);
-			 alert(management_id +"======="+customer_id); */
+			
 			  row++;
 			  if(row==maxRow){
 				  $.ajax({
@@ -580,50 +571,63 @@ function checktable(){
 	  var date_company_received    = document.getElementById("ngaynhantoa").value ;
 	  var date_product_received    = document.getElementById("ngaynhanhang").value ;
 	  if(date_company_received.length !=10){
-		  alert("Ngày nhận toa không được rỗng!");
+		    alert("Ngày nhận toa không được rỗng hoặc khác định dạng dd/mm/yyyy!");
 			flag = false;
 			return false;
 	  }
 	  
 	  if(date_product_received.length !=10){
-		  alert("Ngày nhận hàng không được rỗng!");
+		  alert("Ngày nhận hàng không được rỗng hoặc khác định dạng dd/mm/yyyy!");
 			flag = false;
 			return false;
 	  }
+	 var date1 = new Date(date_company_received);
+	 var date2 = new Date(date_product_received);
+	 if(date1<date2){
+		    alert("Ngày nhận toa phải lớn hơn ngày nhận hàng!");
+			flag = false;
+			return false;
+	 }
+	
 	  $('#table_position > tbody  > tr').each(function() {		
 		  row ++;
 		  maxRow ++;
 		  var id        =   this.getAttribute("id");
-		  var masp      =   document.getElementById("masanpham_"+id).value;
-		  var tensp     =   document.getElementById("tensanpham_"+id).value;
-		  var soluong   =   document.getElementById("soluong_"+id).value;
-		  var sothung   =   document.getElementById("sothung_"+id).value;
-		  var dongia    =   document.getElementById("dongia_"+id).value;
-		  var thanhtien =   document.getElementById("thanhtien_"+id).value;
-		  
-		  var result ="";
-		   if(masp===""){
-			    result = result +" mã sản phẩm không được rỗng.\n";
-		    }
-			if(tensp===""){
-				 result = result +" tên sản phẩm không được rỗng.\n";	  
-		    }
-			if(soluong==="" &&  sothung===""){
-				 result = result +" số lượng hoặc số thùng không được rỗng.\n";
-			}
-			if(dongia===""){
-				 result = result +" đơn giá không được rỗng.\n";
-			}
-			if(thanhtien===""){
-				 result = result +" thành tiền không được rỗng.\n";
-			}
-			
-			if (result!="") {
-				result =  "Dòng "+ row +" không hợp lệ \n"+result;
-				alert(result);
-				flag = false;
-				return false;
-			} 
+		  var masp      =   document.getElementById("masanpham_"+id).value.trim();
+		  var tensp     =   document.getElementById("tensanpham_"+id).value.trim();
+		  var soluong   =   document.getElementById("soluong_"+id).value.trim();
+		  var sothung   =   document.getElementById("sothung_"+id).value.trim();
+		  var dongia    =   document.getElementById("dongia_"+id).value.trim();
+		  var thanhtien =   document.getElementById("thanhtien_"+id).value.trim();
+		  if(masp!=""    || tensp!=""   ||  soluong!="" ||
+			 sothung!="" ||  dongia!="" ||  thanhtien!=""  ){
+			  
+			  var result ="";
+			   if(masp===""){
+				    result = result +" mã sản phẩm không được rỗng.\n";
+			    }
+				if(tensp===""){
+					 result = result +" tên sản phẩm không được rỗng.\n";	  
+			    }
+				if(soluong==="" &&  sothung===""){
+					 result = result +" số lượng hoặc số thùng không được rỗng.\n";
+				}
+				if(dongia===""){
+					 result = result +" đơn giá không được rỗng.\n";
+				}
+				if(thanhtien===""){
+					 result = result +" thành tiền không được rỗng.\n";
+				}
+				
+				if (result!="") {
+					result =  "Dòng "+ row +" không hợp lệ \n"+result;
+					alert(result);
+					flag = false;
+					return false;
+				} 
+			  
+		  }
+		 
 	 });
 	  return flag;
 	
@@ -661,12 +665,12 @@ function addRow(id){
 	  stt.id        = "stt_"+time_id;
 	  stt.innerHTML = "";
 	
-	  masp.innerHTML      = "<input  tabindex =''  value = '' min='0' step='1' data-number-to-fixed='2' data-number-stepfactor='100' id = 'masanpham_"+time_id+"'     name='masanpham_"+time_id+"'  class='custom-input-debitor form-control '/>";
-	  tensp.innerHTML     = "<input  tabindex =''  value = '' min='0' step='1' data-number-to-fixed='2' data-number-stepfactor='100' id = 'tensanpham_"+time_id+"'    name='tensanpham_"+time_id+"' class='custom-input-debitor form-control '/>";
-	  soluong.innerHTML   = "<input  tabindex =''  type='number' value = '' min='0' step='1' data-number-to-fixed='2' data-number-stepfactor='100' id = 'soluong_"+time_id+"'       name='soluong_"+time_id+"'    class='custom-input-debitor form-control currency'/>";
-	  sothung.innerHTML   = "<input  tabindex =''  type='number' value = '' min='0' step='1' data-number-to-fixed='2' data-number-stepfactor='100' id = 'sothung_"+time_id+"'       name='sothung_"+time_id+"'    class='custom-input-debitor form-control currency'/>";
-	  dongia.innerHTML    = "<input  tabindex =''  type='number' value = '' min='0' step='1' data-number-to-fixed='2' data-number-stepfactor='100' id = 'dongia_"+time_id+"'        name='dongia_"+time_id+"'     class='custom-input-debitor form-control currency'/>";
-	  thanhtien.innerHTML = "<input  tabindex =''  type='number' value = '' min='0' step='1' data-number-to-fixed='2' data-number-stepfactor='100' id = 'thanhtien_"+time_id+"'     name='thanhtien_"+time_id+"'  class='custom-input-debitor form-control currency'/>";
+	  masp.innerHTML      = "<input  tabindex =''  value = '' min='0' step='1' data-number-to-fixed='2' data-number-stepfactor='100' id = 'masanpham_"+time_id+"'     name='masanpham_"+time_id+"'  class='custom-input-debitor form-control ' onkeyup='tinhtong("+time_id+")'/>";
+	  tensp.innerHTML     = "<input  tabindex =''  value = '' min='0' step='1' data-number-to-fixed='2' data-number-stepfactor='100' id = 'tensanpham_"+time_id+"'    name='tensanpham_"+time_id+"' class='custom-input-debitor form-control '  onkeyup='tinhtong("+time_id+")'/>";
+	  soluong.innerHTML   = "<input  tabindex =''  type='number' value = '' min='0' step='1' data-number-to-fixed='2' data-number-stepfactor='100' id = 'soluong_"+time_id+"'       name='soluong_"+time_id+"'    class='custom-input-debitor form-control currency'  onkeyup='tinhtong_sothung("+time_id+")'/>";
+	  sothung.innerHTML   = "<input type='hidden'  value = '' id = 'sochai_1thung_"+time_id+"'   name='sochai_1thung_"+time_id+"'> <input  tabindex =''  type='number' value = '' min='0' step='1' data-number-to-fixed='2' data-number-stepfactor='100' id = 'sothung_"+time_id+"'       name='sothung_"+time_id+"'    class='custom-input-debitor form-control currency'  onkeyup='tinhtong("+time_id+")'/>";
+	  dongia.innerHTML    = "<input  tabindex =''  type='number' value = '' min='0' step='1' data-number-to-fixed='2' data-number-stepfactor='100' id = 'dongia_"+time_id+"'        name='dongia_"+time_id+"'     class='custom-input-debitor form-control currency'/ onkeyup='tinhtong("+time_id+")'>";
+	  thanhtien.innerHTML = "<input  tabindex =''  type='number' value = '' min='0' step='1' data-number-to-fixed='2' data-number-stepfactor='100' id = 'thanhtien_"+time_id+"'     name='thanhtien_"+time_id+"'  class='custom-input-debitor form-control currency'/ onkeyup='tinhtong("+time_id+")' >";
 	      
 	  var add_remove  = "<div style='padding-top: 4px; padding-left: 2px; padding-right: 2px; width: 80px'>  ";   
 	      add_remove  +="<button type='button' class='btn btn-success btn-sm' onclick='addRow("+time_id+")'   id ='addRow_"+time_id+"' ><span class='glyphicon glyphicon-plus' ></span></button> ";
@@ -681,14 +685,14 @@ function addRow(id){
 		var soluong    = document.getElementById("soluong_"+sanpham_id);
 		var sothung    = document.getElementById("sothung_"+sanpham_id);
 		var dongia     = document.getElementById("dongia_"+sanpham_id);
-	
-		var sanpham_ma = new LookupKhachHang(masp, tensp, dongia, sothung,null,null,null,null, 5, {		
+		var sochai_1thung = document.getElementById("sochai_1thung_"+sanpham_id);
+		var sanpham_ma = new LookupKhachHang(masp, tensp, dongia, sochai_1thung,null,null,null,null, 5, {		
 			  minChars: 1,
 			  maxItems: 20,
 			  autoFirst: true
 		});
 		
-		var sanpham_ten = new LookupKhachHang(tensp, masp, dongia, sothung,null,null,null,null, 6, {		
+		var sanpham_ten = new LookupKhachHang(tensp, masp, dongia, sochai_1thung,null,null,null,null, 6, {		
 			  minChars: 1,
 			  maxItems: 20,
 			  autoFirst: true
@@ -735,26 +739,32 @@ function addRow(id){
 				 document.getElementById("dongia_"+id).tabIndex     = index_dongia;
 				 document.getElementById("thanhtien_"+id).tabIndex  = index_thanhtien;
 				 
-				 
-			
-				//masanpham.attr("tabindex",index_ma);
+				 $("#soluong_"+id).keypress(function() {
+					// alert("nguyen truong xuan");
+					  //console.log( "Handler for .keypress() called." );
+				 });
+				
 			 });
 		  
 		  $('input').keydown(function (e) {	    	  
-			  if (e.which === 13 ) {
-			    	
-			    	var tabindex = $(this).attr('tabindex');  
-			    	
-			    	if(tabindex>=9){
-			    		 tabindex  = tabindex +6;
-		  	    	 $("[tabindex='"+tabindex+"']").focus();
+			  console.log(e.which);
+	    	  if (e.which === 13 ) {    		  
+	    		  var tabindex = $(this).attr('tabindex');      		
+	    		  if((tabindex-9)>=0 && (tabindex-9)%6==0){    			
+	    			   var masanpham_id   = $(this).attr('id').substring(10);    		
+	  		    	   var tensanpham_val = document.getElementById("tensanpham_"+masanpham_id).value;   		    	
+	  		    	   if(tensanpham_val !=""){
+	  		    		 tabindex  = tabindex +2;  		    		
+	  		    	   }else{
+	  		    		 tabindex  = tabindex +1;  		    	
+	  		    	   }
+			    	}else if((tabindex-9)>=0 && (tabindex-9)%6==2){
+			    		tabindex  = tabindex + 4;		  
 			    	}else {
-			    		 tabindex  = tabindex + 1;
-			    		// alert(tabindex);
-		  	    	 $("[tabindex='"+tabindex+"']").focus();
+			    		 tabindex  = tabindex + 1;		    
 			    	}
-			    	
-			    }             
+	    		  $("[tabindex='"+tabindex+"']").focus();    		 
+	  	    }
 	    	 });
 		
 	}
@@ -855,23 +865,83 @@ $(document).ready(function() {
       $("#orig").click(function(){ iv.iviewer('set_zoom', 100); });
       $("#update").click(function(){ iv.iviewer('update_container_info'); });
       
-      $('input').keydown(function (e) {
-    	  if (e.which === 13 ) {
-  	    	
-  	    	var tabindex = $(this).attr('tabindex');  
-  	    	
-  	    	if(tabindex>=9){
-  	    		 tabindex  = tabindex +6;
-    	    	 $("[tabindex='"+tabindex+"']").focus();
-  	    	}else {
-  	    		 tabindex  = tabindex + 1;  	    		
-    	    	 $("[tabindex='"+tabindex+"']").focus();
-  	    	}
-  	    	
-  	    }
-    	 });
+      
+     
       getjob();
+      
+      $('#table_position > tbody  > tr').each(function() {
+		  var sanpham_id      =this.getAttribute("id"); 
+		    var masp          = document.getElementById("masanpham_"+sanpham_id);
+			var tensp         = document.getElementById("tensanpham_"+sanpham_id);
+			var soluong       = document.getElementById("soluong_"+sanpham_id);
+			var sothung       = document.getElementById("sothung_"+sanpham_id);
+			var dongia        = document.getElementById("dongia_"+sanpham_id);
+			var sochai_1thung = document.getElementById("sochai_1thung_"+sanpham_id);
+			  
+			var sanpham_ma = new LookupKhachHang(masp, tensp, dongia, sochai_1thung,null,null,null,null, 5, {		
+				  minChars: 1,
+				  maxItems: 20,
+				  autoFirst: true
+			});
+			
+			var sanpham_ten = new LookupKhachHang(tensp, masp, dongia, sochai_1thung,null,null,null,null, 6, {		
+				  minChars: 1,
+				  maxItems: 20,
+				  autoFirst: true
+			});
+			$( "#masanpham_"+sanpham_id ).keyup(function(e) {
+				  var code = (e.keyCode || e.which);      
+			        if (code === 37 || code === 38 || code === 39 || code === 40 || code === 27 || code === 13) {
+			            return;
+			        }else{				        	
+			        	 loolupSanPham(masp.value,sanpham_ma);
+			        }
+				});
+			
+			$( "#tensanpham_"+sanpham_id ).keyup(function(e) {
+				  var code = (e.keyCode || e.which);      
+			        if (code === 37 || code === 38 || code === 39 || code === 40 || code === 27 || code === 13) {
+			            return;
+			        }else{				        	
+			        	 loolupSanPham(tensp.value,sanpham_ten);
+			        }
+		   });
+			
+			 
+			
+      });
+	  
+      $('input').keydown(function (e) {    
+    	  console.log(e.which);
+    	  if (e.which === 13 ) {    		  
+    		  var tabindex = $(this).attr('tabindex');      		
+    		  if((tabindex-9)>=0 && (tabindex-9)%6==0){    			
+    			   var masanpham_id   = $(this).attr('id').substring(10);    		
+  		    	   var tensanpham_val = document.getElementById("tensanpham_"+masanpham_id).value;   		    	
+  		    	   if(tensanpham_val !=""){
+  		    		 tabindex  = tabindex +2;  		    		
+  		    	   }else{
+  		    		 tabindex  = tabindex +1;  		    	
+  		    	   }
+		    	}else if((tabindex-9)>=0 && (tabindex-9)%6==2){
+		    		tabindex  = tabindex + 4;		  
+		    	}else {
+		    		 tabindex  = tabindex + 1;		    
+		    	}
+    		  $("[tabindex='"+tabindex+"']").focus();    		 
+  	    }
+     });  
     
+      $(document).on('keydown',function(e) {
+    	  if(e.altKey && event.which ==83){
+    		  saveData();
+    	  }
+    	  if(e.altKey && event.which ==68){
+    		  bad_images();
+    	  }
+    	    
+    	});
+      
 });
         var customer_id_hidden            = document.getElementById("customer_id_hidden");
 		var maKH                          = document.getElementById("maKH");
@@ -1009,8 +1079,6 @@ $(document).ready(function() {
 	        		}else{
 	        			
 	        		}
-	 	        	
-		        	
 		           }
 			   });
 			 
@@ -1065,13 +1133,13 @@ $(document).ready(function() {
 		        	 var stt =0;
 		        	 var resultjson = [];
 	 	        	 for (i in responseText) { 
-	 	        		
+	 	        		console.log(responseText[i]);
 	 	        		data ="";	
 	 	        		data = data +responseText[i][2]+"|";//masp
 	 	        		data = data +responseText[i][1]+"|";//tensp	
 	 	        		
-	 	        		data = data +responseText[i][3]+"";//dongia
-	 	        		
+	 	        		data = data +responseText[i][3]+"|";//dongia
+	 	        		data = data +responseText[i][4]+"";//soluongtren1thung
 	 	        		//alert( data);
 	 	        		resultjson.push(data);
 	 	        		stt++;
@@ -1092,46 +1160,8 @@ $(document).ready(function() {
 		}
 		
 		
-		  $('#table_position > tbody  > tr').each(function() {
-			  var sanpham_id   =this.getAttribute("id"); 
-			    var masp       = document.getElementById("masanpham_"+sanpham_id);
-				var tensp      = document.getElementById("tensanpham_"+sanpham_id);
-				var soluong    = document.getElementById("soluong_"+sanpham_id);
-				var sothung    = document.getElementById("sothung_"+sanpham_id);
-				var dongia     = document.getElementById("dongia_"+sanpham_id);
-			
-				var sanpham_ma = new LookupKhachHang(masp, tensp, dongia, sothung,null,null,null,null, 5, {		
-					  minChars: 1,
-					  maxItems: 20,
-					  autoFirst: true
-				});
-				
-				var sanpham_ten = new LookupKhachHang(tensp, masp, dongia, sothung,null,null,null,null, 6, {		
-					  minChars: 1,
-					  maxItems: 20,
-					  autoFirst: true
-				});
-				$( "#masanpham_"+sanpham_id ).keyup(function(e) {
-					  var code = (e.keyCode || e.which);      
-				        if (code === 37 || code === 38 || code === 39 || code === 40 || code === 27 || code === 13) {
-				            return;
-				        }else{				        	
-				        	 loolupSanPham(masp.value,sanpham_ma);
-				        }
-					});
-				
-				$( "#tensanpham_"+sanpham_id ).keyup(function(e) {
-					  var code = (e.keyCode || e.which);      
-				        if (code === 37 || code === 38 || code === 39 || code === 40 || code === 27 || code === 13) {
-				            return;
-				        }else{				        	
-				        	 loolupSanPham(tensp.value,sanpham_ten);
-				        }
-					});
-				
-	 
-	
-});
+		
+		  
 function setdataCheckBox(value , id){
 	if(value==1){	
 		$(id).prop('checked', true);
@@ -1155,11 +1185,50 @@ function confirmwhensubmit(){
 	
 	return true;
 }
-
-function EnterData(e){
+function tinhtong_sothung(id){
+	  var soluong   =   document.getElementById("soluong_"+id).value;
+	  var sothung   =   document.getElementById("sothung_"+id).value;
+	  var dongia    =   document.getElementById("dongia_"+id).value;
+	  var sochai_1thung    =   document.getElementById("sochai_1thung_"+id).value;
 	
-
+	  if(sochai_1thung.trim()!="" &&  soluong.trim()!=""){
+		  try {				 
+			  var kq = parseFloat(sochai_1thung)*parseFloat(soluong);
+			  document.getElementById("sothung_"+id).value = kq;
+		} catch (e) {
+			// TODO: handle exception
+		}
+		
+	  }
+	  
+	  if(dongia.trim()!="" &&  soluong.trim()!=""){
+		  try {				 
+			  var kq = parseFloat(dongia)*parseFloat(soluong);
+			  document.getElementById("thanhtien_"+id).value = kq;
+		} catch (e) {
+			// TODO: handle exception
+		}
+		
+	  }
 }
+function tinhtong(id){
+	
+	
+	  var soluong   =   document.getElementById("soluong_"+id).value;
+	  var sothung   =   document.getElementById("sothung_"+id).value;
+	  var dongia    =   document.getElementById("dongia_"+id).value;
+	  console.log("1174============="+id);
+	  if(dongia.trim()!="" &&  soluong.trim()!=""){
+		  try {				 
+			  var kq = parseFloat(dongia)*parseFloat(soluong);
+			  document.getElementById("thanhtien_"+id).value = kq;
+		} catch (e) {
+			// TODO: handle exception
+		}
+		
+	  }
+}
+
 
 </script> 
 
