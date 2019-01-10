@@ -126,12 +126,12 @@
 	}
 	
 	.awesomplete > ul > li[aria-selected="true"] {
-		background-color:#c6dfff!important;
+		background-color:yellow!important;
 		color: white;
 	}
 	
-		.awesomplete mark {
-			background-color:#c6dfff!important;
+		.awesomplete mark {			
+		background: none !important;
 		}
 		
 		.awesomplete li:hover mark {
@@ -140,7 +140,7 @@
 		
 		.awesomplete li[aria-selected="true"] mark {
 			
-			background-color:#c6dfff!important;
+			background-color:yellow!important;
 			color: inherit;
 		}
 /*# sourceMappingURL=awesomplete.css.map */

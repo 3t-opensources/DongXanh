@@ -169,7 +169,7 @@
 	                                       		 <div class="col-lg-2 no_margin_right" ><span>Ngày nhận hàng </span>  </div>	                                       		  
 	                                       		  <div class="col-lg-4">
 	                                       		          <div class="input-group input-append date" id="ngaynhanhang_datePicker">
-												                <input type="text" class="form-control" name="ngaynhanhang"  id= "ngaynhanhang" tabindex="6"/>
+												                <input onkeyup="getSongay()"  type="text" class="form-control" name="ngaynhanhang"  id= "ngaynhanhang" tabindex="6"/>
 												                <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
 												            </div>
 												            			                                       									
@@ -181,7 +181,7 @@
 										      <div class="row " >
 	                                       		  <div class="col-lg-2 no_margin_right" ><span>Số ngày gởi trể</span>  </div>	                                       		  
 	                                       		  <div class="col-lg-4">			                                       									
-				                                          <input value = "" type="number" id = "date_sent_late" name="date_sent_late" class="form-control" ondblclick = "getIdTag(this)" tabindex="7"/>				                                         
+				                                          <input onkeyup="getSongay()" value = "" type="number" id = "date_sent_late" name="date_sent_late" class="form-control" ondblclick = "getIdTag(this)" tabindex="7"/>				                                         
 	                                       		  </div>	   
 	                                       		  
 	                                       		 <div class="col-lg-2" ><span>Ghi chú </span>  </div>	                                       		  
@@ -839,13 +839,13 @@ $(document).ready(function() {
            format: 'dd/mm/yyyy'
        }).on('changeDate', function(e) {
            // Revalidate the date field
-           $('#eventForm').formValidation('revalidateField', 'eventDate');
+        //   $('#eventForm').formValidation('revalidateField', 'eventDate');
        });		   
        $('#ngaynhanhang_datePicker').datepicker({
            format: 'dd/mm/yyyy'
        }).on('changeDate', function(e) {
            // Revalidate the date field
-           $('#eventForm').formValidation('revalidateField', 'eventDate');
+          // $('#eventForm').formValidation('revalidateField', 'eventDate');
        });
                                    
        
@@ -1193,7 +1193,7 @@ function tinhtong_sothung(id){
 	
 	  if(sochai_1thung.trim()!="" &&  soluong.trim()!=""){
 		  try {				 
-			  var kq = parseFloat(sochai_1thung)*parseFloat(soluong);
+			  var kq = parseFloat(soluong) / parseFloat(sochai_1thung);
 			  document.getElementById("sothung_"+id).value = kq;
 		} catch (e) {
 			// TODO: handle exception
@@ -1228,6 +1228,23 @@ function tinhtong(id){
 		
 	  }
 }
+   function getSongay(){
+	   try {
+		      var from   = document.getElementById("ngaynhantoa").value.split("/");//date_company_received
+			  var to    = document.getElementById("ngaynhanhang").value.split("/") ;//date_product_received
+			  
+			  var date1 =  new Date(from[2], from[1]-1, from[0]);
+			  var date2 =  new Date(to[2], to[1]-1, to[0]);
+			  var songay = (date1.getTime() -  date2.getTime() )/(1000*24*3600);
+			  if(songay==0){
+				  songay="";
+			  }
+			  document.getElementById("date_sent_late").value =songay;
+		} catch (e) {
+			// TODO: handle exception
+		}
+	     
+	}
 
 
 </script> 

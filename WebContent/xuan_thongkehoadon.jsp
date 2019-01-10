@@ -288,6 +288,8 @@ pageEncoding="UTF-8"%>
   				   
   		      
              }); 
+  		    
+  		  getInvoiceDataFilterReport();
 
         });
         
@@ -325,13 +327,13 @@ pageEncoding="UTF-8"%>
    	 }
    	 
    	function getInvoiceDataFilterReport(){   		
-	   	 var sent_late                  = "";
-		 var customer_id                  = "";
-		 var user_id                  = "";
-		 var invoice_type                  = "";
-		 var end_day                  = "";
-		 var start_day                ="";
-		 //"http://localhost:8081/DongXanh/getInvoiceDataFilterReport1Action?sent_late=0&customer_id=0&user_id=0&invoice_type=1&end_day=null&start_day=null"
+	   	 var sent_late             = "0";
+		 var customer_id           = "0";
+		 var user_id               = "0";
+		 var invoice_type          = "0";
+		 var end_day               = "null";
+		 var start_day             ="null";
+	
 	   	 $.ajax({  		
 	   	       type: "GET",
 	              url     : "getInvoiceDataFilterReport1Action?sent_late="+sent_late+
@@ -339,21 +341,121 @@ pageEncoding="UTF-8"%>
 	            		    "&user_id="+user_id+
 	            		    "&invoice_type="+invoice_type+
 	            		    "&end_day="+end_day+
-	            		    "&start_day="+start_day+",	          
+	            		    "&start_day="+start_day,	          
 	              data    : "",
 	              success : function(responseText) {	
-	           	        console.log("==================getInvoiceDataFilterReport=================");
-	           	        console.log(responseText);
+	           	      
+	           	    var table ="";
+	           	    table +="<table id='table_detail' class='table table-striped table-bordered table table-hover' cellspacing='0' width='100%'>";
+	  	        	table +="<thead>";
+	  	        		table +="<tr class='w3-btn'>";
+	  	        		table +="   <th class='table-th' style='text-align: center;width:10%'>Loại bảng kê</th>";
+	  	        		table +="   <th class='table-th' style='text-align: center;width:20%'>Mã KH</th>	";	
+	  	        		table +="   <th class='table-th' style='text-align: center;width:35%'>Tên KH</th>";
+	  	        		table +="   <th class='table-th' style='text-align: center;width:35%'>KH Cấp 1</th>";
+	  	        		table +="   <th class='table-th' style='text-align: center;width:10%'>NVTT</th>	";
+	  	        		
+	  	        		table +="   <th class='table-th' style='text-align: center;width:10%'>Ngày nhận toa</th>	";
+	  	        		table +="   <th class='table-th' style='text-align: center;width:10%'>Ngày nhận hàng</th>	";
+	  	        		table +="   <th class='table-th' style='text-align: center;width:10%'>Số ngày gởi trể</th>	";
+	  	        		table +="   <th class='table-th' style='text-align: center;width:10%'>Ghi chú</th>	";
+	  	        		table +="   <th class='table-th' style='text-align: center;width:10%'>Mã sản phẩm</th>	";
+	  	        		table +="   <th class='table-th' style='text-align: center;width:10%'>Tên sản phẩm	</th>	";
+	  	        		
+	  	        		table +="   <th class='table-th' style='text-align: center;width:10%'>Số lượng</th>	";
+	  	        		table +="   <th class='table-th' style='text-align: center;width:10%'>Số thùng</th>	";
+	  	        		table +="   <th class='table-th' style='text-align: center;width:10%'>Đơn giá</th>	";
+	  	        		table +="   <th class='table-th' style='text-align: center;width:10%'>Thành tiền</th>	";
+	  	        		
+	 		              
+	  	        		table +=" </tr> </thead>   <tbody> ";   
+	  	        		
+	 		         var stt =1;
+	  	        	 for (i in responseText) {  	        		
+	  	        		console.log(responseText[i]);
+	  	        		var invoiceType          =responseText[i].invoice_type_id.invoiceType;
+	  	        		var customer_code        =responseText[i].customer_code;
+	  	        		var customer_name        =responseText[i].customer_name;
+	  	        		var customer_name_level1 =responseText[i].customer_name_level1;
+	  	        		var staff_name           =responseText[i].staff_name;
+	  	        		
+	  	        		var date_company_received =responseText[i].date_company_received;
+	  	        		var date_product_received =responseText[i].date_product_received;
+	  	        		var date_sent_late        =responseText[i].date_sent_late;
+	  	        		var notes                 =responseText[i].notes;
+	  	        		if(responseText[i].product_ids!=null){
+	  	        			var product_ids           = responseText[i].product_ids.split("`");
+		  	        		var product_names         = responseText[i].product_names.split("`");
+		  	        		var quantitys             = responseText[i].quantitys.split("`");
+		  	        		var total_boxs            = responseText[i].total_boxs.split("`");
+		  	        		var total_prices          = responseText[i].total_prices.split("`");
+		  	        		
+		  	        	    for(row in product_ids){
+				  	        	  	table +="  <tr>";
+				  	        		table +="     <td>"+invoiceType+"</td>";
+				  	            	table +="     <td>"+customer_code+"</td>";
+				  	        		table +="     <td>"+customer_name+"</td>";
+				  	        		table +="     <td>"+customer_name_level1+"</td>";
+				  	        		table +="     <td>"+staff_name+"</td>";
+				  	        		
+				  	        		
+				  	        		table +="     <td>"+date_company_received+"</td>";
+				  	            	table +="     <td>"+date_product_received+"</td>";
+				  	        		table +="     <td>"+date_sent_late+"</td>";
+				  	        		table +="     <td>"+notes+"</td>";
+				  	        		
+				  	        		
+				  	        		table +="     <td>"+product_ids[row]+"</td>";
+				  	        		table +="     <td>"+product_names[row]+"</td>";  
+				  	        		table +="     <td>"+quantitys[row]+"</td>";
+				  	            	table +="     <td>"+total_boxs[row]+"</td>";
+				  	        		table +="     <td>"+total_prices[row]+"</td>";
+				  	        		table +="     <td>"+total_prices[row]+"</td>";
+				  	        		
+				  	        		table +="  </tr>";
+		  	        	    }
+		  	        		
+	  	        		}
+	  	        		
+	  	        		
+	  	        	
+	  	        		stt++;
+	  	        		}
+	  	        	    table +="</tbody>";
+	  	        	    table +="</table>";
+	  	        	    
+	  	        	   $('#detail_data_table').html(table);
+	 	        	   
+	  	        	  $('#table_detail').DataTable({     			   
+	  	 			    "bProcessing": false,	            	    
+	  	     	    	"scrollX": true,
+	  	     	    	"fixedHeader": true,
+	  	     	    	"autoWidth": true,
+	  	     	    	"bScrollAutoCss": false, 
+	  	                fixedColumns: true, 
+	  	         	   fixedHeader: {
+	  	 		            header: true,
+	  	 		            footer: true
+	  	 		        } ,
+	  	                 aLengthMenu: [
+	  	 					        [15,25, 50, 100,-1],
+	  	 					        [15,25, 50, 100,"All"]
+	  	 					    ],
+	  	 					iDisplayLength: 25
+	  	 				 	
+	  	 				   
+	  	 		      
+	  	            }); 
 	              }
 	   	   });
    }
    	
    	
 	function loadCusByStaffInvoiceReport(){  
-		 var user_id                  = "";		
+		 var user_id                  = "0";		
 	   	 $.ajax({  		
 	   	       type: "GET",
-	              url     : "loadCusByStaffInvoiceReport1Action?user_id="+user_id+,	          
+	              url     : "loadCusByStaffInvoiceReport1Action?user_id="+user_id,	          
 	              data    : "",
 	              success : function(responseText) {	
 	           	        console.log("==================loadCusByStaffInvoiceReport=================");
