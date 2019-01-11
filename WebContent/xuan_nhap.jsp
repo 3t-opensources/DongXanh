@@ -112,15 +112,7 @@
 	                                       		  <div class="col-lg-4">	
 	                                       		  
 	                                       		   <select id="cbb_loaibangke" name="cbb_loaibangke"  class="cbb_search" style="width: 100% ; height: 27px">
-										              <%										             									
-										              for(InvoiceType item : listInvoice){ %>
-										            	<option value="<%= item.id%>"><%= item.invoiceType %></option>
-										            	
-										            	
-										             <%   
-										              }	
-										             
-										              %>
+										          
 										              	                  
 										           </select>
 	                                       		  </div>	 
@@ -866,7 +858,7 @@ $(document).ready(function() {
       $("#update").click(function(){ iv.iviewer('update_container_info'); });
       
       
-     
+      lookupCaptureInvoiceTypeAction();
       getjob();
       
       $('#table_position > tbody  > tr').each(function() {
@@ -1245,6 +1237,24 @@ function tinhtong(id){
 		}
 	     
 	}
+   
+   function lookupCaptureInvoiceTypeAction(){ 
+	   	 $.ajax({  		
+	   	       type: "GET",
+	              url     : "lookupCaptureInvoiceTypeAction",	          
+	              data    : "",
+	              success : function(responseText) {
+	            	  var cbb_nvtt = document.getElementById("cbb_loaibangke");
+	            	  for (i in responseText) {  	        		
+		  	        		console.log(responseText[i]);
+		  	        		  var option   = document.createElement("option");
+			            	  option.text  = responseText[i].invoiceType;			            	 
+			            	  option.setAttribute ("value", responseText[i].id);
+			            	  cbb_nvtt.add(option);
+	            	  }
+	              }
+	   	   });
+}
 
 
 </script> 

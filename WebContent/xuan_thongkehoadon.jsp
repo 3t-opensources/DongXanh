@@ -31,21 +31,19 @@ pageEncoding="UTF-8"%>
 			            </div>
 			        </div>
 			        
-			         <div class="title_width_8" >Ngày gửi</div>
+			           <div class="title_width_8" >Loại bảng kê</div>
 				        <div class="value_width_10">
-				            <select id="cbb_location" name="cbb_location"  class="cbb_search">
-				                 <option value="">All</option>	
-			                <%--      <%
-			                        LinkedHashMap<String,String> mapLocation = (LinkedHashMap<String,String>) request.getAttribute("mapLocation");
-			                        for (Map.Entry<String,String> item : mapLocation.entrySet()) { 
-						        %>
-						              <option value="<%= item.getKey()%>"><%= item.getValue()%></option>	
-						        <%} %> --%>
+				            <select id="cbb_loaibangke" name="cbb_loaibangke"  class="cbb_search">
+				                 <option value="0">All</option>	
+			                   
 				           </select>
 				        </div>
+			          
+			          
+			          
 				        
 			        <div class="button_width_12">			           
-			            <button type="button" class="btn btn-success" onclick="searchDetail();">Lọc bảng kê</button>			         
+			            <button type="button" class="btn btn-success" onclick="getInvoiceDataFilterReport();">Lọc bảng kê</button>			         
 			        </div> 
 					        
 			      </div>
@@ -54,42 +52,33 @@ pageEncoding="UTF-8"%>
 			       
 			           <div class="title_width_8" >NVTT</div>
 				        <div class="value_width_10">
-				            <select id="cbb_location" name="cbb_location"  class="cbb_search">
-				                 <option value="">All</option>	
-			                   <%--   <%
-					                 mapLocation = (LinkedHashMap<String,String>) request.getAttribute("mapLocation");
-			                        for (Map.Entry<String,String> item : mapLocation.entrySet()) { 
-						        %>
-						              <option value="<%= item.getKey()%>"><%= item.getValue()%></option>	
-						        <%} %> --%>
+				            <select id="cbb_nvtt" name="cbb_nvtt"  class="cbb_search" onchange="loadCusByStaffInvoiceReport();">
+				                 <option value="0">All</option>	
+			                 
 				           </select>
 				        </div>
 				        
-				        <div class="title_width_8" >Loại bảng kê</div>
-				        <div class="value_width_10">
-				            <select id="cbb_location" name="cbb_location"  class="cbb_search">
-				                 <option value="">All</option>	
-			                    <%--  <%
-					                mapLocation = (LinkedHashMap<String,String>) request.getAttribute("mapLocation");
-			                        for (Map.Entry<String,String> item : mapLocation.entrySet()) { 
-						        %>
-						              <option value="<%= item.getKey()%>"><%= item.getValue()%></option>	
-						        <%} %> --%>
-				           </select>
-				        </div>
+				       
 				        
 				          <div class="title_width_8" >Khách hàng</div>
 				        <div class="value_width_10">
-				            <select id="cbb_location" name="cbb_location"  class="cbb_search">
-				                 <option value="">All</option>	
-			                  <%--    <%
-					                mapLocation = (LinkedHashMap<String,String>) request.getAttribute("mapLocation");
-			                        for (Map.Entry<String,String> item : mapLocation.entrySet()) { 
-						        %>
-						              <option value="<%= item.getKey()%>"><%= item.getValue()%></option>	
-						        <%} %> --%>
+				            <select id="cbb_khachhang" name="cbb_khachhang"  class="cbb_search">
+				                 <option value="0">All</option>	
+			               
 				           </select>
 				        </div>
+				        
+				         <div class="title_width_8" >Ngày gửi trể</div>
+				        <div class="value_width_10">
+				            <select id="cbb_ngaygoitre" name="cbb_ngaygoitre"  class="cbb_search">
+				                 <option value="0">All</option>
+				                 <option value="1">Trể </option>
+				                 <option value="2">Không trể</option>	
+			              
+				           </select>
+				        </div>
+				        
+				        
 				        <div class="button_width_12">			           
 			                 <button type="submit" class="btn btn-success" onclick="searchDetail();" >Xuất ra excel</button>			         
 			            </div> 
@@ -123,8 +112,8 @@ pageEncoding="UTF-8"%>
 		            </tr>
 		        </thead>        
 		        <tbody>  
-		           <% for(int i=0 ;i< 100 ;i++){%>
-			       		 <tr ondblclick='showDilogImages("+<%=i %>+")' >
+		           <% for(int i=0 ;i< 1;i++){%>
+			       		 <tr  >
 			       		    <td></td>
 			                <td></td>
 			                <td></td>
@@ -156,7 +145,7 @@ pageEncoding="UTF-8"%>
 
 	  <div id="dialog" title="images" >
 		
-	    <img src="./images/img_girl.jpg" alt=""  >
+	    <img src="" alt=""  id ="images_dailog" >
 	
 	   </div>
 	   
@@ -290,20 +279,14 @@ pageEncoding="UTF-8"%>
              }); 
   		    
   		  getInvoiceDataFilterReport();
+  		  loadStaffInvoiceReport();
+  		  lookupCaptureInvoiceTypeAction();
 
         });
         
-        function showDilogImages(stt){
-			
-   		 var i=0;
-   		  $('#tr_'+stt).find('td').each(function(){
-   			 if(i==2){				
-   						
-   			 }
-   			 i++;
-   			});
-   		  
-   		
+        function showDilogImages(id_mages){
+        	
+        	$("#images_dailog").attr("src",document.getElementById("id_mages_"+id_mages).innerHTML);     		
    			$("#dialog").dialog("option", "position", {
    				my: "center",
    				at: "center",
@@ -327,12 +310,12 @@ pageEncoding="UTF-8"%>
    	 }
    	 
    	function getInvoiceDataFilterReport(){   		
-	   	 var sent_late             = "0";
-		 var customer_id           = "0";
-		 var user_id               = "0";
-		 var invoice_type          = "0";
-		 var end_day               = "null";
-		 var start_day             ="null";
+	   	 var sent_late             = document.getElementById("cbb_ngaygoitre").value;
+		 var customer_id           = document.getElementById("cbb_khachhang").value;
+		 var user_id               = document.getElementById("cbb_nvtt").value;
+		 var invoice_type          = document.getElementById("cbb_loaibangke").value;
+		 var end_day               = document.getElementById("to_date_search").value;
+		 var start_day             = document.getElementById("form_date_search").value;
 	
 	   	 $.ajax({  		
 	   	       type: "GET",
@@ -344,7 +327,7 @@ pageEncoding="UTF-8"%>
 	            		    "&start_day="+start_day,	          
 	              data    : "",
 	              success : function(responseText) {	
-	           	      
+	           	     console.log(responseText);
 	           	    var table ="";
 	           	    table +="<table id='table_detail' class='table table-striped table-bordered table table-hover' cellspacing='0' width='100%'>";
 	  	        	table +="<thead>";
@@ -366,13 +349,13 @@ pageEncoding="UTF-8"%>
 	  	        		table +="   <th class='table-th' style='text-align: center;width:10%'>Số thùng</th>	";
 	  	        		table +="   <th class='table-th' style='text-align: center;width:10%'>Đơn giá</th>	";
 	  	        		table +="   <th class='table-th' style='text-align: center;width:10%'>Thành tiền</th>	";
-	  	        		
+	  	        		table +="   <th style='display: none'>Hinhanh</th>	";
 	 		              
 	  	        		table +=" </tr> </thead>   <tbody> ";   
 	  	        		
 	 		         var stt =1;
-	  	        	 for (i in responseText) {  	        		
-	  	        		console.log(responseText[i]);
+	 		         var id_mages=1;
+	  	        	 for (i in responseText) {   
 	  	        		var invoiceType          =responseText[i].invoice_type_id.invoiceType;
 	  	        		var customer_code        =responseText[i].customer_code;
 	  	        		var customer_name        =responseText[i].customer_name;
@@ -383,15 +366,40 @@ pageEncoding="UTF-8"%>
 	  	        		var date_product_received =responseText[i].date_product_received;
 	  	        		var date_sent_late        =responseText[i].date_sent_late;
 	  	        		var notes                 =responseText[i].notes;
+	  	        		if(date_company_received!=null && date_company_received.length>10){
+	  	        			date_company_received = date_company_received.substring(0,10);
+	  	        		}
+	  	        		if(date_product_received!=null && date_product_received.length>10){
+	  	        			date_product_received = date_product_received.substring(0,10);
+	  	        		}
 	  	        		if(responseText[i].product_ids!=null){
 	  	        			var product_ids           = responseText[i].product_ids.split("`");
 		  	        		var product_names         = responseText[i].product_names.split("`");
 		  	        		var quantitys             = responseText[i].quantitys.split("`");
 		  	        		var total_boxs            = responseText[i].total_boxs.split("`");
 		  	        		var total_prices          = responseText[i].total_prices.split("`");
+		  	        		var max_size = product_ids.length -1 ;
+		  	        		var lc =0;
 		  	        		
+		  	        		
+		  	        		var imagePath_hidden ="";
+		  	           	     var file_path        = responseText[i].management_id.file_path.split("/DX_Images/");
+		  	           	     var file_name        = responseText[i].management_id.file_name;
+		  	           	     if(file_path.length>1){
+		  	           	    	imagePath_hidden = file_path[1] +"/"+file_name;
+		  	           	     }
+		  	           	    
+		  	           	     var url = window.location.href.toString();
+		  	           	     if(url.includes("localhost")){
+		  	           	        imagePath_hidden = "http://img.f8.bdpcdn.net/Assets/Media/2019/01/11/66/tq1.jpg";
+		  	           	     }else{
+		  	           	    	imagePath_hidden = "http://nv.dongxanhvn.com:8077/DX_Images/"+imagePath_hidden;
+		  	           	     }
+		  	           	     
 		  	        	    for(row in product_ids){
-				  	        	  	table +="  <tr>";
+		  	        	    	if(lc<max_size){
+		  	        	    		id_mages++;
+		  	        	    		table +="  <tr id ="+id_mages+" ondblclick='showDilogImages("+id_mages+")'>";
 				  	        		table +="     <td>"+invoiceType+"</td>";
 				  	            	table +="     <td>"+customer_code+"</td>";
 				  	        		table +="     <td>"+customer_name+"</td>";
@@ -399,20 +407,23 @@ pageEncoding="UTF-8"%>
 				  	        		table +="     <td>"+staff_name+"</td>";
 				  	        		
 				  	        		
-				  	        		table +="     <td>"+date_company_received+"</td>";
-				  	            	table +="     <td>"+date_product_received+"</td>";
+				  	        		table +="     <td class='right'>"+date_company_received+"</td>";
+				  	            	table +="     <td class='right'>"+date_product_received+"</td>";
 				  	        		table +="     <td>"+date_sent_late+"</td>";
 				  	        		table +="     <td>"+notes+"</td>";
 				  	        		
 				  	        		
 				  	        		table +="     <td>"+product_ids[row]+"</td>";
 				  	        		table +="     <td>"+product_names[row]+"</td>";  
-				  	        		table +="     <td>"+quantitys[row]+"</td>";
-				  	            	table +="     <td>"+total_boxs[row]+"</td>";
-				  	        		table +="     <td>"+total_prices[row]+"</td>";
-				  	        		table +="     <td>"+total_prices[row]+"</td>";
+				  	        		table +="     <td class='right'>"+quantitys[row]+"</td>";
+				  	            	table +="     <td class='right'>"+total_boxs[row]+"</td>";
+				  	        		table +="     <td class='right'>"+total_prices[row]+"</td>";
+				  	        		table +="     <td class='right'>"+total_prices[row]+"</td>";
+				  	        		table +="     <td style='display: none' id ='id_mages_"+id_mages+"'>"+imagePath_hidden+"</td>";
 				  	        		
 				  	        		table +="  </tr>";
+		  	        	    	}
+				  	        	lc++;
 		  	        	    }
 		  	        		
 	  	        		}
@@ -452,43 +463,82 @@ pageEncoding="UTF-8"%>
    	
    	
 	function loadCusByStaffInvoiceReport(){  
-		 var user_id                  = "0";		
+		var user_id               = document.getElementById("cbb_nvtt").value;
 	   	 $.ajax({  		
 	   	       type: "GET",
 	              url     : "loadCusByStaffInvoiceReport1Action?user_id="+user_id,	          
 	              data    : "",
-	              success : function(responseText) {	
-	           	        console.log("==================loadCusByStaffInvoiceReport=================");
-	           	        console.log(responseText);
+	              success : function(responseText) {
+	           	     var cbb_nvtt = document.getElementById("cbb_khachhang");
+	            	  for (i in responseText) {  	        		
+		  	        		console.log(responseText[i]);
+		  	        		  var option   = document.createElement("option");
+			            	  option.text  = responseText[i].businessName;			            	 
+			            	  option.setAttribute ("value", responseText[i].id);
+			            	  cbb_nvtt.add(option);
+	            	  }
 	              }
 	   	   });
   }
 	
 	
-	function loadStaffInvoiceReport(){   		
-	   	 var sent_late                  = "";
-		 var customer_id                  = "";
-		 var user_id                  = "";
-		 var invoice_type                  = "";
-		 var end_day                  = "";
-		 var start_day                ="";
+	function loadStaffInvoiceReport(){ 
 	   	 $.ajax({  		
 	   	       type: "GET",
 	              url     : "loadStaffInvoiceReport1Action",	          
 	              data    : "",
-	              success : function(responseText) {	
-	           	        console.log("==================loadStaffInvoiceReport=================");
-	           	        console.log(responseText);
+	              success : function(responseText) {
+	            	  var cbb_nvtt = document.getElementById("cbb_nvtt");
+	            	  for (i in responseText) {  	        		
+		  	        		console.log(responseText[i]);
+		  	        		  var option   = document.createElement("option");
+			            	  option.text  = responseText[i].userName;			            	 
+			            	  option.setAttribute ("value", responseText[i].id);
+			            	  cbb_nvtt.add(option);
+	            	  }
 	              }
 	   	   });
   }
+	
+	function lookupCaptureInvoiceTypeAction(){ 
+	   	 $.ajax({  		
+	   	       type: "GET",
+	              url     : "lookupCaptureInvoiceTypeAction",	          
+	              data    : "",
+	              success : function(responseText) {
+	            	  var cbb_nvtt = document.getElementById("cbb_loaibangke");
+	            	  for (i in responseText) {  	        		
+		  	        		console.log(responseText[i]);
+		  	        		  var option   = document.createElement("option");
+			            	  option.text  = responseText[i].invoiceType;			            	 
+			            	  option.setAttribute ("value", responseText[i].id);
+			            	  cbb_nvtt.add(option);
+	            	  }
+	              }
+	   	   });
+ }
+
 
    	
    	
    	 
 </script>
     
-
+<style type="text/css">
+.right{
+  text-align: right;
+}
+.w3-btn{
+    background: rgba(52, 73, 94, 0.94)!important;
+    color: #ECF0F1;
+}
+.detail_data_table_final{
+    min-height: 700px;
+}
+#table_detail tr {
+height: 30px;
+}
+</style>
 
 </body>
 
