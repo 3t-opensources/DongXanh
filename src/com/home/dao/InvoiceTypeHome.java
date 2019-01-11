@@ -264,8 +264,15 @@ public class InvoiceTypeHome {
 			Connection conn = sessionImpl.connection();
 			try (Statement sta = conn.createStatement()) {
 				String sql = "Select * From invoice_type ORDER BY id";
+				
 				try(ResultSet rs = sta.executeQuery(sql)){
-					results = ResultSetUtils.parserResultSet(rs, InvoiceType.class);
+					while (rs.next()) {
+						InvoiceType iv = new InvoiceType();
+						iv.setId(rs.getInt("id"));
+						iv.setInvoiceType(rs.getString("invoice_type"));
+						iv.setDescription(rs.getString("description"));
+						results.add(iv);
+					}
 				}
 			}
 			tx.commit();
