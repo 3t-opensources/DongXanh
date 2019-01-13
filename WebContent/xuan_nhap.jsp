@@ -4,7 +4,7 @@
 <%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"    pageEncoding="UTF-8"%>
 <%@ page session="false"%>
-<html>
+<html  lang="en">
 <head>
 <title>Promotion Management</title>
 
@@ -41,7 +41,7 @@
 	<!-- LOOKUP DATA -->
 <link href="css/awesomplete.css" type="text/css" rel="stylesheet">
 <script src="js/awesomplete_new.js"></script>
-
+<script src="js/moment.js"></script>
  
 
 </head>
@@ -152,20 +152,13 @@
 										      <div class="row " >
 	                                       		  <div class="col-lg-2 no_margin_right" ><span>Ngày nhận toa </span>  </div>	                                       		  
 	                                       		  <div class="col-lg-4">
-			                                       		   <div class="input-group input-append date" id="ngaynhantoa_datePicker">
-												                <input type="text" class="form-control" name="ngaynhantoa"  id= "ngaynhantoa" tabindex="5"/>
-												                <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
-												            </div>
+	                                       		         <input value = "" id = "ngaynhantoa" name="ngaynhantoa" class="form-control"  tabindex="5" onkeyup="getSongay()"/>			
+			                                       		  
 	                                       		  </div>
 	                                       		  
 	                                       		 <div class="col-lg-2 no_margin_right" ><span>Ngày nhận hàng </span>  </div>	                                       		  
 	                                       		  <div class="col-lg-4">
-	                                       		          <div class="input-group input-append date" id="ngaynhanhang_datePicker">
-												                <input onkeyup="getSongay()"  type="text" class="form-control" name="ngaynhanhang"  id= "ngaynhanhang" tabindex="6"/>
-												                <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
-												            </div>
-												            			                                       									
-				                                          
+	                                       		   <input value = "" id = "ngaynhanhang" name="ngaynhanhang" class="form-control"  tabindex="6" onkeyup="getSongay()"/>	
 	                                       		  </div>	                                          		  
 	                                        </div>
 	                                        
@@ -231,7 +224,7 @@
 											</td>
 											
 											<td>
-											  <input type="number" value="" min="0" step="1" data-number-to-fixed="2" data-number-stepfactor="100" id = "thanhtien_<%=i %>"  onkeyup="tinhtong(<%=i %>)"  name="thanhtien_<%=i %>" class="custom-input-debitor form-control currency" tabindex="<%= (i*6) +6+lc%>" />
+											  <input type="number" value="" min="0" step="any" data-number-to-fixed="2"  lang="en-150"  data-number-stepfactor="100" id = "thanhtien_<%=i %>"  onkeyup="tinhtong(<%=i %>)"  name="thanhtien_<%=i %>" class="custom-input-debitor form-control currency" tabindex="<%= (i*6) +6+lc%>" />
 											
 											</td>
 											<td>
@@ -827,18 +820,7 @@ $(document).ready(function() {
 	
 	
 	
-	  $('#ngaynhantoa_datePicker').datepicker({
-           format: 'dd/mm/yyyy'
-       }).on('changeDate', function(e) {
-           // Revalidate the date field
-        //   $('#eventForm').formValidation('revalidateField', 'eventDate');
-       });		   
-       $('#ngaynhanhang_datePicker').datepicker({
-           format: 'dd/mm/yyyy'
-       }).on('changeDate', function(e) {
-           // Revalidate the date field
-          // $('#eventForm').formValidation('revalidateField', 'eventDate');
-       });
+	 
                                    
        
   
@@ -933,6 +915,12 @@ $(document).ready(function() {
     	  }
     	    
     	});
+      
+      webshims.setOptions('forms-ext', {
+    	    replaceUI: 'auto',
+    	    types: 'number'
+    	});
+    	webshims.polyfill('forms forms-ext');
       
 });
         var customer_id_hidden            = document.getElementById("customer_id_hidden");
@@ -1196,6 +1184,8 @@ function tinhtong_sothung(id){
 	  if(dongia.trim()!="" &&  soluong.trim()!=""){
 		  try {				 
 			  var kq = parseFloat(dongia)*parseFloat(soluong);
+			  alert(kq);
+			  kq = kq.toLocaleString();
 			  document.getElementById("thanhtien_"+id).value = kq;
 		} catch (e) {
 			// TODO: handle exception
@@ -1213,25 +1203,63 @@ function tinhtong(id){
 	  if(dongia.trim()!="" &&  soluong.trim()!=""){
 		  try {				 
 			  var kq = parseFloat(dongia)*parseFloat(soluong);
-			  document.getElementById("thanhtien_"+id).value = kq;
+			  alert(kq.toLocaleString());
+			  document.getElementById("thanhtien_"+id).value = kq.toLocaleString();
 		} catch (e) {
 			// TODO: handle exception
 		}
 		
 	  }
 }
-   function getSongay(){
+   function getday(ngaynhantoa){
+	   var date_val = ngaynhantoa.value.replace(/[^0-9]/g, '');
+	   if(date_val.length >=8){
+		   if(!moment(date_val, 'DDMMYYYY',true).isValid() )	{
+			   alert("ngày không đúng đinh dạng(dd/mm/YYYY)!");
+			   ngaynhantoa.focus();
+			   return  false;
+		   }else{
+			   ngaynhantoa.value = date_val.substr(0,2)+"/"+date_val.substr(2,2)+"/"+date_val.substr(4,4);
+			   return true;
+		   }
+		  
+	   }
+	   return false;
+	  
+	   
+   }
+   function getSongay(){	  
 	   try {
-		      var from   = document.getElementById("ngaynhantoa").value.split("/");//date_company_received
-			  var to    = document.getElementById("ngaynhanhang").value.split("/") ;//date_product_received
-			  
-			  var date1 =  new Date(from[2], from[1]-1, from[0]);
-			  var date2 =  new Date(to[2], to[1]-1, to[0]);
-			  var songay = (date1.getTime() -  date2.getTime() )/(1000*24*3600);
-			  if(songay==0){
-				  songay="";
-			  }
-			  document.getElementById("date_sent_late").value =songay;
+		     var  ngaynhantoa  = document.getElementById("ngaynhantoa").value ;
+		     var  ngaynhanhang = document.getElementById("ngaynhanhang").value ;
+		     var  flag =0;
+		     if(ngaynhantoa.length>=8){
+		    	if(getday(document.getElementById("ngaynhantoa"))){
+		    		 flag++;
+		    	}
+		    	
+		     }
+		     if(ngaynhanhang.length>=8){
+		    	 
+		    	 if(getday(document.getElementById("ngaynhanhang"))){
+		    		 flag++;
+		    	}
+		    	
+		     }
+		     if(flag==2){
+		    	 var from   = document.getElementById("ngaynhantoa").value.split("/");//date_company_received
+				  var to    = document.getElementById("ngaynhanhang").value.split("/") ;//date_product_received
+				  
+				  var date1 =  new Date(from[2], from[1]-1, from[0]);
+				  var date2 =  new Date(to[2], to[1]-1, to[0]);
+				  var songay = (date1.getTime() -  date2.getTime() )/(1000*24*3600);
+				  if(songay<=0){
+					  songay="";
+				  }
+				  document.getElementById("date_sent_late").value =songay;
+				
+		     }
+		     
 		} catch (e) {
 			// TODO: handle exception
 		}

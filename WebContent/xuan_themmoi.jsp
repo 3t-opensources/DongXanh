@@ -17,7 +17,7 @@ pageEncoding="UTF-8"%>
 			      <div class="form-group">			      
 			       <div class="col-md-2 form_title" >Tên đường dẫn </div>
 				   <div class="col-md-5 input_upload" >
-				        <input type="file" id="fileUpload" name="fileList[]" webkitRelativePath  multiple  /> 
+				        <input type="file" id="fileUpload" name="fileList" webkitdirectory multiple  multiple  /> 
 				    </div>
 				    <div class="col-md-2" >  <button type="button" class="btn btn-success" onclick="uploadImages();">Upload</button>			  </div>
 			      </div>
@@ -153,7 +153,7 @@ pageEncoding="UTF-8"%>
     		   console.log(time_id);
     		   var time_img  = "img_"+time_id;
    			   var reader = new FileReader();    			  
-   			   $('#table_list_file').append("<tr id='"+time_id+"'><td>"+stt+"</td><td> <img id='"+time_img+"' height='100' width='100'/></td><td id ='name_"+time_id+"'>"+file.name+"</td><td>"+dungluong+"</td></tr>"); 
+   			   $('#table_list_file').append("<tr id='"+time_id+"'><td>"+stt+"</td><td> <img id='"+time_img+"' height='100' width='100'/></td><td id ='name_"+time_id+"'>"+file.webkitRelativePath+"</td><td>"+dungluong+"</td></tr>"); 
    			   reader.onload = function() {    			  		
    		    	      var dataURL = reader.result;
    		    	      var output  = document.getElementById(time_img);

@@ -391,7 +391,7 @@ pageEncoding="UTF-8"%>
 		  	           	    
 		  	           	     var url = window.location.href.toString();
 		  	           	     if(url.includes("localhost")){
-		  	           	        imagePath_hidden = "http://img.f8.bdpcdn.net/Assets/Media/2019/01/11/66/tq1.jpg";
+		  	           	        imagePath_hidden = "http://nv.dongxanhvn.com:8077/DX_Images/13012019/1547367853715/z1161354633309_0916f6c1aab1f212fa463e5ce5e8d11e.jpg";
 		  	           	     }else{
 		  	           	    	imagePath_hidden = "http://nv.dongxanhvn.com:8077/DX_Images/"+imagePath_hidden;
 		  	           	     }
