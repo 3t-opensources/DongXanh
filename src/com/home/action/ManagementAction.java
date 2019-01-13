@@ -153,10 +153,13 @@ public class ManagementAction extends ActionSupport implements ServletContextAwa
 				if (!dir.exists()) {
 					dir.mkdirs();
 				}
-				System.out.println("===============156:"+dir);
+				//System.out.println("===============156:"+dir);
 
 				ManagementHome managementHome = new ManagementHome(getSessionFactory()); 
 				File output = new File(dir.getAbsolutePath() + "/" + job.getFile_name());
+				if(!output.getParentFile().exists()){
+					output.getParentFile().mkdirs();
+				}
 				ImageIO.write(buff, FilenameUtils.getExtension(job.getFile_name()).toLowerCase().replace("jpg", "jpeg"), output);
 				String hash_file = HashGeneratorUtils.generateMD5(output);
 				if(notDuplicate(managementHome, hash_file)){
