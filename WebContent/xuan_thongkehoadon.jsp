@@ -145,7 +145,7 @@ pageEncoding="UTF-8"%>
 
 	  <div id="dialog" title="images" >
 		
-	    <img src="" alt=""  id ="images_dailog" >
+	    <img src="" alt=""  id ="images_dailog" style="max-height: 700px!important;">
 	
 	   </div>
 	   
@@ -290,7 +290,10 @@ pageEncoding="UTF-8"%>
    			$("#dialog").dialog("option", "position", {
    				my: "center",
    				at: "center",
-   				of: window
+   				of: window,
+   			   create: function() {
+   		        $(this).css("maxHeight", $(window).height()-300);        
+   		       }
    			});
    			if ($("#dialog").dialog("isOpen") == false) {
    				$("#dialog").dialog("open");
@@ -378,6 +381,8 @@ pageEncoding="UTF-8"%>
 		  	        		var quantitys             = responseText[i].quantitys.split("`");
 		  	        		var total_boxs            = responseText[i].total_boxs.split("`");
 		  	        		var total_prices          = responseText[i].total_prices.split("`");
+		  	        		var unit_prices           = responseText[i].unit_prices.split("`");
+		  	        		
 		  	        		var max_size = product_ids.length -1 ;
 		  	        		var lc =0;
 		  	        		
@@ -415,10 +420,10 @@ pageEncoding="UTF-8"%>
 				  	        		
 				  	        		table +="     <td>"+product_ids[row]+"</td>";
 				  	        		table +="     <td>"+product_names[row]+"</td>";  
-				  	        		table +="     <td class='right'>"+quantitys[row]+"</td>";
-				  	            	table +="     <td class='right'>"+total_boxs[row]+"</td>";
-				  	        		table +="     <td class='right'>"+total_prices[row]+"</td>";
-				  	        		table +="     <td class='right'>"+total_prices[row]+"</td>";
+				  	        		table +="     <td class='right'>"+getDataNumber(quantitys[row])+"</td>";
+				  	            	table +="     <td class='right'>"+getDataNumber(total_boxs[row])+"</td>";
+				  	        		table +="     <td class='right'>"+getDataNumber(total_prices[row])+"</td>";
+				  	        		table +="     <td class='right'>"+getDataNumber(unit_prices[row])+"</td>";
 				  	        		table +="     <td style='display: none' id ='id_mages_"+id_mages+"'>"+imagePath_hidden+"</td>";
 				  	        		
 				  	        		table +="  </tr>";
@@ -461,7 +466,15 @@ pageEncoding="UTF-8"%>
 	   	   });
    }
    	
-   	
+   	function getDataNumber(val){
+   	    try {
+			val = parseFloat(val).toLocaleString();
+			return val;
+		} catch (e) {
+			// TODO: handle exception
+		}
+		return "";
+   	}
 	function loadCusByStaffInvoiceReport(){  
 		var user_id               = document.getElementById("cbb_nvtt").value;
 	   	 $.ajax({  		
@@ -538,6 +551,9 @@ pageEncoding="UTF-8"%>
 #table_detail tr {
 height: 30px;
 }
+
+
+
 </style>
 
 </body>

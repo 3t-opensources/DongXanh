@@ -523,6 +523,7 @@ function saveData(){
 			        		  "total_boxs": total_boxs,
 			        		  "quantitys": quantitys,
 			        		  "total_prices": total_prices,
+			        		  "unit_prices": product_prices,
 			        		  "sum_total_price":sum_total_price
 			        		    
 					 	    } 
@@ -1184,8 +1185,8 @@ function tinhtong_sothung(id){
 	  if(dongia.trim()!="" &&  soluong.trim()!=""){
 		  try {				 
 			  var kq = parseFloat(dongia)*parseFloat(soluong);
-			  alert(kq);
-			  kq = kq.toLocaleString();
+			
+			//  kq = kq.toLocaleString();
 			  document.getElementById("thanhtien_"+id).value = kq;
 		} catch (e) {
 			// TODO: handle exception
@@ -1203,8 +1204,8 @@ function tinhtong(id){
 	  if(dongia.trim()!="" &&  soluong.trim()!=""){
 		  try {				 
 			  var kq = parseFloat(dongia)*parseFloat(soluong);
-			  alert(kq.toLocaleString());
-			  document.getElementById("thanhtien_"+id).value = kq.toLocaleString();
+			
+			  document.getElementById("thanhtien_"+id).value = kq;
 		} catch (e) {
 			// TODO: handle exception
 		}
