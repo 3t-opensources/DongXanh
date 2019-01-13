@@ -308,7 +308,7 @@ public class ManagementHome {
 			
 			//Query query = session.createQuery("FROM Management WHERE step=1 AND duplicate_status=0 AND present_user=0 ORDER BY id");
 			//List<Management> results = query.list();
-			try(ResultSet rs1 = st.executeQuery("Select * From management WHERE step=1 AND duplicate_status=0 AND present_user=0 ORDER BY id")) {
+			try(ResultSet rs1 = st.executeQuery("Select * From management WHERE step=1 AND duplicate_status=0 ORDER BY id")) {
 				results = ResultSetUtils.parserResultSet(rs1, Management.class);
 			}
 			tx.commit();

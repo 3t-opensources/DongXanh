@@ -35,6 +35,7 @@ CREATE TABLE IF NOT EXISTS `invoice_data` (
   `product_names` text DEFAULT NULL, 
   `total_boxs` text DEFAULT NULL, 
   `quantitys` text DEFAULT NULL, 
+  `unit_prices` text DEFAULT NULL,
   `total_prices` text DEFAULT NULL, 
   `sum_total_price` decimal(18,2) DEFAULT '0.00',
   PRIMARY KEY (`id`),

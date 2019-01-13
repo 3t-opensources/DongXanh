@@ -413,6 +413,7 @@ public class ManagementAction extends ActionSupport implements ServletContextAwa
 			invoice_data.setProduct_names(data.getProduct_names());
 			invoice_data.setTotal_boxs(data.getTotal_boxs());
 			invoice_data.setQuantitys(data.getQuantitys());
+			invoice_data.setUnit_prices(data.getUnit_prices());
 			invoice_data.setTotal_prices(data.getTotal_prices());
 			invoice_data.setSum_total_price(new BigDecimal(data.getSum_total_price()));
 

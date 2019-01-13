@@ -392,6 +392,7 @@ public class InvoiceDataHome {
 				invoice.setTotal_boxs(rs.getString("total_boxs"));
 				invoice.setQuantitys(rs.getString("quantitys"));
 				invoice.setTotal_prices(rs.getString("total_prices"));
+				invoice.setUnit_prices(rs.getString("unit_prices"));
 				invoice.setSum_total_price(rs.getBigDecimal("sum_total_price"));
 				
 				results.add(invoice);

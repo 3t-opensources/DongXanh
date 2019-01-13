@@ -25,9 +25,16 @@ public class InvoiceData {
 	public String product_names;
 	public String total_boxs;
 	public String quantitys;
+	public String unit_prices;
 	public String total_prices;
 	public BigDecimal sum_total_price;
 	
+	public String getUnit_prices() {
+		return unit_prices;
+	}
+	public void setUnit_prices(String unit_prices) {
+		this.unit_prices = unit_prices;
+	}
 	public String getInvoice_type_name() {
 		return invoice_type_name;
 	}

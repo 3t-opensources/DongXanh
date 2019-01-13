@@ -27,7 +27,15 @@ public class EntInvoiceData {
 	private String quantitys;
 	private String total_prices;
 	public String sum_total_price;
-	
+	public String unit_prices;
+
+	public String getUnit_prices() {
+		return unit_prices;
+	}
+
+	public void setUnit_prices(String unit_prices) {
+		this.unit_prices = unit_prices;
+	}
 
 	public String getId() {
 		return id;
