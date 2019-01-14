@@ -222,9 +222,10 @@ pageEncoding="UTF-8"%>
   		    if(curr_month<10){
   		    	curr_month = "0"+curr_month;
   		    }
-  		    currentDate = curr_date + "/" + curr_month + "/" +curr_year ;		   
+  		    let fromDate = "01/" + curr_month + "/" +curr_year ;
+  		  	let currentDate = curr_date + "/" + curr_month + "/" +curr_year ;
   		  
-  		    $("#form_date_search").val(currentDate);
+  		    $("#form_date_search").val(fromDate);
   		    $("#to_date_search").val(currentDate);
   		   
   		     $("#dialog").dialog({
