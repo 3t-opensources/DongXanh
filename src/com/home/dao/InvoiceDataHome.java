@@ -330,7 +330,7 @@ public class InvoiceDataHome {
 					+ " AND (0="+(invoice_type<=0?0:1)+" Or (invoice_type_id=?))"
 					+ " AND (0="+(staff_id<=0?0:1)+" Or (i.staff_id=?))"
 					+ " AND (0="+(customer_id<=0?0:1)+" Or (customer_id=?))"
-					+ " AND (0="+(sent_late<=0?0:1)+" Or (date_sent_late>0))"
+					+ " AND (0="+(sent_late<=0?0:1)+" Or (date_sent_late"+(sent_late==1?">0":"=0")+"))"
 					+ " Order by date_company_received, id";
 			
 			//System.out.println(sql);

@@ -17,19 +17,40 @@ public class RedisUtil {
 	}
 	
 	public String set(String key, String value){
-		return this.jedis.set(key, value);
+		try {
+			return this.jedis.set(key, value);
+		} catch (Exception e) {
+			close();
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
 	public String get(String key){
-		return this.jedis.get(key);
+		try {
+			return this.jedis.get(key);
+		} catch (Exception e) {
+			close();
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
 	public void close(){
-		jedis.close();
+		try {
+			jedis.close();
+			jedis.disconnect();
+			jedis = null;
+		} catch (Exception e) {}
 	}
 	
 	public String resetAllValues(){
-		return jedis.flushAll();
+		try {
+			return jedis.flushAll();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
 	public void connect(String host, int port, String auth_pass){
