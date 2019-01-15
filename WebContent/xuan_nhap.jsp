@@ -101,35 +101,38 @@
         			  
     	                <div class="well"><p align="center">
     	                        				            
-				                 <button type="button" id ="btn_xoabangke"  class="btn btn-success" onclick="bad_images();">Xóa toa/bảng kê</button>			  
-				            	 <button type="button" id ="btn_Luubangke"  class="btn btn-success" onclick="saveData();">Lưu toa/bảng kê</button>			  
+				                 <button title="Alt +S" type="button" id ="btn_xoabangke"  class="btn btn-success" onclick="bad_images();">Xóa toa/bảng kê</button>			  
+				            	 <button title="Alt +D" id ="btn_Luubangke"  class="btn btn-success" onclick="saveData();">Lưu toa/bảng kê</button>			  
                       	</div>
 						<div id="wrapper" style="width : 100%; height : 100%; float: right">
 							<!-- <div class="panel-heading" style="color: blue;font-weight: bold;">META DATA </div> -->
 									<div class="metadata" style="z-index: 1">									    
 									        <div class="row " >
 	                                       		  <div class="col-lg-2" ><span>Loại bảng kê  </span>  </div>	                                       		  
-	                                       		  <div class="col-lg-4">	
-	                                       		  
-	                                       		   <select id="cbb_loaibangke" name="cbb_loaibangke"  class="cbb_search" style="width: 100% ; height: 27px">
-										          
-										              	                  
+	                                       		  <div class="col-lg-4">
+	                                       		        <select id="cbb_loaibangke" name="cbb_loaibangke"  class="cbb_search" style="width: 100% ; height: 27px">
 										           </select>
-	                                       		  </div>	 
+	                                       		  </div>  
 	                                       		  
-	                                       			                                        		  
+	                                       		  <div class="col-lg-2 no_margin_right" ><span>Ngày Cty nhận toa </span>  </div>	                                       		  
+	                                       		  <div class="col-lg-4">
+	                                       		         <input value = "" id = "ngaynhantoa" name="ngaynhantoa" class="form-control"  tabindex="1" onkeyup="getSongay()"/>			
+			                                       		  
+	                                       		  </div>                              		  
 	                                        </div>
+	                                        
+	                                        
 										     <div class="clear"></div>										     
 										      <div class="row " >
 	                                       		  <div class="col-lg-2" ><span>Mã KH </span>  </div>	                                       		  
 	                                       		  <div class="col-lg-4">	
 	                                       		          <input type="hidden" id="customer_id_hidden" name="customer_id_hidden" value="789">		                                       									
-				                                          <input value = "" id = "maKH" name="maKH" class="form-control" ondblclick = "getIdTag(this)" tabindex="1"/>				                                         
+				                                          <input value = "" id = "maKH" name="maKH" class="form-control" ondblclick = "getIdTag(this)" tabindex="2"/>				                                         
 	                                       		  </div>	   
 	                                       		  
 	                                       		 <div class="col-lg-2" ><span>Tên KH </span>  </div>	                                       		  
 	                                       		  <div class="col-lg-4">			                                       									
-				                                          <input value = "" id = "tenKH" name="tenKH" class="form-control" ondblclick = "getIdTag(this)" tabindex="2"/>				                                         
+				                                          <input value = "" id = "tenKH" name="tenKH" class="form-control" ondblclick = "getIdTag(this)" tabindex="3"/>				                                         
 	                                       		  </div>	                                       		  
 	                                        </div>
 										     <div class="clear"></div>										     
@@ -138,39 +141,35 @@
 	                                       		  <div class="col-lg-4">	
 	                                       		          <input type="hidden"  value = "" id = "customer_id_level1_hidden"  name="customer_id_level1_hidden"   /> 	
 	                                       		          <input type="hidden"  value = "" id = "customer_code_level1_hidden"  name="customer_code_level1_hidden"    /> 		                                       									
-				                                          <input value = "" id = "customer_name_level1" name="customer_name_level1" class="form-control" ondblclick = "getIdTag(this)" tabindex="3"/>				                                         
+				                                          <input value = "" id = "customer_name_level1" name="customer_name_level1" class="form-control" ondblclick = "getIdTag(this)" tabindex="4"/>				                                         
 	                                       		  </div>	   
 	                                       		  
 	                                       		 <div class="col-lg-2" ><span>NVTT </span>  </div>	                                       		  
 	                                       		  <div class="col-lg-4">
 	                                       		  
         			  			                          <input type="hidden"  value = "" id = "nvtt_id_hidden"  name="nvtt_id_hidden"    class="form-control" ondblclick = "getIdTag(this)" tabindex="4"/>             									
-				                                          <input value = "" id = "nvtt_name" name="nvtt_name" class="form-control" ondblclick = "getIdTag(this)" tabindex="4"/>				                                         
+				                                          <input value = "" id = "nvtt_name" name="nvtt_name" class="form-control" ondblclick = "getIdTag(this)" tabindex="5"/>				                                         
 	                                       		  </div>	                                                 		  
 	                                        </div>
 										     <div class="clear"></div>	
 										      <div class="row " >
-	                                       		  <div class="col-lg-2 no_margin_right" ><span>Ngày nhận toa </span>  </div>	                                       		  
-	                                       		  <div class="col-lg-4">
-	                                       		         <input value = "" id = "ngaynhantoa" name="ngaynhantoa" class="form-control"  tabindex="5" onkeyup="getSongay()"/>			
-			                                       		  
-	                                       		  </div>
-	                                       		  
-	                                       		 <div class="col-lg-2 no_margin_right" ><span>Ngày nhận hàng </span>  </div>	                                       		  
+	                                       		 <div class="col-lg-2 no_margin_right" ><span>Ngày cấp 1 giao toa</span>  </div>	                                       		  
 	                                       		  <div class="col-lg-4">
 	                                       		   <input value = "" id = "ngaynhanhang" name="ngaynhanhang" class="form-control"  tabindex="6" onkeyup="getSongay()"/>	
-	                                       		  </div>	                                          		  
-	                                        </div>
-	                                        
-	                                        <div class="clear"></div>	
-										      <div class="row " >
+	                                       		  </div>
+	                                       		  
 	                                       		  <div class="col-lg-2 no_margin_right" ><span>Số ngày gởi trể</span>  </div>	                                       		  
 	                                       		  <div class="col-lg-4">			                                       									
 				                                          <input onkeyup="getSongay()" value = "" type="number" id = "date_sent_late" name="date_sent_late" class="form-control" ondblclick = "getIdTag(this)" tabindex="7"/>				                                         
 	                                       		  </div>	   
-	                                       		  
+	                                       		                                            		  
+	                                        </div>
+	                                        
+	                                        <div class="clear"></div>	
+										      <div class="row " >
+	                                       		
 	                                       		 <div class="col-lg-2" ><span>Ghi chú </span>  </div>	                                       		  
-	                                       		  <div class="col-lg-4">			                                       									
+	                                       		  <div class="col-lg-10">			                                       									
 				                                          <input value = "" id = "notes" name="notes" class="form-control" ondblclick = "getIdTag(this)" tabindex="8"/>				                                         
 	                                       		  </div>	                                          		  
 	                                        </div>
@@ -291,7 +290,16 @@ function getjob(){
             	 var id              = responseText[0].id;
             	 document.getElementById("id").value               = id;
            	     document.getElementById("management_id").value    = id ;
-           	    
+           	     var ngaynhantoa_date                              = responseText[0].created_time ;
+           	     var ngaynhantoa ="";
+           	     console.log(ngaynhantoa_date);
+           	     if(ngaynhantoa_date.length>10){
+           	    	ngaynhantoa = ngaynhantoa_date.substring(8,10)+"/"+ngaynhantoa_date.substring(5,7)+"/"+ngaynhantoa_date.substring(0,4);
+           	        document.getElementById("ngaynhantoa").value      = ngaynhantoa ;
+           	        document.getElementById("ngaynhanhang").value      = ngaynhantoa ;
+           	     }
+           	   
+           	  
            	     var imagePath_hidden ="";
            	     var file_path        = responseText[0].file_path.split("/DX_Images/");
            	     var file_name        = responseText[0].file_name;
@@ -307,7 +315,7 @@ function getjob(){
            	     }
            	    
            	     $('#viewer').iviewer('loadImage', imagePath_hidden);
-           	    document.getElementById("maKH").focus(); 
+           	    document.getElementById("ngaynhantoa").focus(); 
         	 }else{
         		 checkGetJob(true);
         		 alert("Hết hóa đơn nhập!");
@@ -839,6 +847,24 @@ $(document).ready(function() {
       $("#fit").click(function(){ iv.iviewer('fit'); });
       $("#orig").click(function(){ iv.iviewer('set_zoom', 100); });
       $("#update").click(function(){ iv.iviewer('update_container_info'); });
+      $('.iviewer_rotate_right').attr('title','Ok');
+    
+      $(".iviewer_rotate_right").click(function() {
+    	
+    	});
+    
+      $(".iviewer_zoom_out").click(function() {
+     	
+     	});
+      $(".iviewer_zoom_zero").click(function() {
+     	
+     	});
+      $(".iviewer_rotate_left").click(function() {
+     	
+     	});
+      $(".iviewer_rotate_right").click(function() {
+     	
+     	});
       
       
       lookupCaptureInvoiceTypeAction();
@@ -908,20 +934,22 @@ $(document).ready(function() {
      });  
     
       $(document).on('keydown',function(e) {
+    	 
     	  if(e.altKey && event.which ==83){
     		  saveData();
     	  }
     	  if(e.altKey && event.which ==68){
     		  bad_images();
     	  }
-    	    
+    	  
+    	  if(e.altKey && event.which ==18){    		
+    		//  $('#zoom_in').click(function() { zoom_page(10, $(this)) });
+    	
+    	  }
+    
     	});
       
-      webshims.setOptions('forms-ext', {
-    	    replaceUI: 'auto',
-    	    types: 'number'
-    	});
-    	webshims.polyfill('forms forms-ext');
+    
       
 });
         var customer_id_hidden            = document.getElementById("customer_id_hidden");
@@ -1274,6 +1302,7 @@ function tinhtong(id){
 	              data    : "",
 	              success : function(responseText) {
 	            	  var cbb_nvtt = document.getElementById("cbb_loaibangke");
+	            	  console.log("============cbb_loaibangke===============");
 	            	  for (i in responseText) {  	        		
 		  	        		console.log(responseText[i]);
 		  	        		  var option   = document.createElement("option");
