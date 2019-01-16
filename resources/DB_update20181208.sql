@@ -45,3 +45,6 @@ CREATE TABLE IF NOT EXISTS `invoice_data` (
   KEY `FK_invoice_data_customer1_idx` (`customer_id_level1`),
   KEY `FK_invoice_data_invoice_type_id` (`invoice_type_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+ALTER TABLE `invoice_type` ADD `tab_order` INT NOT NULL DEFAULT '0' AFTER `description`;
+ALTER TABLE `invoice_type` ADD `status` INT NOT NULL DEFAULT '0' AFTER `tab_order`;

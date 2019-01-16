@@ -168,6 +168,7 @@ public class ManagementAction extends ActionSupport implements ServletContextAwa
 				}else{
 					rsStatus = 1;
 					strMess.append("File duplicate["+output.getName()+"];");
+					output.delete();
 				}	
 			}
 			rsMess.setStatusError(rsStatus);

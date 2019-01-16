@@ -30,6 +30,16 @@
 			<result name="success">/invoice_data_report1.jsp</result>
 			<result name="error">/invoice_data_report1.jsp</result>
 		</action>
+		
+		<action name="exportInvoiceDataReport1Action" method="exportInvoiceData"
+			class="com.home.action.InvoiceDataAction">
+			<result name="success" type="stream">
+				<param name="contentType">application/vnd.openxmlformats-officedocument.spreadsheetml.sheet</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="contentDisposition">attachment;filename="InvoiceData.xlsx"</param>
+			</result>
+		</action>
+		
 	</package>
 
 	<package name="invoiceJson" namespace="/" extends="json-default">
