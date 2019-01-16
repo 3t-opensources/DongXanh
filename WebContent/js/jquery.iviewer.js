@@ -935,11 +935,11 @@ $.widget( "ui.iviewer", $.ui.mouse, {
         var me=this;
         var $newdiv1 = $("<div>", {'class': "iviewer-panel"}).appendTo(this.container);
 
-        $("<div>", { 'class': "iviewer_zoom_in iviewer_common iviewer_button"})
+        $("<div>", {'title':'Ctrl + Right','id':'iviewer_zoom_in', 'class': "iviewer_zoom_in iviewer_common iviewer_button"})
                     .bind('mousedown touchstart',function(){me.zoom_by(1); return false;})
                     .appendTo($newdiv1);
 
-        $("<div>", { 'class': "iviewer_zoom_out iviewer_common iviewer_button"})
+        $("<div>", { 'title':'Ctrl + Left' ,'id':'iviewer_zoom_out','class': "iviewer_zoom_out iviewer_common iviewer_button"})
                     .bind('mousedown touchstart',function(){me.zoom_by(- 1); return false;})
                     .appendTo($newdiv1);
 
@@ -954,11 +954,11 @@ $.widget( "ui.iviewer", $.ui.mouse, {
         this.zoom_object = $("<div>").addClass("iviewer_zoom_status iviewer_common")
                         .appendTo($newdiv1);            
 
-        $("<div>", { 'class': "iviewer_rotate_left iviewer_common iviewer_button"})
+        $("<div>", { 'title':'Ctrl + Up' ,'id':'iviewer_rotate_left', 'class': "iviewer_rotate_left iviewer_common iviewer_button"})
                     .bind('mousedown touchstart',function(){me.angle(-90); return false;})
                     .appendTo($newdiv1);
 
-        $("<div>", { 'class': "iviewer_rotate_right iviewer_common iviewer_button" })
+        $("<div>", { 'title':'Ctrl + Down' ,'id':'iviewer_rotate_right', 'class': "iviewer_rotate_right iviewer_common iviewer_button" })
                     .bind('mousedown touchstart',function(){me.angle(90); return false;})
                     .appendTo($newdiv1);
 

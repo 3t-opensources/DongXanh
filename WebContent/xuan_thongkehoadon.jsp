@@ -313,6 +313,23 @@ pageEncoding="UTF-8"%>
    			} 
    	 }
    	 
+   	function btnExport(){
+   		
+   	 var sent_late             = document.getElementById("cbb_ngaygoitre").value;
+	 var customer_id           = document.getElementById("cbb_khachhang").value;
+	 var user_id               = document.getElementById("cbb_nvtt").value;
+	 var invoice_type          = document.getElementById("cbb_loaibangke").value;
+	 var end_day               = document.getElementById("to_date_search").value;
+	 var start_day             = document.getElementById("form_date_search").value;
+
+ 		location.href		   ="getInvoiceDataFilterReport1Action?sent_late="+sent_late+
+							    "&customer_id="+customer_id+
+							    "&user_id="+user_id+
+							    "&invoice_type="+invoice_type+
+							    "&end_day="+end_day+
+							    "&start_day="+start_day;
+	}
+   	
    	function getInvoiceDataFilterReport(){   		
 	   	 var sent_late             = document.getElementById("cbb_ngaygoitre").value;
 		 var customer_id           = document.getElementById("cbb_khachhang").value;
@@ -423,8 +440,8 @@ pageEncoding="UTF-8"%>
 				  	        		table +="     <td>"+product_names[row]+"</td>";  
 				  	        		table +="     <td class='right'>"+getDataNumber(quantitys[row])+"</td>";
 				  	            	table +="     <td class='right'>"+getDataNumber(total_boxs[row])+"</td>";
-				  	        		table +="     <td class='right'>"+getDataNumber(total_prices[row])+"</td>";
-				  	        		table +="     <td class='right'>"+getDataNumber(unit_prices[row])+"</td>";
+				  	            	table +="     <td class='right'>"+getDataNumber(unit_prices[row])+"</td>";
+				  	        		table +="     <td class='right'>"+getDataNumber(total_prices[row])+"</td>";				  	        		
 				  	        		table +="     <td style='display: none' id ='id_mages_"+id_mages+"'>"+imagePath_hidden+"</td>";
 				  	        		
 				  	        		table +="  </tr>";
@@ -531,6 +548,8 @@ pageEncoding="UTF-8"%>
 	              }
 	   	   });
  }
+	
+	
 
 
    	

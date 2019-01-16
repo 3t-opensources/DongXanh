@@ -8,7 +8,9 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -35,15 +37,20 @@ import com.home.conts.UserPlanDefine;
 import com.home.dao.ContactTypeHome;
 import com.home.dao.CustomEventsManager;
 import com.home.dao.CustomerHome;
+import com.home.dao.EventsNoteHome;
 import com.home.dao.TimelineTypeHome;
 import com.home.dao.UserHome;
 import com.home.dao.UserPlanHome;
+import com.home.dao.WorkingPlanHome;
 import com.home.entities.UserAware;
+import com.home.entities.UserPlanGeneral;
 import com.home.model.ContactType;
 import com.home.model.Customer;
+import com.home.model.EventsNote;
 import com.home.model.MessageStore;
 import com.home.model.TimelineType;
 import com.home.model.User;
+import com.home.util.DateUtils;
 import com.home.util.ExcelUtil;
 import com.home.util.HibernateUtil;
 import com.home.util.StringUtil;
@@ -451,6 +458,8 @@ public class UserPlanAction extends ActionSupport implements UserAware, UserPlan
 		return SUCCESS;
 	}
 
+	
+	
 	public String getPlanStatistic() {
 		return SUCCESS;
 	}

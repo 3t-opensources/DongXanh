@@ -56,7 +56,6 @@
 		<div class="navbar nav_title" style="border: 0;">
 			<a class="site_title" href="homeAction">
 				<img width="27%" height="70%" alt="ĐỒNG XANH" src="./images/banner_dongxanh.png" style="padding-top: 10px ;">
-			
 			</a>
 		</div>
 	</div>
@@ -89,7 +88,7 @@
     <div class="split-pane-component" id="right-component">
       <div class="split-pane fixed-bottom diagram-section" id="split-pane-2">
 
-    	<form name = "form-field" id = "form-text-field" action = "saveform" method = "post" onsubmit = "return confirmwhensubmit()">
+    	  <!--<form name = "form-field" id = "form-text-field" action = "saveform" method = "post" onsubmit = "return false">-->
     	              <input type="hidden" id="id" name="id" value="123">
         			  <input type="hidden" id="management_id" name="management_id" value="">
         			  <input type="hidden" id="invoice_type_id" name="invoice_type_id" value="">
@@ -245,7 +244,7 @@
                       		
 						</div>
 						</div>
-						</form>
+					 <!--	</form> -->
 						
 						
 
@@ -809,6 +808,16 @@ function moveRow(id){
 	}
 	
 }
+$(function() {
+    if (window.history && window.history.pushState) {
+        window.history.pushState('', null, './');
+        $(window).on('popstate', function() {
+          
+            document.location.href = '#';
+
+        });
+    }
+});
 $(document).ready(function() {
 	var imagePath = "http://nv.dongxanhvn.com:8077/DX_Images/test_image.jpg";
 /* 	checkGetJob(true); */
@@ -828,7 +837,7 @@ $(document).ready(function() {
 	  $('#horizontal-divider-2').css('bottom', winHeight / 3 + 'px');
 	
 	
-	
+	 
 	 
                                    
        
@@ -846,27 +855,7 @@ $(document).ready(function() {
       $("#out").click(function(){ iv.iviewer('zoom_by', -1); });
       $("#fit").click(function(){ iv.iviewer('fit'); });
       $("#orig").click(function(){ iv.iviewer('set_zoom', 100); });
-      $("#update").click(function(){ iv.iviewer('update_container_info'); });
-      $('.iviewer_rotate_right').attr('title','Ok');
-    
-      $(".iviewer_rotate_right").click(function() {
-    	
-    	});
-    
-      $(".iviewer_zoom_out").click(function() {
-     	
-     	});
-      $(".iviewer_zoom_zero").click(function() {
-     	
-     	});
-      $(".iviewer_rotate_left").click(function() {
-     	
-     	});
-      $(".iviewer_rotate_right").click(function() {
-     	
-     	});
-      
-      
+      $("#update").click(function(){ iv.iviewer('update_container_info'); });      
       lookupCaptureInvoiceTypeAction();
       getjob();
       
@@ -933,25 +922,40 @@ $(document).ready(function() {
   	    }
      });  
     
-      $(document).on('keydown',function(e) {
-    	 
-    	  if(e.altKey && event.which ==83){
-    		  saveData();
-    	  }
-    	  if(e.altKey && event.which ==68){
-    		  bad_images();
-    	  }
-    	  
-    	  if(e.altKey && event.which ==18){    		
-    		//  $('#zoom_in').click(function() { zoom_page(10, $(this)) });
-    	
-    	  }
     
-    	});
       
     
       
 });
+
+
+$(document).bind('keydown',function(e) {
+	
+	  if(e.altKey && event.which ==83){
+		  saveData();
+	  }
+	  if(e.altKey && event.which ==68){
+		  bad_images();
+	  }
+	 
+	  if(e.ctrlKey && event.which ==39){  
+		  $("#iviewer_zoom_in").trigger('mousedown');    		
+	  }
+	  if(e.ctrlKey && event.which ==37){  
+		  $("#iviewer_zoom_out").trigger('mousedown');    		
+	  }
+	  
+	  if(e.ctrlKey && event.which ==38){  
+		  $("#iviewer_rotate_left").trigger('mousedown');    		
+	  }
+	  if(e.ctrlKey && event.which ==40){  
+		  $("#iviewer_rotate_right").trigger('mousedown');    		
+	  }
+	  
+	  
+	});
+     
+     
         var customer_id_hidden            = document.getElementById("customer_id_hidden");
 		var maKH                          = document.getElementById("maKH");
 		var tenKH                         = document.getElementById("tenKH");
