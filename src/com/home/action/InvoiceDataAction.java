@@ -229,32 +229,38 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 				int startIndexRow = 0;
 				int startIndexCell = 0;
 				xls.addRowData(sheet, startIndexRow, startIndexCell, 
-						"Ma KH","Tên bảng kê","Khách hàng cấp 1","NVTT","Ngày nhận hàng","Số ngày gởi trể","Ghi chú","Tên sản phẩm","Số lượng","Số thùng","Đơn giá","Thành tiền");
+						"Loại bảng kê","Mã khách hàng","Tên khách hàng","Khách hàng cấp 1","NVTT","Ngày nhận toa","Ngày nhận hàng","Số ngày gởi trể","Ghi chú","Mã sản phẩm","Tên sản phẩm","Số lượng","Số thùng","Đơn giá","Thành tiền");
 				startIndexRow++;
 				for (InvoiceData entry : listData) {
-					String c1 =  StringUtil.notNull(entry.getCustomer_code());
-					String c2 =  StringUtil.notNull(entry.getCustomer_name());
-					String c3 =  StringUtil.notNull(entry.getCustomer_name_level1());
-					String c4 =  StringUtil.notNull(entry.getStaff_name());
-					String c5 =  StringUtil.notNull(entry.getDate_company_received());
-					String c6 =  StringUtil.notNull(entry.getDate_sent_late());
-					String c7 =  StringUtil.notNull(entry.getNotes());
-					if(c1.length() > 0 && c2.length() > 0){
-						String[] arr1 =  StringUtil.notNull(entry.getProduct_names()).split("`");
-						String[] arr2 =  StringUtil.notNull(entry.getQuantitys()).split("`");
-						String[] arr3 =  StringUtil.notNull(entry.getTotal_boxs()).split("`");
-						String[] arr4 =  StringUtil.notNull(entry.getUnit_prices()).split("`");
-						String[] arr5 =  StringUtil.notNull(entry.getTotal_prices()).split("`");
+					
+  	        		
+  	        		String c1 =  StringUtil.notNull(entry.getInvoice_type_name());
+					String c2 =  StringUtil.notNull(entry.getCustomer_code());
+					String c3 =  StringUtil.notNull(entry.getCustomer_name());
+					String c4 =  StringUtil.notNull(entry.getCustomer_name_level1());
+					String c5 =  StringUtil.notNull(entry.getStaff_name());
+					String c6 =  StringUtil.notNull(entry.getDate_company_received());
+					String c7 =  StringUtil.notNull(entry.getDate_product_received());
+					String c8 =  StringUtil.notNull(entry.getDate_sent_late());
+					String c9 =  StringUtil.notNull(entry.getNotes());
+					if(c1.length() > 0){
+						String[] arr1 =  StringUtil.notNull(entry.getProduct_ids()).split("`");
+						String[] arr2 =  StringUtil.notNull(entry.getProduct_names()).split("`");
+						String[] arr3 =  StringUtil.notNull(entry.getQuantitys()).split("`");
+						String[] arr4 =  StringUtil.notNull(entry.getTotal_boxs()).split("`");
+						String[] arr5 =  StringUtil.notNull(entry.getUnit_prices()).split("`");
+						String[] arr6 =  StringUtil.notNull(entry.getTotal_prices()).split("`");
 						if(arr1.length > 0){
 							for (int i = 0; i < arr1.length; i++) {
 								if(arr1[i].length() > 0){
 									xls.addRowData(sheet, startIndexRow, startIndexCell, 
-											c1,c2,c3,c4,c5,c6,c7,
+											c1,c2,c3,c4,c5,c6,c7,c8,c9,
 											arr1[i],
 											arr2[i],
 											arr3[i],
 											arr4[i],
-											arr5[i]
+											arr5[i],
+											arr6[i]
 									);
 									startIndexRow++;
 								}								

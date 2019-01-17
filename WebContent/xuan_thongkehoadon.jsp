@@ -12,7 +12,7 @@ pageEncoding="UTF-8"%>
 		<div class="row">
 			<div class="col-md-12 col-sm-12 col-xs-12">
 
-				 <form  action="ExportDeatail" method="post" onsubmit="return checksearchDate()" class="form-horizontal form_search"> 
+				<div class="form-horizontal form_search"> 
 			     <!--  <div  class="form-horizontal form_search"> -->
 			      <div class="form-group">			      
 			       <div class="title_width_8" >Ngày nhận từ </div>
@@ -80,13 +80,13 @@ pageEncoding="UTF-8"%>
 				        
 				        
 				        <div class="button_width_12">			           
-			                 <button type="submit" class="btn btn-success" onclick="searchDetail();" >Xuất ra excel</button>			         
+			                 <button type="submit" class="btn btn-success" onclick="export_Excel();" >Xuất ra excel</button>			         
 			            </div> 
 					           
 			      </div>
 			     
 			     
-			 </form>
+			 </div>
 
 			  <div class="detail_data_table detail_data_table_final" id ="detail_data_table">	    
 	             <span class="scroll left-scroll"> &#171; </span>
@@ -547,7 +547,26 @@ pageEncoding="UTF-8"%>
 	            	  }
 	              }
 	   	   });
- }
+	   	 
+	} 
+	function export_Excel(){ 
+	   	 var sent_late             = document.getElementById("cbb_ngaygoitre").value;
+		 var customer_id           = document.getElementById("cbb_khachhang").value;
+		 var user_id               = document.getElementById("cbb_nvtt").value;
+		 var invoice_type          = document.getElementById("cbb_loaibangke").value;
+		 var end_day               = document.getElementById("to_date_search").value;
+		 var start_day             = document.getElementById("form_date_search").value;
+		 
+		 var href           =  "exportInvoiceDataReport1Action?sent_late="+sent_late+
+							    "&customer_id="+customer_id+
+							    "&user_id="+user_id+
+							    "&invoice_type="+invoice_type+
+							    "&end_day="+end_day+
+							    "&start_day="+start_day;    
+	 		
+	 		location.href		= href;
+	   
+   }
 	
 	
 

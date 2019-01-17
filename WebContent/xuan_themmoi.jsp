@@ -80,7 +80,9 @@ pageEncoding="UTF-8"%>
 <!-- /page content -->
 
 
-
+<div id="loading" class="se-pre-con">
+       <p><img src="./images/Preloader_5.gif" /> Please Wait</p>
+  </div>
 <div id="custom_notifications" class="custom-notifications dsp_none">
 	<ul class="list-unstyled notifications clearfix"
 		data-tabbed_notifications="notif-group">
@@ -113,6 +115,7 @@ pageEncoding="UTF-8"%>
 <script src="js/nicescroll/jquery.nicescroll.min.js"></script>
 <!-- icheck -->
 <script src="js/icheck/icheck.min.js"></script>
+<script type="text/javascript" src="js/jquery.isloading.js"></script>
 
 <script src="js/custom.js"></script>
 
@@ -169,14 +172,21 @@ pageEncoding="UTF-8"%>
 	
 	document.getElementById("fileUpload").addEventListener("change", async function(event) {
 		   var stt   = 0; 
+		   $.isLoading({ text: ""});		
 		   $('#table_list_file > tbody  > tr').each(function() {		 
 			   stt++;
 		   });
 		   let files = event.target.files;		
-		   for (var i=0; i<files.length; i++) {			  
-			   addrow(stt,files[i]);
-			   stt++;
-			   await wait(500);
+		   for (var i=0; i<files.length; i++) {	
+			   if(files[i].name.toLowerCase().includes(".jpg") || files[i].name.toLowerCase().includes(".png")){
+				   addrow(stt,files[i]);
+				   stt++;
+				   await wait(500);
+			   }
+			   if(i==(files.length-1)){
+				   $.isLoading( "hide" );
+			   }
+			  
 		   };
 		}, false);
 	
@@ -340,6 +350,37 @@ pageEncoding="UTF-8"%>
     padding-top: 10px;
     font-size: 20px;
     font-weight: bold;
+    }
+    
+    .isloading-wrapper.isloading-right {
+    margin-left: 10px;
+}
+.isloading-overlay {
+    position: relative;
+    text-align: center;
+   
+   
+  
+}
+  .isloading-wrapper {
+        background: #FFFFFF;
+        .border-radius(7px);
+        display: inline-block;
+        margin: 0 auto;
+        padding: 10px 20px;
+        top: 10%;
+        z-index:9000;
+         background-image: url("./images/loading.gif")!important;
+   	background-repeat: no-repeat!important;
+   	background-attachment: fixed;
+    background-position: center; 
+    border-radius:7px;
+    width: 200px;
+    height: 200px; 
+  
+      
+    }
+    
 </style>
 
 </body>

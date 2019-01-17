@@ -45,7 +45,7 @@
  
 
 </head>
-<body>
+<body onLoad="noBack();" onpageshow="if (event.persisted) noBack();" onUnload="">
  <%
  
  List<InvoiceType> listInvoice =  (ArrayList<InvoiceType>) request.getAttribute("listInvoiceType");
@@ -238,7 +238,9 @@
 							          </tbody>
 							          
 							        </table>
+							       
 							      </div>
+							       <div style="float: right; padding-right: 110px;margin-top: 10px; font-size:18px; font-weight: bold;" id ="sum_thanh_tien"> Tổng cộng : 0 </div>
 							  </div>   
 				          
                       		
@@ -537,8 +539,8 @@ function saveData(){
 					 	         
 					   	}) ,	           
 			          success : function(responseText) {
-			        	   var url = window.location.href.toString();			        	
-			        		window.location.replace(url);
+			        	   var url = window.location.href.toString();				        	
+			        	   window.location.replace(url);
 			     
 			       
 			          }
@@ -808,17 +810,19 @@ function moveRow(id){
 	}
 	
 }
-$(function() {
-    if (window.history && window.history.pushState) {
-        window.history.pushState('', null, './');
-        $(window).on('popstate', function() {
-          
-            document.location.href = '#';
-
-        });
-    }
-});
+window.history.forward();
+function noBack()
+{
+    window.history.forward();
+}
 $(document).ready(function() {
+	
+	history.pushState(null, null, location.href);
+	
+    window.onpopstate = function () {
+        history.go(1);
+    };
+    
 	var imagePath = "http://nv.dongxanhvn.com:8077/DX_Images/test_image.jpg";
 /* 	checkGetJob(true); */
 	 var winWidth = $('.split-pane').width();
@@ -835,13 +839,6 @@ $(document).ready(function() {
 	  $('#top-component-2').css('bottom', winHeight / 3 + 'px');
 	  $('#bottom-component-2').css('height', winHeight / 3 + 'px');
 	  $('#horizontal-divider-2').css('bottom', winHeight / 3 + 'px');
-	
-	
-	 
-	 
-                                   
-       
-  
       var iv = $("#viewer").iviewer({
     	   src : imagePath,
            update_on_resize: true,
@@ -946,10 +943,11 @@ $(document).bind('keydown',function(e) {
 	  }
 	  
 	  if(e.ctrlKey && event.which ==38){  
-		  $("#iviewer_rotate_left").trigger('mousedown');    		
+		  $("#iviewer_rotate_left").trigger('mousedown');  
 	  }
 	  if(e.ctrlKey && event.which ==40){  
-		  $("#iviewer_rotate_right").trigger('mousedown');    		
+		  $("#iviewer_rotate_right").trigger('mousedown');  
+		   	
 	  }
 	  
 	  
@@ -1225,6 +1223,26 @@ function tinhtong_sothung(id){
 		}
 		
 	  }
+	 
+	  var sum_thanh_tien =0;
+	 
+      $('#table_position > tbody  > tr').each(function() {
+    	  var sanpham_id    = this.getAttribute("id"); 
+    	  soluong       = document.getElementById("soluong_"+sanpham_id).value;
+    	  dongia        = document.getElementById("dongia_"+sanpham_id).value;
+    	  if(dongia!="" &&  soluong!=""){
+    		  try {	
+    			  var thanhiten   = parseFloat(dongia)*parseFloat(soluong);
+    			  sum_thanh_tien  = sum_thanh_tien + thanhiten  ;
+    		} catch (e) {
+    			// TODO: handle exception
+    		}
+    	  }
+      
+      });
+      if( !isNaN(sum_thanh_tien)){
+    	  $("#sum_thanh_tien").html("Tổng : "+sum_thanh_tien.toLocaleString());	
+      }
 }
 function tinhtong(id){
 	
@@ -1232,7 +1250,7 @@ function tinhtong(id){
 	  var soluong   =   document.getElementById("soluong_"+id).value;
 	  var sothung   =   document.getElementById("sothung_"+id).value;
 	  var dongia    =   document.getElementById("dongia_"+id).value;
-	  console.log("1174============="+id);
+	  console.log("1255============="+id);
 	  if(dongia.trim()!="" &&  soluong.trim()!=""){
 		  try {				 
 			  var kq = parseFloat(dongia)*parseFloat(soluong);
@@ -1243,6 +1261,29 @@ function tinhtong(id){
 		}
 		
 	  }
+	
+	  var sum_thanh_tien =0;
+	  console.log("====1268====="+sum_thanh_tien);
+      $('#table_position > tbody  > tr').each(function() {
+    	  console.log("==1270========"+sum_thanh_tien);
+    	  var sanpham_id       = this.getAttribute("id"); 
+    	  var soluong_td       = document.getElementById("soluong_"+sanpham_id).value;
+    	  var dongia_td        = document.getElementById("dongia_"+sanpham_id).value;    	 
+    	  if(dongia_td!="" &&  soluong_td!=""){
+    		  try {				 
+    			  var thanhiten   = parseFloat(dongia)*parseFloat(soluong);
+    			  sum_thanh_tien  = sum_thanh_tien + thanhiten  ;
+    		} catch (e) {
+    			// TODO: handle exception
+    		}
+    	  }
+      
+      });
+      console.log("==========1284======="+sum_thanh_tien);
+      if( !isNaN(sum_thanh_tien)){
+    	  $("#sum_thanh_tien").html("Tổng : "+sum_thanh_tien.toLocaleString());	
+      }
+     
 }
    function getday(ngaynhantoa){
 	   var date_val = ngaynhantoa.value.replace(/[^0-9]/g, '');
