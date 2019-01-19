@@ -648,6 +648,166 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 		return INPUT;
 	}
 
+	public static void main(String[] args) {
+		try {
+			new CustomerAction().assignCus();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public String assignCus() throws Exception {
+		try {
+			cust = new Customer();
+			StringBuilder logDuplicate = new StringBuilder();
+			File theFile = new File("/home/administrator/Downloads/Danh sach phan cong 2018-2019.xlsx");
+			Cell cell = null;
+			Object value = null;
+			varIndexRow = "3";
+			varIndexColumn = "1,2,3,4,8,9,11";
+			varFieldEntName = "customerCode,statisticName,groupCustomer,businessAddress,customerByCustomer1Level1Id,user,telefone";
+			try (FileInputStream fis = new FileInputStream(theFile)) {
+				ExcelUtil xls = new ExcelUtil();
+				CustomerHome custHome = new CustomerHome(getSessionFactory());
+				UserHome userHome = new UserHome(getSessionFactory());
+				workbook = xls.getWorkbook(fis, FilenameUtils.getExtension(theFile.getAbsolutePath()));
+				Sheet sheet = workbook.getSheetAt(0);
+				Iterator<Row> rowIterator = sheet.iterator();
+				totalRecordExcel = sheet.getPhysicalNumberOfRows();
+				for (int i = 0; i < Integer.parseInt(varIndexRow) - 1; i++) {
+					rowIterator.next();
+				}
+				while (rowIterator.hasNext()) {
+					Row row = rowIterator.next();
+					processIndexExcel = row.getRowNum() + 1;
+					cust = new Customer();
+					cust.setCustomerIsActive(true);
+					cell = row.getCell(0);
+					if (cell == null)
+						break;
+					value = xls.getValue(cell);
+					if (StringUtil.notNull(value).isEmpty())
+						continue;
+					String[] arrIndexColumn = varIndexColumn.split(",");
+					String[] arrFieldEntName = varFieldEntName.split(",");
+
+					// -------------CreateTime--------------
+					getCust().setCreateTime(new Date());
+					// ---------------------------
+					// -------------GroupCustomer--------------
+					GroupCustomer gCust = new GroupCustomer();
+					gCust.setId(1);
+					getCust().setGroupCustomer(gCust);
+					
+					User user = new User();
+					
+					// ---------------------------
+					for (int i = 0; i < arrIndexColumn.length; i++) {
+						cell = row.getCell(Integer.parseInt(arrIndexColumn[i].trim()));
+						value = xls.getValue(cell);
+						if (arrFieldEntName[i].trim().equals("customerByCustomer1Level1Id")) {
+							String[] arrCustomerName = StringUtil.notNull(value).split(",");
+							for (int j = 1; j <= arrCustomerName.length; j++) {
+								Customer cus = custHome.findByName(StringUtil.notNull(arrCustomerName[j - 1].trim()));
+								if(cus == null){
+									cus = custHome.findBusinessName(StringUtil.notNull(arrCustomerName[j - 1].trim()));
+								}
+								//System.out.println(StringUtil.notNull(value) + " => " + cus);
+								switch (j) {
+									case 1:
+										cust.setCustomerByCustomer1Level1Id(cus);
+										break;
+									case 2:
+										cust.setCustomerByCustomer2Level1Id(cus);
+										break;
+									case 3:
+										cust.setCustomerByCustomer3Level1Id(cus);
+										break;
+									case 4:
+										cust.setCustomerByCustomer4Level1Id(cus);
+										break;
+									case 5:
+										cust.setCustomerByCustomer5Level1Id(cus);
+										break;
+									default:
+										break;
+								}
+							}
+						} else if (arrFieldEntName[i].trim().equals("user")) {
+							// -------------CustomerGroup--------------
+							user = new User();
+							if(StringUtil.notNull(value).length() > 0){
+								try {
+									user.setId(Integer.valueOf(StringUtil.notNull(value)));
+								} catch (Exception e) {
+									user = userHome.getUserByUserName(StringUtil.notNull(value).replace("NPĐằng", "NPDang").replace("CĐNăng", "CDNang"));
+								}	
+								//System.out.println(StringUtil.notNull(value) + " => " + user);
+								getCust().setUser(user);
+							}
+							
+							// ---------------------------
+						} else if (arrFieldEntName[i].trim().equals("groupCustomer")) {
+							// -------------CustomerGroup--------------
+							gCust = new GroupCustomer();
+							if("A".equalsIgnoreCase(StringUtil.notNull(value))){
+								gCust.setId(1);
+							}
+							else if("B".equalsIgnoreCase(StringUtil.notNull(value))){
+								gCust.setId(2);
+							}
+							else if("C".equalsIgnoreCase(StringUtil.notNull(value))){
+								gCust.setId(3);
+							}
+							else{
+								gCust.setId(1);
+							}
+							getCust().setGroupCustomer(gCust);
+							// ---------------------------
+						} else {
+							Field f = cust.getClass().getField(arrFieldEntName[i].trim());
+							if (f.getType() == Date.class) {
+								if (StringUtil.notNull(value).isEmpty()) {
+									f.set(cust, null);
+								} else {
+									try {
+										f.set(cust, (Date) value);
+									} catch (Exception e) {
+										f.set(cust, DateUtils.tryConvertStringToDate(StringUtil.notNull(value)));
+									}
+								}
+							} else if (f.getType() == BigDecimal.class) {
+								if (StringUtil.notNull(value).isEmpty()) {
+									f.set(cust, new BigDecimal(0));
+								} else {
+									f.set(cust, new BigDecimal(StringUtil.notNull(value)));
+								}
+							} else {
+								f.set(cust, StringUtil.notNull(value));
+							}
+						}
+					}
+					// ---------------------------
+					boolean isExisted = custHome.existCustomer(custId, getCust().getCustomerCode());
+					System.out.println(getCust().getCustomerCode() + " exist => " + isExisted);
+					if (!isExisted){
+						custHome.attachDirty(getCust());						
+					}else{
+						//logDuplicate.append("<li>Cảnh báo: Dữ liệu dòng " + (cell.getRowIndex() + 1) + " đã được cập nhật rồi!</li>");
+						custHome.updateCustomerAssignByStaff(getCust());
+					}						
+					setCust(new Customer());
+				}
+				System.out.println("Update DONE!!!!!!!!!!!!!!!!!!");
+			} catch (Exception e) {
+				e.printStackTrace();
+			} 
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return SUCCESS;
+	}
+	
 	public String importCustomer() throws Exception {
 		try {
 			cust = new Customer();

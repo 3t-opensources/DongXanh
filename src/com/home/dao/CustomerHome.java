@@ -250,6 +250,32 @@ public class CustomerHome {
 		}
 	}
 	
+	public void updateCustomerAssignByStaff(Customer cus) {
+		log.debug("Updating status instance");
+		Transaction tx = null;
+		try {
+			Session session = sessionFactory.openSession();
+			tx = session.beginTransaction();
+			String query = "update Customer set "
+					+ " customerByCustomer1Level1Id=:customerByCustomer1Level1Id, user=:user, telefone=:telefone "
+					+ " where customerCode=:customerCode";
+			System.out.println("Update customerCode:" + cus.getCustomerCode());
+			int rs = session.createQuery( query )
+			        .setParameter("customerByCustomer1Level1Id", cus.getCustomerByCustomer1Level1Id())
+			        .setParameter("user", cus.getUser())
+			        .setParameter("telefone", cus.getTelefone())
+			        .setParameter("customerCode", cus.getCustomerCode())
+			        .executeUpdate();
+			System.out.println("Update customerCode:" + cus.getCustomerCode() + "=" + rs);
+			tx.commit();
+			session.close();
+			log.debug("Update successful");
+		} catch (RuntimeException re) {
+			log.error("Update failed", re);
+			throw re;
+		}
+	}
+	
 	public void delete(Customer persistentInstance) {
 		log.debug("deleting Customer instance");
 		Transaction tx = null;
@@ -375,6 +401,46 @@ public class CustomerHome {
 
 	@SuppressWarnings("unchecked")
 	public Customer findByName(String customerName) {
+		log.debug("getting Customer instance with name: " + customerName);
+		Transaction tx = null;
+		Session session = null;
+		try {
+			Customer instance = null;
+			session = sessionFactory.openSession();
+			tx = session.beginTransaction();
+			List<Customer> listInstance = (List<Customer>) session.createCriteria(Customer.class).add(Restrictions.eq("statisticName", customerName).ignoreCase()).list();
+			tx.commit();
+			if (listInstance.size() < 1) {
+				log.debug("get successful, no instance found");
+			} else {
+				instance = listInstance.get(0);
+				if (instance.getFarmProduct1Session() == null)
+					instance.setFarmProduct1Session("0");
+				if (instance.getFarmProduct2Session() == null)
+					instance.setFarmProduct2Session("0");
+				if (instance.getFarmProduct3Session() == null)
+					instance.setFarmProduct3Session("0");
+				if (instance.getFarmProduct4Session() == null)
+					instance.setFarmProduct4Session("0");
+				log.debug("get successful, instance found");
+			}
+			return instance;
+		} catch (RuntimeException re) {
+			log.error("get failed", re);
+			re.printStackTrace();
+			return null;
+		} finally {
+			try {
+				if (session != null) {
+					session.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public Customer findBusinessName(String customerName) {
 		log.debug("getting Customer instance with name: " + customerName);
 		Transaction tx = null;
 		Session session = null;
@@ -1127,12 +1193,13 @@ public class CustomerHome {
 						+ " LEFT JOIN user u On c.user_id = u.id"
 						+ " LEFT JOIN customer c1 On c.customer1_level1_id = c1.id"
 						+ " Where c.group_customer_id in ("+(groupCustomer)+") "
-						+ " AND (lower(c.business_name) Like ? OR lower(c.statistic_name) Like ?)"
+						+ " AND (lower(c.business_name) Like ? OR lower(c.statistic_name) Like ? OR lower(c.customer_code) = ?)"
 						+ " ORDER BY customer_code, statistic_name LIMIT 20";
 				//System.out.println(query);
 				try(PreparedStatement pre = conn.prepareStatement(query)){
 					pre.setString(1, "%"+cusName.toLowerCase()+"%");
 					pre.setString(2, "%"+cusName.toLowerCase()+"%");
+					pre.setString(3, ""+cusName.toLowerCase()+"");
 					
 					System.out.println(pre.toString());					
 					try (ResultSet rs = pre.executeQuery()) {

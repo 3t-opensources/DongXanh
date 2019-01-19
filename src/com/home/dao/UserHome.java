@@ -273,6 +273,33 @@ public class UserHome {
 		}
 
 	}
+	
+	public User getUserByUserName(String userName) {
+		log.debug("finding User instance by full name");
+		Transaction tx = null;
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			tx = session.beginTransaction();
+			Query query = session.createQuery("from User where userName=:userName");
+			query.setString("userName", userName);
+			User results = (User) query.uniqueResult();
+			tx.commit();
+			return results;
+		} catch (RuntimeException re) {
+			log.error("find by full name failed", re);
+			throw re;
+		} finally {
+			try {
+				if (session != null) {
+					session.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+	}
 
 	@SuppressWarnings("unchecked")
 	public List<User> getListUser() {

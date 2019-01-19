@@ -1114,7 +1114,7 @@ $(document).bind('keydown',function(e) {
 	 	        		data = data +responseText[i][3]+"|";//customer_id_level1	 	        		
 	 	        		data = data +responseText[i][5]+"|";//customer_name_level1
 	 	        		data = data +responseText[i][6]+"|";//user_id
-	 	        		data = data +responseText[i][7]+"";//user_name
+	 	        		data = data +responseText[i][7]+"|";//user_name
 	 	        		data = data +responseText[i][4]+"|";//customer_code_level1_hidden
 	 	        		resultjson.push(data);
 	 	        		stt++;
