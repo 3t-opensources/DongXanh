@@ -6,11 +6,11 @@
 	<packaging>war</packaging>
 
 	<dependencies>
-		<dependency>
+		 <dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
 			<version>4.3.2.Final</version>
-		</dependency>
+		</dependency> 
 		<!-- Hibernate c3p0 connection pool -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
