@@ -1137,7 +1137,7 @@ public class CustomerHome {
 			try (Statement sta = conn.createStatement()) {
 				String query = "Select id, customer_code, business_name, statistic_name, business_address, telefone "
 						+ " From customer "
-						+ " Where group_customer_id in ("+(groupCustomer)+") AND (lower(business_name) Like ? OR lower(statistic_name) Like ?) order by customer_code, business_name, statistic_name LIMIT 20";
+						+ " Where /*group_customer_id in ("+(groupCustomer)+") AND*/ (lower(business_name) Like ? OR lower(statistic_name) Like ?) order by customer_code, business_name, statistic_name LIMIT 20";
 				//System.out.println(query);
 				try(PreparedStatement pre = conn.prepareStatement(query)){
 					pre.setString(1, "%"+cusName.toLowerCase()+"%");
@@ -1192,8 +1192,9 @@ public class CustomerHome {
 						+ " From customer c "
 						+ " LEFT JOIN user u On c.user_id = u.id"
 						+ " LEFT JOIN customer c1 On c.customer1_level1_id = c1.id"
-						+ " Where c.group_customer_id in ("+(groupCustomer)+") "
-						+ " AND (lower(c.business_name) Like ? OR lower(c.statistic_name) Like ? OR lower(c.customer_code) = ?)"
+						//+ " Where c.group_customer_id in ("+(groupCustomer)+") AND "
+						+ " Where "
+						+ " (lower(c.business_name) Like ? OR lower(c.statistic_name) Like ? OR lower(c.customer_code) = ?)"
 						+ " ORDER BY customer_code, statistic_name LIMIT 20";
 				//System.out.println(query);
 				try(PreparedStatement pre = conn.prepareStatement(query)){

@@ -503,7 +503,7 @@ public class ManagementAction extends ActionSupport implements ServletContextAwa
 				String key = "lookupCustomerAndStaff"+ search_cus;
 				String data_json = StringUtil.notNull(redis.get(key));
 				System.out.println("data_json: " + data_json);
-				if(!data_json.isEmpty()){
+				if(data_json.length() > 2){
 					//System.out.println("XXX");
 					listCustomer = new Gson().fromJson(data_json, ArrayList.class);
 				}else{
@@ -544,7 +544,7 @@ public class ManagementAction extends ActionSupport implements ServletContextAwa
 				String key = "lookupCustomer"+ search_cus;
 				String data_json = StringUtil.notNull(redis.get(key));
 				System.out.println("data_json: " + data_json);
-				if(!data_json.isEmpty()){
+				if(data_json.length() > 2){
 					listCustomer = new Gson().fromJson(data_json, ArrayList.class);
 				}else{
 					listCustomer = cusHome.lookupCustomer(search_cus, ""+MyConts.CUS_L1);
@@ -583,7 +583,7 @@ public class ManagementAction extends ActionSupport implements ServletContextAwa
 				String key = "lookupCareStaff"+ search_staff;
 				String data_json = StringUtil.notNull(redis.get(key));
 				System.out.println("data_json: " + data_json);
-				if(!data_json.isEmpty()){
+				if(data_json.length() > 2){
 					listStaff = new Gson().fromJson(data_json, ArrayList.class);
 				}else{
 					listStaff =  userHome.lookupStaff(search_staff);
@@ -623,7 +623,7 @@ public class ManagementAction extends ActionSupport implements ServletContextAwa
 				String key = "lookupProduct"+ search_product;
 				String data_json = StringUtil.notNull(redis.get(key));
 				System.out.println("data_json: " + data_json);
-				if(!data_json.isEmpty()){
+				if(data_json.length() > 2){
 					listProduct = new Gson().fromJson(data_json, ArrayList.class);
 				}else{
 					listProduct = proHome.lookupProduct(search_product);
