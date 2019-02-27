@@ -111,11 +111,19 @@
 	                                       		  <div class="col-lg-4">
 	                                       		        <select id="cbb_loaibangke" name="cbb_loaibangke"  class="cbb_search" style="width: 100% ; height: 27px">
 										           </select>
-	                                       		  </div>  
+	                                       		  </div> 	  
+	                                        </div>
+	                                         <div class="clear"></div>		
+	                                          <div class="row " >
+	                                       		  <div class="col-lg-2 no_margin_right" ><span>Ngày nhận hàng </span>  </div>	                                       		  
+	                                       		  <div class="col-lg-4">
+	                                       		         <input value = "" id = "ngaynhanhang" name="ngaynhanhang" class="form-control"  tabindex="1" onkeyup="getSongay()" />			
+			                                       		  
+	                                       		  </div>          
 	                                       		  
 	                                       		  <div class="col-lg-2 no_margin_right" ><span>Ngày Cty nhận toa </span>  </div>	                                       		  
 	                                       		  <div class="col-lg-4">
-	                                       		         <input value = "" id = "ngaynhantoa" name="ngaynhantoa" class="form-control"  tabindex="1" onkeyup="getSongay()"/>			
+	                                       		         <input value = "" id = "ngaynhantoa" name="ngaynhantoa" class="form-control"  tabindex="2" onkeyup="getSongay()"/>			
 			                                       		  
 	                                       		  </div>                              		  
 	                                        </div>
@@ -126,12 +134,12 @@
 	                                       		  <div class="col-lg-2" ><span>Mã KH </span>  </div>	                                       		  
 	                                       		  <div class="col-lg-4">	
 	                                       		          <input type="hidden" id="customer_id_hidden" name="customer_id_hidden" value="789">		                                       									
-				                                          <input value = "" id = "maKH" name="maKH" class="form-control" ondblclick = "getIdTag(this)" tabindex="2"/>				                                         
+				                                          <input value = "" id = "maKH" name="maKH" class="form-control" ondblclick = "getIdTag(this)" tabindex="3"/>				                                         
 	                                       		  </div>	   
 	                                       		  
 	                                       		 <div class="col-lg-2" ><span>Tên KH </span>  </div>	                                       		  
 	                                       		  <div class="col-lg-4">			                                       									
-				                                          <input value = "" id = "tenKH" name="tenKH" class="form-control" ondblclick = "getIdTag(this)" tabindex="3"/>				                                         
+				                                          <input value = "" id = "tenKH" name="tenKH" class="form-control" ondblclick = "getIdTag(this)" tabindex="4"/>				                                         
 	                                       		  </div>	                                       		  
 	                                        </div>
 										     <div class="clear"></div>										     
@@ -140,26 +148,26 @@
 	                                       		  <div class="col-lg-4">	
 	                                       		          <input type="hidden"  value = "" id = "customer_id_level1_hidden"  name="customer_id_level1_hidden"   /> 	
 	                                       		          <input type="hidden"  value = "" id = "customer_code_level1_hidden"  name="customer_code_level1_hidden"    /> 		                                       									
-				                                          <input value = "" id = "customer_name_level1" name="customer_name_level1" class="form-control" ondblclick = "getIdTag(this)" tabindex="4"/>				                                         
+				                                          <input value = "" id = "customer_name_level1" name="customer_name_level1" class="form-control" ondblclick = "getIdTag(this)" tabindex="5"/>				                                         
 	                                       		  </div>	   
 	                                       		  
 	                                       		 <div class="col-lg-2" ><span>NVTT </span>  </div>	                                       		  
 	                                       		  <div class="col-lg-4">
 	                                       		  
-        			  			                          <input type="hidden"  value = "" id = "nvtt_id_hidden"  name="nvtt_id_hidden"    class="form-control" ondblclick = "getIdTag(this)" tabindex="4"/>             									
-				                                          <input value = "" id = "nvtt_name" name="nvtt_name" class="form-control" ondblclick = "getIdTag(this)" tabindex="5"/>				                                         
+        			  			                          <input type="hidden"  value = "" id = "nvtt_id_hidden"  name="nvtt_id_hidden"    class="form-control" ondblclick = "getIdTag(this)" tabindex="6"/>             									
+				                                          <input value = "" id = "nvtt_name" name="nvtt_name" class="form-control" ondblclick = "getIdTag(this)" tabindex="6"/>				                                         
 	                                       		  </div>	                                                 		  
 	                                        </div>
 										     <div class="clear"></div>	
 										      <div class="row " >
 	                                       		 <div class="col-lg-2 no_margin_right" ><span>Ngày cấp 1 giao toa</span>  </div>	                                       		  
 	                                       		  <div class="col-lg-4">
-	                                       		   <input value = "" id = "ngaynhanhang" name="ngaynhanhang" class="form-control"  tabindex="6" onkeyup="getSongay()"/>	
+	                                       		   <input value = "" id = "ngaycap1giaotoa" name="ngaycap1giaotoa" class="form-control"  tabindex="7" onkeyup="getSongay()"/>	
 	                                       		  </div>
 	                                       		  
 	                                       		  <div class="col-lg-2 no_margin_right" ><span>Số ngày gởi trể</span>  </div>	                                       		  
 	                                       		  <div class="col-lg-4">			                                       									
-				                                          <input onkeyup="getSongay()" value = "" type="number" id = "date_sent_late" name="date_sent_late" class="form-control" ondblclick = "getIdTag(this)" tabindex="7"/>				                                         
+				                                          <input onkeyup="getSongay()" value = "" type="number" id = "date_sent_late" name="date_sent_late" class="form-control" ondblclick = "getIdTag(this)" tabindex="8"/>				                                         
 	                                       		  </div>	   
 	                                       		                                            		  
 	                                        </div>
@@ -169,7 +177,7 @@
 	                                       		
 	                                       		 <div class="col-lg-2" ><span>Ghi chú </span>  </div>	                                       		  
 	                                       		  <div class="col-lg-10">			                                       									
-				                                          <input value = "" id = "notes" name="notes" class="form-control" ondblclick = "getIdTag(this)" tabindex="8"/>				                                         
+				                                          <input value = "" id = "notes" name="notes" class="form-control" ondblclick = "getIdTag(this)" tabindex="9"/>				                                         
 	                                       		  </div>	                                          		  
 	                                        </div>
 										     <div class="clear"></div>
@@ -196,7 +204,7 @@
 							          </thead>
 							          <tbody id ="tbody" >
 							          <% 
-							          int lc =2;
+							          int lc =3;
 							          for(int i = 1; i < 15; i++) {%> 
 		                                <tr class="odd gradeX" id = "<%=i %>" >
 		                                    <td id = "stt_<%=i %>">	<%=i %></td>
@@ -293,11 +301,12 @@ function getjob(){
            	     document.getElementById("management_id").value    = id ;
            	     var ngaynhantoa_date                              = responseText[0].created_time ;
            	     var ngaynhantoa ="";
-           	     console.log(ngaynhantoa_date);
+           	    // console.log(ngaynhantoa_date);
            	     if(ngaynhantoa_date.length>10){
            	    	ngaynhantoa = ngaynhantoa_date.substring(8,10)+"/"+ngaynhantoa_date.substring(5,7)+"/"+ngaynhantoa_date.substring(0,4);
+           	        document.getElementById("ngaynhanhang").value      = "" ;
            	        document.getElementById("ngaynhantoa").value      = ngaynhantoa ;
-           	        document.getElementById("ngaynhanhang").value      = ngaynhantoa ;
+           	        document.getElementById("ngaycap1giaotoa").value  = ngaynhantoa ;
            	     }
            	   
            	  
@@ -316,7 +325,7 @@ function getjob(){
            	     }
            	    
            	     $('#viewer').iviewer('loadImage', imagePath_hidden);
-           	    document.getElementById("ngaynhantoa").focus(); 
+           	    document.getElementById("ngaynhanhang").focus(); 
         	 }else{
         		 checkGetJob(true);
         		 alert("Hết hóa đơn nhập!");
@@ -372,6 +381,8 @@ function checkGetJob(flag){
 		 
 		$("#ngaynhantoa").prop('readonly', flag);
 		$("#ngaynhanhang").prop('readonly', flag);
+		
+		$("#ngaycap1giaotoa").prop('readonly', flag);
 		$("#date_sent_late").prop('readonly', flag);
 		$("#notes").prop('readonly', flag);
 		
@@ -413,7 +424,9 @@ function resetData(){
 	 
 	  
 	  document.getElementById("ngaynhantoa").value="" ;
-	  document.getElementById("ngaynhanhang").value ="";
+	  document.getElementById("ngaynhanhang").value="" ;
+	  
+	  document.getElementById("ngaycap1giaotoa").value ="";
 	  document.getElementById("date_sent_late").value ="";
       document.getElementById("notes").value ="";
     
@@ -458,7 +471,8 @@ function saveData(){
 		 
 		  
 		  var date_company_received    = document.getElementById("ngaynhantoa").value ;//date_company_received
-		  var date_product_received    = document.getElementById("ngaynhanhang").value ;//date_product_received
+		  var date_delivery            = document.getElementById("ngaynhanhang").value ;//ngaynhanhang
+		  var date_product_received    = document.getElementById("ngaycap1giaotoa").value ;//date_product_received
 		  var date_sent_late           = document.getElementById("date_sent_late").value ;//date_sent_late
 		  var notes                    = document.getElementById("notes").value ;//notes
 		 
@@ -474,7 +488,9 @@ function saveData(){
 		 
 		
 		
-		
+		  if(date_delivery.length==10){
+			  date_delivery = date_delivery.substring(6,10)+"-"+date_delivery.substring(3,5)+"-"+date_delivery.substring(0,2)+"T00:00:00";		
+		  }
 		  if(date_company_received.length==10){
 			  date_company_received = date_company_received.substring(6,10)+"-"+date_company_received.substring(3,5)+"-"+date_company_received.substring(0,2)+"T00:00:00";		
 		  }
@@ -525,6 +541,7 @@ function saveData(){
 			        		  "staff_name": staff_name,
 			        		  "date_company_received":date_company_received,
 			        		  "date_product_received": date_product_received,
+			        		  "date_delivery": date_delivery,
 			        		  "date_sent_late": date_sent_late,
 			        		  "notes": notes,
 			        		  "product_ids": product_ids,
@@ -564,7 +581,14 @@ function checktable(){
 	  var row =0;
 	  var flag =true;
 	  var date_company_received    = document.getElementById("ngaynhantoa").value ;
-	  var date_product_received    = document.getElementById("ngaynhanhang").value ;
+	  var ngaynhanhang             = document.getElementById("ngaynhanhang").value ; 
+	  var date_product_received    = document.getElementById("ngaycap1giaotoa").value ;
+	  if(ngaynhanhang.length !=10){
+		    alert("Ngày nhận hàng không được rỗng hoặc khác định dạng dd/mm/yyyy!");
+			flag = false;
+			return false;
+	  }
+	  
 	  if(date_company_received.length !=10){
 		    alert("Ngày nhận toa không được rỗng hoặc khác định dạng dd/mm/yyyy!");
 			flag = false;
@@ -744,8 +768,9 @@ function addRow(id){
 		  $('input').keydown(function (e) {	    	  
 			  console.log(e.which);
 	    	  if (e.which === 13 ) {    		  
-	    		  var tabindex = $(this).attr('tabindex');      		
-	    		  if((tabindex-9)>=0 && (tabindex-9)%6==0){    			
+	    		  var tabindex = $(this).attr('tabindex');      
+	    		 
+	    		  if((tabindex-10)>=0 && (tabindex-10)%6==0){    			
 	    			   var masanpham_id   = $(this).attr('id').substring(10);    		
 	  		    	   var tensanpham_val = document.getElementById("tensanpham_"+masanpham_id).value;   		    	
 	  		    	   if(tensanpham_val !=""){
@@ -753,7 +778,7 @@ function addRow(id){
 	  		    	   }else{
 	  		    		 tabindex  = tabindex +1;  		    	
 	  		    	   }
-			    	}else if((tabindex-9)>=0 && (tabindex-9)%6==2){
+			    	}else if((tabindex-10)>=0 && (tabindex-10)%6==2){
 			    		tabindex  = tabindex + 4;		  
 			    	}else {
 			    		 tabindex  = tabindex + 1;		    
@@ -898,11 +923,11 @@ $(document).ready(function() {
 			
       });
 	  
-      $('input').keydown(function (e) {    
-    	  console.log(e.which);
+      $('input').keydown(function (e) {   
+    	 
     	  if (e.which === 13 ) {    		  
-    		  var tabindex = $(this).attr('tabindex');      		
-    		  if((tabindex-9)>=0 && (tabindex-9)%6==0){    			
+    		  var tabindex = $(this).attr('tabindex');      		 
+    		  if((tabindex-10)>=0 && (tabindex-10)%6==0){    			
     			   var masanpham_id   = $(this).attr('id').substring(10);    		
   		    	   var tensanpham_val = document.getElementById("tensanpham_"+masanpham_id).value;   		    	
   		    	   if(tensanpham_val !=""){
@@ -910,10 +935,10 @@ $(document).ready(function() {
   		    	   }else{
   		    		 tabindex  = tabindex +1;  		    	
   		    	   }
-		    	}else if((tabindex-9)>=0 && (tabindex-9)%6==2){
+		    	}else if((tabindex-10)>=0 && (tabindex-10)%6==2){
 		    		tabindex  = tabindex + 4;		  
 		    	}else {
-		    		 tabindex  = tabindex + 1;		    
+		    		 tabindex  = tabindex + 1;			    		
 		    	}
     		  $("[tabindex='"+tabindex+"']").focus();    		 
   	    }
@@ -1304,25 +1329,30 @@ function tinhtong(id){
    }
    function getSongay(){	  
 	   try {
-		     var  ngaynhantoa  = document.getElementById("ngaynhantoa").value ;
-		     var  ngaynhanhang = document.getElementById("ngaynhanhang").value ;
+		     var  ngaynhantoa     = document.getElementById("ngaynhantoa").value ;
+		     var  ngaycap1giaotoa = document.getElementById("ngaycap1giaotoa").value ;
+		     var  ngaynhanhang    = document.getElementById("ngaynhanhang").value ;
 		     var  flag =0;
+		     if(ngaynhantoa.length>=8){
+		    	 getday(document.getElementById("ngaynhanhang"));
+		     }
+		     
 		     if(ngaynhantoa.length>=8){
 		    	if(getday(document.getElementById("ngaynhantoa"))){
 		    		 flag++;
 		    	}
 		    	
 		     }
-		     if(ngaynhanhang.length>=8){
+		     if(ngaycap1giaotoa.length>=8){
 		    	 
-		    	 if(getday(document.getElementById("ngaynhanhang"))){
+		    	 if(getday(document.getElementById("ngaycap1giaotoa"))){
 		    		 flag++;
 		    	}
 		    	
 		     }
 		     if(flag==2){
 		    	 var from   = document.getElementById("ngaynhantoa").value.split("/");//date_company_received
-				  var to    = document.getElementById("ngaynhanhang").value.split("/") ;//date_product_received
+				  var to    = document.getElementById("ngaycap1giaotoa").value.split("/") ;//date_product_received
 				  
 				  var date1 =  new Date(from[2], from[1]-1, from[0]);
 				  var date2 =  new Date(to[2], to[1]-1, to[0]);

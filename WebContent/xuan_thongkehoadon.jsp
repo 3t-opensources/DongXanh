@@ -7,8 +7,23 @@ pageEncoding="UTF-8"%>
 <link href="css/hoadon_thongke.css" type="text/css" rel="stylesheet">
 <!-- page content -->
 <div class="right_col" role="main">
-	<div class="">
-		<div class="clearfix"></div>
+
+	<div class="container">
+	
+	   <ul class="nav nav-tabs">
+	        <li class="active class-font_14"><a data-toggle="tab" href="#thongkehoadon" onclick="ThongKeHoaDon(1)">Thống kê hóa đơn</a></li>
+		    <li class=" class-font_14"><a data-toggle="tab" href="#mat_hang_cap_1"      onclick="ThongKeHoaDon(2)">Mặt hàng cấp I</a></li>
+		    <li class="class-font_14"><a data-toggle="tab" href="#tong_hop_theo_nvtt"   onclick="ThongKeHoaDon(3)">Tổng hợp theo NVTT</a></li>
+		    <li class="class-font_14"><a data-toggle="tab" href="#tong_hop_theo_cap_2"  onclick="ThongKeHoaDon(4)">Tổng hợp theo cấp 2 </a></li>
+		    <li class="class-font_14"><a data-toggle="tab" href="#chi_tiet_toa_cap_2"   onclick="ThongKeHoaDon(5)">Chi tiết toa cấp 2</a></li>
+		    
+	   </ul>
+	   <div class="tab-content">
+	   
+	   <!--  Mo dau Thống kê hóa đơn -->
+	    <div id="thongkehoadon" class="tab-pane fade in active">
+	    
+	    <div class="clearfix"></div>
 		<div class="row">
 			<div class="col-md-12 col-sm-12 col-xs-12">
 
@@ -87,6 +102,12 @@ pageEncoding="UTF-8"%>
 			     
 			     
 			 </div>
+			 
+			 
+			 
+			 
+			 
+			 
 
 			  <div class="detail_data_table detail_data_table_final" id ="detail_data_table">	    
 	             <span class="scroll left-scroll"> &#171; </span>
@@ -138,6 +159,416 @@ pageEncoding="UTF-8"%>
 				
 			</div>
 		</div>
+		
+		
+		
+		
+	    
+	    </div>
+	    
+	    
+	    
+	    
+	    <!--  mo dau #mat_hang_cap_1 -->
+	<div id="mat_hang_cap_1" class="tab-pane fade padding_left">
+	    
+	    <div class="clearfix"></div>
+		<div class="row">
+			<div class="col-md-12 col-sm-12 col-xs-12">
+			
+			<div class="form-horizontal form_search"> 
+			    
+			      <div class="form-group">			      
+			       <div class="title_width_8" >Ngày nhận từ </div>
+				        <div class="value_width_10">
+				            <div class="input-group input-append date" id="from_datePicker">
+				                <input type="text" class="form-control" name="form_date_search"  id= "form_date_search"/>
+				                <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
+				            </div>
+				        </div>
+			        
+			        <div class="title_width_8" >Ngày nhận đến </div>
+			        <div class="value_width_10">
+			            <div class="input-group input-append date" id="to_datePicker">
+			                <input type="text" class="form-control" name="to_date_search"  id= "to_date_search" />
+			                <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
+			            </div>
+			        </div>
+			        
+			           <div class="title_width_8" >Loại bảng kê</div>
+				        <div class="value_width_10">
+				            <select id="cbb_loaibangke" name="cbb_loaibangke"  class="cbb_search">
+				                 <option value="0">All</option>	
+			                   
+				           </select>
+				        </div>
+			        <div class="button_width_12">			           
+			            <button type="button" class="btn btn-success" onclick="getInvoiceDataFilterReport();">Lọc bảng kê</button>			         
+			        </div> 
+			        
+			         <div class="button_width_12">			           
+			                 <button type="submit" class="btn btn-success" onclick="export_Excel();" >Xuất ra excel</button>			         
+			            </div> 
+					        
+			      </div>
+			     
+			 </div>
+			  <div class="detail_data_table detail_data_table_final" id ="detail_data_table">	    
+	             <span class="scroll left-scroll"> &#171; </span>
+                 <span class="scroll right-scroll" onclick="right_scroll_detail()">&#187;</span>   
+			    <table id="table_detail" class="table table-striped table-bordered table table-hover" cellspacing="0" width="100%">
+		        <thead>
+		            <tr class="w3-btn">
+		                <th class="table-th mat_hang_cap_1_header_table" rowspan ="2">STT</th>		
+		                <th class="table-th mat_hang_cap_1_header_table" style="text-align: center;width:10%"  rowspan ="2">Cấp 1</th>
+		                <th class="table-th mat_hang_cap_1_header_table"  rowspan ="2">Tổng KH có theo dõi</th>		
+		                <th class="table-th mat_hang_cap_1_header_table"  rowspan ="2">Tổng KH có gửi toa</th>		                                
+		                <th class="table-th mat_hang_cap_1_header_table"  rowspan ="2">% Toa gửi hợp lệ</th>
+		                <th class="table-th mat_hang_cap_1_header_table"  rowspan ="2">Mặt hàng</th>
+		                <th class="table-th mat_hang_cap_1_header_table"  rowspan ="2">Tên hàng</th>		               
+		                <th class="table-th" style="text-align: center;width:30%" colspan="3">Số thùng</th>	
+		            </tr>
+		            
+		            <tr class="w3-btn">
+		                <th class="table-th" style="text-align: center;width:11%">Trước kỳ</th>		
+		                <th class="table-th" style="text-align: center;width:11%">Phát sinh</th>
+		                <th class="table-th" style="text-align: center;width:11%">Tổng</th>		
+		               
+		            </tr>
+		        </thead>        
+		        <tbody>  
+		           <% for(int i=0 ;i< 10;i++){%>
+			       		 <tr  >
+			       		    <td></td>
+			                <td></td>
+			                <td></td>
+			                <td></td>
+			                <td></td>
+			                
+			                <td></td>
+			                <td></td>
+			                <td></td>
+			                <td></td>
+			                <td></td>
+			               
+			                
+			            </tr>
+		            <%} %>
+		        </tbody>
+		    </table>
+        </div> 	    	   
+				
+				
+			</div>
+		</div>
+		
+		
+	    
+	    
+	    </div>
+	    
+	    
+	     <!--  mo dau #tong_hop_theo_nvtt -->
+	    <div id="tong_hop_theo_nvtt" class="tab-pane fade padding_left">
+	     <div class="clearfix"></div>
+		<div class="row">
+			<div class="col-md-12 col-sm-12 col-xs-12">
+			
+			<div class="form-horizontal form_search"> 
+			    
+			      <div class="form-group">			      
+			       <div class="title_width_8" >Ngày nhận từ </div>
+				        <div class="value_width_10">
+				            <div class="input-group input-append date" id="from_datePicker">
+				                <input type="text" class="form-control" name="form_date_search"  id= "form_date_search"/>
+				                <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
+				            </div>
+				        </div>
+			        
+			        <div class="title_width_8" >Ngày nhận đến </div>
+			        <div class="value_width_10">
+			            <div class="input-group input-append date" id="to_datePicker">
+			                <input type="text" class="form-control" name="to_date_search"  id= "to_date_search" />
+			                <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
+			            </div>
+			        </div>
+			        
+			           <div class="title_width_8" >Loại bảng kê</div>
+				        <div class="value_width_10">
+				            <select id="cbb_loaibangke" name="cbb_loaibangke"  class="cbb_search">
+				                 <option value="0">All</option>	
+			                   
+				           </select>
+				        </div>
+			        <div class="button_width_12">			           
+			            <button type="button" class="btn btn-success" onclick="getInvoiceDataFilterReport();">Lọc bảng kê</button>			         
+			        </div> 
+			        
+			         <div class="button_width_12">			           
+			                 <button type="submit" class="btn btn-success" onclick="export_Excel();" >Xuất ra excel</button>			         
+			            </div> 
+					        
+			      </div>
+			     
+			 </div>
+			  <div class="detail_data_table detail_data_table_final" id ="detail_data_table">	    
+	             <span class="scroll left-scroll"> &#171; </span>
+                 <span class="scroll right-scroll" onclick="right_scroll_detail()">&#187;</span>   
+			    <table id="table_detail" class="table table-striped table-bordered table table-hover" cellspacing="0" width="100%">
+		        <thead>
+		            <tr class="w3-btn">
+		                <th class="table-th mat_hang_cap_1_header_table" rowspan ="2">STT</th>	
+		                <th class="table-th mat_hang_cap_1_header_table"  rowspan ="2">Tên NVTT</th>		
+		                <th class="table-th mat_hang_cap_1_header_table"  rowspan ="2">Tổng khách quản lý</th>		                                
+		                <th class="table-th mat_hang_cap_1_header_table"  rowspan ="2">Số KH chưa gửi toa nào</th>
+		                <th class="table-th mat_hang_cap_1_header_table"  rowspan ="2">KH có phát sinh toa trong ngày</th>		                           
+		                <th class="table-th" style="text-align: center;width:30%" colspan="3">Doanh số (tr)</th>	
+		            </tr>
+		            
+		            <tr class="w3-btn">
+		                <th class="table-th" style="text-align: center;width:11%">Trước kỳ</th>		
+		                <th class="table-th" style="text-align: center;width:11%">Phát sinh</th>
+		                <th class="table-th" style="text-align: center;width:11%">Tổng</th>		
+		               
+		            </tr>
+		        </thead>        
+		        <tbody>  
+		           <% for(int i=0 ;i< 10;i++){%>
+			       		 <tr  >
+			       		    <td></td>
+			                <td></td>
+			                <td></td>
+			                <td></td>
+			                <td></td>
+			                
+			                <td></td>
+			                <td></td>
+			                <td></td>
+			               
+			               
+			                
+			            </tr>
+		            <%} %>
+		        </tbody>
+		    </table>
+        </div> 	    	   
+				
+				
+			</div>
+		</div>
+		
+		
+	    
+	    </div>
+	    
+	    
+	     <!--  mo dau tong_hop_theo_cap_2 -->
+	    <div id="tong_hop_theo_cap_2" class="tab-pane fade padding_left">
+	     <div class="clearfix"></div>
+		<div class="row">
+			<div class="col-md-12 col-sm-12 col-xs-12">
+			
+			<div class="form-horizontal form_search"> 
+			    
+			      <div class="form-group">			      
+			       <div class="title_width_8" >Ngày nhận từ </div>
+				        <div class="value_width_10">
+				            <div class="input-group input-append date" id="from_datePicker">
+				                <input type="text" class="form-control" name="form_date_search"  id= "form_date_search"/>
+				                <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
+				            </div>
+				        </div>
+			        
+			        <div class="title_width_8" >Ngày nhận đến </div>
+			        <div class="value_width_10">
+			            <div class="input-group input-append date" id="to_datePicker">
+			                <input type="text" class="form-control" name="to_date_search"  id= "to_date_search" />
+			                <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
+			            </div>
+			        </div>
+			        
+			           <div class="title_width_8" >Loại bảng kê</div>
+				        <div class="value_width_10">
+				            <select id="cbb_loaibangke" name="cbb_loaibangke"  class="cbb_search">
+				                 <option value="0">All</option>	
+			                   
+				           </select>
+				        </div>
+			        <div class="button_width_12">			           
+			            <button type="button" class="btn btn-success" onclick="getInvoiceDataFilterReport();">Lọc bảng kê</button>			         
+			        </div> 
+			        
+			         <div class="button_width_12">			           
+			                 <button type="submit" class="btn btn-success" onclick="export_Excel();" >Xuất ra excel</button>			         
+			            </div> 
+					        
+			      </div>
+			     
+			 </div>
+			  <div class="detail_data_table detail_data_table_final" id ="detail_data_table">	    
+	             <span class="scroll left-scroll"> &#171; </span>
+                 <span class="scroll right-scroll" onclick="right_scroll_detail()">&#187;</span>   
+			    <table id="table_detail" class="table table-striped table-bordered table table-hover" cellspacing="0" width="100%">
+		        <thead>
+		            <tr class="w3-btn">
+		                <th class="table-th mat_hang_cap_1_header_table" rowspan ="2">STT</th>		
+		                <th class="table-th mat_hang_cap_1_header_table" rowspan ="2">MKH</th>
+		                <th class="table-th mat_hang_cap_1_header_table"  rowspan ="2">Tên bảng kê</th>		
+		                <th class="table-th mat_hang_cap_1_header_table"  rowspan ="2">Tổng toa đã gửi</th>		                                
+		                <th class="table-th mat_hang_cap_1_header_table"  rowspan ="2">NVTT</th>
+		                <th class="table-th mat_hang_cap_1_header_table"  rowspan ="2">% Toa hợp lệ</th>		                       
+		                <th class="table-th" style="text-align: center;width:30%" colspan="3">Doanh số (tr)</th>	
+		            </tr>
+		            
+		            <tr class="w3-btn">
+		                <th class="table-th" style="text-align: center;width:11%">Trước kỳ</th>		
+		                <th class="table-th" style="text-align: center;width:11%">Trong kỳ</th>
+		                <th class="table-th" style="text-align: center;width:11%">Tổng</th>		
+		               
+		            </tr>
+		        </thead>        
+		        <tbody>  
+		           <% for(int i=0 ;i< 10;i++){%>
+			       		 <tr  >
+			       		    <td></td>
+			                <td></td>
+			                <td></td>
+			                <td></td>
+			                <td></td>
+			                
+			                <td></td>
+			                <td></td>
+			                <td></td>
+			                <td></td>
+			              
+			            </tr>
+		            <%} %>
+		        </tbody>
+		    </table>
+        </div> 	    	   
+				
+				
+			</div>
+		</div>
+		
+		
+	    
+	    </div>
+	    
+	    
+	     <!--  mo dau chi_tiet_toa_cap_2 -->
+	    <div id="chi_tiet_toa_cap_2" class="tab-pane fade padding_left">
+	    <div class="clearfix"></div>
+		<div class="row">
+			<div class="col-md-12 col-sm-12 col-xs-12">
+			
+			<div class="form-horizontal form_search"> 
+			    
+			      <div class="form-group">			      
+			       <div class="title_width_8" >Ngày nhận từ </div>
+				        <div class="value_width_10">
+				            <div class="input-group input-append date" id="from_datePicker">
+				                <input type="text" class="form-control" name="form_date_search"  id= "form_date_search"/>
+				                <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
+				            </div>
+				        </div>
+			        
+			        <div class="title_width_8" >Ngày nhận đến </div>
+			        <div class="value_width_10">
+			            <div class="input-group input-append date" id="to_datePicker">
+			                <input type="text" class="form-control" name="to_date_search"  id= "to_date_search" />
+			                <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
+			            </div>
+			        </div>
+			        
+			           <div class="title_width_8" >Loại bảng kê</div>
+				        <div class="value_width_10">
+				            <select id="cbb_loaibangke" name="cbb_loaibangke"  class="cbb_search">
+				                 <option value="0">All</option>	
+			                   
+				           </select>
+				        </div>
+			        <div class="button_width_12">			           
+			            <button type="button" class="btn btn-success" onclick="getInvoiceDataFilterReport();">Lọc bảng kê</button>			         
+			        </div> 
+			        
+			         <div class="button_width_12">			           
+			                 <button type="submit" class="btn btn-success" onclick="export_Excel();" >Xuất ra excel</button>			         
+			            </div> 
+					        
+			      </div>
+			     
+			 </div>
+			  <div class="detail_data_table detail_data_table_final" id ="detail_data_table">	    
+	             <span class="scroll left-scroll"> &#171; </span>
+                 <span class="scroll right-scroll" onclick="right_scroll_detail()">&#187;</span>   
+			    <table id="table_detail" class="table table-striped table-bordered table table-hover" cellspacing="0" width="100%">
+		        <thead>
+		            <tr class="w3-btn">
+		                <th class="table-th " style="text-align: center;width:10%" >STT</th>		
+		                <th class="table-th " style="text-align: center;width:10%" >MKH</th>
+		                <th class="table-th " style="text-align: center;width:10%" >Tên bảng kê</th>		
+		                <th class="table-th " style="text-align: center;width:10%" >Cấp 1 nhận</th>		                                
+		                <th class="table-th " style="text-align: center;width:10%"  >Ngày gửi toa</th>
+		                <th class="table-th " style="text-align: center;width:10%"  >Ngày nhận hàng trên toa</th>
+		                <th class="table-th " style="text-align: center;width:10%"  >Số ngày gửi trễ</th>		               
+		                <th class="table-th" style="text-align: center;width:10%" >Mã hàng</th>	
+		                <th class="table-th" style="text-align: center;width:10%" >Tên hàng & qui cách</th>	
+		                <th class="table-th" style="text-align: center;width:10%" >Số thùng</th>	
+		                <th class="table-th" style="text-align: center;width:10%" >Thành tiền</th>	
+		            </tr>
+		         
+		        </thead>        
+		        <tbody>  
+		           <% for(int i=0 ;i< 10;i++){%>
+			       		 <tr  >
+			       		    <td></td>
+			                <td></td>
+			                <td></td>
+			                <td></td>
+			                <td></td>
+			                
+			                <td></td>
+			                <td></td>
+			                <td></td>
+			                <td></td>
+			                <td></td>
+			                <td></td>
+			            
+			                
+			            </tr>
+		            <%} %>
+		        </tbody>
+		    </table>
+        </div> 	    	   
+				
+				
+			</div>
+		</div>
+		
+		
+	    
+	    </div>
+	    
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+		
+		
+		
+		
+		
+		
+		
+		
+	</div><!-- tab-content -->
+	
 	</div>
 	<!-- footer content -->
 	<s:include value="footer.jsp" />
@@ -590,7 +1021,12 @@ pageEncoding="UTF-8"%>
 #table_detail tr {
 height: 30px;
 }
+.mat_hang_cap_1_header_table{
+   text-align: center;
+   width:10% ;
+  padding-bottom: 30px!important;
 
+}
 
 
 </style>
