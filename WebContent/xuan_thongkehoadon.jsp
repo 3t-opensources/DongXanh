@@ -95,7 +95,7 @@ pageEncoding="UTF-8"%>
 				        
 				        
 				        <div class="button_width_12">			           
-			                 <button type="submit" class="btn btn-success" onclick="export_Excel();" >Xuất ra excel</button>			         
+			                 <button type="submit" class="btn btn-success" onclick="export_ThongKeHoaDon(1);" >Xuất ra excel</button>			         
 			            </div> 
 					           
 			      </div>
@@ -203,12 +203,12 @@ pageEncoding="UTF-8"%>
 				           </select>
 				        </div>
 			        <div class="button_width_12">			           
-			            <button type="button" class="btn btn-success" onclick="getInvoiceDataFilterReport();">Lọc bảng kê</button>			         
+			            <button type="button" class="btn btn-success" onclick="ThongKeHoaDon(2);">Lọc bảng kê</button>			         
 			        </div> 
 			        
 			         <div class="button_width_12">			           
-			                 <button type="submit" class="btn btn-success" onclick="export_Excel();" >Xuất ra excel</button>			         
-			            </div> 
+			                 <button type="submit" class="btn btn-success" onclick="export_ThongKeHoaDon(2);" >Xuất ra excel</button>			         
+			         </div> 
 					        
 			      </div>
 			     
@@ -301,13 +301,12 @@ pageEncoding="UTF-8"%>
 				           </select>
 				        </div>
 			        <div class="button_width_12">			           
-			            <button type="button" class="btn btn-success" onclick="getInvoiceDataFilterReport();">Lọc bảng kê</button>			         
+			            <button type="button" class="btn btn-success" onclick="ThongKeHoaDon(3);">Lọc bảng kê</button>			         
 			        </div> 
 			        
 			         <div class="button_width_12">			           
-			                 <button type="submit" class="btn btn-success" onclick="export_Excel();" >Xuất ra excel</button>			         
-			            </div> 
-					        
+			                 <button type="submit" class="btn btn-success" onclick="export_ThongKeHoaDon(3);" >Xuất ra excel</button>			         
+			         </div> 
 			      </div>
 			     
 			 </div>
@@ -395,12 +394,12 @@ pageEncoding="UTF-8"%>
 				           </select>
 				        </div>
 			        <div class="button_width_12">			           
-			            <button type="button" class="btn btn-success" onclick="getInvoiceDataFilterReport();">Lọc bảng kê</button>			         
+			            <button type="button" class="btn btn-success" onclick="ThongKeHoaDon(4);">Lọc bảng kê</button>			         
 			        </div> 
 			        
 			         <div class="button_width_12">			           
-			                 <button type="submit" class="btn btn-success" onclick="export_Excel();" >Xuất ra excel</button>			         
-			            </div> 
+			                 <button type="submit" class="btn btn-success" onclick="export_ThongKeHoaDon(4);" >Xuất ra excel</button>			         
+			         </div> 
 					        
 			      </div>
 			     
@@ -489,13 +488,12 @@ pageEncoding="UTF-8"%>
 				           </select>
 				        </div>
 			        <div class="button_width_12">			           
-			            <button type="button" class="btn btn-success" onclick="getInvoiceDataFilterReport();">Lọc bảng kê</button>			         
+			            <button type="button" class="btn btn-success" onclick="ThongKeHoaDon(5);">Lọc bảng kê</button>			         
 			        </div> 
 			        
 			         <div class="button_width_12">			           
-			                 <button type="submit" class="btn btn-success" onclick="export_Excel();" >Xuất ra excel</button>			         
-			            </div> 
-					        
+			                 <button type="submit" class="btn btn-success" onclick="export_ThongKeHoaDon(5);" >Xuất ra excel</button>			         
+			         </div> 
 			      </div>
 			     
 			 </div>
@@ -980,6 +978,127 @@ pageEncoding="UTF-8"%>
 	   	   });
 	   	 
 	} 
+	function ThongKeHoaDon(step){
+		if(step==2){
+			ThongKeMatHangCapI();
+		}else if(step==3){
+			TongHopTheoNVTT();
+		}else if(step==4){
+			TongHopTheoCap2();
+		}else if(step==5){
+			ChiTietToaCap2();
+		}
+		
+	}
+	
+	function ThongKeMatHangCapI(){
+		alert("ThongKeMatHangCapI");
+		 $.ajax({  		
+	   	       type: "GET",
+	              url     : "getReportInvoiceByCus1Action?end_day=null&start_day=null",	          
+	              data    : "",
+	              success : function(responseText) {		            	 
+	            	  console.log("=============991============");
+	            	  alert(responseText);		           	   
+	            	  for (i in responseText) {  	        		
+		  	        		console.log(responseText[i]);
+		  	        		  var option   = document.createElement("option");
+			            	  option.text  = responseText[i].businessName;			            	 
+			            	  option.setAttribute ("value", responseText[i].id);
+			            	  cbb_nvtt.add(option);
+	            	  } 
+	              }
+	   	   });
+	}
+	
+    function TongHopTheoNVTT(){
+    	alert("TongHopTheoNVTT");
+    	$.ajax({  		
+	   	       type: "GET",
+	              url     : "getReportInvoiceByStaffAction?staff_id=0&end_day=null&start_day=null",	          
+	              data    : "",
+	              success : function(responseText) {		            	 
+	            	  console.log("=============991============");
+	            	  alert(responseText);		           	   
+	            	  for (i in responseText) {  	        		
+		  	        		console.log(responseText[i]);
+		  	        		  var option   = document.createElement("option");
+			            	  option.text  = responseText[i].businessName;			            	 
+			            	  option.setAttribute ("value", responseText[i].id);
+			            	  cbb_nvtt.add(option);
+	            	  } 
+	              }
+	   	   });
+	}
+	
+	
+	function TongHopTheoCap2(){
+		alert("TongHopTheoCap2");
+		$.ajax({  		
+	   	       type: "GET",
+	              url     : "loadCusByStaffInvoiceReport1Action?user_id=1",	          
+	              data    : "",
+	              success : function(responseText) {		            	 
+	            	  console.log("=============991============");
+	            	  alert(responseText);		           	   
+	            	  for (i in responseText) {  	        		
+		  	        		console.log(responseText[i]);
+		  	        		  var option   = document.createElement("option");
+			            	  option.text  = responseText[i].businessName;			            	 
+			            	  option.setAttribute ("value", responseText[i].id);
+			            	  cbb_nvtt.add(option);
+	            	  } 
+	              }
+	   	   });
+		
+	}
+    function ChiTietToaCap2(){
+    	alert("ChiTietToaCap2");
+    	
+    	$.ajax({  		
+	   	       type: "GET",
+	              url     : "getReportInvoiceByStaffAction?staff_id=0&end_day=null&start_day=null",	          
+	              data    : "",
+	              success : function(responseText) {		            	 
+	            	  console.log("=============991============");
+	            	  alert(responseText);		           	   
+	            	  for (i in responseText) {  	        		
+		  	        		console.log(responseText[i]);
+		  	        		  var option   = document.createElement("option");
+			            	  option.text  = responseText[i].businessName;			            	 
+			            	  option.setAttribute ("value", responseText[i].id);
+			            	  cbb_nvtt.add(option);
+	            	  } 
+	              }
+	   	   });
+	}
+    function export_ThongKeHoaDon(step){
+    	if(step==1){
+    		export_Excel();
+    	}else if(step==2){
+			export_thongKeMatHangCapI();
+		}else if(step==3){
+			export_TongHopTheoNVTT();
+		}else if(step==4){
+			export_TongHopTheoCap2();
+		}else if(step==5){
+			export_ChiTietToaCap2();
+		}
+    }
+    function export_thongKeMatHangCapI(){ 
+    	alert("export_thongKeMatHangCapI");
+    }
+    
+    function export_TongHopTheoNVTT(){ 
+    	alert("export_TongHopTheoNVTT");
+    }
+	 function export_TongHopTheoCap2(){ 
+		 alert("export_TongHopTheoCap2");
+	 }
+	 function export_ChiTietToaCap2(){ 
+		 alert("export_ChiTietToaCap2");
+	 }
+ 
 	function export_Excel(){ 
 	   	 var sent_late             = document.getElementById("cbb_ngaygoitre").value;
 		 var customer_id           = document.getElementById("cbb_khachhang").value;
