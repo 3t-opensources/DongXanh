@@ -79,6 +79,38 @@
 			</result>
 		</action>
 		
+		
+		<action name="getReportInvoiceByCus1Action" method="getReportInvoiceDataByCus1"
+			class="com.home.action.InvoiceDataAction">
+			<result type="json">
+				<param name="root">result</param>
+			</result>
+		</action>
+		<action name="getReportInvoiceByCus2Action" method="getReportInvoiceDataByCus2"
+			class="com.home.action.InvoiceDataAction">
+			<result type="json">
+				<param name="root">result</param>
+			</result>
+		</action>
+		<action name="getReportInvoiceByStaffAction" method="getReportInvoiceDataByStaff"
+			class="com.home.action.InvoiceDataAction">
+			<result type="json">
+				<param name="root">result</param>
+			</result>
+		</action>
+		<action name="getReportInvoiceDailyAction" method="getReportInvoiceDataDaily"
+			class="com.home.action.InvoiceDataAction">
+			<result type="json">
+				<param name="root">result</param>
+			</result>
+		</action>
+		<action name="getReportInvoiceDetailByCus2Action" method="getReportInvoiceDataDetailByCus2"
+			class="com.home.action.InvoiceDataAction">
+			<result type="json">
+				<param name="root">result</param>
+			</result>
+		</action>
+		
 
 	</package>
 </struts>

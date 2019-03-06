@@ -20,6 +20,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.internal.SessionImpl;
 
+import com.home.entities.ReportInvoiceByCus1;
 import com.home.model.Customer;
 import com.home.model.InvoiceData;
 import com.home.model.InvoiceType;
@@ -312,7 +313,7 @@ public class InvoiceDataHome {
 			int staff_id,
 			int customer_id,
 			int sent_late) throws Exception{
-		log.debug("retrieve list InvoiceData");
+		log.debug("retrieve list getListInvoiceData");
 		Session session = null;
 		List<InvoiceData> results = new ArrayList<InvoiceData>();
 		try {
@@ -403,6 +404,295 @@ public class InvoiceDataHome {
 		} catch (Exception re) {
 			re.printStackTrace();
 			log.error("retrieve list Product failed", re);
+			throw re;
+		} finally{
+			try {
+				if(session != null){
+					session.flush();
+					session.close();
+				}
+			} catch (Exception e) {
+			}
+		}
+	}
+	
+	private InvoiceData getInvoiceData(ResultSet rs) throws Exception{
+		try {
+			InvoiceData invoice = new InvoiceData();
+			invoice.setId(rs.getInt("id"));
+			
+			Management m = new Management();
+			m.setId(rs.getInt("management_id"));
+//			m.setFile_path(rs.getString("file_path"));
+//			m.setFile_name(rs.getString("file_name"));
+//			m.setStep(rs.getInt("step"));
+			invoice.setManagement_id(m);
+			
+//			InvoiceType iv_type = new InvoiceType();
+//			iv_type.setId(rs.getInt("invoice_type_id"));
+//			iv_type.setInvoiceType(rs.getString("invoice_type_name"));
+//			invoice.setInvoice_type_id(iv_type);
+			invoice.setInvoice_type_name(StringUtil.notNull(rs.getString("invoice_type_name")));
+
+//			Customer cus = new Customer();
+//			cus.setId(rs.getInt("customer_id"));
+//			cus.setCustomerCode(rs.getString("customer_code"));
+//			cus.setStatisticName(rs.getString("customer_name"));
+//			//invoice.setCustomer_id(cus);
+			invoice.setCustomer_code(StringUtil.notNull(rs.getString("customer_code")));
+			invoice.setCustomer_name(StringUtil.notNull(rs.getString("customer_name")));
+			
+//			Customer cus1 = new Customer();
+//			cus1.setId(rs.getInt("customer_id_level1"));
+//			cus1.setCustomerCode(rs.getString("customer_code_level1"));
+//			cus1.setStatisticName(rs.getString("customer_name_level1"));
+//			//invoice.setCustomer_id_level1(cus1);
+			invoice.setCustomer_code_level1(StringUtil.notNull(rs.getString("customer_code_level1")));
+			invoice.setCustomer_name_level1(StringUtil.notNull(rs.getString("customer_name_level1")));
+			
+//			User user = new User();
+//			user.setId(rs.getInt("staff_id"));
+//			user.setUserName(rs.getString("staff_name"));
+//			//invoice.setStaff_id(user);
+			invoice.setStaff_name(StringUtil.notNull(rs.getString("staff_name")));
+			
+			invoice.setDate_invoice_sent(rs.getDate("date_invoice_sent"));
+			invoice.setDate_company_received(rs.getDate("date_company_received"));
+			invoice.setDate_product_received(rs.getDate("date_product_received"));
+			invoice.setDate_sent_late(rs.getInt("date_sent_late"));
+			invoice.setNotes(StringUtil.notNull(rs.getString("notes")));
+			
+			invoice.setProduct_ids(StringUtil.notNull(rs.getString("product_ids")));
+			invoice.setProduct_names(StringUtil.notNull(rs.getString("product_names")));
+			invoice.setTotal_boxs(StringUtil.notNull(rs.getString("total_boxs")));
+			invoice.setQuantitys(StringUtil.notNull(rs.getString("quantitys")));
+			invoice.setTotal_prices(StringUtil.notNull(rs.getString("total_prices")));
+			invoice.setUnit_prices(StringUtil.notNull(rs.getString("unit_prices")));
+			invoice.setSum_total_price(rs.getBigDecimal("sum_total_price"));
+			
+			return invoice;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+	
+	
+	public List<InvoiceData> getReportInvoiceDataByCus1(
+			java.sql.Date start_day, 
+			java.sql.Date end_day) throws Exception{
+		log.debug("retrieve list getReportInvoiceDataByCus1");
+		Session session = null;
+		List<InvoiceData> results = new ArrayList<InvoiceData>();
+		try {
+			session = sessionFactory.openSession();
+			SessionImpl sessionImpl = (SessionImpl) session;
+			Connection conn = sessionImpl.connection();
+
+			String sql = "SELECT d.* FROM management m JOIN invoice_data d ON m.id = d.management_id "
+					+ " WHERE  "
+					+ " (0="+(start_day==null?0:1)+" Or (created_time >= ? And created_time <= ?)) AND customer_id_level1 is not null"
+					+ " ORDER BY customer_id_level1";
+			
+			//System.out.println(sql);
+			PreparedStatement pre = conn.prepareStatement(sql);
+			pre.setDate(1, start_day);
+			pre.setDate(2, end_day);		
+			System.out.println(pre.toString());
+			ResultSet rs = pre.executeQuery();
+			while(rs.next()){
+				results.add(getInvoiceData(rs));
+			}
+			rs.close();
+			log.debug("retrieve getReportInvoiceDataByCus1 successful, result size: " + results.size());
+			return results;
+		} catch (Exception re) {
+			re.printStackTrace();
+			log.error("retrieve getReportInvoiceDataByCus1 failed", re);
+			throw re;
+		} finally{
+			try {
+				if(session != null){
+					session.flush();
+					session.close();
+				}
+			} catch (Exception e) {
+			}
+		}
+	}
+	
+	public List<InvoiceData> getReportInvoiceDataByStaff(
+			java.sql.Date start_day, 
+			java.sql.Date end_day,
+			int staff_id) throws Exception{
+		log.debug("retrieve list getReportInvoiceDataByStaff");
+		Session session = null;
+		List<InvoiceData> results = new ArrayList<InvoiceData>();
+		try {
+			session = sessionFactory.openSession();
+			SessionImpl sessionImpl = (SessionImpl) session;
+			Connection conn = sessionImpl.connection();
+
+			String sql = "SELECT d.* FROM management m JOIN invoice_data d ON m.id = d.management_id "
+					+ " WHERE  "
+					+ " (0="+(start_day==null?0:1)+" Or (created_time >= ? And created_time <= ?)) "
+					+ " AND (0="+(staff_id<=0?0:1)+" Or (d.staff_id=?)) AND staff_name is not null"
+					+ " ORDER BY staff_id";
+			
+			//System.out.println(sql);
+			PreparedStatement pre = conn.prepareStatement(sql);
+			pre.setDate(1, start_day);
+			pre.setDate(2, end_day);
+			pre.setInt(3, staff_id);
+			System.out.println(pre.toString());
+			ResultSet rs = pre.executeQuery();
+			while(rs.next()){
+				results.add(getInvoiceData(rs));
+			}
+			rs.close();
+			log.debug("retrieve getReportInvoiceDataByStaff successful, result size: " + results.size());
+			return results;
+		} catch (Exception re) {
+			re.printStackTrace();
+			log.error("retrieve getReportInvoiceDataByStaff failed", re);
+			throw re;
+		} finally{
+			try {
+				if(session != null){
+					session.flush();
+					session.close();
+				}
+			} catch (Exception e) {
+			}
+		}
+	}
+	
+	public List<InvoiceData> getReportInvoiceDataByCus2(
+			java.sql.Date start_day, 
+			java.sql.Date end_day,
+			int customer_id) throws Exception{
+		log.debug("retrieve list getReportInvoiceDataByCus2");
+		Session session = null;
+		List<InvoiceData> results = new ArrayList<InvoiceData>();
+		try {
+			session = sessionFactory.openSession();
+			SessionImpl sessionImpl = (SessionImpl) session;
+			Connection conn = sessionImpl.connection();
+
+			String sql = "SELECT d.* FROM management m JOIN invoice_data d ON m.id = d.management_id "
+					+ " WHERE  "
+					+ " (0="+(start_day==null?0:1)+" Or (created_time >= ? And created_time <= ?))  AND customer_code is not null"
+					+ " AND (0="+(customer_id<=0?0:1)+" Or (customer_id=?))"
+					+ " ORDER BY customer_id";
+			
+			//System.out.println(sql);
+			PreparedStatement pre = conn.prepareStatement(sql);
+			pre.setDate(1, start_day);
+			pre.setDate(2, end_day);	
+			pre.setInt(3, customer_id);
+			System.out.println(pre.toString());
+			ResultSet rs = pre.executeQuery();
+			while(rs.next()){
+				results.add(getInvoiceData(rs));
+			}
+			rs.close();
+			log.debug("retrieve getReportInvoiceDataByCus2 successful, result size: " + results.size());
+			return results;
+		} catch (Exception re) {
+			re.printStackTrace();
+			log.error("retrieve getReportInvoiceDataByCus2 failed", re);
+			throw re;
+		} finally{
+			try {
+				if(session != null){
+					session.flush();
+					session.close();
+				}
+			} catch (Exception e) {
+			}
+		}
+	}
+	
+	public List<InvoiceData> getReportInvoiceDataDetailByCus2(
+			java.sql.Date start_day, 
+			java.sql.Date end_day,
+			int customer_id) throws Exception{
+		log.debug("retrieve list getReportInvoiceDataDetailByCus2");
+		Session session = null;
+		List<InvoiceData> results = new ArrayList<InvoiceData>();
+		try {
+			session = sessionFactory.openSession();
+			SessionImpl sessionImpl = (SessionImpl) session;
+			Connection conn = sessionImpl.connection();
+
+			String sql = "SELECT d.* FROM management m JOIN invoice_data d ON m.id = d.management_id "
+					+ " WHERE  "
+					+ " (0="+(start_day==null?0:1)+" Or (created_time >= ? And created_time <= ?))  AND customer_code is not null"
+					+ " AND (0="+(customer_id<=0?0:1)+" Or (customer_id=?))"
+					+ " ORDER BY customer_id";
+			
+			//System.out.println(sql);
+			PreparedStatement pre = conn.prepareStatement(sql);
+			pre.setDate(1, start_day);
+			pre.setDate(2, end_day);	
+			pre.setInt(3, customer_id);
+			System.out.println(pre.toString());
+			ResultSet rs = pre.executeQuery();
+			while(rs.next()){
+				results.add(getInvoiceData(rs));
+			}
+			rs.close();
+			log.debug("retrieve getReportInvoiceDataDetailByCus2 successful, result size: " + results.size());
+			return results;
+		} catch (Exception re) {
+			re.printStackTrace();
+			log.error("retrieve getReportInvoiceDataDetailByCus2 failed", re);
+			throw re;
+		} finally{
+			try {
+				if(session != null){
+					session.flush();
+					session.close();
+				}
+			} catch (Exception e) {
+			}
+		}
+	}
+	
+	public List<InvoiceData> getReportInvoiceDataDaily(
+			java.sql.Date start_day, 
+			java.sql.Date end_day,
+			int staff_id) throws Exception{
+		log.debug("retrieve list getReportInvoiceDataByStaff");
+		Session session = null;
+		List<InvoiceData> results = new ArrayList<InvoiceData>();
+		try {
+			session = sessionFactory.openSession();
+			SessionImpl sessionImpl = (SessionImpl) session;
+			Connection conn = sessionImpl.connection();
+
+			String sql = "SELECT d.* FROM management m JOIN invoice_data d ON m.id = d.management_id "
+					+ " WHERE  "
+					+ " (0="+(start_day==null?0:1)+" Or (created_time >= ? And created_time <= ?)) "
+					+ " AND (0="+(staff_id<=0?0:1)+" Or (d.staff_id=?)) AND staff_name is not null"
+					+ " ORDER BY staff_id, customer_code_level1";
+			
+			//System.out.println(sql);
+			PreparedStatement pre = conn.prepareStatement(sql);
+			pre.setDate(1, start_day);
+			pre.setDate(2, end_day);
+			pre.setInt(3, staff_id);
+			System.out.println(pre.toString());
+			ResultSet rs = pre.executeQuery();
+			while(rs.next()){
+				results.add(getInvoiceData(rs));
+			}
+			rs.close();
+			log.debug("retrieve getReportInvoiceDataByStaff successful, result size: " + results.size());
+			return results;
+		} catch (Exception re) {
+			re.printStackTrace();
+			log.error("retrieve getReportInvoiceDataByStaff failed", re);
 			throw re;
 		} finally{
 			try {
