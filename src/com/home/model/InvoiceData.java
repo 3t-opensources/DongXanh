@@ -17,6 +17,7 @@ public class InvoiceData {
 	public String customer_name_level1;
 	public User staff_id;
 	public String staff_name;
+	public Date date_invoice_sent;// moi them vao
 	public Date date_company_received;
 	public Date date_product_received;
 	public Integer date_sent_late;
@@ -167,6 +168,11 @@ public class InvoiceData {
 	public void setSum_total_price(BigDecimal sum_total_price) {
 		this.sum_total_price = sum_total_price;
 	}
-	
+	public Date getDate_invoice_sent() {
+		return date_invoice_sent;
+	}
+	public void setDate_invoice_sent(Date date_invoice_sent) {
+		this.date_invoice_sent = date_invoice_sent;
+	}
 		
 }

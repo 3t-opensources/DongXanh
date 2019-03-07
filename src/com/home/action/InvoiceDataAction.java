@@ -5,10 +5,15 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -20,22 +25,22 @@ import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.util.ServletContextAware;
 import org.hibernate.SessionFactory;
 
-import com.home.dao.CategoryHome;
 import com.home.dao.CustomerHome;
 import com.home.dao.InvoiceDataHome;
-import com.home.dao.StatisticHome;
 import com.home.dao.UserHome;
-import com.home.model.Category;
+import com.home.entities.ReportInvoiceByCus1;
+import com.home.entities.ReportInvoiceByCus2;
+import com.home.entities.ReportInvoiceByStaff;
+import com.home.entities.ReportInvoiceDaily;
+import com.home.entities.ReportInvoiceDetailByCus2;
 import com.home.model.Customer;
 import com.home.model.InvoiceData;
 import com.home.model.ResultMessage;
-import com.home.model.Statistic;
 import com.home.model.User;
 import com.home.util.DateUtils;
 import com.home.util.ExcelUtil;
 import com.home.util.HibernateUtil;
 import com.home.util.StringUtil;
-import com.home.util.SystemUtil;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -283,9 +288,497 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 		return SUCCESS;
 	}
 	
+	//////////////////////////////////////////////NEW REPORT///////////////////////////////////////////////////////////
+	public String getReportInvoiceDataByCus1(){
+		try {
+			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
+			// Fetch Data from User Table
+			Date date_company_received_from = null;
+			Date date_company_received_to = null;
+			try {
+				String start_day = StringUtil.notNull(request.getParameter("start_day"));
+				String end_day = StringUtil.notNull(request.getParameter("end_day"));	
+				if(end_day.length() == 10 && end_day.length() == 10){
+					date_company_received_from = new Date(DateUtils.getDateFromString(start_day, "dd/MM/yyyy").getTime());
+					date_company_received_to = new Date(DateUtils.getDateFromString(end_day, "dd/MM/yyyy").getTime());
+				}
+			} catch (Exception e) {
+				throw new Exception("List params[start_day/end_day] invalid, error: " + e.toString());
+			}
+			InvoiceDataHome home = new InvoiceDataHome(getSessionFactory());
+			listData = home.getReportInvoiceDataByCus1(date_company_received_from, date_company_received_to);
+			
+			ReportInvoiceByCus1 report = new ReportInvoiceByCus1();
+			report.setListData(new ArrayList<ReportInvoiceByCus1>());
+			ReportInvoiceByCus1 reportData = new ReportInvoiceByCus1();
+			int total_invoices = 0;
+			BigDecimal sum_total_money = new BigDecimal(0);
+			String customer_code_temp  = "";
+			StringBuilder listProductCodes = new StringBuilder();
+			StringBuilder listProductNames = new StringBuilder();
+			StringBuilder listProductQuantities = new StringBuilder();
+			for (InvoiceData data : listData) {
+				String customer_code_level1 = data.getCustomer_code_level1();
+				String customer_name_level1 = data.getCustomer_name_level1();
+				String product_codes = data.getProduct_ids();
+				String product_names = data.getProduct_names();
+				String product_quantities = data.getQuantitys();
+				
+				if(customer_code_temp.length() > 0 && !customer_code_temp.equals(customer_code_level1)){
+					reportData.setTotal_cus2_follow(getTotalCustomer2Follow(customer_code_temp));
+					String[] arr_products = getProductCodeAndName(listProductCodes, listProductNames);
+					reportData.setProduct_codes(arr_products[0]);
+					reportData.setProduct_names(arr_products[1]);
+					String[] arr_total_products = getTotalProducts(listProductCodes, listProductNames, listProductQuantities);
+					reportData.setTotal_products_before_phase(arr_total_products[0]);
+					reportData.setTotal_products_in_phase(arr_total_products[1]);
+					reportData.setTotal_products_all_phase(arr_total_products[2]);
+					report.getListData().add(reportData);
+					reportData = new ReportInvoiceByCus1();
+					reportData.setCustomer1_code(customer_code_level1);
+					reportData.setCustomer1_name(customer_name_level1);
+					reportData.setTotal_cus2_sent(1);
+					if(data.getDate_sent_late() <= 0){
+						reportData.setTotal_invoice_valid(1);
+					}
+					listProductCodes = new StringBuilder();
+					listProductNames = new StringBuilder();
+					listProductQuantities = new StringBuilder();
+				}else{
+					reportData.setCustomer1_code(customer_code_level1);
+					reportData.setCustomer1_name(customer_name_level1);
+					reportData.setTotal_cus2_sent(reportData.getTotal_cus2_sent()+1);
+					if(data.getDate_sent_late() <= 0){
+						reportData.setTotal_invoice_valid(reportData.getTotal_invoice_valid() + 1);
+					}
+				}
+				listProductCodes.append(product_codes);
+				listProductNames.append(product_names);
+				listProductQuantities.append(product_quantities);
+				
+				customer_code_temp = customer_code_level1;
+				total_invoices ++;
+				sum_total_money.add(data.getSum_total_price());
+			}
+			if(customer_code_temp.length() > 0){
+				reportData.setTotal_cus2_follow(getTotalCustomer2Follow(customer_code_temp));
+				String[] arr_products = getProductCodeAndName(listProductCodes, listProductNames);
+				reportData.setProduct_codes(arr_products[0]);
+				reportData.setProduct_names(arr_products[1]);
+				String[] arr_total_products = getTotalProducts(listProductCodes, listProductNames, listProductQuantities);
+				reportData.setTotal_products_before_phase(arr_total_products[0]);
+				reportData.setTotal_products_in_phase(arr_total_products[1]);
+				reportData.setTotal_products_all_phase(arr_total_products[2]);
+				report.getListData().add(reportData);
+			}
+			
+			report.setTotal_invoices(total_invoices);
+			report.setSum_total_money(sum_total_money.toString());
+			result = report;
+			listData.clear();
+		} catch (Exception e) {
+			e.printStackTrace();
+			rsMess.setStatusError(1);
+			rsMess.setMessage(StringUtil.getError(e));
+			result = rsMess;//rsMess.toString();
+			//return ERROR;
+		}
+		return SUCCESS;
+	}
+	
+	private String[] getTotalProducts(StringBuilder listProductCodes, StringBuilder listProductNames, StringBuilder listQuantities) {
+		try {
+			String arr_code[] = listProductCodes.toString().split("`");
+			String arr_quantities[] = listQuantities.toString().split("`");
+			
+			StringBuilder resultBefore = new StringBuilder();
+			StringBuilder resultIn = new StringBuilder();
+			StringBuilder resultAll = new StringBuilder();
+			LinkedHashMap<String, Integer> mapIn = new LinkedHashMap<String, Integer>();
+			for (int i = 0; i < arr_code.length; i++) {
+				int q = 0;
+				try {
+					q = Integer.parseInt(arr_quantities[i]);
+				} catch (Exception e) {}
+				if(mapIn.containsKey(arr_code[i])){
+					mapIn.put(arr_code[i], mapIn.get(arr_code[i]) + q);
+				}else{
+					mapIn.put(arr_code[i], q);
+				}
+			}
+	        Set set = mapIn.entrySet();
+	        Iterator iterator = set.iterator();
+	        while (iterator.hasNext()) {
+	            Map.Entry item = (Map.Entry) iterator.next();
+	            //System.out.println("Key = " + item.getKey() + " Value = " + item.getValue());
+	            
+	            int total_products_before_phase = getTotalProductBeforePhase(item.getKey().toString());
+	            resultBefore.append(total_products_before_phase).append("'");
+	            resultIn.append(item.getValue()).append("`");
+	            resultAll.append(total_products_before_phase + Integer.parseInt(item.getValue().toString())).append("`");
+	        }
+	        
+			return new String[]{resultBefore.toString(), resultIn.toString(), resultAll.toString()};
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+	
+	private int getTotalProductBeforePhase(String product_code) {
+		return 0;
+	}
+	
+	private String[] getProductCodeAndName(StringBuilder listProductCodes, StringBuilder listProductNames) throws Exception {
+		try {
+			String arr_code[] = listProductCodes.toString().split("`");
+			String arr_name[] = listProductNames.toString().split("`");
+			
+			StringBuilder resultCode = new StringBuilder();
+			StringBuilder resultName = new StringBuilder();
+			List<String> dup = new ArrayList<String>();
+			for (int i = 0; i < arr_code.length; i++) {
+				if(!dup.contains(arr_code[i])){
+					resultCode.append(arr_code[i]).append("`");
+					resultName.append(arr_name[i]).append("`");
+					dup.add(arr_code[i]);
+				}
+			}
+			return new String[]{resultCode.toString(), resultName.toString()};
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+	
+	private int getTotalCustomer2Follow(String customer_code) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	
+	public String getReportInvoiceDataByStaff(){
+		try {
+			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
+			// Fetch Data from User Table
+			Date date_company_received_from = null;
+			Date date_company_received_to = null;
+			int staff_id = 0;
+			try {
+				String start_day = StringUtil.notNull(request.getParameter("start_day"));
+				String end_day = StringUtil.notNull(request.getParameter("end_day"));	
+				if(end_day.length() == 10 && end_day.length() == 10){
+					date_company_received_from = new Date(DateUtils.getDateFromString(start_day, "dd/MM/yyyy").getTime());
+					date_company_received_to = new Date(DateUtils.getDateFromString(end_day, "dd/MM/yyyy").getTime());
+				}
+				staff_id =  Integer.parseInt(StringUtil.notNull(request.getParameter("staff_id")));
+			} catch (Exception e) {
+				throw new Exception("List params[start_day/end_day/staff_id] invalid, error: " + e.toString());
+			}
+			InvoiceDataHome home = new InvoiceDataHome(getSessionFactory());
+			listData = home.getReportInvoiceDataByStaff(date_company_received_from, date_company_received_to, staff_id);
+			
+			List<ReportInvoiceByStaff> reports = new ArrayList<ReportInvoiceByStaff>();
+			String staff_temp  = ""; 
+			InvoiceData data_temp = null;
+			List<String> listCus = new ArrayList<String>();
+			BigDecimal revenue_in_phase = new BigDecimal(0); 
+			for (InvoiceData data : listData) {
+				String staff_name = data.getStaff_name();
+				String cus_code = data.getCustomer_code();
+				BigDecimal sum_total_price = data.getSum_total_price();
+				
+				if(staff_temp.length() > 0 && !staff_temp.equalsIgnoreCase(staff_name)){
+					ReportInvoiceByStaff report = new ReportInvoiceByStaff();
+					report.setStaff_name(data_temp.getStaff_name());
+					report.setTotal_customer_follow(getTotalCustomerFollow(data_temp.getStaff_name()));
+					report.setTotal_customer_no_sent(getTotalCustomerNoSent(data_temp.getStaff_name()));
+					report.setTotal_customer_sent(listCus.size());
+					String revenue_before_phase = getTotalRevenueBeforePhaseByStaff(data_temp.getStaff_name());
+					report.setTotal_revenue_before_phase(revenue_before_phase);
+					report.setTotal_revenue_in_phase(revenue_in_phase.toString());
+					if(revenue_before_phase != null && revenue_before_phase.length() > 0){
+						report.setTotal_revenue_all_phase(revenue_in_phase.add(new BigDecimal(revenue_before_phase)).toString());
+					}else{
+						report.setTotal_revenue_all_phase(revenue_in_phase.toString());
+					}
+					reports.add(report);
+					listCus.clear();
+					revenue_in_phase = new BigDecimal(0); 
+				}
+				if(!listCus.contains(cus_code)){
+					listCus.add(cus_code);
+				}
+				if(sum_total_price != null){
+					revenue_in_phase.add(sum_total_price);	
+				}
+				staff_temp = staff_name;
+				data_temp = data;
+			}
+			if(staff_temp.length() > 0){
+				ReportInvoiceByStaff report = new ReportInvoiceByStaff();
+				report.setStaff_name(data_temp.getStaff_name());
+				report.setTotal_customer_follow(getTotalCustomerFollow(data_temp.getStaff_name()));
+				report.setTotal_customer_no_sent(getTotalCustomerNoSent(data_temp.getStaff_name()));
+				report.setTotal_customer_sent(listCus.size());
+				String revenue_before_phase = getTotalRevenueBeforePhaseByStaff(data_temp.getStaff_name());
+				report.setTotal_revenue_before_phase(revenue_before_phase);
+				report.setTotal_revenue_in_phase(revenue_in_phase.toString());
+				if(revenue_before_phase != null && revenue_before_phase.length() > 0){
+					report.setTotal_revenue_all_phase(revenue_in_phase.add(new BigDecimal(revenue_before_phase)).toString());
+				}else{
+					report.setTotal_revenue_all_phase(revenue_in_phase.toString());
+				}
+				reports.add(report);
+				listCus.clear();
+			}
+			System.out.println("Total data: " + reports.size());
+			result = reports;
+			listData.clear();
+		} catch (Exception e) {
+			e.printStackTrace();
+			rsMess.setStatusError(1);
+			rsMess.setMessage(StringUtil.getError(e));
+			result = rsMess;//rsMess.toString();
+			//return ERROR;
+		}
+		return SUCCESS;
+	}
+	
+	private String getTotalRevenueBeforePhaseByStaff(String staff_name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	private int getTotalCustomerNoSent(String staff_name) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	private int getTotalCustomerFollow(String staff_name) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	public String getReportInvoiceDataByCus2(){
+		try {
+			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
+			// Fetch Data from User Table
+			Date date_company_received_from = null;
+			Date date_company_received_to = null;
+			int customer_id = 0;
+			try {
+				String start_day = StringUtil.notNull(request.getParameter("start_day"));
+				String end_day = StringUtil.notNull(request.getParameter("end_day"));	
+				if(end_day.length() == 10 && end_day.length() == 10){
+					date_company_received_from = new Date(DateUtils.getDateFromString(start_day, "dd/MM/yyyy").getTime());
+					date_company_received_to = new Date(DateUtils.getDateFromString(end_day, "dd/MM/yyyy").getTime());
+				}
+				customer_id =  Integer.parseInt(StringUtil.notNull(request.getParameter("customer_id")));
+			} catch (Exception e) {
+				throw new Exception("List params[start_day/end_day/customer_id] invalid, error: " + e.toString());
+			}
+			InvoiceDataHome home = new InvoiceDataHome(getSessionFactory());
+			listData = home.getReportInvoiceDataByCus2(date_company_received_from, date_company_received_to, customer_id);
+			
+			String cus_temp  = ""; 
+			InvoiceData data_temp = null;
+			List<ReportInvoiceByCus2> reports = new ArrayList<ReportInvoiceByCus2>();
+			int total_invoice_sent = 0;
+			int total_invoice_valid = 0;
+			BigDecimal revenue_in_phase = new BigDecimal(0); 
+			for (InvoiceData data : listData) {
+				String cus_code = data.getCustomer_code();
+				BigDecimal sum_total_price = data.getSum_total_price();
+				
+				if(cus_temp.length() > 0 && !cus_temp.equalsIgnoreCase(cus_code)){
+					ReportInvoiceByCus2 report = new ReportInvoiceByCus2();
+					report.setCustomer2_code(data_temp.getCustomer_code());
+					report.setCustomer2_name(data_temp.getCustomer_name());
+					report.setTotal_invoice_sent(total_invoice_sent);
+					report.setTotal_invoice_valid(total_invoice_valid);
+					report.setStaff_name(data_temp.getStaff_name());
+					String revenue_before_phase = getTotalRevenueBeforePhaseByCus(data_temp.getCustomer_code());
+					report.setTotal_revenue_before_phase(revenue_before_phase);
+					report.setTotal_revenue_in_phase(revenue_in_phase.toString());
+					if(revenue_before_phase != null && revenue_before_phase.length() > 0){
+						report.setTotal_revenue_all_phase(revenue_in_phase.add(new BigDecimal(revenue_before_phase)).toString());
+					}else{
+						report.setTotal_revenue_all_phase(revenue_in_phase.toString());
+					}
+					reports.add(report);
+					total_invoice_sent = 0;
+					total_invoice_valid = 0;
+					revenue_in_phase = new BigDecimal(0);
+				}
+				
+				if(sum_total_price != null){
+					revenue_in_phase.add(sum_total_price);	
+				}
+				data_temp = data;
+				cus_temp  = cus_code;
+			}
+			if(cus_temp.length() > 0){
+				ReportInvoiceByCus2 report = new ReportInvoiceByCus2();
+				report.setCustomer2_code(data_temp.getCustomer_code());
+				report.setCustomer2_name(data_temp.getCustomer_name());
+				report.setTotal_invoice_sent(total_invoice_sent);
+				report.setTotal_invoice_valid(total_invoice_valid);
+				report.setStaff_name(data_temp.getStaff_name());
+				String revenue_before_phase = getTotalRevenueBeforePhaseByCus(data_temp.getCustomer_code());
+				report.setTotal_revenue_before_phase(revenue_before_phase);
+				report.setTotal_revenue_in_phase(revenue_in_phase.toString());
+				if(revenue_before_phase != null && revenue_before_phase.length() > 0){
+					report.setTotal_revenue_all_phase(revenue_in_phase.add(new BigDecimal(revenue_before_phase)).toString());
+				}else{
+					report.setTotal_revenue_all_phase(revenue_in_phase.toString());
+				}
+				reports.add(report);
+			}
+			System.out.println("Total data: " + reports.size());
+			result = reports;
+			listData.clear();
+		} catch (Exception e) {
+			e.printStackTrace();
+			rsMess.setStatusError(1);
+			rsMess.setMessage(StringUtil.getError(e));
+			result = rsMess;//rsMess.toString();
+			//return ERROR;
+		}
+		return SUCCESS;
+	}
+	
+	private String getTotalRevenueBeforePhaseByCus(String customer_code) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	public String getReportInvoiceDataDetailByCus2(){
+		try {
+			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
+			// Fetch Data from User Table
+			Date date_company_received_from = null;
+			Date date_company_received_to = null;
+			int customer_id = 0;
+			try {
+				String start_day = StringUtil.notNull(request.getParameter("start_day"));
+				String end_day = StringUtil.notNull(request.getParameter("end_day"));	
+				if(end_day.length() == 10 && end_day.length() == 10){
+					date_company_received_from = new Date(DateUtils.getDateFromString(start_day, "dd/MM/yyyy").getTime());
+					date_company_received_to = new Date(DateUtils.getDateFromString(end_day, "dd/MM/yyyy").getTime());
+				}
+				customer_id =  Integer.parseInt(StringUtil.notNull(request.getParameter("customer_id")));
+			} catch (Exception e) {
+				throw new Exception("List params[start_day/end_day/customer_id] invalid, error: " + e.toString());
+			}
+			InvoiceDataHome home = new InvoiceDataHome(getSessionFactory());
+			listData = home.getReportInvoiceDataDetailByCus2(date_company_received_from, date_company_received_to, customer_id);
+			
+			List<ReportInvoiceDetailByCus2> reports = new ArrayList<ReportInvoiceDetailByCus2>();
+			for (InvoiceData data : listData) {
+				ReportInvoiceDetailByCus2 report = new ReportInvoiceDetailByCus2();
+				report.setCustomer2_code(data.getCustomer_code());
+				report.setCustomer2_name(data.getCustomer_name());
+				report.setCustomer1_name(data.getCustomer_name_level1());
+				report.setDate_invoice_sent(data.getDate_invoice_sent());
+				report.setDate_product_received(data.getDate_product_received());
+				report.setDate_sent_late(data.getDate_sent_late());
+				report.setProduct_ids(data.getProduct_ids());
+				report.setProduct_names(data.getProduct_names());
+				report.setQuantitys(data.getQuantitys());
+				report.setTotal_boxs(data.getTotal_boxs());
+				report.setTotal_prices(data.getTotal_prices());
+				reports.add(report);
+			}
+			System.out.println("Total data: " + reports.size());
+			result = reports;
+			listData.clear();
+		} catch (Exception e) {
+			e.printStackTrace();
+			rsMess.setStatusError(1);
+			rsMess.setMessage(StringUtil.getError(e));
+			result = rsMess;//rsMess.toString();
+			//return ERROR;
+		}
+		return SUCCESS;
+	}
+	
+	public String getReportInvoiceDataDaily(){
+		try {
+			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
+			// Fetch Data from User Table
+			Date date_company_received_from = null;
+			Date date_company_received_to = null;
+			int staff_id = 0;
+			try {
+				String start_day = StringUtil.notNull(request.getParameter("start_day"));
+				String end_day = StringUtil.notNull(request.getParameter("end_day"));	
+				if(end_day.length() == 10 && end_day.length() == 10){
+					date_company_received_from = new Date(DateUtils.getDateFromString(start_day, "dd/MM/yyyy").getTime());
+					date_company_received_to = new Date(DateUtils.getDateFromString(end_day, "dd/MM/yyyy").getTime());
+				}
+				staff_id =  Integer.parseInt(StringUtil.notNull(request.getParameter("staff_id")));
+			} catch (Exception e) {
+				throw new Exception("List params[start_day/end_day/staff_id] invalid, error: " + e.toString());
+			}
+			InvoiceDataHome home = new InvoiceDataHome(getSessionFactory());
+			listData = home.getReportInvoiceDataDaily(date_company_received_from, date_company_received_to, staff_id);
+			
+			String staff_temp  = ""; 
+			BigDecimal revenue_in_phase = new BigDecimal(0); 
+			List<ReportInvoiceDaily> reports = new ArrayList<ReportInvoiceDaily>();
+			for (InvoiceData data : listData) {
+				String staff_name = data.getStaff_name();
+				BigDecimal sum_total_price = data.getSum_total_price();
+				
+				if(staff_temp.length() > 0 && !staff_temp.equals(staff_name)){
+					ReportInvoiceDaily reportSum = new ReportInvoiceDaily();
+					reportSum.setStaff_name(staff_temp + " Total");
+					reportSum.setTotal_moneys(revenue_in_phase.toString());
+					reports.add(reportSum);
+					revenue_in_phase = new BigDecimal(0);
+				}
+				
+				ReportInvoiceDaily report = new ReportInvoiceDaily();
+				if(staff_temp.equals(data.getStaff_name())){
+					report.setStaff_name("");
+				}else{
+					report.setStaff_name(data.getStaff_name());	
+				}
+				report.setCustomer1_codes(data.getCustomer_code_level1());
+				report.setCustomer1_names(data.getCustomer_name_level1());
+				report.setDates_received(data.getDate_company_received());
+				report.setTotal_moneys(StringUtil.notNull(sum_total_price));
+				reports.add(report);
+				
+				if(sum_total_price != null){
+					revenue_in_phase.add(sum_total_price);	
+				}
+				staff_temp = data.getStaff_name();
+			}
+			if(staff_temp.length() > 0){
+				ReportInvoiceDaily reportSum = new ReportInvoiceDaily();
+				reportSum.setStaff_name(staff_temp + " Total");
+				reportSum.setTotal_moneys(revenue_in_phase.toString());
+				reports.add(reportSum);
+			}
+			System.out.println("Total data: " + reports.size());
+			result = reports;
+			listData.clear();
+		} catch (Exception e) {
+			e.printStackTrace();
+			rsMess.setStatusError(1);
+			rsMess.setMessage(StringUtil.getError(e));
+			result = rsMess;//rsMess.toString();
+			//return ERROR;
+		}
+		return SUCCESS;
+	}
+	
+	///////////////////////////////////////////////NEW REPORT/////////////////////////////////////////////////////////
+	
 	public static void main(String[] args) {
 		try {
-			new InvoiceDataAction().loadListStaff();
+			//new InvoiceDataAction().loadListStaff();
+			//InvoiceDataHome home = new InvoiceDataHome(new InvoiceDataAction().getSessionFactory());
+			//System.out.println(home.getReportInvoiceDataByCus1(null, null).size());
+			BigDecimal sum_total_money = new BigDecimal(0);
+			System.out.println(sum_total_money.add(new BigDecimal("3434")).toString());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
