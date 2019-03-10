@@ -58,7 +58,12 @@ public class ReportInvoiceByCus1 {
 		this.sum_total_money = sum_total_money;
 	}
 	public float getPercent_invoice_valid() {
-		return percent_invoice_valid;
+		if(percent_invoice_valid > 0){
+			return percent_invoice_valid;	
+		}else{
+			return (float)total_invoice_valid*100/total_invoices;
+		}
+		
 	}
 	public void setPercent_invoice_valid(float percent_invoice_valid) {
 		this.percent_invoice_valid = percent_invoice_valid;

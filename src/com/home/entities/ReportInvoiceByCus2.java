@@ -31,7 +31,12 @@ public class ReportInvoiceByCus2 {
 		return total_invoice_valid;
 	}
 	public float getPercent_invoice_valid() {
-		return percent_invoice_valid;
+		if(percent_invoice_valid > 0){
+			return percent_invoice_valid;	
+		}else{
+			return (float)(total_invoice_valid * 100)/total_invoice_sent;
+		}
+		
 	}
 	public String getTotal_revenue_before_phase() {
 		return total_revenue_before_phase;
