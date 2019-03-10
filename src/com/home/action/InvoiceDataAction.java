@@ -413,7 +413,7 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 	            //System.out.println("Key = " + item.getKey() + " Value = " + item.getValue());
 	            
 	            int total_products_before_phase = getTotalProductBeforePhase(item.getKey().toString());
-	            resultBefore.append(total_products_before_phase).append("'");
+	            resultBefore.append(total_products_before_phase).append("`");
 	            resultIn.append(item.getValue()).append("`");
 	            resultAll.append(total_products_before_phase + Integer.parseInt(item.getValue().toString())).append("`");
 	        }
