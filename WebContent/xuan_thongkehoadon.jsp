@@ -1153,9 +1153,10 @@ pageEncoding="UTF-8"%>
 			  	        			          
 			  	        			table +="  <td>"+list_product_codes[row]+"</td>";
 			  	        			table +="  <td>"+list_product_names[row]+"</td>";
-			  	        			table +="  <td class='right'>"+getDataNumber(list_total_products_all_phase[row])+"</td>";
+			  	        		
 			  	        			table +="  <td class='right'>"+getDataNumber(list_total_products_before_phase[row])+"</td>";
-			  	        			table +="  <td class='right'>"+getDataNumber(list_total_products_in_phase[row])+"</td>";		                
+			  	        			table +="  <td class='right'>"+getDataNumber(list_total_products_in_phase[row])+"</td>";	
+			  	        			table +="  <td class='right'>"+getDataNumber(list_total_products_all_phase[row])+"</td>";
 			  	        			table +="</tr>";
 			  	        		 }
 		  	        		}
@@ -1228,10 +1229,10 @@ pageEncoding="UTF-8"%>
 		  	        		table +="     <td>"+total_customer_sent+"</td>";
 		  	        		
 		  	        		
-		  	        		
-		  	        		table +="     <td class='right'>"+getDataNumber(total_revenue_all_phase)+"</td>";
-		  	            	table +="     <td class='right'>"+getDataNumber(total_revenue_before_phase)+"</td>";
+		  	        	
+		  	        		table +="     <td class='right'>"+getDataNumber(total_revenue_before_phase)+"</td>";
 		  	        		table +="     <td class='right'>"+getDataNumber(total_revenue_in_phase)+"</td>";
+		  	        		table +="     <td class='right'>"+getDataNumber(total_revenue_all_phase)+"</td>";
 		  	        		
 		  	        		table +="</tr>";
 		  	        		stt++;
@@ -1278,13 +1279,14 @@ pageEncoding="UTF-8"%>
 		  	        	table +=" </tr> </thead>   <tbody> ";   
 		  	        		
 		 		         var stt =1;
-		 		        for (i in responseText) {  	        		
+		 		        for (i in responseText) {  	   
+		 		        	console.log(responseText[i]);
 	            		    var customer2_code                = responseText[i].customer2_code;
 		  	        		var customer2_name                = responseText[i].customer2_name;		  	        		
 		  	        		
 		  	        		var staff_name         = responseText[i].staff_name;		  	        		
 		  	        		var total_invoice_sent            = responseText[i].total_invoice_sent;
-		  	        		var total_invoice_valid           = responseText[i].total_invoice_valid;
+		  	        		var percent_invoice_valid           = responseText[i].percent_invoice_valid;
 		  	        		
 		  	        		
 		  	        		var total_revenue_all_phase       = responseText[i].total_revenue_all_phase;
@@ -1297,12 +1299,14 @@ pageEncoding="UTF-8"%>
 		  	            	table +="     <td>"+customer2_name+"</td>";
 		  	        		table +="     <td>"+total_invoice_sent+"</td>";
 		  	        		table +="     <td>"+staff_name+"</td>";
-		  	        		table +="     <td>"+total_invoice_valid+"</td>";
+		  	        		table +="     <td>"+percent_invoice_valid+"</td>";
 		  	        		
 		  	        		
-		  	        		table +="     <td class='right'>"+getDataNumber(total_revenue_all_phase)+"</td>";
+		  	        		
 		  	            	table +="     <td class='right'>"+getDataNumber(total_revenue_before_phase)+"</td>";
 		  	        		table +="     <td class='right'>"+getDataNumber(total_revenue_in_phase)+"</td>";
+		  	        		table +="     <td class='right'>"+getDataNumber(total_revenue_all_phase)+"</td>";
+		  	        	
 		  	        		
 		  	        		table +="</tr>";
 		  	        		stt++;
@@ -1352,25 +1356,67 @@ pageEncoding="UTF-8"%>
 			  	        		if(dates_received!=null && dates_received.length>10){
 			  	        			dates_received = dates_received.substring(0,10);
 			  	        		}
-			  	        		table +="<tr>";
-			  	        		table +="     <td>"+stt+"</td>";
-			  	        		table +="     <td>"+staff_name+"</td>";
-			  	            	table +="     <td>"+customer1_codes+"</td>";
-			  	        		table +="     <td>"+customer1_names+"</td>";
-			  	        		table +="     <td class='right'>"+dates_received+"</td>";			  	        		
-			  	        		table +="     <td class='right'>"+getDataNumber(total_moneys)+"</td>";
-			  	        		table +="</tr>";
-			  	        		stt++;
+			  	        		if(staff_name.includes("Total")){
+			  	        			table +="<tr style='font-weight: bold; height:30px'>";
+				  	        		table +="     <td colspan='5' style='padding-top:5px!important'> Total </td>";				  	        		        		
+				  	        		table +="     <td class='right' style='padding-top:5px!important'>"+getDataNumber(total_moneys)+"</td>";
+				  	        		table +="</tr>";
+				  	        		
+			  	        		}else{
+			  	        			table +="<tr>";
+				  	        		table +="     <td>"+stt+"</td>";
+				  	        		table +="     <td>"+staff_name+"</td>";
+				  	            	table +="     <td>"+customer1_codes+"</td>";
+				  	        		table +="     <td>"+customer1_names+"</td>";
+				  	        		table +="     <td class='right'>"+dates_received+"</td>";			  	        		
+				  	        		table +="     <td class='right'>"+getDataNumber(total_moneys)+"</td>";
+				  	        		table +="</tr>";
+				  	        		stt++;
+			  	        		}
+			  	        		
 		            	     }
 		  	        	    table +="</tbody>";
 		  	        	    table +="</table>";
 		  	        	
 		  	        	    $('#div_thong_ke_theo_ngay').html(table);	 	        	   
-			  	        	$('#table_thong_ke_theo_ngay').DataTable({ }); 
+			  	        	$('#table_thong_ke_theo_ngay').DataTable();  
 	            	  } 
 	              
 	   	   });
 	}
+    
+   /*  function MergeGridCells() {
+        var dimension_cells = new Array();
+        var dimension_col = null;
+        var columnCount = $("#table_thong_ke_theo_ngay tr:first th").length;
+        for (dimension_col = 0; dimension_col < columnCount; dimension_col++) {
+            // first_instance holds the first instance of identical td
+            var first_instance = null;
+            var rowspan = 1;
+            // iterate through rows
+            $("#table_thong_ke_theo_ngay").find('tr').each(function () {
+
+                // find the td of the correct column (determined by the dimension_col set above)
+                var dimension_td = $(this).find('td:nth-child(' + dimension_col + ')');
+
+                if (first_instance == null) {
+                    // must be the first row
+                    first_instance = dimension_td;
+                } else if (dimension_td.text() == first_instance.text()) {
+                    // the current td is identical to the previous
+                    // remove the current td
+                    dimension_td.remove();
+                    ++rowspan;
+                    // increment the rowspan attribute of the first instance
+                    first_instance.attr('rowspan', rowspan);
+                } else {
+                    // this cell is different from the last
+                    first_instance = dimension_td;
+                    rowspan = 1;
+                }
+            });
+        } */
+        
     function export_ThongKeHoaDon(step){
     	if(step==1){
     		export_Excel();
