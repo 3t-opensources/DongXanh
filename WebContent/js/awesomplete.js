@@ -304,7 +304,7 @@ _.prototype = {
 
 			this.suggestions = this._list
 				.map(function(item) {
-					console.log('aa:'+item);
+				//	console.log('aa:'+item);
 					return new Suggestion(me.data(item, value));
 				})
 				.filter(function(item) {

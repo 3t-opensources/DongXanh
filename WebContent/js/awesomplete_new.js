@@ -559,8 +559,8 @@ function configure(instance, properties, o) {
 var slice = Array.prototype.slice;
 
 function $(expr, con) {
-	console.log(expr);
-	console.log(con);
+	//console.log(expr);
+	//console.log(con);
 	return typeof expr === "string"? (con || document).querySelector(expr) : expr || null;
 }
 

@@ -583,23 +583,66 @@ function checktable(){
 	  var date_company_received    = document.getElementById("ngaynhantoa").value ;
 	  var ngaynhanhang             = document.getElementById("ngaynhanhang").value ; 
 	  var date_product_received    = document.getElementById("ngaycap1giaotoa").value ;
+	
+	  var maKH                          = document.getElementById("maKH").value ;
+	  var tenKH                         = document.getElementById("tenKH").value ;		
+	  var nvtt_name                     = document.getElementById("nvtt_name").value ;
+	  var customer_name_level1          = document.getElementById("customer_name_level1").value ;
+	  
 	  if(ngaynhanhang.length !=10){
 		    alert("Ngày nhận hàng không được rỗng hoặc khác định dạng dd/mm/yyyy!");
+		    document.getElementById("ngaynhanhang").focus();
 			flag = false;
 			return false;
 	  }
 	  
 	  if(date_company_received.length !=10){
 		    alert("Ngày nhận toa không được rỗng hoặc khác định dạng dd/mm/yyyy!");
+		    document.getElementById("ngaynhantoa").focus();
+			flag = false;
+			return false;
+	  }
+	  if(maKH==null || maKH.trim()=='' ){
+		    alert("Mã Khách Hàng không được rỗng!");
+		    document.getElementById("maKH").focus();
 			flag = false;
 			return false;
 	  }
 	  
-	  if(date_product_received.length !=10){
-		  alert("Ngày nhận hàng không được rỗng hoặc khác định dạng dd/mm/yyyy!");
+	  if(tenKH==null || tenKH.trim()=='' ){
+		    alert("Tên Khách Hàng không được rỗng!");
+		    document.getElementById("tenKH").focus();
 			flag = false;
 			return false;
 	  }
+	  if(customer_name_level1==null || customer_name_level1.trim()=='' ){
+		    alert("Khách hàng cấp I không được rỗng!");
+		    document.getElementById("customer_name_level1").focus();
+			flag = false;
+			return false;
+	  }
+	  if(nvtt_name==null || nvtt_name.trim()=='' ){
+		    alert("NVTT không được rỗng!");
+		    document.getElementById("nvtt_name").focus();
+			flag = false;
+			return false;
+	  }
+	  
+	 
+	  
+	
+	  
+	 
+	 
+	  
+	  if(date_product_received.length !=10){
+		  alert("Ngày cấp I giao toa không được rỗng hoặc khác định dạng dd/mm/yyyy!");
+		  document.getElementById("ngaycap1giaotoa").focus();
+			flag = false;
+			return false;
+	  }
+	  
+	  
 	 var date1 = new Date(date_company_received);
 	 var date2 = new Date(date_product_received);
 	 if(date1<date2){
@@ -766,7 +809,7 @@ function addRow(id){
 			 });
 		  
 		  $('input').keydown(function (e) {	    	  
-			  console.log(e.which);
+			  //console.log(e.which);
 	    	  if (e.which === 13 ) {    		  
 	    		  var tabindex = $(this).attr('tabindex');      
 	    		 
@@ -1066,7 +1109,7 @@ $(document).bind('keydown',function(e) {
 		        	 var resultjson = [];
 	 	        	 for (i in responseText) { 
 	 	        		 
-	 	        	//	 console.log(responseText);
+	 	        	  console.log(responseText);
 	 	        		data ="";	
 	 	        		data = data +responseText[i][0]+"|";//nvtt_id_hidden
 	 	        		data = data +responseText[i][1]+"";//nvtt_name	
@@ -1076,7 +1119,7 @@ $(document).bind('keydown',function(e) {
 	 	        		
 	 	        		}
 	 	        	
-	 	        	if(stt>1){
+	 	        	if(stt>0){
 	 	        		
 	 	        		khachhang.list = resultjson ;
 	        		}else{
@@ -1098,9 +1141,8 @@ $(document).bind('keydown',function(e) {
 		        	
 		        	 var stt =0;
 		        	 var resultjson = [];
-	 	        	 for (i in responseText) { 
-	 	        		 
-	 	        		// console.log(responseText);
+	 	        	 for (i in responseText) { 	 	        		 
+	 	        		 console.log(responseText);
 	 	        		data ="";	
 	 	        		data = data +responseText[i][0]+"|";//customer_id_level1_hidden
 	 	        		data = data +responseText[i][1]+"|";//customer_code_level1_hidden	
@@ -1110,7 +1152,7 @@ $(document).bind('keydown',function(e) {
 	 	        		stt++;	 	        		
 	 	        		}
 	 	        	
-	 	        	if(stt>1){	 	        		
+	 	        	if(stt>0){	 	        		
 	 	        		khachhang.list = resultjson ;
 	        		}else{
 	        			
@@ -1130,7 +1172,7 @@ $(document).bind('keydown',function(e) {
 		        	 var stt =0;
 		        	 var resultjson = [];
 	 	        	 for (i in responseText) { 
-	 	        		 console.log(responseText);
+	 	        		// console.log(responseText);
 	 	        	
 	 	        		data ="";	
 	 	        		data = data +responseText[i][0]+"|";//customer_id
@@ -1146,11 +1188,10 @@ $(document).bind('keydown',function(e) {
 	 	        		
 	 	        		}
 	 	        	
-	 	        	if(stt>1){
-	 	        		
+	 	        	if(stt>0){	 	        		
 	 	        		khachhang.list = resultjson ;
 	        		}else{
-	        			
+	        			khachhang.list = null;
 	        		}
 	 	        	
 		        	
@@ -1169,7 +1210,7 @@ $(document).bind('keydown',function(e) {
 		        	 var stt =0;
 		        	 var resultjson = [];
 	 	        	 for (i in responseText) { 
-	 	        		console.log(responseText[i]);
+	 	        		//console.log(responseText[i]);
 	 	        		data ="";	
 	 	        		data = data +responseText[i][2]+"|";//masp
 	 	        		data = data +responseText[i][1]+"|";//tensp	
@@ -1182,7 +1223,7 @@ $(document).bind('keydown',function(e) {
 	 	        		
 	 	        		}
 	 	        	
-	 	        	if(stt>1){
+	 	        	if(stt>0){
 	 	        		
 	 	        		khachhang.list = resultjson ;
 	        		}else{
@@ -1275,7 +1316,7 @@ function tinhtong(id){
 	  var soluong   =   document.getElementById("soluong_"+id).value;
 	  var sothung   =   document.getElementById("sothung_"+id).value;
 	  var dongia    =   document.getElementById("dongia_"+id).value;
-	  console.log("1255============="+id);
+	  //console.log("1255============="+id);
 	  if(dongia.trim()!="" &&  soluong.trim()!=""){
 		  try {				 
 			  var kq = parseFloat(dongia)*parseFloat(soluong);
@@ -1288,9 +1329,9 @@ function tinhtong(id){
 	  }
 	
 	  var sum_thanh_tien =0;
-	  console.log("====1268====="+sum_thanh_tien);
+	 // console.log("====1268====="+sum_thanh_tien);
       $('#table_position > tbody  > tr').each(function() {
-    	  console.log("==1270========"+sum_thanh_tien);
+    	 // console.log("==1270========"+sum_thanh_tien);
     	  var sanpham_id       = this.getAttribute("id"); 
     	  var soluong_td       = document.getElementById("soluong_"+sanpham_id).value;
     	  var dongia_td        = document.getElementById("dongia_"+sanpham_id).value;    	 
@@ -1304,7 +1345,7 @@ function tinhtong(id){
     	  }
       
       });
-      console.log("==========1284======="+sum_thanh_tien);
+      ///console.log("==========1284======="+sum_thanh_tien);
       if( !isNaN(sum_thanh_tien)){
     	  $("#sum_thanh_tien").html("Tổng : "+sum_thanh_tien.toLocaleString());	
       }
@@ -1377,9 +1418,9 @@ function tinhtong(id){
 	              data    : "",
 	              success : function(responseText) {
 	            	  var cbb_nvtt = document.getElementById("cbb_loaibangke");
-	            	  console.log("============cbb_loaibangke===============");
+	            	 // console.log("============cbb_loaibangke===============");
 	            	  for (i in responseText) {  	        		
-		  	        		console.log(responseText[i]);
+		  	        		//console.log(responseText[i]);
 		  	        		  var option   = document.createElement("option");
 			            	  option.text  = responseText[i].invoiceType;			            	 
 			            	  option.setAttribute ("value", responseText[i].id);

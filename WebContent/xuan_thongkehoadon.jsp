@@ -611,8 +611,8 @@ pageEncoding="UTF-8"%>
  <!-- daterangepicker -->
    
   
-   <%--  <script type="text/javascript" src="js/datepicker/daterangepicker.js"></script>
-   --%>
+     <script  src="https://cdn.rawgit.com/ashl1/datatables-rowsgroup/fbd569b8768155c7a9a62568e66a64115887d7d0/dataTables.rowsGroup.js"></script>
+   
  <script type="text/javascript">
         $(document).ready(function () {      
              
@@ -906,22 +906,35 @@ pageEncoding="UTF-8"%>
 		  	           	     }else{
 		  	           	    	imagePath_hidden = "http://nv.dongxanhvn.com:8077/DX_Images/"+imagePath_hidden;
 		  	           	     }
-		  	           	     
+		  	           	   
 		  	        	    for(row in product_ids){
+		  	        	    	
+		  	        	    	
 		  	        	    	if(lc<max_size){
 		  	        	    		id_mages++;
 		  	        	    		table +="  <tr id ="+id_mages+" ondblclick='showDilogImages("+id_mages+")'>";
-				  	        		table +="     <td>"+invoiceType+"</td>";
+		  	        	    		
+		  	        	    	    if(lc==0){			  	        				
+				  	        			table +="     <td rowspan ='"+max_size+"'>"+invoiceType+"</td>";
+					  	            	table +="     <td rowspan ='"+max_size+"'>"+customer_code+"</td>";
+					  	        		table +="     <td rowspan ='"+max_size+"'>"+customer_name+"</td>";
+					  	        		table +="     <td rowspan ='"+max_size+"'>"+customer_name_level1+"</td>";
+					  	        		table +="     <td rowspan ='"+max_size+"'>"+staff_name+"</td>";
+					  	        		table +="     <td rowspan ='"+max_size+"' class='right'>"+date_company_received+"</td>";
+					  	            	table +="     <td rowspan ='"+max_size+"' class='right'>"+date_product_received+"</td>";
+					  	        		table +="     <td rowspan ='"+max_size+"'>"+date_sent_late+"</td>";
+					  	        		table +="     <td rowspan ='"+max_size+"'>"+notes+"</td>";
+			  	        			}  
+			  	        	    	
+				  	        		/* table +="     <td>"+max_size+"</td>";
 				  	            	table +="     <td>"+customer_code+"</td>";
 				  	        		table +="     <td>"+customer_name+"</td>";
 				  	        		table +="     <td>"+customer_name_level1+"</td>";
 				  	        		table +="     <td>"+staff_name+"</td>";
-				  	        		
-				  	        		
 				  	        		table +="     <td class='right'>"+date_company_received+"</td>";
 				  	            	table +="     <td class='right'>"+date_product_received+"</td>";
 				  	        		table +="     <td>"+date_sent_late+"</td>";
-				  	        		table +="     <td>"+notes+"</td>";
+				  	        		table +="     <td>"+notes+"</td>";  */
 				  	        		
 				  	        		
 				  	        		table +="     <td>"+product_ids[row]+"</td>";
@@ -947,13 +960,17 @@ pageEncoding="UTF-8"%>
 	  	        	    table +="</table>";
 	  	        	    
 	  	        	   $('#detail_data_table').html(table);
-	 	        	   
-	  	        	  $('#table_detail').DataTable({     			   
+	  	        	   $('#table_detail').DataTable({
+	  	        		 'rowsGroup': [0,1,2,3,4,5,6,7,8],
+	  	        		
+	  	        	   });
+	 	        	    
+	  	        	/*    $('#table_detail').DataTable({     			   
 	  	 			    "bProcessing": false,	            	    
 	  	     	    	"scrollX": true,
 	  	     	    	"fixedHeader": true,
 	  	     	    	"autoWidth": true,
-	  	     	    	"bScrollAutoCss": false, 
+	  	     	    	"bScrollAutoCss": false,
 	  	                fixedColumns: true, 
 	  	         	   fixedHeader: {
 	  	 		            header: true,
@@ -963,12 +980,9 @@ pageEncoding="UTF-8"%>
 	  	 					        [15,25, 50, 100,-1],
 	  	 					        [15,25, 50, 100,"All"]
 	  	 					    ],
-	  	 					iDisplayLength: 25
-	  	 				 	
-	  	 				   
-	  	 		      
-	  	            }); 
-	  	        	  
+	  	 					iDisplayLength: -1 
+	  	            });  */
+	  	        	   
 	  	        	  
 	  	        	  
 	  	        	  

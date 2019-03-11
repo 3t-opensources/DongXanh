@@ -153,7 +153,7 @@ pageEncoding="UTF-8"%>
     		  }
     		
     		   var time_id   = new Date().getTime();
-    		   console.log(time_id);
+    		  // console.log(time_id);
     		   var time_img  = "img_"+time_id;
    			   var reader = new FileReader();    			  
    			   $('#table_list_file').append("<tr id='"+time_id+"'><td>"+stt+"</td><td> <img id='"+time_img+"' height='100' width='100'/></td><td id ='name_"+time_id+"'>"+file.webkitRelativePath+"</td><td>"+dungluong+"</td></tr>"); 
@@ -195,7 +195,7 @@ pageEncoding="UTF-8"%>
 		   let files = event.target.files;		
 		   for (var i=0; i<files.length; i++) {
 			   addrow(i,files[i]);
-			   console.log("a"+i);
+			  // console.log("a"+i);
 			   await wait(2016);
 		   };
 	}
@@ -212,8 +212,8 @@ pageEncoding="UTF-8"%>
 	   });
 	   $('#table_list_file > tbody  > tr').each(function() {		 
 		   stt ++;
-		   console.log("name_"+this.getAttribute("id"));
-		   console.log($("#name_"+this.getAttribute("id")).html());
+		  // console.log("name_"+this.getAttribute("id"));
+		  // console.log($("#name_"+this.getAttribute("id")).html());
 		   var id_tr = this.getAttribute("id");
 		   $.ajax({
 			   async: false,
@@ -270,10 +270,10 @@ pageEncoding="UTF-8"%>
  	        		table +="   <th class='table-th' style='text-align: center;width:10%'>Ngày tạo</th>	";
 		              
  	        		table +=" </tr> </thead>   <tbody> ";   
- 	        		console.log(responseText);  
+ 	        		//console.log(responseText);  
 		         var stt =1;
  	        	 for (i in responseText) {  	        		
- 	        		console.log(responseText[i]);
+ 	        		//console.log(responseText[i]);
  	        		var created_time ="";
  	        		if(responseText[i].created_time!=null && responseText[i].created_time!='null'){
  	        			created_time = responseText[i].created_time;
