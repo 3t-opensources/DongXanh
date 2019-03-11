@@ -8,7 +8,7 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Calendar;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -314,6 +314,7 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 			int total_invoices = 0;
 			BigDecimal sum_total_money = new BigDecimal(0);
 			String customer_code_temp  = "";
+			InvoiceData data_temp = null;
 			StringBuilder listProductCodes = new StringBuilder();
 			StringBuilder listProductNames = new StringBuilder();
 			StringBuilder listProductQuantities = new StringBuilder();
@@ -325,11 +326,11 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 				String product_quantities = data.getQuantitys();
 				
 				if(customer_code_temp.length() > 0 && !customer_code_temp.equals(customer_code_level1)){
-					reportData.setTotal_cus2_follow(getTotalCustomer2Follow(customer_code_temp));
+					reportData.setTotal_cus2_follow(getTotalCustomer2FollowByCus1(data_temp.getCustomer_id_level1().getId()));
 					String[] arr_products = getProductCodeAndName(listProductCodes, listProductNames);
 					reportData.setProduct_codes(arr_products[0]);
 					reportData.setProduct_names(arr_products[1]);
-					String[] arr_total_products = getTotalProducts(listProductCodes, listProductNames, listProductQuantities);
+					String[] arr_total_products = getTotalProducts(date_company_received_from, data_temp.getCustomer_id_level1().getId(), listProductCodes, listProductNames, listProductQuantities);
 					reportData.setTotal_products_before_phase(arr_total_products[0]);
 					reportData.setTotal_products_in_phase(arr_total_products[1]);
 					reportData.setTotal_products_all_phase(arr_total_products[2]);
@@ -338,6 +339,8 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 					reportData.setCustomer1_code(customer_code_level1);
 					reportData.setCustomer1_name(customer_name_level1);
 					reportData.setTotal_cus2_sent(1);
+					reportData.setTotal_invoices(total_invoices);
+					reportData.setTotal_invoices(1);
 					if(data.getDate_sent_late() <= 0){
 						reportData.setTotal_invoice_valid(1);
 					}
@@ -348,6 +351,7 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 					reportData.setCustomer1_code(customer_code_level1);
 					reportData.setCustomer1_name(customer_name_level1);
 					reportData.setTotal_cus2_sent(reportData.getTotal_cus2_sent()+1);
+					reportData.setTotal_invoices(reportData.getTotal_invoices()+1);
 					if(data.getDate_sent_late() <= 0){
 						reportData.setTotal_invoice_valid(reportData.getTotal_invoice_valid() + 1);
 					}
@@ -356,16 +360,17 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 				listProductNames.append(product_names);
 				listProductQuantities.append(product_quantities);
 				
+				data_temp = data;
 				customer_code_temp = customer_code_level1;
 				total_invoices ++;
-				sum_total_money.add(data.getSum_total_price());
+				sum_total_money = sum_total_money.add(data.getSum_total_price());
 			}
 			if(customer_code_temp.length() > 0){
-				reportData.setTotal_cus2_follow(getTotalCustomer2Follow(customer_code_temp));
+				reportData.setTotal_cus2_follow(getTotalCustomer2FollowByCus1(data_temp.getCustomer_id_level1().getId()));
 				String[] arr_products = getProductCodeAndName(listProductCodes, listProductNames);
 				reportData.setProduct_codes(arr_products[0]);
 				reportData.setProduct_names(arr_products[1]);
-				String[] arr_total_products = getTotalProducts(listProductCodes, listProductNames, listProductQuantities);
+				String[] arr_total_products = getTotalProducts(date_company_received_from, data_temp.getCustomer_id_level1().getId(), listProductCodes, listProductNames, listProductQuantities);
 				reportData.setTotal_products_before_phase(arr_total_products[0]);
 				reportData.setTotal_products_in_phase(arr_total_products[1]);
 				reportData.setTotal_products_all_phase(arr_total_products[2]);
@@ -386,7 +391,7 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 		return SUCCESS;
 	}
 	
-	private String[] getTotalProducts(StringBuilder listProductCodes, StringBuilder listProductNames, StringBuilder listQuantities) {
+	private String[] getTotalProducts(Date date_company_received_from, int customer1_code, StringBuilder listProductCodes, StringBuilder listProductNames, StringBuilder listQuantities) throws Exception{
 		try {
 			String arr_code[] = listProductCodes.toString().split("`");
 			String arr_quantities[] = listQuantities.toString().split("`");
@@ -412,8 +417,8 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 	            Map.Entry item = (Map.Entry) iterator.next();
 	            //System.out.println("Key = " + item.getKey() + " Value = " + item.getValue());
 	            
-	            int total_products_before_phase = getTotalProductBeforePhase(item.getKey().toString());
-	            resultBefore.append(total_products_before_phase).append("'");
+	            int total_products_before_phase = getTotalProductBeforePhase(date_company_received_from, customer1_code, item.getKey().toString());
+	            resultBefore.append(total_products_before_phase).append("`");
 	            resultIn.append(item.getValue()).append("`");
 	            resultAll.append(total_products_before_phase + Integer.parseInt(item.getValue().toString())).append("`");
 	        }
@@ -425,8 +430,36 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 		}
 	}
 	
-	private int getTotalProductBeforePhase(String product_code) {
-		return 0;
+	private int getTotalProductBeforePhase(Date date_company_received_from, int customer1_code, String product_code) throws Exception {
+		int total = 0;
+		try {
+			InvoiceDataHome home = new InvoiceDataHome(getSessionFactory());
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(date_company_received_from);
+			int year = cal.get(Calendar.YEAR);
+			int month = cal.get(Calendar.MONTH);
+			if(month < 10){
+				year = year -1;
+			}
+			java.sql.Date start_day = new Date(DateUtils.getDateFromString("01/10/"+(year), "dd/MM/yyyy").getTime());
+			java.sql.Date end_day = new Date(date_company_received_from.getTime());
+			List<String[]> results = home.getTotalProductBeforePhase(start_day, end_day, customer1_code, product_code);
+			for (String[] arr : results) {
+				String codes[] = arr[0].split("`");
+				String quantitys[] = arr[1].split("`");
+				int i = 0;
+				for (String code : codes) {
+					if(product_code.equalsIgnoreCase(code)){
+						total += Integer.parseInt(quantitys[i]);
+					}
+					i++;
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		return total;
 	}
 	
 	private String[] getProductCodeAndName(StringBuilder listProductCodes, StringBuilder listProductNames) throws Exception {
@@ -451,9 +484,9 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 		}
 	}
 	
-	private int getTotalCustomer2Follow(String customer_code) {
-		// TODO Auto-generated method stub
-		return 0;
+	private int getTotalCustomer2FollowByCus1(int customer_id) throws Exception{
+		InvoiceDataHome home = new InvoiceDataHome(getSessionFactory());
+		return (int)home.getTotalCustomer2FollowByCus1(customer_id);
 	}
 	
 	public String getReportInvoiceDataByStaff(){
@@ -486,14 +519,15 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 				String staff_name = data.getStaff_name();
 				String cus_code = data.getCustomer_code();
 				BigDecimal sum_total_price = data.getSum_total_price();
+				//System.out.println("sum_total_price = " + sum_total_price);
 				
 				if(staff_temp.length() > 0 && !staff_temp.equalsIgnoreCase(staff_name)){
 					ReportInvoiceByStaff report = new ReportInvoiceByStaff();
 					report.setStaff_name(data_temp.getStaff_name());
-					report.setTotal_customer_follow(getTotalCustomerFollow(data_temp.getStaff_name()));
-					report.setTotal_customer_no_sent(getTotalCustomerNoSent(data_temp.getStaff_name()));
+					report.setTotal_customer_follow(getTotalCustomer2FollowByStaff(data_temp.getStaff_id().getId()));
+					report.setTotal_customer_no_sent(getTotalCustomerNoSent(date_company_received_from, date_company_received_to, data_temp.getStaff_id().getId()));
 					report.setTotal_customer_sent(listCus.size());
-					String revenue_before_phase = getTotalRevenueBeforePhaseByStaff(data_temp.getStaff_name());
+					String revenue_before_phase = getTotalRevenueBeforePhaseByStaff(date_company_received_from, data_temp.getStaff_id().getId());
 					report.setTotal_revenue_before_phase(revenue_before_phase);
 					report.setTotal_revenue_in_phase(revenue_in_phase.toString());
 					if(revenue_before_phase != null && revenue_before_phase.length() > 0){
@@ -509,7 +543,7 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 					listCus.add(cus_code);
 				}
 				if(sum_total_price != null){
-					revenue_in_phase.add(sum_total_price);	
+					revenue_in_phase = revenue_in_phase.add(sum_total_price);	
 				}
 				staff_temp = staff_name;
 				data_temp = data;
@@ -517,10 +551,10 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 			if(staff_temp.length() > 0){
 				ReportInvoiceByStaff report = new ReportInvoiceByStaff();
 				report.setStaff_name(data_temp.getStaff_name());
-				report.setTotal_customer_follow(getTotalCustomerFollow(data_temp.getStaff_name()));
-				report.setTotal_customer_no_sent(getTotalCustomerNoSent(data_temp.getStaff_name()));
+				report.setTotal_customer_follow(getTotalCustomer2FollowByStaff(data_temp.getStaff_id().getId()));
+				report.setTotal_customer_no_sent(getTotalCustomerNoSent(date_company_received_from, date_company_received_to, data_temp.getStaff_id().getId()));
 				report.setTotal_customer_sent(listCus.size());
-				String revenue_before_phase = getTotalRevenueBeforePhaseByStaff(data_temp.getStaff_name());
+				String revenue_before_phase = getTotalRevenueBeforePhaseByStaff(date_company_received_from, data_temp.getStaff_id().getId());
 				report.setTotal_revenue_before_phase(revenue_before_phase);
 				report.setTotal_revenue_in_phase(revenue_in_phase.toString());
 				if(revenue_before_phase != null && revenue_before_phase.length() > 0){
@@ -544,17 +578,33 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 		return SUCCESS;
 	}
 	
-	private String getTotalRevenueBeforePhaseByStaff(String staff_name) {
-		// TODO Auto-generated method stub
-		return null;
+	private String getTotalRevenueBeforePhaseByStaff(Date date_company_received_from, int staff_id) throws Exception {
+		String revenue = "";
+		try {
+			InvoiceDataHome home = new InvoiceDataHome(getSessionFactory());
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(date_company_received_from);
+			int year = cal.get(Calendar.YEAR);
+			int month = cal.get(Calendar.MONTH);
+			if(month < 10){
+				year = year -1;
+			}
+			java.sql.Date start_day = new Date(DateUtils.getDateFromString("01/10/"+(year), "dd/MM/yyyy").getTime());
+			java.sql.Date end_day = new Date(date_company_received_from.getTime());
+			revenue = home.getTotalRevenueBeforePhaseByStaff(start_day, end_day, staff_id).toString();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		return revenue;
 	}
-	private int getTotalCustomerNoSent(String staff_name) {
-		// TODO Auto-generated method stub
-		return 0;
+	private int getTotalCustomerNoSent(java.sql.Date start_day, java.sql.Date end_day, int staff_id) throws Exception {
+		InvoiceDataHome home = new InvoiceDataHome(getSessionFactory());
+		return (int)home.getTotalCustomerNoSentInvoice(start_day, end_day, staff_id);
 	}
-	private int getTotalCustomerFollow(String staff_name) {
-		// TODO Auto-generated method stub
-		return 0;
+	private int getTotalCustomer2FollowByStaff(int staff_id) throws Exception{
+		InvoiceDataHome home = new InvoiceDataHome(getSessionFactory());
+		return (int)home.getTotalCustomer2FollowByStaff(staff_id);
 	}
 	public String getReportInvoiceDataByCus2(){
 		try {
@@ -594,7 +644,7 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 					report.setTotal_invoice_sent(total_invoice_sent);
 					report.setTotal_invoice_valid(total_invoice_valid);
 					report.setStaff_name(data_temp.getStaff_name());
-					String revenue_before_phase = getTotalRevenueBeforePhaseByCus(data_temp.getCustomer_code());
+					String revenue_before_phase = getTotalRevenueBeforePhaseByCus(date_company_received_from, data_temp.getCustomer_id().getId());
 					report.setTotal_revenue_before_phase(revenue_before_phase);
 					report.setTotal_revenue_in_phase(revenue_in_phase.toString());
 					if(revenue_before_phase != null && revenue_before_phase.length() > 0){
@@ -609,8 +659,12 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 				}
 				
 				if(sum_total_price != null){
-					revenue_in_phase.add(sum_total_price);	
+					revenue_in_phase = revenue_in_phase.add(sum_total_price);	
 				}
+				if(data.getDate_sent_late() <= 0){
+					total_invoice_valid ++;
+				}
+				total_invoice_sent++;
 				data_temp = data;
 				cus_temp  = cus_code;
 			}
@@ -621,7 +675,7 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 				report.setTotal_invoice_sent(total_invoice_sent);
 				report.setTotal_invoice_valid(total_invoice_valid);
 				report.setStaff_name(data_temp.getStaff_name());
-				String revenue_before_phase = getTotalRevenueBeforePhaseByCus(data_temp.getCustomer_code());
+				String revenue_before_phase = getTotalRevenueBeforePhaseByCus(date_company_received_from, data_temp.getCustomer_id().getId());
 				report.setTotal_revenue_before_phase(revenue_before_phase);
 				report.setTotal_revenue_in_phase(revenue_in_phase.toString());
 				if(revenue_before_phase != null && revenue_before_phase.length() > 0){
@@ -644,9 +698,26 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 		return SUCCESS;
 	}
 	
-	private String getTotalRevenueBeforePhaseByCus(String customer_code) {
-		// TODO Auto-generated method stub
-		return null;
+	private String getTotalRevenueBeforePhaseByCus(Date date_company_received_from, int customer_id) throws Exception{
+		String revenue = "";
+		try {
+			InvoiceDataHome home = new InvoiceDataHome(getSessionFactory());
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(date_company_received_from);
+			int year = cal.get(Calendar.YEAR);
+			int month = cal.get(Calendar.MONTH);
+			if(month < 10){
+				year = year -1;
+			}
+			java.sql.Date start_day = new Date(DateUtils.getDateFromString("01/10/"+(year), "dd/MM/yyyy").getTime());
+			java.sql.Date end_day = new Date(date_company_received_from.getTime());
+			revenue = home.getTotalRevenueBeforePhaseByCus(start_day, end_day, customer_id).toString();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		return revenue;
+	
 	}
 	public String getReportInvoiceDataDetailByCus2(){
 		try {
@@ -730,6 +801,8 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 					ReportInvoiceDaily reportSum = new ReportInvoiceDaily();
 					reportSum.setStaff_name(staff_temp + " Total");
 					reportSum.setTotal_moneys(revenue_in_phase.toString());
+					reportSum.setCustomer1_codes("");
+					reportSum.setCustomer1_names("");
 					reports.add(reportSum);
 					revenue_in_phase = new BigDecimal(0);
 				}
@@ -747,7 +820,7 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 				reports.add(report);
 				
 				if(sum_total_price != null){
-					revenue_in_phase.add(sum_total_price);	
+					revenue_in_phase = revenue_in_phase.add(sum_total_price);	
 				}
 				staff_temp = data.getStaff_name();
 			}
@@ -755,6 +828,8 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 				ReportInvoiceDaily reportSum = new ReportInvoiceDaily();
 				reportSum.setStaff_name(staff_temp + " Total");
 				reportSum.setTotal_moneys(revenue_in_phase.toString());
+				reportSum.setCustomer1_codes("");
+				reportSum.setCustomer1_names("");
 				reports.add(reportSum);
 			}
 			System.out.println("Total data: " + reports.size());

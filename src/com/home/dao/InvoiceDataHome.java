@@ -4,6 +4,7 @@ package com.home.dao;
 
 import static org.hibernate.criterion.Example.create;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -20,13 +21,10 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.internal.SessionImpl;
 
-import com.home.entities.ReportInvoiceByCus1;
 import com.home.model.Customer;
 import com.home.model.InvoiceData;
 import com.home.model.InvoiceType;
 import com.home.model.Management;
-import com.home.model.Product;
-import com.home.model.Statistic;
 import com.home.model.User;
 import com.home.util.ResultSetUtils;
 import com.home.util.StringUtil;
@@ -434,26 +432,26 @@ public class InvoiceDataHome {
 //			invoice.setInvoice_type_id(iv_type);
 			invoice.setInvoice_type_name(StringUtil.notNull(rs.getString("invoice_type_name")));
 
-//			Customer cus = new Customer();
-//			cus.setId(rs.getInt("customer_id"));
-//			cus.setCustomerCode(rs.getString("customer_code"));
-//			cus.setStatisticName(rs.getString("customer_name"));
-//			//invoice.setCustomer_id(cus);
+			Customer cus = new Customer();
+			cus.setId(rs.getInt("customer_id"));
+			cus.setCustomerCode(StringUtil.notNull(rs.getString("customer_code")));
+			cus.setStatisticName(StringUtil.notNull(rs.getString("customer_name")));
+			invoice.setCustomer_id(cus);
 			invoice.setCustomer_code(StringUtil.notNull(rs.getString("customer_code")));
 			invoice.setCustomer_name(StringUtil.notNull(rs.getString("customer_name")));
 			
-//			Customer cus1 = new Customer();
-//			cus1.setId(rs.getInt("customer_id_level1"));
-//			cus1.setCustomerCode(rs.getString("customer_code_level1"));
-//			cus1.setStatisticName(rs.getString("customer_name_level1"));
-//			//invoice.setCustomer_id_level1(cus1);
+			Customer cus1 = new Customer();
+			cus1.setId(rs.getInt("customer_id_level1"));
+			cus1.setCustomerCode(StringUtil.notNull(rs.getString("customer_code_level1")));
+			cus1.setStatisticName(StringUtil.notNull(rs.getString("customer_name_level1")));
+			invoice.setCustomer_id_level1(cus1);
 			invoice.setCustomer_code_level1(StringUtil.notNull(rs.getString("customer_code_level1")));
 			invoice.setCustomer_name_level1(StringUtil.notNull(rs.getString("customer_name_level1")));
 			
-//			User user = new User();
-//			user.setId(rs.getInt("staff_id"));
-//			user.setUserName(rs.getString("staff_name"));
-//			//invoice.setStaff_id(user);
+			User user = new User();
+			user.setId(rs.getInt("staff_id"));
+			user.setUserName(StringUtil.notNull(rs.getString("staff_name")));
+			invoice.setStaff_id(user);
 			invoice.setStaff_name(StringUtil.notNull(rs.getString("staff_name")));
 			
 			invoice.setDate_invoice_sent(rs.getDate("date_invoice_sent"));
@@ -674,8 +672,8 @@ public class InvoiceDataHome {
 			String sql = "SELECT d.* FROM management m JOIN invoice_data d ON m.id = d.management_id "
 					+ " WHERE  "
 					+ " (0="+(start_day==null?0:1)+" Or (created_time >= ? And created_time <= ?)) "
-					+ " AND (0="+(staff_id<=0?0:1)+" Or (d.staff_id=?)) AND staff_name is not null"
-					+ " ORDER BY staff_id, customer_code_level1";
+					+ " AND (0="+(staff_id<=0?0:1)+" Or (d.staff_id=?)) AND staff_id is not null AND customer_id_level1 is not null"
+					+ " ORDER BY staff_id, customer_id_level1";
 			
 			//System.out.println(sql);
 			PreparedStatement pre = conn.prepareStatement(sql);
@@ -705,5 +703,288 @@ public class InvoiceDataHome {
 		}
 	}
 	
+	
+	
+	public long getTotalCustomer2FollowByCus1(int customer_id) throws Exception{
+		log.debug("retrieve list getTotalCustomer2Follow");
+		Session session = null;
+		long total = 0;
+		try {
+			session = sessionFactory.openSession();
+			SessionImpl sessionImpl = (SessionImpl) session;
+			Connection conn = sessionImpl.connection();
+
+			String sql = "SELECT count(*) FROM customer where "
+					+ "customer1_level1_id = ? "
+					+ "or customer2_level1_id = ? "
+					+ "or customer3_level1_id = ? "
+					+ "or customer4_level1_id = ? "
+					+ "or customer5_level1_id = ? ";
+			
+			//System.out.println(sql);
+			PreparedStatement pre = conn.prepareStatement(sql);
+			pre.setInt(1, customer_id);
+			pre.setInt(2, customer_id);
+			pre.setInt(3, customer_id);
+			pre.setInt(4, customer_id);
+			pre.setInt(5, customer_id);
+			System.out.println(pre.toString());
+			ResultSet rs = pre.executeQuery();
+			if(rs.next()){
+				total = rs.getLong(1);
+			}
+			rs.close();
+			log.debug("retrieve getTotalCustomer2Follow successful, result size: " + total);
+			return total;
+		} catch (Exception re) {
+			re.printStackTrace();
+			log.error("retrieve getTotalCustomer2Follow failed", re);
+			throw re;
+		} finally{
+			try {
+				if(session != null){
+					session.flush();
+					session.close();
+				}
+			} catch (Exception e) {
+			}
+		}
+	}
+	
+	public List<String[]> getTotalProductBeforePhase(
+			java.sql.Date start_day, 
+			java.sql.Date end_day,
+			int customer1_code, 
+			String product_code) throws Exception{
+		log.debug("retrieve list getTotalProductBeforePhase");
+		Session session = null;
+		List<String[]> results = new ArrayList<String[]>();
+		try {
+			session = sessionFactory.openSession();
+			SessionImpl sessionImpl = (SessionImpl) session;
+			Connection conn = sessionImpl.connection();
+
+			//String sql = "SELECT product_ids, quantitys FROM invoice_data where product_ids like ? and customer_id_level1=?";
+			String sql = "SELECT d.product_ids, d.quantitys "
+					+ " FROM management m JOIN invoice_data d "
+					+ " ON m.id = d.management_id "
+					+ " WHERE d.product_ids like ? and d.customer_id_level1=? AND (m.created_time >= ? And m.created_time < ?)";
+			
+			//System.out.println(sql);
+			PreparedStatement pre = conn.prepareStatement(sql);
+			pre.setString(1,  "%" + product_code + "%");
+			pre.setInt(2, customer1_code);
+			pre.setDate(3, start_day);
+			pre.setDate(4, end_day);
+			System.out.println(pre.toString());
+			ResultSet rs = pre.executeQuery();
+			while(rs.next()){
+				results.add(new String[]{
+					StringUtil.notNull(rs.getString("product_ids"))	,
+					StringUtil.notNull(rs.getString("quantitys"))	
+				});
+			}
+			rs.close();
+			log.debug("retrieve getTotalProductBeforePhase successful, result size: " + results);
+			return results;
+		} catch (Exception re) {
+			re.printStackTrace();
+			log.error("retrieve getTotalProductBeforePhase failed", re);
+			throw re;
+		} finally{
+			try {
+				if(session != null){
+					session.flush();
+					session.close();
+				}
+			} catch (Exception e) {
+			}
+		}
+	}
+	
+	
+	public long getTotalCustomer2FollowByStaff(int staff_id) throws Exception{
+		log.debug("retrieve list getTotalCustomer2FollowByStaff");
+		Session session = null;
+		long total = 0;
+		try {
+			session = sessionFactory.openSession();
+			SessionImpl sessionImpl = (SessionImpl) session;
+			Connection conn = sessionImpl.connection();
+
+			String sql = "SELECT count(*) FROM customer where user_id = ?";
+			
+			//System.out.println(sql);
+			PreparedStatement pre = conn.prepareStatement(sql);
+			pre.setInt(1, staff_id);
+			System.out.println(pre.toString());
+			ResultSet rs = pre.executeQuery();
+			if(rs.next()){
+				total = rs.getLong(1);
+			}
+			rs.close();
+			log.debug("retrieve getTotalCustomer2FollowByStaff successful, result size: " + total);
+			return total;
+		} catch (Exception re) {
+			re.printStackTrace();
+			log.error("retrieve getTotalCustomer2FollowByStaff failed", re);
+			throw re;
+		} finally{
+			try {
+				if(session != null){
+					session.flush();
+					session.close();
+				}
+			} catch (Exception e) {
+			}
+		}
+	}
+	
+	public long getTotalCustomerNoSentInvoice(
+			java.sql.Date start_day, 
+			java.sql.Date end_day,
+			int staff_id) throws Exception{
+		log.debug("retrieve list getTotalCustomerNoSentInvoice");
+		Session session = null;
+		long total = 0;
+		try {
+			session = sessionFactory.openSession();
+			SessionImpl sessionImpl = (SessionImpl) session;
+			Connection conn = sessionImpl.connection();
+
+			String sql = "SELECT count(*) FROM customer where user_id = ? "
+					+ " AND id not in ("
+					+ "Select customer_id_level1 FROM management m JOIN invoice_data d ON m.id = d.management_id "
+					+ " WHERE  "
+					+ " (0="+(start_day==null?0:1)+" Or (created_time >= ? And created_time <= ?)) "
+					+ " AND (0="+(staff_id<=0?0:1)+" Or (d.staff_id=?)) AND customer_id_level1 is not null"
+					+ ")";
+			
+			//System.out.println(sql);
+			PreparedStatement pre = conn.prepareStatement(sql);
+			pre.setInt(1, staff_id);
+			pre.setDate(2, start_day);
+			pre.setDate(3, end_day);
+			pre.setInt(4, staff_id);
+			System.out.println(pre.toString());
+			ResultSet rs = pre.executeQuery();
+			if(rs.next()){
+				total = rs.getLong(1);
+			}
+			rs.close();
+			log.debug("retrieve getTotalCustomerNoSentInvoice successful, result size: " + total);
+			return total;
+		} catch (Exception re) {
+			re.printStackTrace();
+			log.error("retrieve getTotalCustomerNoSentInvoice failed", re);
+			throw re;
+		} finally{
+			try {
+				if(session != null){
+					session.flush();
+					session.close();
+				}
+			} catch (Exception e) {
+			}
+		}
+	}
+	
+	
+	public BigDecimal getTotalRevenueBeforePhaseByStaff(
+			java.sql.Date start_day, 
+			java.sql.Date end_day,
+			int staff_id) throws Exception{
+		log.debug("retrieve list getTotalRevenueBeforePhaseByStaff");
+		Session session = null;
+		BigDecimal total = new BigDecimal(0);
+		try {
+			session = sessionFactory.openSession();
+			SessionImpl sessionImpl = (SessionImpl) session;
+			Connection conn = sessionImpl.connection();
+
+			String sql =  "Select sum_total_price FROM management m JOIN invoice_data d ON m.id = d.management_id "
+					+ " WHERE  "
+					+ " (0="+(start_day==null?0:1)+" Or (created_time >= ? And created_time <= ?)) "
+					+ " AND (0="+(staff_id<=0?0:1)+" Or (d.staff_id=?)) AND staff_name is not null";
+			
+			//System.out.println(sql);
+			PreparedStatement pre = conn.prepareStatement(sql);
+			pre.setDate(1, start_day);
+			pre.setDate(2, end_day);
+			pre.setInt(3, staff_id);
+			System.out.println(pre.toString());
+			ResultSet rs = pre.executeQuery();
+			while(rs.next()){
+				BigDecimal sum_total_price = rs.getBigDecimal("sum_total_price");
+				if(sum_total_price != null){
+					total = total.add(sum_total_price);
+				}
+			}
+			rs.close();
+			log.debug("retrieve getTotalRevenueBeforePhaseByStaff successful, result size: " + total);
+			return total;
+		} catch (Exception re) {
+			re.printStackTrace();
+			log.error("retrieve getTotalRevenueBeforePhaseByStaff failed", re);
+			throw re;
+		} finally{
+			try {
+				if(session != null){
+					session.flush();
+					session.close();
+				}
+			} catch (Exception e) {
+			}
+		}
+	}
+	
+	
+	public BigDecimal getTotalRevenueBeforePhaseByCus(
+			java.sql.Date start_day, 
+			java.sql.Date end_day,
+			int customer_id) throws Exception{
+		log.debug("retrieve list getTotalRevenueBeforePhaseByCus");
+		Session session = null;
+		BigDecimal total = new BigDecimal(0);
+		try {
+			session = sessionFactory.openSession();
+			SessionImpl sessionImpl = (SessionImpl) session;
+			Connection conn = sessionImpl.connection();
+
+			String sql =  "Select sum_total_price FROM management m JOIN invoice_data d ON m.id = d.management_id "
+					+ " WHERE  "
+					+ " (0="+(start_day==null?0:1)+" Or (created_time >= ? And created_time <= ?)) "
+					+ " AND (0="+(customer_id<=0?0:1)+" Or (d.customer_id=?)) AND customer_name is not null";
+			
+			//System.out.println(sql);
+			PreparedStatement pre = conn.prepareStatement(sql);
+			pre.setDate(1, start_day);
+			pre.setDate(2, end_day);
+			pre.setInt(3, customer_id);
+			System.out.println(pre.toString());
+			ResultSet rs = pre.executeQuery();
+			while(rs.next()){
+				BigDecimal sum_total_price = rs.getBigDecimal("sum_total_price");
+				if(sum_total_price != null){
+					total = total.add(sum_total_price);
+				}
+			}
+			rs.close();
+			log.debug("retrieve getTotalRevenueBeforePhaseByCus successful, result size: " + total);
+			return total;
+		} catch (Exception re) {
+			re.printStackTrace();
+			log.error("retrieve getTotalRevenueBeforePhaseByCus failed", re);
+			throw re;
+		} finally{
+			try {
+				if(session != null){
+					session.flush();
+					session.close();
+				}
+			} catch (Exception e) {
+			}
+		}
+	}
 	
 }
