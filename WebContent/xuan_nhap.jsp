@@ -194,12 +194,12 @@
 							             <th class = "header-table-column  table-th" >STT</th>
 							             <th class = "header-table-column  table-th " >Mã sản phẩm</th>
 							             <th class = "header-table-column  table-th"  style="width: 200px!important;">Tên sản phẩm</th>
-							             <th class = "header-table-column  table-th" >Số lượng</th>
-							             <th class = "header-table-column  table-th" >Số thùng</th>
+							             <th class = "header-table-column  table-th"  style="width: 70px!important;">Số lượng</th>
+							             <th class = "header-table-column  table-th"  style="width: 70px!important;">Số thùng</th>
 							             <th class = "header-table-column  table-th" >Đơn giá</th>
-							             <th class = "header-table-column  table-th" style="width: 70px!important;">Thành tiền</th>
+							             <th class = "header-table-column  table-th" >Thành tiền</th>
 							            
-							             <th class = "header-table-column  table-th" style="width: 80px"></th>
+							             <th class = "header-table-column  table-th" style="width: 60px"></th>
 							            </tr>
 							          </thead>
 							          <tbody id ="tbody" >
@@ -210,33 +210,33 @@
 		                                    <td id = "stt_<%=i %>">	<%=i %></td>
 											
 											<td>
-												<input value = "" id = "masanpham_<%=i %>"    name="masanpham_<%=i %>"  class="custom-input-debitor form-control" onkeyup="tinhtong(<%=i %>)" tabindex="<%= (i*6) +1+lc%>"/>
+												<input value = "" id = "masanpham_<%=i %>"    name="masanpham_<%=i %>"  class="custom-input-debitor form-control_table" onkeyup="tinhtong(<%=i %>)" tabindex="<%= (i*6) +1+lc%>"/>
 											</td>
 											<td>
-												<input value = "" id = "tensanpham_<%=i %>"   name="tensanpham_<%=i %>" class="custom-input-debitor form-control"  onkeyup="tinhtong(<%=i %>)" tabindex="<%= (i*6) +2+lc%>"/>
+												<input value = "" id = "tensanpham_<%=i %>"   name="tensanpham_<%=i %>" class="custom-input-debitor form-control_table"  onkeyup="tinhtong(<%=i %>)" tabindex="<%= (i*6) +2+lc%>"/>
 											</td>
 											<td>
-											   <input type="number" value="" min="0" step="1" data-number-to-fixed="2" data-number-stepfactor="100" id = "soluong_<%=i %>"  onkeyup="tinhtong_sothung(<%=i %>)"  name="soluong_<%=i %>" class="custom-input-debitor form-control currency" tabindex="<%= (i*6) +3+lc%>"/>
+											   <input type="number" value="" min="0" step="1" data-number-to-fixed="2" data-number-stepfactor="100" id = "soluong_<%=i %>"  onkeyup="tinhtong_sothung(<%=i %>)"  name="soluong_<%=i %>" class="custom-input-debitor form-control_table currency" tabindex="<%= (i*6) +3+lc%>"/>
 											
 											</td>
 											<td>
 											  <input type="hidden"  value = "" id = "sochai_1thung_<%=i %>"   name="sochai_1thung_<%=i %>">
-											  <input type="number" value="" min="0" step="1" data-number-to-fixed="2" data-number-stepfactor="100" id = "sothung_<%=i %>"  onkeyup="tinhtong(<%=i %>)"  name="sothung_<%=i %>" class="custom-input-debitor form-control currency" tabindex="<%= (i*6) +4+lc%>" />
+											  <input type="number" value="" min="0" step="1" data-number-to-fixed="2" data-number-stepfactor="100" id = "sothung_<%=i %>"  onkeyup="tinhtong(<%=i %>)"  name="sothung_<%=i %>" class="custom-input-debitor form-control_table currency" tabindex="<%= (i*6) +4+lc%>" />
 											</td>
 											
 											<td>
-											  <input type="number" value="" min="0" step="1" data-number-to-fixed="2" data-number-stepfactor="100" id = "dongia_<%=i %>"  onkeyup="tinhtong(<%=i %>)"  name="dongia_<%=i %>" class="custom-input-debitor form-control currency" tabindex="<%= (i*6) +5+lc%>" />
+											  <input type="number" value="" min="0" step="1" data-number-to-fixed="2" data-number-stepfactor="100" id = "dongia_<%=i %>"  onkeyup="tinhtong(<%=i %>)"  name="dongia_<%=i %>" class="custom-input-debitor form-control_table currency" tabindex="<%= (i*6) +5+lc%>" />
 											
 											</td>
 											
 											<td>
-											  <input type="number" value="" min="0" step="any" data-number-to-fixed="2"  lang="en-150"  data-number-stepfactor="100" id = "thanhtien_<%=i %>"  onkeyup="tinhtong(<%=i %>)"  name="thanhtien_<%=i %>" class="custom-input-debitor form-control currency" tabindex="<%= (i*6) +6+lc%>" />
+											  <input type="number" value="" min="0" step="any" data-number-to-fixed="2"  lang="en-150"  data-number-stepfactor="100" id = "thanhtien_<%=i %>"  onkeyup="tinhtong(<%=i %>)"  name="thanhtien_<%=i %>" class="custom-input-debitor form-control_table currency" tabindex="<%= (i*6) +6+lc%>" />
 											
 											</td>
 											<td>
 											   <div style="padding-top: 4px; padding-left: 2px; padding-right: 2px">
-											        <button type="button" class="btn btn-success btn-sm" onclick="addRow(<%=i %>)"   id ="addRow_<%=i %>"><span class="glyphicon glyphicon-plus"></span></button>
-                                                    <button type="button" class="btn btn-danger btn-sm"  onclick="moveRow(<%=i %>)"  id ="moveRow_<%=i %>"><span class="glyphicon glyphicon-remove"></span></button>											
+											        <button type="button" class="btn btn-success btn-sm button" onclick="addRow(<%=i %>)"   id ="addRow_<%=i %>"><span class="glyphicon glyphicon-plus"></span></button>
+                                                    <button type="button" class="btn btn-danger btn-sm button"  onclick="moveRow(<%=i %>)"  id ="moveRow_<%=i %>"><span class="glyphicon glyphicon-remove"></span></button>											
 											   </div>
 												
 											</td>
@@ -304,9 +304,9 @@ function getjob(){
            	    // console.log(ngaynhantoa_date);
            	     if(ngaynhantoa_date.length>10){
            	    	ngaynhantoa = ngaynhantoa_date.substring(8,10)+"/"+ngaynhantoa_date.substring(5,7)+"/"+ngaynhantoa_date.substring(0,4);
-           	        document.getElementById("ngaynhanhang").value      = "" ;
-           	        document.getElementById("ngaynhantoa").value      = ngaynhantoa ;
-           	        document.getElementById("ngaycap1giaotoa").value  = ngaynhantoa ;
+           	        document.getElementById("ngaycap1giaotoa").value      = "" ;
+           	        document.getElementById("ngaynhantoa").value          = ngaynhantoa ;
+           	        document.getElementById("ngaynhanhang").value         = ngaynhantoa ;
            	     }
            	   
            	  
@@ -635,21 +635,21 @@ function checktable(){
 	 
 	 
 	  
-	  if(date_product_received.length !=10){
+	/*   if(date_product_received.length !=10){
 		  alert("Ngày cấp I giao toa không được rỗng hoặc khác định dạng dd/mm/yyyy!");
 		  document.getElementById("ngaycap1giaotoa").focus();
 			flag = false;
 			return false;
-	  }
+	  } */
 	  
 	  
-	 var date1 = new Date(date_company_received);
+	/*  var date1 = new Date(date_company_received);
 	 var date2 = new Date(date_product_received);
 	 if(date1<date2){
 		    alert("Ngày nhận toa phải lớn hơn ngày nhận hàng!");
 			flag = false;
 			return false;
-	 }
+	 } */
 	
 	  $('#table_position > tbody  > tr').each(function() {		
 		  row ++;
@@ -727,16 +727,16 @@ function addRow(id){
 	  stt.id        = "stt_"+time_id;
 	  stt.innerHTML = "";
 	
-	  masp.innerHTML      = "<input  tabindex =''  value = '' min='0' step='1' data-number-to-fixed='2' data-number-stepfactor='100' id = 'masanpham_"+time_id+"'     name='masanpham_"+time_id+"'  class='custom-input-debitor form-control ' onkeyup='tinhtong("+time_id+")'/>";
-	  tensp.innerHTML     = "<input  tabindex =''  value = '' min='0' step='1' data-number-to-fixed='2' data-number-stepfactor='100' id = 'tensanpham_"+time_id+"'    name='tensanpham_"+time_id+"' class='custom-input-debitor form-control '  onkeyup='tinhtong("+time_id+")'/>";
-	  soluong.innerHTML   = "<input  tabindex =''  type='number' value = '' min='0' step='1' data-number-to-fixed='2' data-number-stepfactor='100' id = 'soluong_"+time_id+"'       name='soluong_"+time_id+"'    class='custom-input-debitor form-control currency'  onkeyup='tinhtong_sothung("+time_id+")'/>";
-	  sothung.innerHTML   = "<input type='hidden'  value = '' id = 'sochai_1thung_"+time_id+"'   name='sochai_1thung_"+time_id+"'> <input  tabindex =''  type='number' value = '' min='0' step='1' data-number-to-fixed='2' data-number-stepfactor='100' id = 'sothung_"+time_id+"'       name='sothung_"+time_id+"'    class='custom-input-debitor form-control currency'  onkeyup='tinhtong("+time_id+")'/>";
-	  dongia.innerHTML    = "<input  tabindex =''  type='number' value = '' min='0' step='1' data-number-to-fixed='2' data-number-stepfactor='100' id = 'dongia_"+time_id+"'        name='dongia_"+time_id+"'     class='custom-input-debitor form-control currency'/ onkeyup='tinhtong("+time_id+")'>";
-	  thanhtien.innerHTML = "<input  tabindex =''  type='number' value = '' min='0' step='1' data-number-to-fixed='2' data-number-stepfactor='100' id = 'thanhtien_"+time_id+"'     name='thanhtien_"+time_id+"'  class='custom-input-debitor form-control currency'/ onkeyup='tinhtong("+time_id+")' >";
+	  masp.innerHTML      = "<input  tabindex =''  value = '' min='0' step='1' data-number-to-fixed='2' data-number-stepfactor='100' id = 'masanpham_"+time_id+"'     name='masanpham_"+time_id+"'  class='custom-input-debitor form-control_table ' onkeyup='tinhtong("+time_id+")'/>";
+	  tensp.innerHTML     = "<input  tabindex =''  value = '' min='0' step='1' data-number-to-fixed='2' data-number-stepfactor='100' id = 'tensanpham_"+time_id+"'    name='tensanpham_"+time_id+"' class='custom-input-debitor form-control_table '  onkeyup='tinhtong("+time_id+")'/>";
+	  soluong.innerHTML   = "<input  tabindex =''  type='number' value = '' min='0' step='1' data-number-to-fixed='2' data-number-stepfactor='100' id = 'soluong_"+time_id+"'       name='soluong_"+time_id+"'    class='custom-input-debitor form-control_table currency'  onkeyup='tinhtong_sothung("+time_id+")'/>";
+	  sothung.innerHTML   = "<input type='hidden'  value = '' id = 'sochai_1thung_"+time_id+"'   name='sochai_1thung_"+time_id+"'> <input  tabindex =''  type='number' value = '' min='0' step='1' data-number-to-fixed='2' data-number-stepfactor='100' id = 'sothung_"+time_id+"'       name='sothung_"+time_id+"'    class='custom-input-debitor form-control_table currency'  onkeyup='tinhtong("+time_id+")'/>";
+	  dongia.innerHTML    = "<input  tabindex =''  type='number' value = '' min='0' step='1' data-number-to-fixed='2' data-number-stepfactor='100' id = 'dongia_"+time_id+"'        name='dongia_"+time_id+"'     class='custom-input-debitor form-control_table currency'/ onkeyup='tinhtong("+time_id+")'>";
+	  thanhtien.innerHTML = "<input  tabindex =''  type='number' value = '' min='0' step='1' data-number-to-fixed='2' data-number-stepfactor='100' id = 'thanhtien_"+time_id+"'     name='thanhtien_"+time_id+"'  class='custom-input-debitor form-control_table currency'/ onkeyup='tinhtong("+time_id+")' >";
 	      
-	  var add_remove  = "<div style='padding-top: 4px; padding-left: 2px; padding-right: 2px; width: 80px'>  ";   
-	      add_remove  +="<button type='button' class='btn btn-success btn-sm' onclick='addRow("+time_id+")'   id ='addRow_"+time_id+"' ><span class='glyphicon glyphicon-plus' ></span></button> ";
-	      add_remove  +="<button type='button' class='btn btn-danger btn-sm'  onclick='moveRow("+time_id+")'  id ='moveRow_"+time_id+"' ><span class='glyphicon glyphicon-remove'></span></button>";
+	  var add_remove  = "<div style='padding-top: 4px; padding-left: 2px; padding-right: 2px; width: 70px'>  ";   
+	      add_remove  +="<button type='button' class='btn btn-success btn-sm button' onclick='addRow("+time_id+")'   id ='addRow_"+time_id+"' ><span class='glyphicon glyphicon-plus' ></span></button> ";
+	      add_remove  +="<button type='button' class='btn btn-danger btn-sm button'  onclick='moveRow("+time_id+")'  id ='moveRow_"+time_id+"' ><span class='glyphicon glyphicon-remove'></span></button>";
 	      add_remove  +="</div>";
 	      
 	  addremove.innerHTML =add_remove;
@@ -1376,6 +1376,7 @@ function tinhtong(id){
 		     var  flag =0;
 		     if(ngaynhantoa.length>=8){
 		    	 getday(document.getElementById("ngaynhanhang"));
+		    	 flag++;
 		     }
 		     
 		     if(ngaynhantoa.length>=8){
@@ -1391,10 +1392,14 @@ function tinhtong(id){
 		    	}
 		    	
 		     }
-		     if(flag==2){
+		     if(flag>=2 && ngaynhantoa.length>=8){
 		    	 var from   = document.getElementById("ngaynhantoa").value.split("/");//date_company_received
-				  var to    = document.getElementById("ngaycap1giaotoa").value.split("/") ;//date_product_received
-				  
+		    	 var to ="";
+		    	 if(ngaycap1giaotoa.length>=8){
+		    		   to    = document.getElementById("ngaycap1giaotoa").value.split("/") ;//date_product_received
+		    	 }else{
+		    		 to    = document.getElementById("ngaynhanhang").value.split("/") ;//date_product_received
+		    	 }
 				  var date1 =  new Date(from[2], from[1]-1, from[0]);
 				  var date2 =  new Date(to[2], to[1]-1, to[0]);
 				  var songay = (date1.getTime() -  date2.getTime() )/(1000*24*3600);
@@ -1448,7 +1453,28 @@ overflow-y: auto;
 -ms-overflow-style: -ms-autohiding-scrollbar;
 }
 
+.button{
+padding-left: 5px!important;
+padding-right: 5px!important;
+}
 
+.form-control_table {
+    display: block;
+    width: 100%;
+    height: 34px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    background-color: #fff;
+    background-image: none;
+    border: 0px solid #DDE2E8;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+}
  
  </style>
     

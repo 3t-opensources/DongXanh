@@ -195,22 +195,34 @@ pageEncoding="UTF-8"%>
 			            </div>
 			        </div>
 			        
-			         <%--   <div class="title_width_8" >Loại bảng kê</div>
-				        <div class="value_width_10">
-				            <select id="cbb_loaibangke" name="cbb_loaibangke"  class="cbb_search">
-				                 <option value="0">All</option>	
-			                   
-				           </select>
-				        </div> --%>
-			        <div class="button_width_12">			           
-			            <button type="button" class="btn btn-success" onclick="ThongKeHoaDon(2);">Lọc bảng kê</button>			         
-			        </div> 
+			           
+				        
+			       
 			        
 			         <div class="button_width_12">			           
 			                 <button type="submit" class="btn btn-success" onclick="export_ThongKeHoaDon(2);" >Xuất ra excel</button>			         
 			         </div> 
+			         
+			          <div class="button_width_12">			           
+			            <button type="button" class="btn btn-success" onclick="ThongKeHoaDon(2);">Lọc bảng kê</button>			         
+			        </div> 
 					        
 			      </div>
+			       <div class="form-group">		
+			       
+			            <div class="title_width_8" >Tổng số toa đã nhập</div>
+				        <div class="value_width_10">
+				              <input value = "" id = "tongsotoadanhap" name="tongsotoadanhap" class="form-control"  tabindex="1"  />			
+			                                       		 
+				        </div> 
+				        
+				        <div class="title_width_8" >Doanh số</div>
+				        <div class="value_width_10">
+				              <input value = "" id = "doanhso" name="doanhso" class="form-control"  tabindex="2"  />			
+			                                       		 
+				        </div> 
+				        	
+			       </div>
 			     
 			 </div>
 			  <div class="detail_data_table detail_data_table_final" id ="div_thong_ke_mat_hang_capI">	    
@@ -237,7 +249,7 @@ pageEncoding="UTF-8"%>
 		            </tr>
 		        </thead>        
 		        <tbody>  
-		           <% for(int i=0 ;i< 10;i++){%>
+		           <% for(int i=0 ;i< 1;i++){%>
 			       		 <tr  >
 			       		    <td></td>
 			                <td></td>
@@ -300,13 +312,14 @@ pageEncoding="UTF-8"%>
 			                   
 				           </select>
 				        </div>
+				     <div class="button_width_12">			           
+			                 <button type="submit" class="btn btn-success" onclick="export_ThongKeHoaDon(3);" >Xuất ra excel</button>			         
+			         </div> 
 			        <div class="button_width_12">			           
 			            <button type="button" class="btn btn-success" onclick="ThongKeHoaDon(3);">Lọc bảng kê</button>			         
 			        </div> 
 			        
-			         <div class="button_width_12">			           
-			                 <button type="submit" class="btn btn-success" onclick="export_ThongKeHoaDon(3);" >Xuất ra excel</button>			         
-			         </div> 
+			       
 			      </div>
 			     
 			 </div>
@@ -332,7 +345,7 @@ pageEncoding="UTF-8"%>
 		            </tr>
 		        </thead>        
 		        <tbody>  
-		           <% for(int i=0 ;i< 10;i++){%>
+		           <% for(int i=0 ;i< 1;i++){%>
 			       		 <tr  >
 			       		    <td></td>
 			                <td></td>
@@ -393,13 +406,15 @@ pageEncoding="UTF-8"%>
 			                   
 				           </select>
 				        </div>
+				        
+				     
+			         <div class="button_width_12">			           
+			                 <button type="submit" class="btn btn-success" onclick="export_ThongKeHoaDon(4);" >Xuất ra excel</button>			         
+			         </div> 
 			        <div class="button_width_12">			           
 			            <button type="button" class="btn btn-success" onclick="ThongKeHoaDon(4);">Lọc bảng kê</button>			         
 			        </div> 
 			        
-			         <div class="button_width_12">			           
-			                 <button type="submit" class="btn btn-success" onclick="export_ThongKeHoaDon(4);" >Xuất ra excel</button>			         
-			         </div> 
 					        
 			      </div>
 			     
@@ -427,7 +442,7 @@ pageEncoding="UTF-8"%>
 		            </tr>
 		        </thead>        
 		        <tbody>  
-		           <% for(int i=0 ;i< 10;i++){%>
+		           <% for(int i=0 ;i< 1;i++){%>
 			       		 <tr  >
 			       		    <td></td>
 			                <td></td>
@@ -487,13 +502,15 @@ pageEncoding="UTF-8"%>
 			                   
 				           </select>
 				        </div>
+				        
+				      <div class="button_width_12">			           
+			                 <button type="submit" class="btn btn-success" onclick="export_ThongKeHoaDon(5);" >Xuất ra excel</button>			         
+			         </div> 
 			        <div class="button_width_12">			           
 			            <button type="button" class="btn btn-success" onclick="ThongKeHoaDon(5);">Lọc bảng kê</button>			         
 			        </div> 
 			        
-			         <div class="button_width_12">			           
-			                 <button type="submit" class="btn btn-success" onclick="export_ThongKeHoaDon(5);" >Xuất ra excel</button>			         
-			         </div> 
+			        
 			      </div>
 			     
 			 </div>
@@ -1122,6 +1139,9 @@ pageEncoding="UTF-8"%>
 		 		         var stt =0;
 		 		       
 		 		         var listData = responseText.listData;
+		 		        console.log(responseText);
+		 		       document.getElementById("tongsotoadanhap").value         = getDataNumber(responseText.total_invoices) ;
+		 		       document.getElementById("doanhso").value                 = getDataNumber(responseText.sum_total_money);
 		  	        	 for (i in listData) { 
 		  	        		 stt++;
 		  	        		var customer1_code              =listData[i].customer1_code;
