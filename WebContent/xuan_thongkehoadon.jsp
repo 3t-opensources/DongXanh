@@ -608,6 +608,7 @@ pageEncoding="UTF-8"%>
 
 <!-- Datatables -->
 <script src="js/jquery.dataTables.min.js"></script>
+<script src="js/dataTables.rowsGroup.js"></script>
 <link rel="stylesheet" href="css/datepicker.min.css"/>
 <link rel="stylesheet" href="css/stylesDilog2.css"/>
 <link rel="stylesheet" href="css/jquery-ui.min.css"/>
@@ -626,10 +627,7 @@ pageEncoding="UTF-8"%>
 
 
  <!-- daterangepicker -->
-   
   
-     <script  src="https://cdn.rawgit.com/ashl1/datatables-rowsgroup/fbd569b8768155c7a9a62568e66a64115887d7d0/dataTables.rowsGroup.js"></script>
-   
  <script type="text/javascript">
         $(document).ready(function () {      
              
@@ -858,6 +856,7 @@ pageEncoding="UTF-8"%>
 	           	    table +="<table id='table_detail' class='table table-striped table-bordered table table-hover' cellspacing='0' width='100%'>";
 	  	        	table +="<thead>";
 	  	        		table +="<tr class='w3-btn'>";
+	  	        		table +="   <th class='table-th' style='text-align: center;width:10%'>STT</th>";
 	  	        		table +="   <th class='table-th' style='text-align: center;width:10%'>Loại bảng kê</th>";
 	  	        		table +="   <th class='table-th' style='text-align: center;width:20%'>Mã KH</th>	";	
 	  	        		table +="   <th class='table-th' style='text-align: center;width:35%'>Tên KH</th>";
@@ -931,7 +930,7 @@ pageEncoding="UTF-8"%>
 		  	        	    		id_mages++;
 		  	        	    		table +="  <tr id ="+id_mages+" ondblclick='showDilogImages("+id_mages+")'>";
 		  	        	    		
-		  	        	    	    if(lc==0){			  	        				
+		  	        	    	   /*  if(lc==0){			  	        				
 				  	        			table +="     <td rowspan ='"+max_size+"'>"+invoiceType+"</td>";
 					  	            	table +="     <td rowspan ='"+max_size+"'>"+customer_code+"</td>";
 					  	        		table +="     <td rowspan ='"+max_size+"'>"+customer_name+"</td>";
@@ -941,9 +940,9 @@ pageEncoding="UTF-8"%>
 					  	            	table +="     <td rowspan ='"+max_size+"' class='right'>"+date_product_received+"</td>";
 					  	        		table +="     <td rowspan ='"+max_size+"'>"+date_sent_late+"</td>";
 					  	        		table +="     <td rowspan ='"+max_size+"'>"+notes+"</td>";
-			  	        			}  
-			  	        	    	
-				  	        		/* table +="     <td>"+max_size+"</td>";
+			  	        			}   */
+			  	        			 table +="    <td>"+ stt+"</td>";
+				  	        		 table +="    <td>"+max_size+"</td>";
 				  	            	table +="     <td>"+customer_code+"</td>";
 				  	        		table +="     <td>"+customer_name+"</td>";
 				  	        		table +="     <td>"+customer_name_level1+"</td>";
@@ -951,7 +950,7 @@ pageEncoding="UTF-8"%>
 				  	        		table +="     <td class='right'>"+date_company_received+"</td>";
 				  	            	table +="     <td class='right'>"+date_product_received+"</td>";
 				  	        		table +="     <td>"+date_sent_late+"</td>";
-				  	        		table +="     <td>"+notes+"</td>";  */
+				  	        		table +="     <td>"+notes+"</td>";  
 				  	        		
 				  	        		
 				  	        		table +="     <td>"+product_ids[row]+"</td>";
@@ -975,14 +974,10 @@ pageEncoding="UTF-8"%>
 	  	        		}
 	  	        	    table +="</tbody>";
 	  	        	    table +="</table>";
-	  	        	    
-	  	        	   $('#detail_data_table').html(table);
-	  	        	   $('#table_detail').DataTable({
-	  	        		 'rowsGroup': [0,1,2,3,4,5,6,7,8],
-	  	        		
-	  	        	   });
-	 	        	    
-	  	        	/*    $('#table_detail').DataTable({     			   
+	  	        	    $('#table_detail').DataTable();
+	  	        	    $('#detail_data_table').html(table);
+	  	        	
+	  	        	    $('#table_detail').DataTable({     			   
 	  	 			    "bProcessing": false,	            	    
 	  	     	    	"scrollX": true,
 	  	     	    	"fixedHeader": true,
@@ -997,14 +992,16 @@ pageEncoding="UTF-8"%>
 	  	 					        [15,25, 50, 100,-1],
 	  	 					        [15,25, 50, 100,"All"]
 	  	 					    ],
-	  	 					iDisplayLength: -1 
-	  	            });  */
-	  	        	   
-	  	        	  
-	  	        	  
-	  	        	  
+	  	 					iDisplayLength: -1 ,
+	  	 				  rowsGroup: [0,1,2,3,4,5,6,7,8,9],
+  	 				     
+	  	            }); 
+	  	        	     
+	  	        	    
+	  	        	    
 	  	        	  
 	              }
+	 	  	        	   
 	   	 
 	   	 
 	   	 
@@ -1139,9 +1136,9 @@ pageEncoding="UTF-8"%>
 		 		         var stt =0;
 		 		       
 		 		         var listData = responseText.listData;
-		 		        console.log(responseText);
-		 		       document.getElementById("tongsotoadanhap").value         = getDataNumber(responseText.total_invoices) ;
-		 		       document.getElementById("doanhso").value                 = getDataNumber(responseText.sum_total_money);
+		 		         console.log(responseText);
+		 		         document.getElementById("tongsotoadanhap").value         = getDataNumber(responseText.total_invoices) ;
+		 		         document.getElementById("doanhso").value                 = getDataNumber(responseText.sum_total_money);
 		  	        	 for (i in listData) { 
 		  	        		 stt++;
 		  	        		var customer1_code              =listData[i].customer1_code;
@@ -1163,14 +1160,13 @@ pageEncoding="UTF-8"%>
 			  	        			 lc_row++;
 			  	        			 
 			  	        			table +="<tr>";
-			  	        			if(lc_row==1){
-			  	        				table +="  <td rowspan ='"+size_row+"' style='vertical-align : middle;text-align:center;' >"+stt+"</td>";
-				  	        			table +="  <td rowspan ='"+size_row+"' style='vertical-align : middle;text-align:center;' >"+customer1_name+"</td>";
-				  	        			table +="  <td rowspan ='"+size_row+"' style='vertical-align : middle;text-align:center;'  >"+total_cus2_follow+"</td>";
-				  	        			table +="  <td rowspan ='"+size_row+"' style='vertical-align : middle;text-align:center;'  >"+total_cus2_sent+"</td>";
-				  	        			table +="  <td rowspan ='"+size_row+"' style='vertical-align : middle;text-align:center;' >"+percent_invoice_valid+"</td>";			      
-			  	        			}
-			  	        			          
+			  	        		
+			  	        			table +="  <td  style='vertical-align : middle;text-align:center;' >"+stt+"</td>";
+			  	        			table +="  <td  style='vertical-align : middle;text-align:center;' >"+customer1_name+"</td>";
+			  	        			table +="  <td  style='vertical-align : middle;text-align:center;'  >"+total_cus2_follow+"</td>";
+			  	        			table +="  <td  style='vertical-align : middle;text-align:center;'  >"+total_cus2_sent+"</td>";
+			  	        			table +="  <td  style='vertical-align : middle;text-align:center;' >"+percent_invoice_valid+"</td>";	
+			  	        			
 			  	        			table +="  <td>"+list_product_codes[row]+"</td>";
 			  	        			table +="  <td>"+list_product_names[row]+"</td>";
 			  	        		
@@ -1187,6 +1183,12 @@ pageEncoding="UTF-8"%>
 		  	        	   $('#div_thong_ke_mat_hang_capI').html(table);
 		 	        	   
 		  	        	  $('#table_thong_ke_mat_hang_capI').DataTable({ 
+	  	        		     aLengthMenu: [
+		  	 					        [15,25, 50, 100,-1],
+		  	 					        [15,25, 50, 100,"All"]
+		  	 					    ],
+		  	 				   iDisplayLength: -1 ,
+		  	        		   rowsGroup: [0,1,2,3,4,5],
 		  	            }); 
 		  	        	  
 		  	        	  
@@ -1397,7 +1399,7 @@ pageEncoding="UTF-8"%>
 		            	     }
 		  	        	    table +="</tbody>";
 		  	        	    table +="</table>";
-		  	        	
+		  	        	    alert(table);
 		  	        	    $('#div_thong_ke_theo_ngay').html(table);	 	        	   
 			  	        	$('#table_thong_ke_theo_ngay').DataTable();  
 	            	  } 
@@ -1405,37 +1407,7 @@ pageEncoding="UTF-8"%>
 	   	   });
 	}
     
-   /*  function MergeGridCells() {
-        var dimension_cells = new Array();
-        var dimension_col = null;
-        var columnCount = $("#table_thong_ke_theo_ngay tr:first th").length;
-        for (dimension_col = 0; dimension_col < columnCount; dimension_col++) {
-            // first_instance holds the first instance of identical td
-            var first_instance = null;
-            var rowspan = 1;
-            // iterate through rows
-            $("#table_thong_ke_theo_ngay").find('tr').each(function () {
-
-                // find the td of the correct column (determined by the dimension_col set above)
-                var dimension_td = $(this).find('td:nth-child(' + dimension_col + ')');
-
-                if (first_instance == null) {
-                    // must be the first row
-                    first_instance = dimension_td;
-                } else if (dimension_td.text() == first_instance.text()) {
-                    // the current td is identical to the previous
-                    // remove the current td
-                    dimension_td.remove();
-                    ++rowspan;
-                    // increment the rowspan attribute of the first instance
-                    first_instance.attr('rowspan', rowspan);
-                } else {
-                    // this cell is different from the last
-                    first_instance = dimension_td;
-                    rowspan = 1;
-                }
-            });
-        } */
+   
         
     function export_ThongKeHoaDon(step){
     	if(step==1){
@@ -1447,7 +1419,7 @@ pageEncoding="UTF-8"%>
 		}else if(step==4){
 			export_TongHopTheoCap2();
 		}else if(step==5){
-			export_ChiTietToaCap2();
+			export_ThongKeTheoNgay();
 		}
     }
     function export_thongKeMatHangCapI(){ 
@@ -1460,7 +1432,7 @@ pageEncoding="UTF-8"%>
 	 function export_TongHopTheoCap2(){ 
 		 alert("export_TongHopTheoCap2");
 	 }
-	 function export_ChiTietToaCap2(){ 
+	 function export_ThongKeTheoNgay(){ 
 		 alert("export_ChiTietToaCap2");
 	 }
  
