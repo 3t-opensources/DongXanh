@@ -52,13 +52,13 @@
  User userSes                  =  ( User) request.getAttribute("userSes");	
  %>
   
-   <div id="header">  
+  <!--  <div id="header">  
 		<div class="navbar nav_title" style="border: 0;">
 			<a class="site_title" href="homeAction">
 				<img width="27%" height="70%" alt="ĐỒNG XANH" src="./images/banner_dongxanh.png" style="padding-top: 10px ;">
 			</a>
 		</div>
-	</div>
+	</div> -->
 	<div class="container"  id="center" style="padding-left: 0px;">
 	
 	
@@ -99,9 +99,9 @@
         			  
         			  
     	                <div class="well"><p align="center">
-    	                        				            
-				                 <button title="Alt +S" type="button" id ="btn_xoabangke"  class="btn btn-success" onclick="bad_images();">Xóa toa/bảng kê</button>			  
-				            	 <button title="Alt +D" id ="btn_Luubangke"  class="btn btn-success" onclick="saveData();">Lưu toa/bảng kê</button>			  
+		    	                <a  href="homeAction"><button  style="width: 120px!important;" class="btn btn-success"> Home </button></a>
+				                 <button style="width: 120px!important;" title="Alt +S" type="button" id ="btn_xoabangke"  class="btn btn-success" onclick="bad_images();">Xóa toa/bảng kê</button>			  
+				            	 <button style="width: 120px!important;" title="Alt +D" id ="btn_Luubangke"  class="btn btn-success" onclick="saveData();">Lưu toa/bảng kê</button>			  
                       	</div>
 						<div id="wrapper" style="width : 100%; height : 100%; float: right">
 							<!-- <div class="panel-heading" style="color: blue;font-weight: bold;">META DATA </div> -->
@@ -269,14 +269,14 @@
 	</div>
 <!-- 	</div> -->
 
-  <div id="footer">
+ <!--  <div id="footer">
   	   <div style="margin:10px auto;">
 			@Copyright by <a>Thien Toan</a>. | <span class="lead"> 
 				<img src="./images/logo_dongxanh.png" alt="ĐỒNG XANH" height="25" width="25"> ĐỒNG XANH
 				</span>
            
 		</div>
-	</div>	
+	</div>	 -->
 <script type="text/javascript" src="js/jquery.mousewheel.min.js" ></script>
 <script type="text/javascript" src="js/jquery.iviewer.js" ></script> 
 <script type="text/javascript" src="js/hoadon_nhap.js" ></script>   
@@ -1475,10 +1475,14 @@ padding-right: 5px!important;
     -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
     transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
 }
+
+/* .btn-success{
+width: 120px!important;
+ }    */
  
  </style>
     
-    
+ 
     
 </body>
 </html>
