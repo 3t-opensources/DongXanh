@@ -77,10 +77,12 @@ pageEncoding="UTF-8"%>
 				        
 				          <div class="title_width_8" >Khách hàng</div>
 				        <div class="value_width_10">
+				         <input value = "" id = "cbb_khachhang" name="cbb_khachhang" class="form-control" />			
+			              <%--                          		  
 				            <select id="cbb_khachhang" name="cbb_khachhang"  class="cbb_search">
 				                 <option value="0">All</option>	
 			               
-				           </select>
+				           </select> --%>
 				        </div>
 				        
 				         <div class="title_width_8" >Ngày gửi trể</div>
@@ -892,10 +894,10 @@ pageEncoding="UTF-8"%>
 	  	        		var date_sent_late        =responseText[i].date_sent_late;
 	  	        		var notes                 =responseText[i].notes;
 	  	        		if(date_company_received!=null && date_company_received.length>10){
-	  	        			date_company_received = date_company_received.substring(0,10);
+	  	        			date_company_received = date_company_received.substring(8,10)+"/"+date_company_received.substring(5,7)+"/"+date_company_received.substring(0,4);
 	  	        		}
 	  	        		if(date_product_received!=null && date_product_received.length>10){
-	  	        			date_product_received = date_product_received.substring(0,10);
+	  	        			date_product_received = date_product_received.substring(8,10)+"/"+date_product_received.substring(5,7)+"/"+date_product_received.substring(0,4);
 	  	        		}
 	  	        		if(responseText[i].product_ids!=null){
 	  	        			var product_ids           = responseText[i].product_ids.split("`");
@@ -928,19 +930,9 @@ pageEncoding="UTF-8"%>
 		  	        	    	
 		  	        	    	if(lc<max_size){
 		  	        	    		id_mages++;
-		  	        	    		table +="  <tr id ="+id_mages+" ondblclick='showDilogImages("+id_mages+")'>";
+		  	        	    		table +="  <tr id ="+id_mages+" ondblclick='showDilogImages("+id_mages+")' class='table-striped'>";
 		  	        	    		
-		  	        	    	   /*  if(lc==0){			  	        				
-				  	        			table +="     <td rowspan ='"+max_size+"'>"+invoiceType+"</td>";
-					  	            	table +="     <td rowspan ='"+max_size+"'>"+customer_code+"</td>";
-					  	        		table +="     <td rowspan ='"+max_size+"'>"+customer_name+"</td>";
-					  	        		table +="     <td rowspan ='"+max_size+"'>"+customer_name_level1+"</td>";
-					  	        		table +="     <td rowspan ='"+max_size+"'>"+staff_name+"</td>";
-					  	        		table +="     <td rowspan ='"+max_size+"' class='right'>"+date_company_received+"</td>";
-					  	            	table +="     <td rowspan ='"+max_size+"' class='right'>"+date_product_received+"</td>";
-					  	        		table +="     <td rowspan ='"+max_size+"'>"+date_sent_late+"</td>";
-					  	        		table +="     <td rowspan ='"+max_size+"'>"+notes+"</td>";
-			  	        			}   */
+		  	        	    	 
 			  	        			 table +="    <td>"+ stt+"</td>";
 				  	        		 table +="    <td>"+max_size+"</td>";
 				  	            	table +="     <td>"+customer_code+"</td>";
@@ -1019,7 +1011,7 @@ pageEncoding="UTF-8"%>
 		return "";
    	}
 	function loadCusByStaffInvoiceReport(){  
-		var user_id               = document.getElementById("cbb_nvtt").value;
+		/* var user_id               = document.getElementById("cbb_nvtt").value;
 	   	 $.ajax({  		
 	   	       type: "GET",
 	              url     : "loadCusByStaffInvoiceReport1Action?user_id="+user_id,	          
@@ -1034,7 +1026,7 @@ pageEncoding="UTF-8"%>
 			            	  cbb_nvtt.add(option);
 	            	  }
 	              }
-	   	   });
+	   	   }); */
   }
 	
 	
@@ -1398,8 +1390,7 @@ pageEncoding="UTF-8"%>
 			  	        		
 		            	     }
 		  	        	    table +="</tbody>";
-		  	        	    table +="</table>";
-		  	        	    alert(table);
+		  	        	    table +="</table>";		  	        	  
 		  	        	    $('#div_thong_ke_theo_ngay').html(table);	 	        	   
 			  	        	$('#table_thong_ke_theo_ngay').DataTable();  
 	            	  } 
@@ -1486,6 +1477,8 @@ height: 30px;
 .button_width_12{
 float:right;
 }
+
+
 
 </style>
 

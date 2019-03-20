@@ -5,6 +5,13 @@ pageEncoding="UTF-8"%>
 <%@ include file="user_profile.jsp"%> 
 <%@ include file="menu.jsp"%>
 
+<script type="text/javascript" src="js/docs-js-jquery-1.7.1.min.js"></script>	
+<script type="text/javascript" src="js/jquery-ui.min.js"></script> 
+<script src="js/bootstrap.min.js"></script>
+<script src="js/bootstrap-datepicker.min.js"></script>
+<script src = "js/es6-promise.auto.js"></script>
+<link rel="stylesheet" href="css/hoadon_themmoi.css"/>
+
 <!-- page content -->
 <div class="right_col" role="main">
 	<div class="">
@@ -90,12 +97,7 @@ pageEncoding="UTF-8"%>
 	<div class="clearfix"></div>
 	<div id="notif-group" class="tabbed_notifications"></div>
 </div>
-<script type="text/javascript" src="js/docs-js-jquery-1.7.1.min.js"></script>	
-<script src="js/bootstrap.min.js"></script>
-<script type="text/javascript" src="js/jquery-ui.min.js"></script> 
-<script src="js/bootstrap-datepicker.min.js"></script>
-<script src = "js/es6-promise.auto.js"></script>
-<link rel="stylesheet" href="css/hoadon_themmoi.css"/>
+
 
 
 <!-- Datatables -->
@@ -268,12 +270,12 @@ pageEncoding="UTF-8"%>
  	        		table +="   <th class='table-th' style='text-align: center;width:35%'>Tên Hình</th>";
  	        		table +="   <th class='table-th' style='text-align: center;width:10%'>User import</th>	";
  	        		table +="   <th class='table-th' style='text-align: center;width:10%'>Ngày tạo</th>	";
-		              
+ 	        		table +="   <th class='table-th' style='text-align: center;width:10%'>Delete</th>	"; 
  	        		table +=" </tr> </thead>   <tbody> ";   
  	        		//console.log(responseText);  
 		         var stt =1;
  	        	 for (i in responseText) {  	        		
- 	        		//console.log(responseText[i]);
+ 	        		console.log(responseText[i]);
  	        		var created_time ="";
  	        		if(responseText[i].created_time!=null && responseText[i].created_time!='null'){
  	        			created_time = responseText[i].created_time;
@@ -283,7 +285,8 @@ pageEncoding="UTF-8"%>
  	            	table +="     <td>"+responseText[i].file_path+"</td>";
  	        		table +="     <td>"+responseText[i].file_name+"</td>";
  	        		table +="     <td>"+responseText[i].created_by+"</td>";
- 	        		table +="     <td>"+created_time+"</td>";    
+ 	        		table +="     <td>"+created_time+"</td>"; 
+ 	        		table +="     <td><button type='button' class='btn btn-success' onclick='DeleteRow("+responseText[i].id+")'> Delete </button></td>";   
  	        		table +="  </tr>";
  	        		stt++;
  	        		}
@@ -320,7 +323,24 @@ pageEncoding="UTF-8"%>
         	
         }
         
-  
+  function DeleteRow(id){
+	  
+	  var result = confirm("bạn có chắt chắn chắn xóa hóa đơn này?");
+		if (result) {
+					 $.ajax({  		
+			       type: "GET",
+		          url     : 'badJobCaptureAction?management_id='+ id,	          
+		          data    : "",
+		          success : function(responseText) {	
+		        	  alert("Xóa bảng kê thành công!");
+		        	  var url = window.location.href.toString();			        	
+		      		  window.location.replace(url);
+		          }
+			   });
+
+		}
+	
+  }
    	 
 </script>
     

@@ -464,13 +464,13 @@ _.REPLACE = function (text) {
 	} else if(this.debitor_nummer==5) {
 		this.input.value  = text.value.split('|')[0];//masp
 		this.field1.value = text.value.split('|')[1];//tensp
-		this.field2.value = text.value.split('|')[2];//dongia
+		this.field2.value = parseFloat(text.value.split('|')[2]).toLocaleString();//dongia
 		this.field3.value = text.value.split('|')[3];//sochaitren1thung
 	} else if(this.debitor_nummer==6) {
 		this.input.value  = text.value.split('|')[1];//tensp
 		this.field1.value = text.value.split('|')[0];//masp
-		this.field2.value = text.value.split('|')[2];//dongia
-		this.field3.value = text.value.split('|')[2];//sochaitren1thung
+		this.field2.value = parseFloat(text.value.split('|')[2]).toLocaleString();//dongia
+		this.field3.value = text.value.split('|')[3];//sochaitren1thung
 	}else if(this.field1 != null && this.field2 != null && this.field3 != null && this.field4 != null && this.field5 != null && this.field6 != null){
 		
 //		data = data +responseText[i][0]+"|";//customer_id
@@ -679,7 +679,13 @@ if (typeof module === "object" && module.exports) {
 return _;
 
 }());
-
+function checkParseFloat(val){
+	 var kq = parseFloat(val); 
+	 if(kq!='NaN'){
+		 return false;
+	 }
+	 return true;
+}
 function change_alias(alias) {
     var str = alias;
     str = str.toLowerCase();
