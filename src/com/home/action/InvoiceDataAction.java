@@ -166,6 +166,7 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 			int user_id = 0;
 			int invoice_type = 0;
 			int customer_id = 0;
+			String customer_name = "";
 			int sent_late = 0;
 			try {
 				String start_day = StringUtil.notNull(request.getParameter("start_day"));
@@ -176,14 +177,20 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 					date_company_received_to = new Date(DateUtils.getDateFromString(end_day, "dd/MM/yyyy").getTime());
 				}
 				user_id =  Integer.parseInt(StringUtil.notNull(request.getParameter("user_id")));
-				customer_id =  Integer.parseInt(StringUtil.notNull(request.getParameter("customer_id")));
+				try {
+					customer_id =  Integer.parseInt(StringUtil.notNull(request.getParameter("customer_id")));
+					customer_name = "XXXYYYZZZ";
+				} catch (Exception e) {
+					customer_id = -1;
+					customer_name = StringUtil.notNull(request.getParameter("customer_id"));
+				}
 				sent_late =  Integer.parseInt(StringUtil.notNull(request.getParameter("sent_late")));
 			} catch (Exception e) {
 				throw new Exception("List params[start_day/end_day/invoice_type/user_id/customer_id/sent_late] invalid, error: " + e.toString());
 			}
 
 			InvoiceDataHome home = new InvoiceDataHome(getSessionFactory());
-			listData = home.getListInvoiceData(date_company_received_from, date_company_received_to, invoice_type, user_id, customer_id, sent_late);
+			listData = home.getListInvoiceData(date_company_received_from, date_company_received_to, invoice_type, user_id, customer_id, customer_name, sent_late);
 			result = listData;//new Gson().toJson(listData);
 			System.out.println("Total data: " + listData.size());
 			//System.out.println(datas.get(0).getManagement_id().getFile_name());
@@ -207,6 +214,7 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 			int invoice_type = 0;
 			int customer_id = 0;
 			int sent_late = 0;
+			String customer_name = "";
 			try {
 				String start_day = StringUtil.notNull(request.getParameter("start_day"));
 				String end_day = StringUtil.notNull(request.getParameter("end_day"));
@@ -216,13 +224,19 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 					date_company_received_to = new Date(DateUtils.getDateFromString(end_day, "dd/MM/yyyy").getTime());
 				}
 				user_id =  Integer.parseInt(StringUtil.notNull(request.getParameter("user_id")));
-				customer_id =  Integer.parseInt(StringUtil.notNull(request.getParameter("customer_id")));
+				try {
+					customer_id =  Integer.parseInt(StringUtil.notNull(request.getParameter("customer_id")));
+					customer_name = "XXXYYYZZZ";
+				} catch (Exception e) {
+					customer_id = -1;
+					customer_name = StringUtil.notNull(request.getParameter("customer_id"));
+				}
 				sent_late =  Integer.parseInt(StringUtil.notNull(request.getParameter("sent_late")));
 			} catch (Exception e) {
 				throw new Exception("List params[start_day/end_day/invoice_type/user_id/customer_id/sent_late] invalid, error: " + e.toString());
 			}
 			InvoiceDataHome home = new InvoiceDataHome(getSessionFactory());
-			listData = home.getListInvoiceData(date_company_received_from, date_company_received_to, invoice_type, user_id, customer_id, sent_late);
+			listData = home.getListInvoiceData(date_company_received_from, date_company_received_to, invoice_type, user_id, customer_id, customer_name, sent_late);
 			
 			ServletContext servletContext = ServletActionContext.getServletContext();
 			String pathname = servletContext.getRealPath("/WEB-INF/template/excel/blank.xlsx");

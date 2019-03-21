@@ -400,6 +400,7 @@ public class InvoiceDataHome {
 			int invoice_type,
 			int staff_id,
 			int customer_id,
+			String customer_name,
 			int sent_late) throws Exception{
 		log.debug("retrieve list getListInvoiceData");
 		Session session = null;
@@ -418,7 +419,7 @@ public class InvoiceDataHome {
 					+ " (0="+(start_day==null?0:1)+" Or (date_company_received >= ? And date_company_received <= ?))"
 					+ " AND (0="+(invoice_type<=0?0:1)+" Or (invoice_type_id=?))"
 					+ " AND (0="+(staff_id<=0?0:1)+" Or (i.staff_id=?))"
-					+ " AND (0="+(customer_id<=0?0:1)+" Or (customer_id=?))"
+					+ " AND (0="+(customer_id<=0?0:1)+" Or (customer_id=?) OR 0="+(customer_name.length()==0?0:1)+" OR (customer_name=?))"
 					+ " AND (0="+(sent_late<=0?0:1)+" Or (date_sent_late"+(sent_late==1?">0":"=0")+"))"
 					+ " Order by date_company_received, id";
 			
@@ -429,6 +430,7 @@ public class InvoiceDataHome {
 			pre.setInt(3, invoice_type);
 			pre.setInt(4, staff_id);
 			pre.setInt(5, customer_id);
+			pre.setString(6, customer_name);
 			System.out.println(pre.toString());
 			ResultSet rs = pre.executeQuery();
 			int no = 1;
