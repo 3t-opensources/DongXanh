@@ -17,7 +17,14 @@ public class Management {
 	public Integer capture_status;
 	public Integer present_user;
 	public Integer invoice_data_id;
+	public InvoiceData invoice_data;
 	
+	public InvoiceData getInvoice_data() {
+		return invoice_data;
+	}
+	public void setInvoice_data(InvoiceData invoice_data) {
+		this.invoice_data = invoice_data;
+	}
 	public Integer getInvoice_data_id() {
 		return invoice_data_id;
 	}

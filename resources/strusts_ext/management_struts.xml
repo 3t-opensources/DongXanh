@@ -133,6 +133,28 @@
 				<param name="root">result</param>
 			</result>
 		</action>
+		
+		<!-- rework -->
+		<action name="getJobCaptureReworkAction" method="getJobCaptureRework"
+			class="com.home.action.ManagementAction">
+			<result type="json">
+				<param name="root">result</param>
+			</result>
+		</action>
+		<!-- delete job capture -->
+		<action name="deleteListJobCaptureAction" method="deleteListJobCapture"
+			class="com.home.action.ManagementAction">
+			<result type="json">
+				<param name="root">result</param>
+			</result>
+		</action>
+		<!-- check duplicate invoice record -->
+		<action name="getDuplicateInvoiceRecordAction" method="getDuplicateInvoiceRecord"
+			class="com.home.action.ManagementAction">
+			<result type="json">
+				<param name="root">result</param>
+			</result>
+		</action>
 
 	</package>
 </struts>

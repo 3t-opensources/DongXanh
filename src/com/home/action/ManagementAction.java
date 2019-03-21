@@ -22,6 +22,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.home.conts.MyConts;
 import com.home.dao.CustomerHome;
+import com.home.dao.InvoiceDataHome;
 import com.home.dao.InvoiceTypeHome;
 import com.home.dao.ManagementHome;
 import com.home.dao.ProductHome;
@@ -217,6 +218,7 @@ public class ManagementAction extends ActionSupport implements ServletContextAwa
 				}else{
 					rsStatus = 1;
 					strMess.append("File duplicate["+output.getName()+"];");
+					output.delete();
 				}	
 			}
 			rsMess.setStatusError(rsStatus);
@@ -645,5 +647,79 @@ public class ManagementAction extends ActionSupport implements ServletContextAwa
 		return SUCCESS;
 	}
 
+	
+	////////////////////////////////////////
+	public String getJobCaptureRework(){
+		try {
+			InvoiceDataHome home = new InvoiceDataHome(getSessionFactory());
+			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
+			String id = StringUtil.notNull(request.getParameter("id"));
+			if(id.isEmpty()){
+				throw new Exception("Param: id must be not empty!");
+			}
+			result = home.getInvoiceData(Integer.parseInt(id));
+		} catch (Exception e) {
+			e.printStackTrace();
+			rsMess.setStatusError(1);
+			rsMess.setMessage(StringUtil.getError(e));
+			result = rsMess;//rsMess.toString();
+			//return ERROR;
+		}
+		return SUCCESS;
+	}
+	
+	public String deleteListJobCapture(){
+		try {
+			ManagementHome home = new ManagementHome(getSessionFactory());
+			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
+			String ids = StringUtil.notNull(request.getParameter("ids"));
+			if(ids.isEmpty()){
+				throw new Exception("Param: ids must be not empty!");
+			}
+			result = home.deleteJobCapture(ids);
+		} catch (Exception e) {
+			e.printStackTrace();
+			rsMess.setStatusError(1);
+			rsMess.setMessage(StringUtil.getError(e));
+			result = rsMess;//rsMess.toString();
+			//return ERROR;
+		}
+		return SUCCESS;
+	}
+	
+	public String getDuplicateInvoiceRecord(){
+		try {
+			ManagementHome home = new ManagementHome(getSessionFactory());
+			String customer_id_level1;
+			java.sql.Date day;
+			String product_id;
+			String quantity;
+			try {
+				HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
+				customer_id_level1 = "" + Integer.parseInt(StringUtil.notNull(request.getParameter("customer_id_level1")));
+				product_id = StringUtil.notNull(request.getParameter("product_id"));
+				quantity = "" + Integer.parseInt(StringUtil.notNull(request.getParameter("quantity")));
+				String str_day = StringUtil.notNull(request.getParameter("day"));
+				day = new java.sql.Date(DateUtils.getDateFromString(str_day, "dd/MM/yyyy").getTime());
+			} catch (Exception e) {
+				throw new Exception("List params[customer_id_level1/day/product_id/quantity] invalid, error: " + e.toString());
+			}
+			
+			boolean exist = home.checkInvoiceRecordDuplicate(customer_id_level1, day, product_id, quantity);
+			if(exist){
+				result = new String[]{"status", "duplicated"};
+			}else{
+				result = new String[]{"status", "OK"};
+			}
+		
+		} catch (Exception e) {
+			e.printStackTrace();
+			rsMess.setStatusError(1);
+			rsMess.setMessage(StringUtil.getError(e));
+			result = rsMess;//rsMess.toString();
+			//return ERROR;
+		}
+		return SUCCESS;
+	}
 
 }

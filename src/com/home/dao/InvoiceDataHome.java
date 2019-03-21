@@ -304,6 +304,96 @@ public class InvoiceDataHome {
 		}
 	}
 	
+	public InvoiceData getInvoiceData(int management_id) throws Exception{
+		log.debug("retrieve list getListInvoiceData");
+		Session session = null;
+		InvoiceData invoice = new InvoiceData();
+		try {
+			session = sessionFactory.openSession();
+			SessionImpl sessionImpl = (SessionImpl) session;
+			Connection conn = sessionImpl.connection();
+
+			String sql = 
+					"SELECT i.*, m.file_path, m.file_name, m.step, it.invoice_type " +
+					" FROM invoice_data i "+
+					" JOIN management m ON m.id=i.management_id "+
+					" LEFT JOIN invoice_type it ON i.invoice_type_id=it.id "+
+					" WHERE management_id = ?";
+			
+			//System.out.println(sql);
+			PreparedStatement pre = conn.prepareStatement(sql);
+			pre.setInt(1, management_id);
+			System.out.println(pre.toString());
+			ResultSet rs = pre.executeQuery();
+			if(rs.next()){
+				invoice.setId(rs.getInt("id"));
+				
+				Management m = new Management();
+				m.setId(rs.getInt("management_id"));
+				m.setFile_path(rs.getString("file_path"));
+				m.setFile_name(rs.getString("file_name"));
+				m.setStep(rs.getInt("step"));
+				invoice.setManagement_id(m);
+				
+				InvoiceType iv_type = new InvoiceType();
+				iv_type.setId(rs.getInt("invoice_type_id"));
+				iv_type.setInvoiceType(rs.getString("invoice_type"));
+				invoice.setInvoice_type_id(iv_type);
+				invoice.setInvoice_type_name(rs.getString("invoice_type_name"));
+
+				Customer cus = new Customer();
+				cus.setId(rs.getInt("customer_id"));
+				cus.setCustomerCode(rs.getString("customer_code"));
+				cus.setStatisticName(rs.getString("customer_name"));
+				//invoice.setCustomer_id(cus);
+				invoice.setCustomer_code(rs.getString("customer_code"));
+				invoice.setCustomer_name(rs.getString("customer_name"));
+				
+				Customer cus1 = new Customer();
+				cus1.setId(rs.getInt("customer_id_level1"));
+				cus1.setCustomerCode(rs.getString("customer_code_level1"));
+				cus1.setStatisticName(rs.getString("customer_name_level1"));
+				//invoice.setCustomer_id_level1(cus1);
+				invoice.setCustomer_code_level1(rs.getString("customer_code_level1"));
+				invoice.setCustomer_name_level1(rs.getString("customer_name_level1"));
+				
+				User user = new User();
+				user.setId(rs.getInt("staff_id"));
+				user.setUserName(rs.getString("staff_name"));
+				//invoice.setStaff_id(user);
+				invoice.setStaff_name(rs.getString("staff_name"));
+				
+				invoice.setDate_company_received(rs.getDate("date_company_received"));
+				invoice.setDate_product_received(rs.getDate("date_product_received"));
+				invoice.setDate_sent_late(rs.getInt("date_sent_late"));
+				invoice.setNotes(rs.getString("notes"));
+				
+				invoice.setProduct_ids(rs.getString("product_ids"));
+				invoice.setProduct_names(rs.getString("product_names"));
+				invoice.setTotal_boxs(rs.getString("total_boxs"));
+				invoice.setQuantitys(rs.getString("quantitys"));
+				invoice.setTotal_prices(rs.getString("total_prices"));
+				invoice.setUnit_prices(rs.getString("unit_prices"));
+				invoice.setSum_total_price(rs.getBigDecimal("sum_total_price"));
+				
+			}
+			rs.close();
+			return invoice;
+		} catch (Exception re) {
+			re.printStackTrace();
+			log.error("retrieve list Product failed", re);
+			throw re;
+		} finally{
+			try {
+				if(session != null){
+					session.flush();
+					session.close();
+				}
+			} catch (Exception e) {
+			}
+		}
+	}
+	
 	public List<InvoiceData> getListInvoiceData(
 			java.sql.Date start_day, 
 			java.sql.Date end_day, 

@@ -4,6 +4,7 @@ package com.home.dao;
 
 import static org.hibernate.criterion.Example.create;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -26,6 +27,7 @@ import org.hibernate.internal.SessionImpl;
 import com.home.model.InvoiceData;
 import com.home.model.Management;
 import com.home.util.ResultSetUtils;
+import com.home.util.StringUtil;
 
 /**
  * Home object for domain model class Management.
@@ -470,6 +472,101 @@ public class ManagementHome {
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
+			}
+		}
+	}
+	
+	////////////////////////////////////////////////////////////////
+	
+	public boolean checkInvoiceRecordDuplicate(String customer_id_level1, java.sql.Date date_product_received, String product_id, String quantity) throws Exception {
+		log.debug("isInvoiceRecordDuplicate");
+		Transaction tx = null;
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			tx = session.beginTransaction();
+			//Criteria cre = session.createCriteria(Management.class);
+			//cre.add(Restrictions.eq("hash_file", hash_file));
+			//Management instance = (Management) cre.uniqueResult();
+			SessionImpl sessionImpl = (SessionImpl) session;
+			Connection conn = sessionImpl.connection();
+			boolean isExist = false;
+			try(PreparedStatement pre = conn.prepareStatement("Select * From invoice_data "
+					+ " Where customer_id_level1=? and date_product_received=? and product_ids like ? and quantitys like ? Limit 1")){
+				pre.setString(1, customer_id_level1);
+				pre.setDate(2, date_product_received);
+				pre.setString(3, "%"+product_id+"`%");
+				pre.setString(4, "%"+quantity+"`%");
+				
+				try(ResultSet rs = pre.executeQuery()){
+					if(rs.next()){
+						String[] product_ids = StringUtil.notNull(rs.getString("product_ids")).split("`");
+						String[] quantitys = StringUtil.notNull(rs.getString("quantitys")).split("`");
+						for (int i = 0; i < product_ids.length; i++) {
+							if(product_ids[i].equalsIgnoreCase(product_id)
+									&& quantitys[i].equalsIgnoreCase(quantity)){
+								isExist = true;
+								break;
+							}
+						}
+					}					
+				}
+			}
+			tx.commit();
+			return isExist;
+		} catch (Exception re) {
+			log.error("get failed", re);
+			throw re;
+		} finally {
+			try {
+				if (session != null) {
+					session.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	
+	public List<String[]> deleteJobCapture(String listId) throws Exception{
+		log.debug("deleteJobCapture");
+		Transaction tx = null;
+		Session session = null;
+		List<String[]> results = new ArrayList<String[]>();
+		try {
+			session = sessionFactory.openSession();
+			tx = session.beginTransaction();
+			String[] arr = listId.replace(",", ";").split(";");
+			for (String id : arr) {
+				if(id.trim().length() > 0){
+					try {
+						Management management = (Management)session.get(Management.class, Integer.parseInt(id));
+						management.setDuplicate_status(1);
+						management.setCapture_status(0);
+						session.update(management);
+						new File(management.getFile_path() + "/" + management.getFile_name()).delete();
+						results.add(new String[]{id, "OK"});
+					} catch (Exception e) {
+						e.printStackTrace();
+						results.add(new String[]{id, "Fail"});
+					}
+				}
+			}
+			
+			tx.commit();
+			log.debug("deleteJobCapture successful");
+			return results;
+		} catch (Exception re) {
+			re.printStackTrace();
+			log.error("deleteJobCapture failed", re);
+			throw re;
+		} finally{
+			try {
+				if(session != null){
+					session.close();
+				}
+			} catch (Exception e) {
 			}
 		}
 	}
