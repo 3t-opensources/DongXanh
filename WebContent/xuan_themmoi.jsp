@@ -329,9 +329,10 @@ pageEncoding="UTF-8"%>
 		if (result) {
 					 $.ajax({  		
 			       type: "GET",
-		          url     : 'badJobCaptureAction?management_id='+ id,	          
+		          url     : 'deleteListJobCaptureAction?ids='+ id,	          
 		          data    : "",
 		          success : function(responseText) {	
+		        	  console.log(responseText)
 		        	  alert("Xóa bảng kê thành công!");
 		        	  var url = window.location.href.toString();			        	
 		      		  window.location.replace(url);

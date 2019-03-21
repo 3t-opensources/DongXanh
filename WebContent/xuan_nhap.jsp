@@ -400,6 +400,8 @@ function checkGetJob(flag){
 			  $("#thanhtien_"+id).prop('readonly', flag);
 			  $("#addRow_"+id).prop('disabled', flag);
 			  $("#moveRow_"+id).prop('disabled', flag);
+			  
+			 
 			 
 		  });
 		
@@ -681,6 +683,8 @@ function checktable(){
 					flag = false;
 					return false;
 				} 
+				
+				 checkDuplicateInvoiceRecordAction(masp,soluong);
 			  
 		  }
 		 
@@ -1482,7 +1486,24 @@ function tinhtong(id){
 	            	  }
 	              }
 	   	   });
-}
+    }
+   
+   function checkDuplicateInvoiceRecordAction(product_id,quantity){ 
+	 
+	   var day                = document.getElementById("ngaynhanhang").value ;
+	   var customer_id_level1 = document.getElementById("customer_id_level1_hidden").value ;
+	   
+	   	 $.ajax({  		
+	   	       type: "GET",
+	              url     : "getDuplicateInvoiceRecordAction?quantity="+quantity+"&product_id="+product_id+"&day="+day+"&customer_id_level1="+customer_id_level1,	          
+	              data    : "",
+	              success : function(responseText) {
+	            	 
+	            	  console.log("============cbb_loaibangke==============="+responseText);
+	            	  
+	              }
+	   	   });
+  }
 
 
 </script> 
