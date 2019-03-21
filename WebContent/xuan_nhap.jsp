@@ -448,7 +448,8 @@ function getSelectedText(elementId) {
 }
 
 var maxRow =0;
-function saveData(){
+var checkduplicated = true;
+async function saveData(){
 	 maxRow =0;
 	
 	 if (checktable()) {
@@ -491,13 +492,13 @@ function saveData(){
 		 
 		
 		
-		  if(date_delivery.length==10){
+		  if(date_delivery!=null &&  date_delivery.length==10){
 			  date_delivery = date_delivery.substring(6,10)+"-"+date_delivery.substring(3,5)+"-"+date_delivery.substring(0,2)+"T00:00:00";		
 		  }
-		  if(date_company_received.length==10){
+		  if(date_company_received!=null &&  date_company_received.length==10){
 			  date_company_received = date_company_received.substring(6,10)+"-"+date_company_received.substring(3,5)+"-"+date_company_received.substring(0,2)+"T00:00:00";		
 		  }
-		  if(date_product_received.length==10){
+		  if(date_product_received!= null && date_product_received.length==10){
 			  date_product_received = date_product_received.substring(6,10)+"-"+date_product_received.substring(3,5)+"-"+date_product_received.substring(0,2)+"T00:00:00";		
 		  }
 		  var row =0;
@@ -518,6 +519,14 @@ function saveData(){
 				  product_prices   = product_prices     +dongia     +"`";
 				  total_prices     = total_prices       +thanhtien  +"`";
 				  sum_total_price = parseFloat(sum_total_price) + parseFloat(thanhtien);
+				  checkduplicated = true;
+				  checkDuplicateInvoiceRecordAction(masp,soluong);				
+				  if(checkduplicated==false){
+					 if (confirm('Mã sản phẩm '+masp+'này đã được nhập trong ngày hôm nay . bạn có muốn kiểm tra ?')) {
+						    flag = false;
+							return false;
+					 } 
+			    }
 			  }
 			
 			  row++;
@@ -684,7 +693,7 @@ function checktable(){
 					return false;
 				} 
 				
-				 checkDuplicateInvoiceRecordAction(masp,soluong);
+				
 			  
 		  }
 		 
@@ -1488,7 +1497,7 @@ function tinhtong(id){
 	   	   });
     }
    
-   function checkDuplicateInvoiceRecordAction(product_id,quantity){ 
+   async function checkDuplicateInvoiceRecordAction(product_id,quantity){ 
 	 
 	   var day                = document.getElementById("ngaynhanhang").value ;
 	   var customer_id_level1 = document.getElementById("customer_id_level1_hidden").value ;
@@ -1497,10 +1506,16 @@ function tinhtong(id){
 	   	       type: "GET",
 	              url     : "getDuplicateInvoiceRecordAction?quantity="+quantity+"&product_id="+product_id+"&day="+day+"&customer_id_level1="+customer_id_level1,	          
 	              data    : "",
+	              async   : false, //blocks window close
 	              success : function(responseText) {
 	            	 
-	            	  console.log("============cbb_loaibangke==============="+responseText);
-	            	  
+	            	 if(responseText=="OK"){	            		 
+	            		 checkduplicated= true;
+	            	 }else{
+	            		 checkduplicated = false;
+	            	 }
+	            	
+	            	 
 	              }
 	   	   });
   }
