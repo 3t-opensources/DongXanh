@@ -19,6 +19,7 @@ public class EntInvoiceData {
 	private String staff_name;
 	private Date date_company_received;
 	private Date date_product_received;
+	private Date date_delivery;
 	private String date_sent_late;
 	private String notes;
 	private String product_ids;
@@ -211,6 +212,14 @@ public class EntInvoiceData {
 
 	public void setSum_total_price(String sum_total_price) {
 		this.sum_total_price = sum_total_price;
+	}
+	
+	public Date getDate_delivery() {
+		return date_delivery;
+	}
+
+	public void setDate_delivery(Date date_delivery) {
+		this.date_delivery = date_delivery;
 	}
 
 	@Override
