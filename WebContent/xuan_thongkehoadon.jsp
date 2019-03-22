@@ -883,6 +883,7 @@ pageEncoding="UTF-8"%>
 	 		         var stt =1;
 	 		         var id_mages=1;
 	  	        	 for (i in responseText) {   
+	  	        		
 	  	        		var invoiceType          =responseText[i].invoice_type_id.invoiceType;
 	  	        		var customer_code        =responseText[i].customer_code;
 	  	        		var customer_name        =responseText[i].customer_name;
@@ -933,10 +934,10 @@ pageEncoding="UTF-8"%>
 		  	        	    		table +="  <tr id ="+id_mages+" ondblclick='showDilogImages("+id_mages+")' class='table-striped'>";
 		  	        	    		
 		  	        	    	 
-			  	        			 table +="    <td>"+ stt+"</td>";
-				  	        		 table +="    <td>"+max_size+"</td>";
-				  	            	table +="     <td>"+customer_code+"</td>";
-				  	        		table +="     <td>"+customer_name+"</td>";
+			  	        			table +="    <td>"+ stt+"</td>";				  	        		
+				  	            	table +="     <td>"+invoiceType +"</td>";
+				  	            	table +="    <td  ondblclick = 'CaptureRework("+responseText[i].id+")'>"+customer_code+"</td>";
+				  	        		table +="     <td  ondblclick = 'CaptureRework("+responseText[i].id+")'>"+customer_name+"</td>";
 				  	        		table +="     <td>"+customer_name_level1+"</td>";
 				  	        		table +="     <td>"+staff_name+"</td>";
 				  	        		table +="     <td class='right'>"+date_company_received+"</td>";
@@ -1445,6 +1446,11 @@ pageEncoding="UTF-8"%>
 	 		location.href		= href;
 	   
    }
+	function CaptureRework(id){
+		
+		url = window.location.href.toString().replace("thongkehoadon.action", "nhap.action")+"?id="+id;		
+		window.location.replace(url);
+	}
 	
 	
 

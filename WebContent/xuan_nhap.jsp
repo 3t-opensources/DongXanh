@@ -281,6 +281,168 @@
 <script type="text/javascript" src="js/jquery.iviewer.js" ></script> 
 <script type="text/javascript" src="js/hoadon_nhap.js" ></script>   
 <script type="text/javascript">
+function getJobCaptureReworkAction(id){	
+	 $.ajax({  		
+	       type: "GET",
+          url     : 'getJobCaptureReworkAction?id='+id,	          
+          data    : "",
+          success : function(responseText) {	
+       	 //  console.log("==================305=================");
+       	  console.log("bat dau=============");
+       	  console.log(responseText);
+          console.log("ket thuc============");
+       	 
+       		 
+       	  document.getElementById("id").value              = responseText.id ;//id
+		  document.getElementById("management_id").value   = responseText.management_id.id ;
+		  document.getElementById("cbb_loaibangke").value  = responseText.invoice_type_id.id; 
+		  
+		  document.getElementById("customer_id_hidden").value = responseText.customer_id;
+		  document.getElementById("maKH").value               = responseText.customer_code;
+		  document.getElementById("tenKH").value              = responseText.customer_name;
+		  
+		  
+		  document.getElementById("customer_id_level1_hidden").value    = responseText.customer_id_level1;
+		  document.getElementById("customer_code_level1_hidden").value  = responseText.customer_code_level1;
+		  document.getElementById("customer_name_level1").value         = responseText.customer_name_level1;	  
+		 
+		  document.getElementById("nvtt_id_hidden").value               = responseText.staff_id;
+		  document.getElementById("nvtt_name").value                   = responseText.staff_name;
+		 
+		  var date_company_received =responseText.date_company_received;
+    	  var date_product_received =responseText.date_product_received;
+    	  var date_invoice_sent      =responseText.date_invoice_sent;
+    		
+    	   if(date_company_received!=null && date_company_received.length>10){
+    			date_company_received = date_company_received.substring(8,10)+"/"+date_company_received.substring(5,7)+"/"+date_company_received.substring(0,4);
+    		}
+    		if(date_product_received!=null && date_product_received.length>10){
+    			date_product_received = date_product_received.substring(8,10)+"/"+date_product_received.substring(5,7)+"/"+date_product_received.substring(0,4);
+    		}
+    		
+    		if(date_invoice_sent!=null && date_invoice_sent.length>10){
+    			date_invoice_sent = date_invoice_sent.substring(8,10)+"/"+date_invoice_sent.substring(5,7)+"/"+date_invoice_sent.substring(0,4);
+    		}
+    		
+    		
+		  document.getElementById("ngaynhantoa").value                 = date_company_received;
+		  document.getElementById("ngaynhanhang").value                = date_product_received;
+		  document.getElementById("ngaycap1giaotoa").value             = date_invoice_sent;
+		  
+		  document.getElementById("date_sent_late").value              = responseText.date_sent_late;
+		  document.getElementById("notes").value                       = responseText.notes;
+		  
+		  
+		  
+		     var imagePath_hidden ="";
+    	     var file_path        = responseText.management_id.file_path.split("/DX_Images/");
+    	     var file_name        = responseText.management_id.file_name;
+    	     if(file_path.length>1){
+    	    	imagePath_hidden = file_path[1] +"/"+file_name;
+    	     }
+    	    
+    	     var url = window.location.href.toString();
+    	     if(url.includes("localhost")){
+    	        imagePath_hidden = "http://nv.dongxanhvn.com:8077/DX_Images/13012019/1547367853715/z1161354633309_0916f6c1aab1f212fa463e5ce5e8d11e.jpg";
+    	     }else{
+    	    	imagePath_hidden = "http://nv.dongxanhvn.com:8077/DX_Images/"+imagePath_hidden;
+    	     }
+    	     $('#viewer').iviewer('loadImage', imagePath_hidden);
+		  
+		  if(responseText.product_ids!=null){
+    			var product_ids           = responseText.product_ids.split("`");
+        		var product_names         = responseText.product_names.split("`");
+        		var quantitys             = responseText.quantitys.split("`");
+        		var total_boxs            = responseText.total_boxs.split("`");
+        		var total_prices          = responseText.total_prices.split("`");
+        		var unit_prices           = responseText.unit_prices.split("`");
+        		if(product_ids.length>10){
+        			for(var row =10 ;row < product_ids.length ;row++){
+        				var time_id   = new Date().getTime();
+            			addRow(time_id);
+        			}
+        			
+        		}
+        		
+        		var stt =0;
+        		$('#table_position > tbody  > tr').each(function() {
+  				 
+  				  
+  				  document.getElementById("stt_"+this.getAttribute("id")).innerHTML  = (stt+1);
+  				if(stt < product_ids.length-1){
+  					
+  	        		 var id        =   this.getAttribute("id");
+  	        	
+  	        		 document.getElementById("masanpham_"+id).value  =  product_ids[stt];
+  	  				 document.getElementById("tensanpham_"+id).value =  product_names[stt];
+  	  				 document.getElementById("soluong_"+id).value    =  parseFloat(quantitys[stt]).toLocaleString();
+  	  				 document.getElementById("sothung_"+id).value    =  total_boxs[stt];
+  	  				 document.getElementById("dongia_"+id).value     =  parseFloat(unit_prices[stt]).toLocaleString();
+  	  				 document.getElementById("thanhtien_"+id).value  =  parseFloat(total_prices[stt]).toLocaleString();
+  				}
+  				 stt++;
+  			 });
+        		
+        		 $("#sum_thanh_tien").html("Tổng : "+parseFloat(responseText.sum_total_price).toLocaleString());	
+        	
+		  }
+		  
+		  
+       		/*  
+       		 
+       		 
+		  
+		  
+		
+       		 
+       		 
+       		 
+       		 
+       		 
+       		 
+       		 
+       		 var invoice_data_id = responseText[0].responseText;
+           	 var id              = responseText[0].id;
+           	 document.getElementById("id").value               = id;
+          	     document.getElementById("management_id").value    = id ;
+          	     var ngaynhantoa_date                              = responseText[0].created_time ;
+          	     var ngaynhantoa ="";
+          	 
+          	     if(ngaynhantoa_date.length>10){
+          	    	ngaynhantoa = ngaynhantoa_date.substring(8,10)+"/"+ngaynhantoa_date.substring(5,7)+"/"+ngaynhantoa_date.substring(0,4);
+          	        document.getElementById("ngaycap1giaotoa").value      = "" ;
+          	        document.getElementById("ngaynhantoa").value          = ngaynhantoa ;
+          	        document.getElementById("ngaynhanhang").value         = ngaynhantoa ;
+          	     }
+          	   
+          	  
+          	     var imagePath_hidden ="";
+          	     var file_path        = responseText[0].file_path.split("/DX_Images/");
+          	     var file_name        = responseText[0].file_name;
+          	     if(file_path.length>1){
+          	    	imagePath_hidden = file_path[1] +"/"+file_name;
+          	     }
+          	    
+          	     var url = window.location.href.toString();
+          	     if(url.includes("localhost")){
+          	    	 imagePath_hidden = "http://nv.dongxanhvn.com:8077/DX_Images/test_image2.jpg";
+          	     }else{
+          	    	imagePath_hidden = "http://nv.dongxanhvn.com:8077/DX_Images/"+imagePath_hidden;
+          	     }
+          	    
+          	     $('#viewer').iviewer('loadImage', imagePath_hidden);
+          	    document.getElementById("ngaynhanhang").focus();  */
+       /* 	 }else{
+       		 checkGetJob(true);
+       		 alert("Hết hóa đơn nhập!");
+       	 } */
+       	
+	       	 
+          }
+	   });
+
+}
+
 
 function getjob(){
 	
@@ -568,7 +730,11 @@ async function saveData(){
 					 	         
 					   	}) ,	           
 			          success : function(responseText) {
-			        	   var url = window.location.href.toString();				        	
+			        	   var url = window.location.href.toString();
+			        	   if(window.location.href.toString().includes("?id=")){
+			        	    	  var  url = window.location.href.toString();
+			        	    	  var  url  = url.substring(0,url.lastIndexOf("?id=")); 
+			        	   }
 			        	   window.location.replace(url);
 			     
 			       
@@ -899,7 +1065,7 @@ $(document).ready(function() {
     };
     
 	var imagePath = "http://nv.dongxanhvn.com:8077/DX_Images/test_image.jpg";
-/* 	checkGetJob(true); */
+
 	 var winWidth = $('.split-pane').width();
 	  var winHeight = $('.split-pane').height();
 
@@ -928,8 +1094,7 @@ $(document).ready(function() {
       $("#fit").click(function(){ iv.iviewer('fit'); });
       $("#orig").click(function(){ iv.iviewer('set_zoom', 100); });
       $("#update").click(function(){ iv.iviewer('update_container_info'); });      
-      lookupCaptureInvoiceTypeAction();
-      getjob();
+     
       
       $('#table_position > tbody  > tr').each(function() {
 		  var sanpham_id      =this.getAttribute("id"); 
@@ -1008,7 +1173,15 @@ $(document).ready(function() {
     	  }, 0);
     	});
     
-    
+      lookupCaptureInvoiceTypeAction();
+      if(window.location.href.toString().includes("?id=")){
+    	  var  url = window.location.href.toString();
+    	  var  id  = url.substring(url.lastIndexOf("?id=")+4,url.length);    	  
+    	  getJobCaptureReworkAction(id);
+      }else{
+    	  getjob();
+      }
+     
       
     
       
