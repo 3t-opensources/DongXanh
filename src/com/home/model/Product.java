@@ -14,6 +14,7 @@ public class Product implements java.io.Serializable {
 
 	private Integer id;
 	private Category category;
+	private String category_code;
 	private String productCode;
 	private String productName;
 	private String description;
@@ -55,6 +56,14 @@ public class Product implements java.io.Serializable {
 
 	public void setCategory(Category category) {
 		this.category = category;
+	}
+	
+	public String getCategory_code() {
+		return category_code;
+	}
+
+	public void setCategory_code(String category_code) {
+		this.category_code = category_code;
 	}
 
 	public String getProductCode() {
@@ -133,5 +142,10 @@ public class Product implements java.io.Serializable {
 
 	public void setTotalBox(Integer totalBox) {
 		this.totalBox = totalBox;
+	}
+	
+	@Override
+	public String toString() {
+		return "["+category_code+"]["+productCode+"]["+productName+"]["+quantity+"]["+unitPrice+"]["+description+"]";
 	}
 }

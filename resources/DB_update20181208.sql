@@ -27,6 +27,7 @@ CREATE TABLE IF NOT EXISTS `invoice_data` (
    `customer_name_level1` varchar(200) DEFAULT NULL,
    `staff_id` int(11) DEFAULT NULL,
    `staff_name` varchar(200) DEFAULT NULL,
+   `date_invoice_sent` datetime DEFAULT NULL,
    `date_company_received` datetime DEFAULT NULL,
    `date_product_received` datetime DEFAULT NULL,
    `date_sent_late` int(11) DEFAULT 0,
@@ -48,3 +49,4 @@ CREATE TABLE IF NOT EXISTS `invoice_data` (
 
 ALTER TABLE `invoice_type` ADD `tab_order` INT NOT NULL DEFAULT '0' AFTER `description`;
 ALTER TABLE `invoice_type` ADD `status` INT NOT NULL DEFAULT '0' AFTER `tab_order`;
+ALTER TABLE `product` ADD `category_code` varchar(200) DEFAULT NULL AFTER `id`;

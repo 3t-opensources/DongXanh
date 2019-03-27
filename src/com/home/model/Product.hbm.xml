@@ -11,6 +11,9 @@
         <many-to-one name="category" class="com.home.model.Category" fetch="select">
             <column name="category_id" />
         </many-to-one>
+        <property name="category_code" type="string">
+            <column name="category_code" length="50" />
+        </property>
         <property name="productCode" type="string">
             <column name="product_code" length="50" />
         </property>

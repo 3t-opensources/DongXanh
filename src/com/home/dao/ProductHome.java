@@ -127,10 +127,11 @@ public class ProductHome {
 		try {
 			session = sessionFactory.openSession();
 			tx = session.beginTransaction();
-			Query query = session.createQuery("update Product set quantity=:quantity, point=:point, unitPrice=:unitPrice where productCode=:productCode");
+			Query query = session.createQuery("update Product set quantity=:quantity, point=:point, unitPrice=:unitPrice, description=:description where productCode=:productCode");
 			query.setInteger("quantity", instance.getQuantity());
 			query.setInteger("point", instance.getPoint());
 			query.setBigDecimal("unitPrice", instance.getUnitPrice());
+			query.setString("description", instance.getDescription());
 			query.setString("productCode", instance.getProductCode());
 			query.executeUpdate();
 			tx.commit();

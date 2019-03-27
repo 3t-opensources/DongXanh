@@ -181,7 +181,7 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 					customer_id =  Integer.parseInt(StringUtil.notNull(request.getParameter("customer_id")));
 					customer_name = "XXXYYYZZZ";
 				} catch (Exception e) {
-					customer_id = -1;
+					customer_id = 999999999;
 					customer_name = StringUtil.notNull(request.getParameter("customer_id"));
 				}
 				sent_late =  Integer.parseInt(StringUtil.notNull(request.getParameter("sent_late")));

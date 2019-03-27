@@ -660,7 +660,7 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 		try {
 			cust = new Customer();
 			StringBuilder logDuplicate = new StringBuilder();
-			File theFile = new File("/home/administrator/Downloads/Danh sach phan cong 2018-2019.xlsx");
+			File theFile = new File("/media/administrator/data_ntxuan/TTTOAN/Jee Projects/DongXanh_Proj/Data/Danh sach phan cong 2018-2019.xlsx");
 			Cell cell = null;
 			Object value = null;
 			varIndexRow = "3";
@@ -742,7 +742,7 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 								} catch (Exception e) {
 									user = userHome.getUserByUserName(StringUtil.notNull(value).replace("NPĐằng", "NPDang").replace("CĐNăng", "CDNang"));
 								}	
-								//System.out.println(StringUtil.notNull(value) + " => " + user);
+								System.out.println(StringUtil.notNull(value) + " => " + user);
 								getCust().setUser(user);
 							}
 							
@@ -789,7 +789,7 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 					}
 					// ---------------------------
 					boolean isExisted = custHome.existCustomer(custId, getCust().getCustomerCode());
-					System.out.println(getCust().getCustomerCode() + " exist => " + isExisted);
+					System.out.println(getCust().getCustomerCode() + " exist => " + isExisted + " assign nvtt => " + user.getUserName());
 					if (!isExisted){
 						custHome.attachDirty(getCust());						
 					}else{

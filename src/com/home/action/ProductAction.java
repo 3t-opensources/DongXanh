@@ -56,6 +56,7 @@ public class ProductAction implements Action, ServletContextAware{
 	private Integer id;
 	private Integer proId;
 	private Integer category_id;
+	private String category_code;
 	private String productCode;
 	private String productName;
 	private String description;
@@ -63,11 +64,13 @@ public class ProductAction implements Action, ServletContextAware{
 	private Integer quantity;
 	private Integer point;
 	//Import product
+	private Integer colProductCate;
 	private Integer colProductCode;
 	private Integer colProductName;
 	private Integer colProductQuantity;
 	private Integer colProductPoint;
 	private Integer colProductPrice;
+	private Integer colProductDes;
 	private Integer rowProductStart;
 	//Upload file
 	private File upload_excel;//[your file name parameter
@@ -81,10 +84,127 @@ public class ProductAction implements Action, ServletContextAware{
 			//action.create();
 			//action.list();
 			//action.delete();
-			System.out.println(action.getTotalProducts());
+			System.out.println(action.importProductsFromExcel("/media/administrator/data_ntxuan/TTTOAN/Jee Projects/DongXanh_Proj/Data/Danh muc san pham 2018-2019.xlsx"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public String importProductsFromExcel(String filepath){
+		try {
+			colProductCate = 1;
+			colProductCode = 2;
+			colProductName = 3;
+			colProductQuantity = 4;
+			colProductPoint = 6;
+			colProductPrice = 5;
+			colProductDes = 7;
+			
+			rowProductStart = 3;
+			
+			File theFile = new File(filepath);
+			Cell cell = null;
+			Object value = null;
+			try (FileInputStream fis = new FileInputStream(theFile)) {
+				ProductHome productHome = new ProductHome(HibernateUtil.getSessionFactory());
+				ExcelUtil xls = new ExcelUtil();
+//				System.out.println(colProductCode);
+//				System.out.println(colProductName);
+//				System.out.println(colProductQuantity);
+//				System.out.println(colProductPrice);
+//				System.out.println(rowProductStart);
+				workbook = xls.getWorkbook(fis, FilenameUtils.getExtension(theFile.getAbsolutePath()));
+				Sheet sheet = workbook.getSheetAt(0);
+				Iterator<Row> rowIterator = sheet.iterator();
+				rowIterator.next();
+				int row_index = 0;
+				while (rowIterator.hasNext()) {
+					if(row_index >= rowProductStart){
+						Row row = rowIterator.next();
+						
+						//Product categoty
+						cell = row.getCell(colProductCate);
+						value = xls.getValue(cell);
+						category_code = StringUtil.notNull(value);
+						//Product code
+						cell = row.getCell(colProductCode);
+						value = xls.getValue(cell);
+						productCode = StringUtil.notNull(value);
+						//Product name
+						cell = row.getCell(colProductName);
+						value = xls.getValue(cell);
+						productName = StringUtil.notNull(value);
+						//Product quantity
+						cell = row.getCell(colProductQuantity);
+						value = xls.getValue(cell);
+						try {
+							quantity = Integer.parseInt(value.toString().replaceAll("\\.[0-9]+", ""));
+						} catch (Exception e) {
+							quantity = 0;
+						}
+						//Product point
+						cell = row.getCell(colProductPoint);
+						value = xls.getValue(cell);
+						try {
+							point = Integer.parseInt(value.toString().replaceAll("\\.[0-9]+", ""));
+						} catch (Exception e) {
+							point = 0;
+						}
+						//Product price
+						cell = row.getCell(colProductPrice);
+						value = xls.getValue(cell);
+						try {
+							unitPrice = new BigDecimal(value.toString().replaceAll("\\.[0-9]+", "").replace(",", ""));
+						} catch (Exception e) {
+							unitPrice = new BigDecimal("0");
+						}
+						//Note
+						cell = row.getCell(colProductDes);
+						value = xls.getValue(cell);
+						description = StringUtil.notNull(value);
+						
+						if(productCode.length() > 0 && productName.length() > 0 &&
+								(quantity > 0 || point > 0 || unitPrice.intValue() > 0)){
+							Category category = new Category();
+							category.setId(1);
+							Product record = new Product();
+							record.setId(id);
+							record.setCategory_code(category_code);
+							record.setProductCode(productCode);
+							record.setProductName(productName);
+							record.setDescription(description);
+							record.setCategory(category);
+							record.setUnitPrice(unitPrice);
+							record.setQuantity(quantity);
+							record.setPoint(point);
+							record.setExportDate(new Date());
+							
+							if(productHome.existProduct(record)){
+								//Update
+								productHome.updateByProductCode(record);
+								System.out.println("Update product: " + record);
+							}else{
+								//Create
+								productHome.attachDirty(record);
+								System.out.println("Insert product: " + record);
+							}
+						}
+						
+					}
+					row_index++;
+				}
+				
+			} catch (Exception e) {
+				result = "ERROR";
+				message = e.getMessage();
+				e.printStackTrace();
+			}
+		} catch (Exception e) {
+			result = "ERROR";
+			message = e.getMessage();
+			e.printStackTrace();
+		}
+		return Action.SUCCESS;
 	}
 
 	@Override
