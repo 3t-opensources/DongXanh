@@ -694,6 +694,7 @@ public class ManagementAction extends ActionSupport implements ServletContextAwa
 			java.sql.Date day;
 			String product_id;
 			String quantity;
+			int management_id = -1;
 			try {
 				HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
 				customer_id_level1 = "" + Integer.parseInt(StringUtil.notNull(request.getParameter("customer_id_level1")));
@@ -701,11 +702,14 @@ public class ManagementAction extends ActionSupport implements ServletContextAwa
 				quantity = "" + Integer.parseInt(StringUtil.notNull(request.getParameter("quantity")));
 				String str_day = StringUtil.notNull(request.getParameter("day"));
 				day = new java.sql.Date(DateUtils.getDateFromString(str_day, "dd/MM/yyyy").getTime());
+				try {
+					management_id = Integer.parseInt(StringUtil.notNull(request.getParameter("management_id")));
+				} catch (Exception e) {}
 			} catch (Exception e) {
 				throw new Exception("List params[customer_id_level1/day/product_id/quantity] invalid, error: " + e.toString());
 			}
 			
-			boolean exist = home.checkInvoiceRecordDuplicate(customer_id_level1, day, product_id, quantity);
+			boolean exist = home.checkInvoiceRecordDuplicate(customer_id_level1, day, product_id, quantity, management_id);
 			if(exist){
 				result = new String[]{"duplicated"};
 			}else{

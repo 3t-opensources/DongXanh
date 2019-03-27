@@ -532,6 +532,62 @@ public class ManagementHome {
 		}
 	}
 	
+	public boolean checkInvoiceRecordDuplicate(String customer_id_level1, java.sql.Date date_invoice_sent, String product_id, String quantity, int management_id) throws Exception {
+		log.debug("isInvoiceRecordDuplicate");
+		Transaction tx = null;
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			tx = session.beginTransaction();
+			//Criteria cre = session.createCriteria(Management.class);
+			//cre.add(Restrictions.eq("hash_file", hash_file));
+			//Management instance = (Management) cre.uniqueResult();
+			SessionImpl sessionImpl = (SessionImpl) session;
+			Connection conn = sessionImpl.connection();
+			boolean isExist = false;
+			try(PreparedStatement pre = conn.prepareStatement("Select * From invoice_data "
+					+ " Where customer_id_level1=? "
+					+ " and date_invoice_sent=? "
+					+ " and product_ids like ? "
+					+ " and quantitys like ? "
+					+ " and management_id != ? "
+					+ " Limit 1")){
+				pre.setString(1, customer_id_level1);
+				pre.setDate(2, date_invoice_sent);
+				pre.setString(3, "%"+product_id+"`%");
+				pre.setString(4, "%"+quantity+"`%");
+				pre.setInt(5, management_id);
+				
+				try(ResultSet rs = pre.executeQuery()){
+					if(rs.next()){
+						String[] product_ids = StringUtil.notNull(rs.getString("product_ids")).split("`");
+						String[] quantitys = StringUtil.notNull(rs.getString("quantitys")).split("`");
+						for (int i = 0; i < product_ids.length; i++) {
+							if(product_ids[i].equalsIgnoreCase(product_id)
+									&& quantitys[i].equalsIgnoreCase(quantity)){
+								isExist = true;
+								break;
+							}
+						}
+					}					
+				}
+			}
+			tx.commit();
+			return isExist;
+		} catch (Exception re) {
+			log.error("get failed", re);
+			throw re;
+		} finally {
+			try {
+				if (session != null) {
+					session.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
 	
 	public List<String[]> deleteJobCapture(String listId) throws Exception{
 		log.debug("deleteJobCapture");
