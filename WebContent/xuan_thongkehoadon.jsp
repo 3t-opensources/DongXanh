@@ -609,7 +609,7 @@ pageEncoding="UTF-8"%>
 <!--<script src="js/datatables/tools/js/dataTables.tableTools.js"></script>-->
 
 <!-- Datatables -->
-<script src="js/jquery.dataTables.min.js"></script>
+ <script src="js/jquery.dataTables.min.js"></script> 
 <script src="js/dataTables.rowsGroup.js"></script>
 <link rel="stylesheet" href="css/datepicker.min.css"/>
 <link rel="stylesheet" href="css/stylesDilog2.css"/>
@@ -625,8 +625,12 @@ pageEncoding="UTF-8"%>
 
 <script src="js/custom.js"></script>
 
+<link rel="stylesheet" href=https://cdn.datatables.net/buttons/1.5.6/css/buttons.dataTables.min.css"/>
+<script src="https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.min.js"></script>
 
-
+<!-- <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.5.6/css/buttons.dataTables.min.css"/> -->
+ 
 
  <!-- daterangepicker -->
   
@@ -834,7 +838,13 @@ pageEncoding="UTF-8"%>
 							    "&end_day="+end_day+
 							    "&start_day="+start_day;
 	}
-   	
+    function left_scroll_detail(){		
+		
+		 document.querySelector('.dataTables_scrollBody').scrollLeft -= 40;
+	 }
+	 function right_scroll_detail(){		
+		 document.querySelector('.dataTables_scrollBody').scrollLeft += 40;
+	 }
    	function getInvoiceDataFilterReport(){   		
 	   	 var sent_late             = document.getElementById("cbb_ngaygoitre").value;
 		 var customer_id           = document.getElementById("cbb_khachhang").value;
@@ -854,8 +864,8 @@ pageEncoding="UTF-8"%>
 	              data    : "",
 	              success : function(responseText) {	
 	           	    console.log(responseText);
-	           	    var table ="";
-	           	    table +="<table id='table_detail' class='table table-striped table-bordered table table-hover' cellspacing='0' width='100%'>";
+	           	    var table =" <span class='scroll left-scroll' onclick='left_scroll_detail()' > &#171; </span> <span class='scroll right-scroll' onclick='right_scroll_detail()'>&#187;</span>   ";
+	           	    table +="<table id='table_detail' class='table table-striped table-bordered table table-hover display nowrap' cellspacing='0' width='100%'>";
 	  	        	table +="<thead>";
 	  	        		table +="<tr class='w3-btn'>";
 	  	        		table +="   <th class='table-th' style='text-align: center;width:10%'>STT</th>";
@@ -967,15 +977,17 @@ pageEncoding="UTF-8"%>
 	  	        		}
 	  	        	    table +="</tbody>";
 	  	        	    table +="</table>";
-	  	        	    $('#table_detail').DataTable();
-	  	        	    $('#detail_data_table').html(table);
+	  	        	  
 	  	        	
+	  	        	     $('#detail_data_table').html(table);
+	  	        	    
 	  	        	    $('#table_detail').DataTable({     			   
 	  	 			    "bProcessing": false,	            	    
 	  	     	    	"scrollX": true,
 	  	     	    	"fixedHeader": true,
 	  	     	    	"autoWidth": true,
 	  	     	    	"bScrollAutoCss": false,
+	  	     	    	
 	  	                fixedColumns: true, 
 	  	         	   fixedHeader: {
 	  	 		            header: true,
@@ -985,11 +997,15 @@ pageEncoding="UTF-8"%>
 	  	 					        [15,25, 50, 100,-1],
 	  	 					        [15,25, 50, 100,"All"]
 	  	 					    ],
-	  	 					iDisplayLength: -1 ,
-	  	 				  rowsGroup: [0,1,2,3,4,5,6,7,8,9],
+	  	 					iDisplayLength: -1 , 
+	  	 				 rowsGroup: [0,1,2,3,4,5,6,7,8,9],
+	  	 				// dom: 'Bfrtip',
+	  	     	          /* buttons: [
+	  	     	            'copy', 'csv', 'excel', 'pdf', 'print'
+	  	     	          ],  */
   	 				     
 	  	            }); 
-	  	        	     
+	  	        	      
 	  	        	    
 	  	        	    
 	  	        	  
@@ -1393,7 +1409,8 @@ pageEncoding="UTF-8"%>
 		  	        	    table +="</tbody>";
 		  	        	    table +="</table>";		  	        	  
 		  	        	    $('#div_thong_ke_theo_ngay').html(table);	 	        	   
-			  	        	$('#table_thong_ke_theo_ngay').DataTable();  
+			  	        	$('#table_thong_ke_theo_ngay').DataTable(
+			  	        	);  
 	            	  } 
 	              
 	   	   });

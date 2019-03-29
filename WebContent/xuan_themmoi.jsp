@@ -271,8 +271,8 @@ pageEncoding="UTF-8"%>
  	        		table +="   <th class='table-th' style='text-align: center;width:10%'>User import</th>	";
  	        		table +="   <th class='table-th' style='text-align: center;width:10%'>Ngày tạo</th>	";
  	        		table +="   <th class='table-th' style='text-align: center;width:10%'>Delete</th>	"; 
- 	        		table +=" </tr> </thead>   <tbody> ";   
- 	        		//console.log(responseText);  
+ 	        		table +=" </tr> </thead>   <tbody> ";  
+ 	        		
 		         var stt =1;
  	        	 for (i in responseText) {  	        		
  	        		console.log(responseText[i]);
