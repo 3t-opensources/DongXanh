@@ -10,12 +10,15 @@ public class InvoiceData {
 	public InvoiceType invoice_type_id;
 	public String invoice_type_name;
 	public Customer customer_id;
+	public int customer_id_id;
 	public String customer_code;
 	public String customer_name;
 	public Customer customer_id_level1;
+	public int customer_id_level1_id;
 	public String customer_code_level1;
 	public String customer_name_level1;
 	public User staff_id;
+	public int staff_id_id;
 	public String staff_name;
 	public Date date_invoice_sent;// moi them vao
 	public Date date_company_received;
@@ -173,6 +176,24 @@ public class InvoiceData {
 	}
 	public void setDate_invoice_sent(Date date_invoice_sent) {
 		this.date_invoice_sent = date_invoice_sent;
+	}
+	public int getCustomer_id_id() {
+		return customer_id_id;
+	}
+	public int getCustomer_id_level1_id() {
+		return customer_id_level1_id;
+	}
+	public int getStaff_id_id() {
+		return staff_id_id;
+	}
+	public void setCustomer_id_id(int customer_id_id) {
+		this.customer_id_id = customer_id_id;
+	}
+	public void setCustomer_id_level1_id(int customer_id_level1_id) {
+		this.customer_id_level1_id = customer_id_level1_id;
+	}
+	public void setStaff_id_id(int staff_id_id) {
+		this.staff_id_id = staff_id_id;
 	}
 		
 }
