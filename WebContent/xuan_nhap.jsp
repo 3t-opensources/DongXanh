@@ -474,6 +474,7 @@ function getjob(){
             	 var id              = responseText[0].id;
             	 document.getElementById("id").value               = id;
            	     document.getElementById("management_id").value    = id ;
+           	    
            	     var ngaynhantoa_date                              = responseText[0].created_time ;
            	     var ngaynhantoa ="";
            	    // console.log(ngaynhantoa_date);
@@ -775,9 +776,9 @@ async function saveData(){
 function checktable(){
 	  var row =0;
 	  var flag =true;
-	  var date1_receipt_of_product    = document.getElementById("ngaynhantoa").value ;
-	  var ngaynhanhang                   = document.getElementById("ngaynhanhang").value ; 
-	  var date3_cus1_delivery_invoice    = document.getElementById("ngaycap1giaotoa").value ;
+	  var date1_receipt_of_product           = document.getElementById("ngaynhanhang").value ;  
+	  var date2_company_receipt_of_invoice   = document.getElementById("ngaynhantoa").value ;
+	  var date3_cus1_delivery_invoice        = document.getElementById("ngaycap1giaotoa").value ;
 	
 	  var maKH                          = document.getElementById("maKH").value ;
 	  var tenKH                         = document.getElementById("tenKH").value ;		
@@ -785,14 +786,14 @@ function checktable(){
 	  var nvtt_id_hidden                = document.getElementById("nvtt_id_hidden").value ;
 	  var customer_name_level1          = document.getElementById("customer_name_level1").value ;
 	
-	  if(ngaynhanhang.length !=10){
+	  if(date1_receipt_of_product.length !=10){
 		    alert("Ngày nhận hàng không được rỗng hoặc khác định dạng dd/mm/yyyy!");
 		    document.getElementById("ngaynhanhang").focus();
 			flag = false;
 			return false;
 	  }
 	  
-	  if(date1_receipt_of_product.length !=10){
+	  if(date2_company_receipt_of_invoice.length !=10){
 		    alert("Ngày nhận toa không được rỗng hoặc khác định dạng dd/mm/yyyy!");
 		    document.getElementById("ngaynhantoa").focus();
 			flag = false;
