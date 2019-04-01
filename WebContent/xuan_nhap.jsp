@@ -288,9 +288,9 @@ function getJobCaptureReworkAction(id){
           data    : "",
           success : function(responseText) {	
        	 //  console.log("==================305=================");
-       	  console.log("bat dau=============");
+       	  console.log("============batdau=============");
        	  console.log(responseText);
-          console.log("ket thuc============");
+          console.log("============ketthuc============");
        	 
        		 
        	  document.getElementById("id").value              = responseText.id ;//id
