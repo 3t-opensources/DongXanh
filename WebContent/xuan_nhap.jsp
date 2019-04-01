@@ -296,38 +296,51 @@ function getJobCaptureReworkAction(id){
        	  document.getElementById("id").value              = responseText.id ;//id
 		  document.getElementById("management_id").value   = responseText.management_id.id ;
 		  document.getElementById("cbb_loaibangke").value  = responseText.invoice_type_id.id; 
+		  if(responseText.customer_id!=null){
+			  document.getElementById("customer_id_hidden").value = responseText.customer_id;
+		  }else{
+			  document.getElementById("customer_id_hidden").value = responseText.customer_id_id;
+		  }
 		  
-		  document.getElementById("customer_id_hidden").value = responseText.customer_id;
 		  document.getElementById("maKH").value               = responseText.customer_code;
 		  document.getElementById("tenKH").value              = responseText.customer_name;
 		  
+		  if(responseText.customer_id_level1!=null){
+			  document.getElementById("customer_id_level1_hidden").value    = responseText.customer_id_level1;
+		  }else{
+			  document.getElementById("customer_id_level1_hidden").value    = responseText.customer_id_level1_id;
+		  }
 		  
-		  document.getElementById("customer_id_level1_hidden").value    = responseText.customer_id_level1;
+		  
 		  document.getElementById("customer_code_level1_hidden").value  = responseText.customer_code_level1;
 		  document.getElementById("customer_name_level1").value         = responseText.customer_name_level1;	  
 		 
-		  document.getElementById("nvtt_id_hidden").value               = responseText.staff_id;
+		  if(responseText.staff_id!=null){
+			  document.getElementById("nvtt_id_hidden").value               = responseText.staff_id;
+		  }else{
+			  document.getElementById("nvtt_id_hidden").value               = responseText.staff_id_id;
+		  }
+		 
 		  document.getElementById("nvtt_name").value                   = responseText.staff_name;
 		 
-		  var date_company_received =responseText.date_company_received;
-    	  var date_product_received =responseText.date_product_received;
-    	  var date_invoice_sent      =responseText.date_invoice_sent;
+		  var date1_receipt_of_product         = responseText.date1_receipt_of_product;
+    	  var date2_company_receipt_of_invoice = responseText.date2_company_receipt_of_invoice;
+    	  var date3_cus1_delivery_invoice      = responseText.date3_cus1_delivery_invoice;
     		
-    	   if(date_company_received!=null && date_company_received.length>10){
-    			date_company_received = date_company_received.substring(8,10)+"/"+date_company_received.substring(5,7)+"/"+date_company_received.substring(0,4);
+    	   if(date1_receipt_of_product!=null && date1_receipt_of_product.length>10){
+    		   date1_receipt_of_product = date1_receipt_of_product.substring(8,10)+"/"+date1_receipt_of_product.substring(5,7)+"/"+date1_receipt_of_product.substring(0,4);
     		}
-    		if(date_product_received!=null && date_product_received.length>10){
-    			date_product_received = date_product_received.substring(8,10)+"/"+date_product_received.substring(5,7)+"/"+date_product_received.substring(0,4);
-    		}
-    		
-    		if(date_invoice_sent!=null && date_invoice_sent.length>10){
-    			date_invoice_sent = date_invoice_sent.substring(8,10)+"/"+date_invoice_sent.substring(5,7)+"/"+date_invoice_sent.substring(0,4);
+    		if(date2_company_receipt_of_invoice!=null && date2_company_receipt_of_invoice.length>10){
+    			date2_company_receipt_of_invoice = date2_company_receipt_of_invoice.substring(8,10)+"/"+date2_company_receipt_of_invoice.substring(5,7)+"/"+date2_company_receipt_of_invoice.substring(0,4);
     		}
     		
+    		if(date3_cus1_delivery_invoice!=null && date3_cus1_delivery_invoice.length>10){
+    			date3_cus1_delivery_invoice = date3_cus1_delivery_invoice.substring(8,10)+"/"+date3_cus1_delivery_invoice.substring(5,7)+"/"+date3_cus1_delivery_invoice.substring(0,4);
+    		}
     		
-		  document.getElementById("ngaynhantoa").value                 = date_company_received;
-		  document.getElementById("ngaynhanhang").value                = date_product_received;
-		  document.getElementById("ngaycap1giaotoa").value             = date_invoice_sent;
+    	  document.getElementById("ngaynhanhang").value                = date1_receipt_of_product;
+		  document.getElementById("ngaynhantoa").value                 = date2_company_receipt_of_invoice;		 
+		  document.getElementById("ngaycap1giaotoa").value             = date3_cus1_delivery_invoice;
 		  
 		  document.getElementById("date_sent_late").value              = responseText.date_sent_late;
 		  document.getElementById("notes").value                       = responseText.notes;
@@ -634,14 +647,18 @@ async function saveData(){
 		  var staff_id                 = document.getElementById("nvtt_id_hidden").value ;//staff_id
 		  var staff_name               = document.getElementById("nvtt_name").value ;//staff_name
 		 
+		  var date1_receipt_of_product          = document.getElementById("ngaynhanhang").value ;//date1_receipt_of_product
+		  var date2_company_receipt_of_invoice  = document.getElementById("ngaynhantoa").value ;//	
+		  var date3_cus1_delivery_invoice       = document.getElementById("ngaycap1giaotoa").value ;//date3_cus1_delivery_invoice
 		  
-		  var date_company_received    = document.getElementById("ngaynhantoa").value ;//date_company_received
-		  var date_delivery            = document.getElementById("ngaynhanhang").value ;//ngaynhanhang
-		  var date_product_received    = document.getElementById("ngaycap1giaotoa").value ;//date_product_received
+		 
+		  
+		  
+		  
 		  var date_sent_late           = document.getElementById("date_sent_late").value ;//date_sent_late
 		  var notes                    = document.getElementById("notes").value ;//notes
-		 if(date_product_received==''){
-			 date_product_received =null;
+		 if(date3_cus1_delivery_invoice==''){
+			 date3_cus1_delivery_invoice =null;
 		 }
 		
 		  var product_ids="";//product_ids
@@ -653,15 +670,15 @@ async function saveData(){
 		  var sum_total_price=0;
 		 
 		
-		
-		  if(date_delivery!=null &&  date_delivery.length==10){
-			  date_delivery = date_delivery.substring(6,10)+"-"+date_delivery.substring(3,5)+"-"+date_delivery.substring(0,2)+"T00:00:00";		
+		  if(date1_receipt_of_product!=null &&  date1_receipt_of_product.length==10){
+			  date1_receipt_of_product = date1_receipt_of_product.substring(6,10)+"-"+date1_receipt_of_product.substring(3,5)+"-"+date1_receipt_of_product.substring(0,2)+"T00:00:00";		
 		  }
-		  if(date_company_received!=null &&  date_company_received.length==10){
-			  date_company_received = date_company_received.substring(6,10)+"-"+date_company_received.substring(3,5)+"-"+date_company_received.substring(0,2)+"T00:00:00";		
+		  if(date2_company_receipt_of_invoice!=null &&  date2_company_receipt_of_invoice.length==10){
+			  date2_company_receipt_of_invoice = date2_company_receipt_of_invoice.substring(6,10)+"-"+date2_company_receipt_of_invoice.substring(3,5)+"-"+date2_company_receipt_of_invoice.substring(0,2)+"T00:00:00";		
 		  }
-		  if(date_product_received!= null && date_product_received.length==10){
-			  date_product_received = date_product_received.substring(6,10)+"-"+date_product_received.substring(3,5)+"-"+date_product_received.substring(0,2)+"T00:00:00";		
+		 
+		  if(date3_cus1_delivery_invoice!= null && date3_cus1_delivery_invoice.length==10){
+			  date3_cus1_delivery_invoice = date3_cus1_delivery_invoice.substring(6,10)+"-"+date3_cus1_delivery_invoice.substring(3,5)+"-"+date3_cus1_delivery_invoice.substring(0,2)+"T00:00:00";		
 		  }
 		  var row =0;
 		  $('#table_position > tbody  > tr').each(function() {		
@@ -713,9 +730,9 @@ async function saveData(){
 			        		  "customer_name_level1": customer_name_level1,
 			        		  "staff_id": staff_id,
 			        		  "staff_name": staff_name,
-			        		  "date_company_received":date_company_received,
-			        		  "date_product_received": date_product_received,
-			        		  "date_delivery": date_delivery,
+			        		  "date1_receipt_of_product":date1_receipt_of_product,
+			        		  "date2_company_receipt_of_invoice": date2_company_receipt_of_invoice,
+			        		  "date3_cus1_delivery_invoice": date3_cus1_delivery_invoice,
 			        		  "date_sent_late": date_sent_late,
 			        		  "notes": notes,
 			        		  "product_ids": product_ids,
@@ -758,15 +775,16 @@ async function saveData(){
 function checktable(){
 	  var row =0;
 	  var flag =true;
-	  var date_company_received    = document.getElementById("ngaynhantoa").value ;
-	  var ngaynhanhang             = document.getElementById("ngaynhanhang").value ; 
-	  var date_product_received    = document.getElementById("ngaycap1giaotoa").value ;
+	  var date1_receipt_of_product    = document.getElementById("ngaynhantoa").value ;
+	  var ngaynhanhang                   = document.getElementById("ngaynhanhang").value ; 
+	  var date3_cus1_delivery_invoice    = document.getElementById("ngaycap1giaotoa").value ;
 	
 	  var maKH                          = document.getElementById("maKH").value ;
 	  var tenKH                         = document.getElementById("tenKH").value ;		
 	  var nvtt_name                     = document.getElementById("nvtt_name").value ;
+	  var nvtt_id_hidden                = document.getElementById("nvtt_id_hidden").value ;
 	  var customer_name_level1          = document.getElementById("customer_name_level1").value ;
-	  
+	
 	  if(ngaynhanhang.length !=10){
 		    alert("Ngày nhận hàng không được rỗng hoặc khác định dạng dd/mm/yyyy!");
 		    document.getElementById("ngaynhanhang").focus();
@@ -774,7 +792,7 @@ function checktable(){
 			return false;
 	  }
 	  
-	  if(date_company_received.length !=10){
+	  if(date1_receipt_of_product.length !=10){
 		    alert("Ngày nhận toa không được rỗng hoặc khác định dạng dd/mm/yyyy!");
 		    document.getElementById("ngaynhantoa").focus();
 			flag = false;
@@ -805,6 +823,14 @@ function checktable(){
 			flag = false;
 			return false;
 	  }
+	  
+	  if(nvtt_id_hidden==null || nvtt_id_hidden.trim()=='' ){
+		    alert("NVTT phai co trong lookup!");
+		    document.getElementById("nvtt_name").focus();
+			flag = false;
+			return false;
+	  }
+	
 	  
 	 
 	  
@@ -1628,12 +1654,12 @@ function tinhtong(id){
 		    	
 		     }
 		     if(flag>=2 && ngaynhantoa.length>=8){
-		    	 var from   = document.getElementById("ngaynhantoa").value.split("/");//date_company_received
+		    	 var from   = document.getElementById("ngaynhantoa").value.split("/");
 		    	 var to ="";
 		    	 if(ngaycap1giaotoa.length>=8){
-		    		   to    = document.getElementById("ngaycap1giaotoa").value.split("/") ;//date_product_received
+		    		   to    = document.getElementById("ngaycap1giaotoa").value.split("/") ;//date3_cus1_delivery_invoice
 		    	 }else{
-		    		 to    = document.getElementById("ngaynhanhang").value.split("/") ;//date_product_received
+		    		 to    = document.getElementById("ngaynhanhang").value.split("/") ;//date3_cus1_delivery_invoice
 		    	 }
 				  var date1 =  new Date(from[2], from[1]-1, from[0]);
 				  var date2 =  new Date(to[2], to[1]-1, to[0]);
