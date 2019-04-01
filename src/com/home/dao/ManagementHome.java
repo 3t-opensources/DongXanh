@@ -478,7 +478,7 @@ public class ManagementHome {
 	
 	////////////////////////////////////////////////////////////////
 	
-	public boolean checkInvoiceRecordDuplicate(String customer_id_level1, java.sql.Date date_invoice_sent, String product_id, String quantity) throws Exception {
+	public boolean checkInvoiceRecordDuplicate(String customer_id_level1, java.sql.Date date1_receipt_of_product, String product_id, String quantity) throws Exception {
 		log.debug("isInvoiceRecordDuplicate");
 		Transaction tx = null;
 		Session session = null;
@@ -493,12 +493,12 @@ public class ManagementHome {
 			boolean isExist = false;
 			try(PreparedStatement pre = conn.prepareStatement("Select * From invoice_data "
 					+ " Where customer_id_level1=? "
-					+ " and date_invoice_sent=? "
+					+ " and date1_receipt_of_product=? "
 					+ " and product_ids like ? "
 					+ " and quantitys like ? "
 					+ " Limit 1")){
 				pre.setString(1, customer_id_level1);
-				pre.setDate(2, date_invoice_sent);
+				pre.setDate(2, date1_receipt_of_product);
 				pre.setString(3, "%"+product_id+"`%");
 				pre.setString(4, "%"+quantity+"`%");
 				
@@ -532,7 +532,7 @@ public class ManagementHome {
 		}
 	}
 	
-	public boolean checkInvoiceRecordDuplicate(String customer_id_level1, java.sql.Date date_invoice_sent, String product_id, String quantity, int management_id) throws Exception {
+	public boolean checkInvoiceRecordDuplicate(String customer_id_level1, java.sql.Date date1_receipt_of_product, String product_id, String quantity, int management_id) throws Exception {
 		log.debug("isInvoiceRecordDuplicate");
 		Transaction tx = null;
 		Session session = null;
@@ -547,13 +547,13 @@ public class ManagementHome {
 			boolean isExist = false;
 			try(PreparedStatement pre = conn.prepareStatement("Select * From invoice_data "
 					+ " Where customer_id_level1=? "
-					+ " and date_invoice_sent=? "
+					+ " and date1_receipt_of_product=? "
 					+ " and product_ids like ? "
 					+ " and quantitys like ? "
 					+ " and management_id != ? "
 					+ " Limit 1")){
 				pre.setString(1, customer_id_level1);
-				pre.setDate(2, date_invoice_sent);
+				pre.setDate(2, date1_receipt_of_product);
 				pre.setString(3, "%"+product_id+"`%");
 				pre.setString(4, "%"+quantity+"`%");
 				pre.setInt(5, management_id);

@@ -420,12 +420,12 @@ public class InvoiceDataHome {
 					" JOIN management m ON m.id=i.management_id "+
 					" LEFT JOIN invoice_type it ON i.invoice_type_id=it.id "+
 					" WHERE  "
-					+ " (0="+(start_day==null?0:1)+" Or (date_company_received >= ? And date_company_received <= ?))"
+					+ " (0="+(start_day==null?0:1)+" Or (date1_receipt_of_product >= ? And date1_receipt_of_product <= ?))"
 					+ " AND (0="+(invoice_type<=0?0:1)+" Or (invoice_type_id=?))"
 					+ " AND (0="+(staff_id<=0?0:1)+" Or (i.staff_id=?))"
 					+ " AND (0="+(customer_id<=0?0:1)+" Or (customer_id=?) OR 0="+(customer_name.length()==0?0:1)+" OR (customer_name=?))"
 					+ " AND (0="+(sent_late<=0?0:1)+" Or (date_sent_late"+(sent_late==1?">0":"=0")+"))"
-					+ " Order by date_company_received, id";
+					+ " Order by date1_receipt_of_product, id";
 			
 			//System.out.println(sql);
 			PreparedStatement pre = conn.prepareStatement(sql);
