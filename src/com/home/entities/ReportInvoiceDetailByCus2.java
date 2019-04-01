@@ -9,8 +9,8 @@ public class ReportInvoiceDetailByCus2 {
 	public String customer2_code;
 	public String customer2_name;
 	public String customer1_name;
-	public Date date_invoice_sent;
-	public Date date_product_received;
+	public Date date1_receipt_of_product;
+	public Date date2_company_receipt_of_invoice;
 	public Integer date_sent_late;
 	public String product_ids;
 	public String product_names;
@@ -31,12 +31,6 @@ public class ReportInvoiceDetailByCus2 {
 	}
 	public String getCustomer1_name() {
 		return customer1_name;
-	}
-	public Date getDate_invoice_sent() {
-		return date_invoice_sent;
-	}
-	public Date getDate_product_received() {
-		return date_product_received;
 	}
 	public Integer getDate_sent_late() {
 		return date_sent_late;
@@ -74,12 +68,6 @@ public class ReportInvoiceDetailByCus2 {
 	public void setCustomer1_name(String customer1_name) {
 		this.customer1_name = customer1_name;
 	}
-	public void setDate_invoice_sent(Date date_invoice_sent) {
-		this.date_invoice_sent = date_invoice_sent;
-	}
-	public void setDate_product_received(Date date_product_received) {
-		this.date_product_received = date_product_received;
-	}
 	public void setDate_sent_late(Integer date_sent_late) {
 		this.date_sent_late = date_sent_late;
 	}
@@ -103,6 +91,19 @@ public class ReportInvoiceDetailByCus2 {
 	}
 	public void setSum_total_price(BigDecimal sum_total_price) {
 		this.sum_total_price = sum_total_price;
+	}
+	public Date getDate1_receipt_of_product() {
+		return date1_receipt_of_product;
+	}
+	public Date getDate2_company_receipt_of_invoice() {
+		return date2_company_receipt_of_invoice;
+	}
+	public void setDate1_receipt_of_product(Date date1_receipt_of_product) {
+		this.date1_receipt_of_product = date1_receipt_of_product;
+	}
+	public void setDate2_company_receipt_of_invoice(
+			Date date2_company_receipt_of_invoice) {
+		this.date2_company_receipt_of_invoice = date2_company_receipt_of_invoice;
 	}
 		
 	

@@ -258,8 +258,8 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 					String c3 =  StringUtil.notNull(entry.getCustomer_name());
 					String c4 =  StringUtil.notNull(entry.getCustomer_name_level1());
 					String c5 =  StringUtil.notNull(entry.getStaff_name());
-					String c6 =  StringUtil.notNull(entry.getDate_company_received());
-					String c7 =  StringUtil.notNull(entry.getDate_product_received());
+					String c6 =  StringUtil.notNull(entry.getDate2_company_receipt_of_invoice());
+					String c7 =  StringUtil.notNull(entry.getDate1_receipt_of_product());
 					String c8 =  StringUtil.notNull(entry.getDate_sent_late());
 					String c9 =  StringUtil.notNull(entry.getNotes());
 					if(c1.length() > 0){
@@ -760,8 +760,8 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 				report.setCustomer2_code(data.getCustomer_code());
 				report.setCustomer2_name(data.getCustomer_name());
 				report.setCustomer1_name(data.getCustomer_name_level1());
-				report.setDate_invoice_sent(data.getDate_invoice_sent());
-				report.setDate_product_received(data.getDate_product_received());
+				report.setDate1_receipt_of_product(data.getDate1_receipt_of_product());
+				report.setDate2_company_receipt_of_invoice(data.getDate2_company_receipt_of_invoice());
 				report.setDate_sent_late(data.getDate_sent_late());
 				report.setProduct_ids(data.getProduct_ids());
 				report.setProduct_names(data.getProduct_names());
@@ -829,7 +829,7 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 				}
 				report.setCustomer1_codes(data.getCustomer_code_level1());
 				report.setCustomer1_names(data.getCustomer_name_level1());
-				report.setDates_received(data.getDate_company_received());
+				report.setDate1_receipt_of_product(data.getDate1_receipt_of_product());
 				report.setTotal_moneys(StringUtil.notNull(sum_total_price));
 				reports.add(report);
 				

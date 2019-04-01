@@ -366,9 +366,9 @@ public class InvoiceDataHome {
 				invoice.setStaff_id_id(rs.getInt("staff_id"));
 				invoice.setStaff_name(rs.getString("staff_name"));
 				
-				invoice.setDate_company_received(rs.getDate("date_company_received"));
-				invoice.setDate_product_received(rs.getDate("date_product_received"));
-				invoice.setDate_invoice_sent(rs.getDate("date_invoice_sent"));
+				invoice.setDate1_receipt_of_product(rs.getDate("date1_receipt_of_product"));
+				invoice.setDate2_company_receipt_of_invoice(rs.getDate("date2_company_receipt_of_invoice"));
+				invoice.setDate3_cus1_delivery_invoice(rs.getDate("date3_cus1_delivery_invoice"));
 				invoice.setDate_sent_late(rs.getInt("date_sent_late"));
 				invoice.setNotes(rs.getString("notes"));
 				
@@ -477,8 +477,9 @@ public class InvoiceDataHome {
 				//invoice.setStaff_id(user);
 				invoice.setStaff_name(rs.getString("staff_name"));
 				
-				invoice.setDate_company_received(rs.getDate("date_company_received"));
-				invoice.setDate_product_received(rs.getDate("date_product_received"));
+				invoice.setDate1_receipt_of_product(rs.getDate("date1_receipt_of_product"));
+				invoice.setDate2_company_receipt_of_invoice(rs.getDate("date2_company_receipt_of_invoice"));
+				invoice.setDate3_cus1_delivery_invoice(rs.getDate("date3_cus1_delivery_invoice"));
 				invoice.setDate_sent_late(rs.getInt("date_sent_late"));
 				invoice.setNotes(rs.getString("notes"));
 				
@@ -550,9 +551,9 @@ public class InvoiceDataHome {
 			invoice.setStaff_id(user);
 			invoice.setStaff_name(StringUtil.notNull(rs.getString("staff_name")));
 			
-			invoice.setDate_invoice_sent(rs.getDate("date_invoice_sent"));
-			invoice.setDate_company_received(rs.getDate("date_company_received"));
-			invoice.setDate_product_received(rs.getDate("date_product_received"));
+			invoice.setDate1_receipt_of_product(rs.getDate("date1_receipt_of_product"));
+			invoice.setDate2_company_receipt_of_invoice(rs.getDate("date2_company_receipt_of_invoice"));
+			invoice.setDate3_cus1_delivery_invoice(rs.getDate("date3_cus1_delivery_invoice"));
 			invoice.setDate_sent_late(rs.getInt("date_sent_late"));
 			invoice.setNotes(StringUtil.notNull(rs.getString("notes")));
 			

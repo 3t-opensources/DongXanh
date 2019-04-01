@@ -20,9 +20,9 @@ public class InvoiceData {
 	public User staff_id;
 	public int staff_id_id;
 	public String staff_name;
-	public Date date_invoice_sent;// moi them vao
-	public Date date_company_received;
-	public Date date_product_received;
+	public Date date1_receipt_of_product;
+	public Date date2_company_receipt_of_invoice;
+	public Date date3_cus1_delivery_invoice;
 	public Integer date_sent_late;
 	public String notes;
 	public String product_ids;
@@ -77,12 +77,6 @@ public class InvoiceData {
 	}
 	public String getStaff_name() {
 		return staff_name;
-	}
-	public Date getDate_company_received() {
-		return date_company_received;
-	}
-	public Date getDate_product_received() {
-		return date_product_received;
 	}
 	public Integer getDate_sent_late() {
 		return date_sent_late;
@@ -141,12 +135,6 @@ public class InvoiceData {
 	public void setStaff_name(String staff_name) {
 		this.staff_name = staff_name;
 	}
-	public void setDate_company_received(Date date_company_received) {
-		this.date_company_received = date_company_received;
-	}
-	public void setDate_product_received(Date date_product_received) {
-		this.date_product_received = date_product_received;
-	}
 	public void setDate_sent_late(Integer date_sent_late) {
 		this.date_sent_late = date_sent_late;
 	}
@@ -171,12 +159,6 @@ public class InvoiceData {
 	public void setSum_total_price(BigDecimal sum_total_price) {
 		this.sum_total_price = sum_total_price;
 	}
-	public Date getDate_invoice_sent() {
-		return date_invoice_sent;
-	}
-	public void setDate_invoice_sent(Date date_invoice_sent) {
-		this.date_invoice_sent = date_invoice_sent;
-	}
 	public int getCustomer_id_id() {
 		return customer_id_id;
 	}
@@ -196,4 +178,23 @@ public class InvoiceData {
 		this.staff_id_id = staff_id_id;
 	}
 		
+	public Date getDate1_receipt_of_product() {
+		return date1_receipt_of_product;
+	}
+	public Date getDate2_company_receipt_of_invoice() {
+		return date2_company_receipt_of_invoice;
+	}
+	public Date getDate3_cus1_delivery_invoice() {
+		return date3_cus1_delivery_invoice;
+	}
+	public void setDate1_receipt_of_product(Date date1_receipt_of_product) {
+		this.date1_receipt_of_product = date1_receipt_of_product;
+	}
+	public void setDate2_company_receipt_of_invoice(
+			Date date2_company_receipt_of_invoice) {
+		this.date2_company_receipt_of_invoice = date2_company_receipt_of_invoice;
+	}
+	public void setDate3_cus1_delivery_invoice(Date date3_cus1_delivery_invoice) {
+		this.date3_cus1_delivery_invoice = date3_cus1_delivery_invoice;
+	}
 }

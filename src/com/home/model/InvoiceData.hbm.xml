@@ -41,14 +41,14 @@
          <property name="staff_name" type="string">
             <column name="staff_name" length="200" />
         </property>
-         <property name="date_invoice_sent" type="date">
-            <column name="date_invoice_sent" length="0" />
+         <property name="date1_receipt_of_product" type="date">
+            <column name="date1_receipt_of_product" length="0" />
         </property>
-        <property name="date_company_received" type="date">
-            <column name="date_company_received" length="0" />
+        <property name="date2_company_receipt_of_invoice" type="date">
+            <column name="date2_company_receipt_of_invoice" length="0" />
         </property>
-        <property name="date_product_received" type="date">
-            <column name="date_product_received" length="0" />
+        <property name="date3_cus1_delivery_invoice" type="date">
+            <column name="date3_cus1_delivery_invoice" length="0" />
         </property>
         <property name="date_sent_late" type="java.lang.Integer">
             <column name="date_sent_late" />

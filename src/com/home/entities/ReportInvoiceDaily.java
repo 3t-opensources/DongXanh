@@ -7,7 +7,7 @@ public class ReportInvoiceDaily {
 	public String staff_name;
 	public String customer1_codes;
 	public String customer1_names;
-	public Date dates_received;
+	public Date date1_receipt_of_product;
 	public String total_moneys;
 	public int getNo() {
 		return no;
@@ -20,9 +20,6 @@ public class ReportInvoiceDaily {
 	}
 	public String getCustomer1_names() {
 		return customer1_names;
-	}
-	public Date getDates_received() {
-		return dates_received;
 	}
 	public String getTotal_moneys() {
 		return total_moneys;
@@ -39,11 +36,14 @@ public class ReportInvoiceDaily {
 	public void setCustomer1_names(String customer1_names) {
 		this.customer1_names = customer1_names;
 	}
-	public void setDates_received(Date dates_received) {
-		this.dates_received = dates_received;
-	}
 	public void setTotal_moneys(String total_moneys) {
 		this.total_moneys = total_moneys;
+	}
+	public Date getDate1_receipt_of_product() {
+		return date1_receipt_of_product;
+	}
+	public void setDate1_receipt_of_product(Date date1_receipt_of_product) {
+		this.date1_receipt_of_product = date1_receipt_of_product;
 	}
 	
 	

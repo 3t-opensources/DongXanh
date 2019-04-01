@@ -17,9 +17,9 @@ public class EntInvoiceData {
 	private String customer_name_level1;
 	private String staff_id;
 	private String staff_name;
-	private Date date_company_received;
-	private Date date_product_received;
-	private Date date_delivery;
+	private Date date1_receipt_of_product;
+	private Date date2_company_receipt_of_invoice;
+	private Date date3_cus1_delivery_invoice;
 	private String date_sent_late;
 	private String notes;
 	private String product_ids;
@@ -86,13 +86,6 @@ public class EntInvoiceData {
 		return staff_name;
 	}
 
-	public Date getDate_company_received() {
-		return date_company_received;
-	}
-
-	public Date getDate_product_received() {
-		return date_product_received;
-	}
 
 	public String getDate_sent_late() {
 		return date_sent_late;
@@ -174,13 +167,6 @@ public class EntInvoiceData {
 		this.staff_name = staff_name;
 	}
 
-	public void setDate_company_received(Date date_company_received) {
-		this.date_company_received = date_company_received;
-	}
-
-	public void setDate_product_received(Date date_product_received) {
-		this.date_product_received = date_product_received;
-	}
 
 	public void setDate_sent_late(String date_sent_late) {
 		this.date_sent_late = date_sent_late;
@@ -214,13 +200,32 @@ public class EntInvoiceData {
 		this.sum_total_price = sum_total_price;
 	}
 	
-	public Date getDate_delivery() {
-		return date_delivery;
+
+	public Date getDate1_receipt_of_product() {
+		return date1_receipt_of_product;
 	}
 
-	public void setDate_delivery(Date date_delivery) {
-		this.date_delivery = date_delivery;
+	public Date getDate2_company_receipt_of_invoice() {
+		return date2_company_receipt_of_invoice;
 	}
+
+	public Date getDate3_cus1_delivery_invoice() {
+		return date3_cus1_delivery_invoice;
+	}
+
+	public void setDate1_receipt_of_product(Date date1_receipt_of_product) {
+		this.date1_receipt_of_product = date1_receipt_of_product;
+	}
+
+	public void setDate2_company_receipt_of_invoice(
+			Date date2_company_receipt_of_invoice) {
+		this.date2_company_receipt_of_invoice = date2_company_receipt_of_invoice;
+	}
+
+	public void setDate3_cus1_delivery_invoice(Date date3_cus1_delivery_invoice) {
+		this.date3_cus1_delivery_invoice = date3_cus1_delivery_invoice;
+	}
+	
 
 	@Override
 	public String toString() {
