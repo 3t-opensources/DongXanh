@@ -586,7 +586,7 @@ public class InvoiceDataHome {
 
 			String sql = "SELECT d.* FROM management m JOIN invoice_data d ON m.id = d.management_id "
 					+ " WHERE  "
-					+ " (0="+(start_day==null?0:1)+" Or (created_time >= ? And created_time <= ?)) AND customer_id_level1 is not null"
+					+ " (0="+(start_day==null?0:1)+" Or (date1_receipt_of_product >= ? And date1_receipt_of_product <= ?)) AND customer_id_level1 is not null"
 					+ " ORDER BY customer_id_level1";
 			
 			//System.out.println(sql);
@@ -630,7 +630,7 @@ public class InvoiceDataHome {
 
 			String sql = "SELECT d.* FROM management m JOIN invoice_data d ON m.id = d.management_id "
 					+ " WHERE  "
-					+ " (0="+(start_day==null?0:1)+" Or (created_time >= ? And created_time <= ?)) "
+					+ " (0="+(start_day==null?0:1)+" Or (date1_receipt_of_product >= ? And date1_receipt_of_product <= ?)) "
 					+ " AND (0="+(staff_id<=0?0:1)+" Or (d.staff_id=?)) AND staff_name is not null"
 					+ " ORDER BY staff_id";
 			
@@ -676,7 +676,7 @@ public class InvoiceDataHome {
 
 			String sql = "SELECT d.* FROM management m JOIN invoice_data d ON m.id = d.management_id "
 					+ " WHERE  "
-					+ " (0="+(start_day==null?0:1)+" Or (created_time >= ? And created_time <= ?))  AND customer_code is not null"
+					+ " (0="+(start_day==null?0:1)+" Or (date1_receipt_of_product >= ? And date1_receipt_of_product <= ?))  AND customer_code is not null"
 					+ " AND (0="+(customer_id<=0?0:1)+" Or (customer_id=?))"
 					+ " ORDER BY customer_id";
 			
@@ -722,7 +722,7 @@ public class InvoiceDataHome {
 
 			String sql = "SELECT d.* FROM management m JOIN invoice_data d ON m.id = d.management_id "
 					+ " WHERE  "
-					+ " (0="+(start_day==null?0:1)+" Or (created_time >= ? And created_time <= ?))  AND customer_code is not null"
+					+ " (0="+(start_day==null?0:1)+" Or (date1_receipt_of_product >= ? And date1_receipt_of_product <= ?))  AND customer_code is not null"
 					+ " AND (0="+(customer_id<=0?0:1)+" Or (customer_id=?))"
 					+ " ORDER BY customer_id";
 			
@@ -768,7 +768,7 @@ public class InvoiceDataHome {
 
 			String sql = "SELECT d.* FROM management m JOIN invoice_data d ON m.id = d.management_id "
 					+ " WHERE  "
-					+ " (0="+(start_day==null?0:1)+" Or (created_time >= ? And created_time <= ?)) "
+					+ " (0="+(start_day==null?0:1)+" Or (date1_receipt_of_product >= ? And date1_receipt_of_product <= ?)) "
 					+ " AND (0="+(staff_id<=0?0:1)+" Or (d.staff_id=?)) AND staff_id is not null AND customer_id_level1 is not null"
 					+ " ORDER BY staff_id, customer_id_level1";
 			
@@ -865,7 +865,7 @@ public class InvoiceDataHome {
 			String sql = "SELECT d.product_ids, d.quantitys "
 					+ " FROM management m JOIN invoice_data d "
 					+ " ON m.id = d.management_id "
-					+ " WHERE d.product_ids like ? and d.customer_id_level1=? AND (m.created_time >= ? And m.created_time < ?)";
+					+ " WHERE d.product_ids like ? and d.customer_id_level1=? AND (m.date1_receipt_of_product >= ? And m.date1_receipt_of_product < ?)";
 			
 			//System.out.println(sql);
 			PreparedStatement pre = conn.prepareStatement(sql);
@@ -953,7 +953,7 @@ public class InvoiceDataHome {
 					+ " AND id not in ("
 					+ "Select customer_id_level1 FROM management m JOIN invoice_data d ON m.id = d.management_id "
 					+ " WHERE  "
-					+ " (0="+(start_day==null?0:1)+" Or (created_time >= ? And created_time <= ?)) "
+					+ " (0="+(start_day==null?0:1)+" Or (date1_receipt_of_product >= ? And date1_receipt_of_product <= ?)) "
 					+ " AND (0="+(staff_id<=0?0:1)+" Or (d.staff_id=?)) AND customer_id_level1 is not null"
 					+ ")";
 			
@@ -1001,7 +1001,7 @@ public class InvoiceDataHome {
 
 			String sql =  "Select sum_total_price FROM management m JOIN invoice_data d ON m.id = d.management_id "
 					+ " WHERE  "
-					+ " (0="+(start_day==null?0:1)+" Or (created_time >= ? And created_time <= ?)) "
+					+ " (0="+(start_day==null?0:1)+" Or (date1_receipt_of_product >= ? And date1_receipt_of_product <= ?)) "
 					+ " AND (0="+(staff_id<=0?0:1)+" Or (d.staff_id=?)) AND staff_name is not null";
 			
 			//System.out.println(sql);
@@ -1050,7 +1050,7 @@ public class InvoiceDataHome {
 
 			String sql =  "Select sum_total_price FROM management m JOIN invoice_data d ON m.id = d.management_id "
 					+ " WHERE  "
-					+ " (0="+(start_day==null?0:1)+" Or (created_time >= ? And created_time <= ?)) "
+					+ " (0="+(start_day==null?0:1)+" Or (date1_receipt_of_product >= ? And date1_receipt_of_product <= ?)) "
 					+ " AND (0="+(customer_id<=0?0:1)+" Or (d.customer_id=?)) AND customer_name is not null";
 			
 			//System.out.println(sql);
