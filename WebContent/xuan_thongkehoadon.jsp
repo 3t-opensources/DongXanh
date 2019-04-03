@@ -906,15 +906,16 @@ pageEncoding="UTF-8"%>
 	  	        		var customer_name_level1 =responseText[i].customer_name_level1;
 	  	        		var staff_name           =responseText[i].staff_name;
 	  	        		
-	  	        		var date_company_received =responseText[i].date_company_received;
-	  	        		var date_product_received =responseText[i].date_product_received;
+	  	        		var date1_receipt_of_product =responseText[i].date1_receipt_of_product;
+	  	        		var date2_company_receipt_of_invoice =responseText[i].date2_company_receipt_of_invoice;
+	  	        	
 	  	        		var date_sent_late        =responseText[i].date_sent_late;
 	  	        		var notes                 =responseText[i].notes;
-	  	        		if(date_company_received!=null && date_company_received.length>10){
-	  	        			date_company_received = date_company_received.substring(8,10)+"/"+date_company_received.substring(5,7)+"/"+date_company_received.substring(0,4);
+	  	        		if(date1_receipt_of_product!=null && date1_receipt_of_product.length>10){
+	  	        			date1_receipt_of_product = date1_receipt_of_product.substring(8,10)+"/"+date1_receipt_of_product.substring(5,7)+"/"+date1_receipt_of_product.substring(0,4);
 	  	        		}
-	  	        		if(date_product_received!=null && date_product_received.length>10){
-	  	        			date_product_received = date_product_received.substring(8,10)+"/"+date_product_received.substring(5,7)+"/"+date_product_received.substring(0,4);
+	  	        		if(date2_company_receipt_of_invoice!=null && date2_company_receipt_of_invoice.length>10){
+	  	        			date2_company_receipt_of_invoice = date2_company_receipt_of_invoice.substring(8,10)+"/"+date2_company_receipt_of_invoice.substring(5,7)+"/"+date2_company_receipt_of_invoice.substring(0,4);
 	  	        		}
 	  	        		if(responseText[i].product_ids!=null){
 	  	        			var product_ids           = responseText[i].product_ids.split("`");
@@ -956,8 +957,8 @@ pageEncoding="UTF-8"%>
 				  	        		table +="     <td  ondblclick = 'CaptureRework("+responseText[i].id+")'>"+customer_name+"</td>";
 				  	        		table +="     <td>"+customer_name_level1+"</td>";
 				  	        		table +="     <td>"+staff_name+"</td>";
-				  	        		table +="     <td class='right'>"+date_company_received+"</td>";
-				  	            	table +="     <td class='right'>"+date_product_received+"</td>";
+				  	        		table +="     <td class='right'>"+date2_company_receipt_of_invoice+"</td>";
+				  	            	table +="     <td class='right'>"+date1_receipt_of_product+"</td>";
 				  	        		table +="     <td>"+date_sent_late+"</td>";
 				  	        		table +="     <td>"+notes+"</td>";  
 				  	        		
@@ -1364,7 +1365,8 @@ pageEncoding="UTF-8"%>
 	              url     : "getReportInvoiceDailyAction?staff_id="+staff_id+"&end_day="+end_day+"&start_day="+start_day,	              
 	              data    : "",
 	              success : function(responseText) {		            	 
-	            	  console.log("=============991============");	            	 
+	            	  console.log("=============991============");	        
+	            	  console.log(responseText);
 	            		
 	            		  var table ="";
 			           	    table +="<table id='table_thong_ke_theo_ngay' class='table table-striped table-bordered table table-hover' cellspacing='0' width='100%'>";

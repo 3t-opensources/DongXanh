@@ -143,6 +143,7 @@ pageEncoding="UTF-8"%>
     	 setTimeout(function() { 
     		  var stt  = i+1;
     		  var size = file.size ;
+    		  var lastModified = file.lastModified;
     		  var dungluong ="";
     		  size = size /1024;
     		  if(size> 1024){
@@ -154,11 +155,10 @@ pageEncoding="UTF-8"%>
     			 dungluong = size+"KB"; 
     		  }
     		
-    		   var time_id   = new Date().getTime();
-    		  // console.log(time_id);
+    		   var time_id   = new Date().getTime();    		
     		   var time_img  = "img_"+time_id;
    			   var reader = new FileReader();    			  
-   			   $('#table_list_file').append("<tr id='"+time_id+"'><td>"+stt+"</td><td> <img id='"+time_img+"' height='100' width='100'/></td><td id ='name_"+time_id+"'>"+file.webkitRelativePath+"</td><td>"+dungluong+"</td></tr>"); 
+   			   $('#table_list_file').append("<tr id='"+time_id+"'><td id ='modified_"+time_id+"' style='display: none'>"+lastModified+"</td><td >"+stt+"</td><td> <img id='"+time_img+"' height='100' width='100'/></td><td id ='name_"+time_id+"'>"+file.webkitRelativePath+"</td><td>"+dungluong+"</td></tr>"); 
    			   reader.onload = function() {    			  		
    		    	      var dataURL = reader.result;
    		    	      var output  = document.getElementById(time_img);
@@ -214,9 +214,11 @@ pageEncoding="UTF-8"%>
 	   });
 	   $('#table_list_file > tbody  > tr').each(function() {		 
 		   stt ++;
+		 
 		  // console.log("name_"+this.getAttribute("id"));
 		  // console.log($("#name_"+this.getAttribute("id")).html());
 		   var id_tr = this.getAttribute("id");
+		 
 		   $.ajax({
 			   async: false,
 	           dataType: 'json',
@@ -227,7 +229,8 @@ pageEncoding="UTF-8"%>
 			 		jobs:[ 
 			 	         {  file_name: $("#name_"+id_tr).html(), 
 			 	        	base64: document.getElementById("img_"+id_tr).getAttribute("src"), 
-			 	        	user_name: document.getElementById("profile_username").textContent
+			 	        	user_name: document.getElementById("profile_username").textContent,
+			 	        	last_modified:$("#modified_"+id_tr).html()
 			 	        	} 
 			 	         ] 
 			   	}) ,	           

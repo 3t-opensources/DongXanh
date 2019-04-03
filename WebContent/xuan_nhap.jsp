@@ -457,8 +457,7 @@ function getJobCaptureReworkAction(id){
 }
 
 
-function getjob(){
-	
+function getjob(){	
 	 var user_id                  = document.getElementById("user_id").value ;
 	 $.ajax({  		
 	       type: "GET",
