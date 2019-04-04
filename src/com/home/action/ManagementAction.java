@@ -164,7 +164,7 @@ public class ManagementAction extends ActionSupport implements ServletContextAwa
 				ImageIO.write(buff, FilenameUtils.getExtension(job.getFile_name()).toLowerCase().replace("jpg", "jpeg"), output);
 				String hash_file = HashGeneratorUtils.generateMD5(output);
 				if(notDuplicate(managementHome, hash_file)){
-					importImage2DB(managementHome, output, hash_file, job.getUser_name());
+					importImage2DB(managementHome, output, hash_file, job.getUser_name(), job.getLast_modified());
 					strMess.append("Import successed["+output.getName()+"];");
 				}else{
 					rsStatus = 1;
@@ -213,7 +213,7 @@ public class ManagementAction extends ActionSupport implements ServletContextAwa
 				FileUtils.copyFile(files[i], output);
 				String hash_file = HashGeneratorUtils.generateMD5(output);
 				if(notDuplicate(managementHome, hash_file)){
-					importImage2DB(managementHome, output, hash_file, user_name);
+					importImage2DB(managementHome, output, hash_file, user_name, null);
 					strMess.append("Import successed["+output.getName()+"];");
 				}else{
 					rsStatus = 1;
@@ -272,7 +272,7 @@ public class ManagementAction extends ActionSupport implements ServletContextAwa
 		return false;
 	}
 
-	private void importImage2DB(ManagementHome managementHome, File file, String hash_file, String user_name) throws Exception{
+	private void importImage2DB(ManagementHome managementHome, File file, String hash_file, String user_name, String last_modified) throws Exception{
 		try {
 			Management management = new Management();
 			management.setFile_path(file.getParent().replace("\\", "/"));
@@ -290,6 +290,10 @@ public class ManagementAction extends ActionSupport implements ServletContextAwa
 
 			InvoiceData invoiceData = new InvoiceData();
 			invoiceData.setManagement_id(management);
+			try {
+				invoiceData.setDate1_receipt_of_product(new java.sql.Timestamp(new Date().getTime()));
+				invoiceData.setDate2_company_receipt_of_invoice(new Date(Long.parseLong(last_modified)));
+			} catch (Exception e) {}
 			managementHome.attachDirty(invoiceData);
 			System.out.println("File " + file.getName() + " imported!");
 		} catch (Exception e) {

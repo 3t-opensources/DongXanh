@@ -6,7 +6,14 @@ public class JobImport {
 	private String file_name = "";
 	private String base64 = "";
 	private String user_name = "";
+	private String last_modified = "";
 
+	public String getLast_modified() {
+		return last_modified;
+	}
+	public void setLast_modified(String last_modified) {
+		this.last_modified = last_modified;
+	}
 	public String getFile_name() {
 		return file_name;
 	}
