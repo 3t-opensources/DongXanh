@@ -1708,7 +1708,7 @@ function tinhtong(id){
 	   var day                = document.getElementById("ngaynhanhang").value ;
 	   var customer_id_level1 = document.getElementById("customer_id_level1_hidden").value ;
 	   var management_id      = document.getElementById("management_id").value ;
-	 alert(customer_id_level1);
+	
 	   	 $.ajax({  		
 	   	       type: "GET",
 	              url     : "getDuplicateInvoiceRecordAction?management_id="+management_id+"&quantity="+quantity+"&product_id="+product_id+"&day="+day+"&customer_id_level1="+customer_id_level1,	          
