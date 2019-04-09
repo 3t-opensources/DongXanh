@@ -95,7 +95,7 @@
 					class="fa fa-chevron-down"></span></a>
 				<ul class="nav child_menu" style="display: none">
 					<li><s:url action="themmoi"       var="billAdd">      </s:url><s:a href="%{billAdd}"> Thêm mới </s:a></li>
-					<li><s:url action="nhap"          var="billInput" />     <s:a href="%{billInput}"> Nhập hóa đơn </s:a></li>					
+					<li><s:url action="nhap"          var="billInput" />     <s:a href="%{billInput}" target="_blank"> Nhập hóa đơn </s:a></li>	
 					<li><s:url action="thongkehoadon" var="billstatic"></s:url>	<s:a href="%{billstatic}"> Thống kê hóa đơn</s:a></li>
 				
 				</ul></li>

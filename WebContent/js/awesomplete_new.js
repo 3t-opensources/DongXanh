@@ -273,6 +273,7 @@ _.prototype = {
 
 			// scroll to highlighted element in case parent's height is fixed
 			this.ul.scrollTop = lis[i].offsetTop - this.ul.clientHeight + lis[i].clientHeight;
+		
 
 			$.fire(this.input, "awesomplete-highlight", {
 				text: this.suggestions[this.index]

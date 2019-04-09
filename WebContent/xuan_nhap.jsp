@@ -99,7 +99,7 @@
         			  
         			  
     	                <div class="well"><p align="center">
-		    	                <a  href="homeAction"><button  style="width: 120px!important;" class="btn btn-success"> Home </button></a>
+		    	                <a  href="homeAction" onclick="return goHome();"><button  style="width: 120px!important;" class="btn btn-success"  > Home </button></a>
 				                 <button style="width: 120px!important;" title="Alt +S" type="button" id ="btn_xoabangke"  class="btn btn-success" onclick="bad_images();">Xóa toa/bảng kê</button>			  
 				            	 <button style="width: 120px!important;" title="Alt +D" id ="btn_Luubangke"  class="btn btn-success" onclick="saveData();">Lưu toa/bảng kê</button>			  
                       	</div>
@@ -481,7 +481,8 @@ function getjob(){
            	    	ngaynhantoa = ngaynhantoa_date.substring(8,10)+"/"+ngaynhantoa_date.substring(5,7)+"/"+ngaynhantoa_date.substring(0,4);
            	        document.getElementById("ngaycap1giaotoa").value      = "" ;
            	        document.getElementById("ngaynhantoa").value          = ngaynhantoa ;
-           	        document.getElementById("ngaynhanhang").value         = ngaynhantoa ;
+           	       // document.getElementById("ngaynhanhang").value         = ngaynhantoa ;
+           	        document.getElementById("ngaynhanhang").value         = "" ;
            	     }
            	   
            	  
@@ -512,7 +513,13 @@ function getjob(){
 
 }
 
-
+function goHome(){
+	var result = confirm("bạn có chắt chắn trở về trang chủ?");
+	if (result) {
+		return true;
+	}
+	return false;
+}
 function bad_images(){	
 	var result = confirm("bạn có chắt chắn chắn xóa hóa đơn này?");
 	if (result) {
@@ -817,7 +824,7 @@ function checktable(){
 			flag = false;
 			return false;
 	  }
-	  if(nvtt_name==null || nvtt_name.trim()=='' ){
+	   /* if(nvtt_name==null || nvtt_name.trim()=='' ){
 		    alert("NVTT không được rỗng!");
 		    document.getElementById("nvtt_name").focus();
 			flag = false;
@@ -829,8 +836,8 @@ function checktable(){
 		    document.getElementById("nvtt_name").focus();
 			flag = false;
 			return false;
-	  }
-	
+	  } */
+	 
 	  
 	 
 	  
@@ -1701,7 +1708,7 @@ function tinhtong(id){
 	   var day                = document.getElementById("ngaynhanhang").value ;
 	   var customer_id_level1 = document.getElementById("customer_id_level1_hidden").value ;
 	   var management_id      = document.getElementById("management_id").value ;
-	   
+	 
 	   	 $.ajax({  		
 	   	       type: "GET",
 	              url     : "getDuplicateInvoiceRecordAction?management_id="+management_id+"&quantity="+quantity+"&product_id="+product_id+"&day="+day+"&customer_id_level1="+customer_id_level1,	          
