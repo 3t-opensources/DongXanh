@@ -236,14 +236,14 @@ pageEncoding="UTF-8"%>
 			   	}) ,	           
 	           success : function(responseText) {	   
 	        	   if(responseText.statusError==1){
-	        		  alert(responseText.message );
+	        		 
 	        	   }else{
 	        		   $("#"+id_tr).remove(); 
 	        	   }
 	        	   
 	        	   // load lai table 
 	        	   if(stt==sum){
-	        		   LoadTableDetail();
+	        		   LoadTableDetail();	        		  
 	        		   alert("Inport thanh cong!");
 	        	   }
 	        	  

@@ -99,7 +99,7 @@
         			  
         			  
     	                <div class="well"><p align="center">
-		    	                <a  href="homeAction" onclick="return goHome();"><button  style="width: 120px!important;" class="btn btn-success"  > Home </button></a>
+		    	             <!--    <a  href="homeAction" onclick="return goHome();"><button  style="width: 120px!important;" class="btn btn-success"  > Home </button></a> -->
 				                 <button style="width: 120px!important;" title="Alt +S" type="button" id ="btn_xoabangke"  class="btn btn-success" onclick="bad_images();">Xóa toa/bảng kê</button>			  
 				            	 <button style="width: 120px!important;" title="Alt +D" id ="btn_Luubangke"  class="btn btn-success" onclick="saveData();">Lưu toa/bảng kê</button>			  
                       	</div>
@@ -1261,7 +1261,7 @@ $(document).bind('keydown',function(e) {
 		var customer_code_level1_hidden   = document.getElementById("customer_code_level1_hidden");
 		var customer_name_level1          = document.getElementById("customer_name_level1");
 		
-		var khachhang_ma = new LookupKhachHang(maKH, tenKH, customer_name_level1, nvtt_name,customer_code_level1_hidden,nvtt_id_hidden,customer_id_hidden,customer_code_level1_hidden, 1, {		
+		var khachhang_ma = new LookupKhachHang(maKH, tenKH, customer_name_level1, nvtt_name,customer_id_level1_hidden,nvtt_id_hidden,customer_id_hidden,customer_code_level1_hidden, 1, {		
 			  minChars: 1,
 			  maxItems: 20,
 			  autoFirst: true
@@ -1395,7 +1395,7 @@ $(document).bind('keydown',function(e) {
 		           url     : 'lookupCaptureCusStaffAction?search_cus='+ name,	          
 		           data    : "",
 		           success : function(responseText) {
-		        	
+		        	console.log(responseText);
 		        	 var stt =0;
 		        	 var resultjson = [];
 	 	        	 for (i in responseText) { 
@@ -1708,7 +1708,7 @@ function tinhtong(id){
 	   var day                = document.getElementById("ngaynhanhang").value ;
 	   var customer_id_level1 = document.getElementById("customer_id_level1_hidden").value ;
 	   var management_id      = document.getElementById("management_id").value ;
-	 
+	 alert(customer_id_level1);
 	   	 $.ajax({  		
 	   	       type: "GET",
 	              url     : "getDuplicateInvoiceRecordAction?management_id="+management_id+"&quantity="+quantity+"&product_id="+product_id+"&day="+day+"&customer_id_level1="+customer_id_level1,	          
