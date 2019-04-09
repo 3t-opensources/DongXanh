@@ -344,13 +344,13 @@ public class ManagementHome {
 			Statement st = conn.createStatement();
 			
 			//Query query = session.createQuery("FROM Management WHERE step=1 AND duplicate_status=0 AND present_user="+present_user+" ORDER BY id");
-			try(ResultSet rs1 = st.executeQuery("Select m.*, i.id as invoice_data_id  From management m JOIN invoice_data i "
+			try(ResultSet rs1 = st.executeQuery("Select m.*, i.id as invoice_data_id, i.date2_company_receipt_of_invoice  From management m JOIN invoice_data i "
 					+ " ON m.id = i.management_id"
 					+ " WHERE step=1 AND duplicate_status=0 AND present_user="+present_user+" ORDER BY id")) {
 				results = ResultSetUtils.parserResultSet(rs1, Management.class);
 				if(results == null || results.isEmpty()){
 					//query = session.createQuery("FROM Management WHERE step=1 AND duplicate_status=0 AND present_user=0 ORDER BY id Limit " + limit);
-					try(ResultSet rs2 = st.executeQuery("Select m.*, i.id as invoice_data_id  From management m JOIN invoice_data i "
+					try(ResultSet rs2 = st.executeQuery("Select m.*, i.id as invoice_data_id, i.date2_company_receipt_of_invoice  From management m JOIN invoice_data i "
 							+ " ON m.id = i.management_id"
 							+ " WHERE step=1 AND duplicate_status=0 AND present_user=0 ORDER BY id Limit " + limit)){
 						 results = ResultSetUtils.parserResultSet(rs2, Management.class);

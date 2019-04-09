@@ -403,13 +403,18 @@ public class ManagementAction extends ActionSupport implements ServletContextAwa
 				User user = new User();
 				user.setId(Integer.parseInt(data.getStaff_id()));
 				invoice_data.setStaff_id(user);
+				invoice_data.setStaff_name(data.getStaff_name()) ;
+				
 				if(user.getId() == 0){
-					invoice_data.setStaff_id(null);
+					System.out.println(0/0);
 				}
 			} catch (Exception e) {
-				invoice_data.setStaff_id(null);
+				User user = new User();
+				user.setId(-1);
+				invoice_data.setStaff_id(user);
+				invoice_data.setStaff_name("Unknown") ;
 			}
-			invoice_data.setStaff_name(data.getStaff_name()) ;
+			
 			invoice_data.setDate1_receipt_of_product(data.getDate1_receipt_of_product());
 			invoice_data.setDate2_company_receipt_of_invoice(data.getDate2_company_receipt_of_invoice());
 			invoice_data.setDate3_cus1_delivery_invoice(data.getDate3_cus1_delivery_invoice());
@@ -430,9 +435,9 @@ public class ManagementAction extends ActionSupport implements ServletContextAwa
 
 			home.saveJobCapture(management_id, invoice_data);
 
-			System.out.println("Save job done!");
+			System.out.println("Save job["+management_id+"] done!");
 			rsMess.setStatusError(0);
-			rsMess.setMessage("Save job done!");
+			rsMess.setMessage("Save job["+management_id+"] done!");
 			result = rsMess;//rsMess.toString();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -706,13 +711,10 @@ public class ManagementAction extends ActionSupport implements ServletContextAwa
 				quantity = "" + Integer.parseInt(StringUtil.notNull(request.getParameter("quantity")));
 				String str_day = StringUtil.notNull(request.getParameter("day"));
 				day = new java.sql.Date(DateUtils.getDateFromString(str_day, "dd/MM/yyyy").getTime());
-				System.out.println(day+"============"+customer_id_level1+"==========="+product_id);
-				try {
-					management_id = Integer.parseInt(StringUtil.notNull(request.getParameter("management_id")));
-				} catch (Exception e) {}
+				//System.out.println(day+"============"+customer_id_level1+"==========="+product_id);
+				management_id = Integer.parseInt(StringUtil.notNull(request.getParameter("management_id")));
 			} catch (Exception e) {
-				
-				throw new Exception("List params[customer_id_level1/day/product_id/quantity] invalid, error: " + e.toString());
+				throw new Exception("List params[customer_id_level1/day/product_id/quantity/management_id] invalid, error: " + e.toString());
 			}
 			
 			boolean exist = home.checkInvoiceRecordDuplicate(customer_id_level1, day, product_id, quantity, management_id);

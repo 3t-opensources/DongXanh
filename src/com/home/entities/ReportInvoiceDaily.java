@@ -8,6 +8,14 @@ public class ReportInvoiceDaily {
 	public String customer1_codes;
 	public String customer1_names;
 	public Date date1_receipt_of_product;
+	public Date date2_company_receipt_of_invoice;
+	public Date getDate2_company_receipt_of_invoice() {
+		return date2_company_receipt_of_invoice;
+	}
+	public void setDate2_company_receipt_of_invoice(
+			Date date2_company_receipt_of_invoice) {
+		this.date2_company_receipt_of_invoice = date2_company_receipt_of_invoice;
+	}
 	public String total_moneys;
 	public int getNo() {
 		return no;

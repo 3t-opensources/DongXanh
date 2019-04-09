@@ -18,7 +18,15 @@ public class Management {
 	public Integer present_user;
 	public Integer invoice_data_id;
 	public InvoiceData invoice_data;
+	public Date date2_company_receipt_of_invoice;
 	
+	public Date getDate2_company_receipt_of_invoice() {
+		return date2_company_receipt_of_invoice;
+	}
+	public void setDate2_company_receipt_of_invoice(
+			Date date2_company_receipt_of_invoice) {
+		this.date2_company_receipt_of_invoice = date2_company_receipt_of_invoice;
+	}
 	public InvoiceData getInvoice_data() {
 		return invoice_data;
 	}

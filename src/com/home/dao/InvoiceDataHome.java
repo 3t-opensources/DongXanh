@@ -419,7 +419,7 @@ public class InvoiceDataHome {
 					" FROM invoice_data i "+
 					" JOIN management m ON m.id=i.management_id "+
 					" LEFT JOIN invoice_type it ON i.invoice_type_id=it.id "+
-					" WHERE  "
+					" WHERE  duplicate_status=0 AND "
 					+ " (0="+(start_day==null?0:1)+" Or (date1_receipt_of_product >= ? And date1_receipt_of_product <= ?))"
 					+ " AND (0="+(invoice_type<=0?0:1)+" Or (invoice_type_id=?))"
 					+ " AND (0="+(staff_id<=0?0:1)+" Or (i.staff_id=?))"
@@ -585,7 +585,7 @@ public class InvoiceDataHome {
 			Connection conn = sessionImpl.connection();
 
 			String sql = "SELECT d.* FROM management m JOIN invoice_data d ON m.id = d.management_id "
-					+ " WHERE  "
+					+ " WHERE  duplicate_status=0 AND "
 					+ " (0="+(start_day==null?0:1)+" Or (date1_receipt_of_product >= ? And date1_receipt_of_product <= ?)) AND customer_id_level1 is not null"
 					+ " ORDER BY customer_id_level1";
 			
@@ -629,7 +629,7 @@ public class InvoiceDataHome {
 			Connection conn = sessionImpl.connection();
 
 			String sql = "SELECT d.* FROM management m JOIN invoice_data d ON m.id = d.management_id "
-					+ " WHERE  "
+					+ " WHERE  duplicate_status=0 AND "
 					+ " (0="+(start_day==null?0:1)+" Or (date1_receipt_of_product >= ? And date1_receipt_of_product <= ?)) "
 					+ " AND (0="+(staff_id<=0?0:1)+" Or (d.staff_id=?)) AND staff_name is not null"
 					+ " ORDER BY staff_id";
@@ -675,7 +675,7 @@ public class InvoiceDataHome {
 			Connection conn = sessionImpl.connection();
 
 			String sql = "SELECT d.* FROM management m JOIN invoice_data d ON m.id = d.management_id "
-					+ " WHERE  "
+					+ " WHERE  duplicate_status=0 AND "
 					+ " (0="+(start_day==null?0:1)+" Or (date1_receipt_of_product >= ? And date1_receipt_of_product <= ?))  AND customer_code is not null"
 					+ " AND (0="+(customer_id<=0?0:1)+" Or (customer_id=?))"
 					+ " ORDER BY customer_id";
@@ -721,7 +721,7 @@ public class InvoiceDataHome {
 			Connection conn = sessionImpl.connection();
 
 			String sql = "SELECT d.* FROM management m JOIN invoice_data d ON m.id = d.management_id "
-					+ " WHERE  "
+					+ " WHERE  duplicate_status=0 AND "
 					+ " (0="+(start_day==null?0:1)+" Or (date1_receipt_of_product >= ? And date1_receipt_of_product <= ?))  AND customer_code is not null"
 					+ " AND (0="+(customer_id<=0?0:1)+" Or (customer_id=?))"
 					+ " ORDER BY customer_id";
@@ -767,7 +767,7 @@ public class InvoiceDataHome {
 			Connection conn = sessionImpl.connection();
 
 			String sql = "SELECT d.* FROM management m JOIN invoice_data d ON m.id = d.management_id "
-					+ " WHERE  "
+					+ " WHERE  duplicate_status=0 AND "
 					+ " (0="+(start_day==null?0:1)+" Or (date1_receipt_of_product >= ? And date1_receipt_of_product <= ?)) "
 					+ " AND (0="+(staff_id<=0?0:1)+" Or (d.staff_id=?)) AND staff_id is not null AND customer_id_level1 is not null"
 					+ " ORDER BY staff_id, customer_id_level1";
@@ -865,7 +865,7 @@ public class InvoiceDataHome {
 			String sql = "SELECT d.product_ids, d.quantitys "
 					+ " FROM management m JOIN invoice_data d "
 					+ " ON m.id = d.management_id "
-					+ " WHERE d.product_ids like ? and d.customer_id_level1=? AND (m.date1_receipt_of_product >= ? And m.date1_receipt_of_product < ?)";
+					+ " WHERE duplicate_status=0 AND d.product_ids like ? and d.customer_id_level1=? AND (d.date1_receipt_of_product >= ? And d.date1_receipt_of_product < ?)";
 			
 			//System.out.println(sql);
 			PreparedStatement pre = conn.prepareStatement(sql);
@@ -952,7 +952,7 @@ public class InvoiceDataHome {
 			String sql = "SELECT count(*) FROM customer where user_id = ? "
 					+ " AND id not in ("
 					+ "Select customer_id_level1 FROM management m JOIN invoice_data d ON m.id = d.management_id "
-					+ " WHERE  "
+					+ " WHERE  duplicate_status=0 AND "
 					+ " (0="+(start_day==null?0:1)+" Or (date1_receipt_of_product >= ? And date1_receipt_of_product <= ?)) "
 					+ " AND (0="+(staff_id<=0?0:1)+" Or (d.staff_id=?)) AND customer_id_level1 is not null"
 					+ ")";
@@ -1000,7 +1000,7 @@ public class InvoiceDataHome {
 			Connection conn = sessionImpl.connection();
 
 			String sql =  "Select sum_total_price FROM management m JOIN invoice_data d ON m.id = d.management_id "
-					+ " WHERE  "
+					+ " WHERE  duplicate_status=0 AND "
 					+ " (0="+(start_day==null?0:1)+" Or (date1_receipt_of_product >= ? And date1_receipt_of_product <= ?)) "
 					+ " AND (0="+(staff_id<=0?0:1)+" Or (d.staff_id=?)) AND staff_name is not null";
 			
@@ -1049,7 +1049,7 @@ public class InvoiceDataHome {
 			Connection conn = sessionImpl.connection();
 
 			String sql =  "Select sum_total_price FROM management m JOIN invoice_data d ON m.id = d.management_id "
-					+ " WHERE  "
+					+ " WHERE  duplicate_status=0 AND "
 					+ " (0="+(start_day==null?0:1)+" Or (date1_receipt_of_product >= ? And date1_receipt_of_product <= ?)) "
 					+ " AND (0="+(customer_id<=0?0:1)+" Or (d.customer_id=?)) AND customer_name is not null";
 			

@@ -830,6 +830,7 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 				report.setCustomer1_codes(data.getCustomer_code_level1());
 				report.setCustomer1_names(data.getCustomer_name_level1());
 				report.setDate1_receipt_of_product(data.getDate1_receipt_of_product());
+				report.setDate2_company_receipt_of_invoice(data.getDate2_company_receipt_of_invoice());
 				report.setTotal_moneys(StringUtil.notNull(sum_total_price));
 				reports.add(report);
 				
