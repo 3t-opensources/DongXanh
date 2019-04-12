@@ -19,7 +19,14 @@ public class Management {
 	public Integer invoice_data_id;
 	public InvoiceData invoice_data;
 	public Date date2_company_receipt_of_invoice;
+	public String owner;
 	
+	public String getOwner() {
+		return owner;
+	}
+	public void setOwner(String owner) {
+		this.owner = owner;
+	}
 	public Date getDate2_company_receipt_of_invoice() {
 		return date2_company_receipt_of_invoice;
 	}
