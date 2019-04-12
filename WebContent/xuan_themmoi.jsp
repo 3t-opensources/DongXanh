@@ -292,7 +292,7 @@ pageEncoding="UTF-8"%>
  	        		}
  	        		table +="  <tr>";
  	        		table +="     <td>"+stt+"</td>";
- 	            	table +="     <td>"+responseText[i].file_path+"</td>";
+ 	            	table +="     <td>"+responseText[i].file_name+"</td>";
  	        		table +="     <td>"+responseText[i].created_by+"</td>";
  	        		table +="     <td>"+nvgiu+"</td>";
  	        		table +="     <td>"+created_time+"</td>"; 
