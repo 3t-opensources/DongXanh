@@ -725,8 +725,13 @@ pageEncoding="UTF-8"%>
   		    }
   		    let fromDate = "01/" + curr_month + "/" +curr_year ;
   		  	let currentDate = curr_date + "/" + curr_month + "/" +curr_year ;
-  		  
-  		    $("#form_date_search").val(fromDate);
+  		    var form_tkhd = "01/10/";
+  		  	if(curr_month<10){
+  		  	    form_tkhd  = form_tkhd +(curr_year-1);
+  		  	}else{
+  		     	form_tkhd  = form_tkhd +curr_year;
+  		  	}
+  		    $("#form_date_search").val(form_tkhd);
   		    $("#to_date_search").val(currentDate);
   		    
   		    $("#from_mat_hang_cap1_date_search").val(fromDate);
@@ -1004,7 +1009,7 @@ pageEncoding="UTF-8"%>
 	  	 					        [15,25, 50, 100,-1],
 	  	 					        [15,25, 50, 100,"All"]
 	  	 					    ],
-	  	 					iDisplayLength: -1 , 
+	  	 					iDisplayLength: 25 , 
 	  	 				  rowsGroup: [0,1,2,3,4,5,6,7,8,9], 
 	  	 				 
   	 				     
@@ -1385,13 +1390,14 @@ pageEncoding="UTF-8"%>
 		            		    var customer1_codes                = responseText[i].customer1_codes;
 			  	        		var customer1_names                = responseText[i].customer1_names;		  	        		
 			  	        		
-			  	        		var dates_received                 = responseText[i].dates_received;		  	        		
+			  	        		var date2_company_receipt_of_invoice         = responseText[i].date2_company_receipt_of_invoice;	
+			  	        		if(date2_company_receipt_of_invoice!=null && date2_company_receipt_of_invoice.length>10){
+			  	        			date2_company_receipt_of_invoice = date2_company_receipt_of_invoice.substring(8,10)+"/"+date2_company_receipt_of_invoice.substring(5,7)+"/"+date2_company_receipt_of_invoice.substring(0,4);
+			  	        		}
 			  	        		var staff_name                     = responseText[i].staff_name;
 			  	        		var total_moneys                   = responseText[i].total_moneys;
 			  	        		
-			  	        		if(dates_received!=null && dates_received.length>10){
-			  	        			dates_received = dates_received.substring(0,10);
-			  	        		}
+			  	        		
 			  	        		if(staff_name.includes("Total")){
 			  	        			table +="<tr style='font-weight: bold; height:30px'>";
 				  	        		table +="     <td colspan='5' style='padding-top:5px!important'> Total </td>";				  	        		        		
@@ -1404,7 +1410,7 @@ pageEncoding="UTF-8"%>
 				  	        		table +="     <td>"+staff_name+"</td>";
 				  	            	table +="     <td>"+customer1_codes+"</td>";
 				  	        		table +="     <td>"+customer1_names+"</td>";
-				  	        		table +="     <td class='right'>"+dates_received+"</td>";			  	        		
+				  	        		table +="     <td class='right'>"+date2_company_receipt_of_invoice+"</td>";			  	        		
 				  	        		table +="     <td class='right'>"+getDataNumber(total_moneys)+"</td>";
 				  	        		table +="</tr>";
 				  	        		stt++;
