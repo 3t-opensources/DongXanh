@@ -57,9 +57,10 @@ pageEncoding="UTF-8"%>
 		        <thead>
 		            <tr class="w3-btn">
 		                <th class="table-th" style="text-align: center;width:10%">STT</th>
-		                <th class="table-th" style="text-align: center;width:20%">Hình</th>				                
+		              		                
 		                <th class="table-th" style="text-align: center;width:45%">Tên Hình</th>
-		                <th class="table-th" style="text-align: center;width:10%">User Import</th>	
+		                <th class="table-th" style="text-align: center;width:15%">Nhân Viên Tạo </th>	
+		                <th class="table-th" style="text-align: center;width:15%">Nhân Viên giữ </th>		
 		                <th class="table-th" style="text-align: center;width:10%">Ngày tạo</th>	
 		              
 		            </tr>
@@ -269,25 +270,31 @@ pageEncoding="UTF-8"%>
  	        	table +="<thead>";
  	        		table +="<tr class='w3-btn'>";
  	        		table +="   <th class='table-th' style='text-align: center;width:10%'>STT</th>";
- 	        		table +="   <th class='table-th' style='text-align: center;width:20%'>Hình</th>	";			                
  	        		table +="   <th class='table-th' style='text-align: center;width:35%'>Tên Hình</th>";
- 	        		table +="   <th class='table-th' style='text-align: center;width:10%'>User import</th>	";
- 	        		table +="   <th class='table-th' style='text-align: center;width:10%'>Ngày tạo</th>	";
- 	        		table +="   <th class='table-th' style='text-align: center;width:10%'>Delete</th>	"; 
+ 	        		table +="   <th class='table-th' style='text-align: center;width:15%'>Nhân Viên Tạo </th>	";
+ 	        		table +="   <th class='table-th' style='text-align: center;width:15%'>Nhân Viên Giữ</th>	";		
+ 	        		table +="   <th class='table-th' style='text-align: center;width:15%'>Ngày tạo</th>	";
+ 	        		table +="   <th class='table-th' style='text-align: center;width:10%'>Xóa </th>	"; 
  	        		table +=" </tr> </thead>   <tbody> ";  
  	        		
 		         var stt =1;
  	        	 for (i in responseText) {  	        		
  	        		console.log(responseText[i]);
  	        		var created_time ="";
+ 	        		var nvgiu        ="";
+ 	        		if(responseText[i].owner==null || responseText[i].owner==''){
+ 	        			nvgiu        ="";
+ 	        		}else{
+ 	        			nvgiu        =responseText[i].owner;
+ 	        		}
  	        		if(responseText[i].created_time!=null && responseText[i].created_time!='null'){
  	        			created_time = responseText[i].created_time;
  	        		}
  	        		table +="  <tr>";
  	        		table +="     <td>"+stt+"</td>";
  	            	table +="     <td>"+responseText[i].file_path+"</td>";
- 	        		table +="     <td>"+responseText[i].file_name+"</td>";
  	        		table +="     <td>"+responseText[i].created_by+"</td>";
+ 	        		table +="     <td>"+nvgiu+"</td>";
  	        		table +="     <td>"+created_time+"</td>"; 
  	        		table +="     <td><button type='button' class='btn btn-success' onclick='DeleteRow("+responseText[i].id+")'> Delete </button></td>";   
  	        		table +="  </tr>";
