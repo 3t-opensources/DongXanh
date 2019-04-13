@@ -465,7 +465,7 @@ function getjob(){
            data    : "",
            success : function(responseText) {	
         	 //  console.log("==================305=================");
-        	 // console.log(responseText);
+        	  console.log(responseText);
         	
         	 if(responseText.length>0){
         		 checkGetJob(false);
@@ -473,8 +473,9 @@ function getjob(){
             	 var id              = responseText[0].id;
             	 document.getElementById("id").value               = id;
            	     document.getElementById("management_id").value    = id ;
-           	    
-           	     var ngaynhantoa_date                              = responseText[0].created_time ;
+           	     
+           	     var ngaynhantoa_date                          = responseText[0].date2_company_receipt_of_invoice ;
+           	     ngaynhantoa_date                              = responseText[0].created_time ;
            	     var ngaynhantoa ="";
            	    // console.log(ngaynhantoa_date);
            	     if(ngaynhantoa_date.length>10){
