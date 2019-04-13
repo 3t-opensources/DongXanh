@@ -955,11 +955,11 @@ pageEncoding="UTF-8"%>
 		  	        	    		id_mages++;
 		  	        	    		table +="  <tr id ="+id_mages+" ondblclick='showDilogImages("+id_mages+")' class='table-striped'>";
 		  	        	    		
-		  	        	    	 
-			  	        			table +="    <td>"+ stt+"</td>";				  	        		
-				  	            	table +="     <td>"+invoiceType +"</td>";
-				  	            	table +="    <td  ondblclick = 'CaptureRework("+responseText[i].id+")'>"+customer_code+"</td>";
-				  	        		table +="     <td  ondblclick = 'CaptureRework("+responseText[i].id+")'>"+customer_name+"</td>";
+		  	        	    	    alert(responseText[i].id);
+			  	        			table +="    <td> <a href='nhap.action?id="+responseText[i].id+"'  target='_blank' style ='color:blue;'>"+ stt+"</a></td>";				  	        		
+				  	            	table +="    <td>"+invoiceType +"</td>";
+				  	            	table +="    <td>"+customer_code+"</td>";
+				  	        		table +="     <td>"+customer_name+"</td>";
 				  	        		table +="     <td>"+customer_name_level1+"</td>";
 				  	        		table +="     <td>"+staff_name+"</td>";
 				  	        		table +="     <td class='right'>"+date2_company_receipt_of_invoice+"</td>";
