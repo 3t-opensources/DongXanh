@@ -25,6 +25,7 @@ import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.util.ServletContextAware;
 import org.hibernate.SessionFactory;
 
+import com.google.gson.Gson;
 import com.home.dao.CustomerHome;
 import com.home.dao.InvoiceDataHome;
 import com.home.dao.UserHome;
@@ -530,7 +531,7 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 			List<String> listCus = new ArrayList<String>();
 			BigDecimal revenue_in_phase = new BigDecimal(0); 
 			for (InvoiceData data : listData) {
-				String staff_name = data.getStaff_name();
+				String staff_name = StringUtil.notNull(data.getStaff_name());
 				String cus_code = data.getCustomer_code();
 				BigDecimal sum_total_price = data.getSum_total_price();
 				//System.out.println("sum_total_price = " + sum_total_price);
@@ -581,6 +582,7 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 			}
 			System.out.println("Total data: " + reports.size());
 			result = reports;
+			System.out.println(new Gson().toJson(result));
 			listData.clear();
 		} catch (Exception e) {
 			e.printStackTrace();

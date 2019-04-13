@@ -632,7 +632,7 @@ public class InvoiceDataHome {
 					+ " WHERE  duplicate_status=0 AND "
 					+ " (0="+(start_day==null?0:1)+" Or (date1_receipt_of_product >= ? And date1_receipt_of_product <= ?)) "
 					+ " AND (0="+(staff_id<=0?0:1)+" Or (d.staff_id=?)) AND staff_name is not null"
-					+ " ORDER BY staff_id";
+					+ " ORDER BY staff_name";
 			
 			//System.out.println(sql);
 			PreparedStatement pre = conn.prepareStatement(sql);
