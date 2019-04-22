@@ -533,6 +533,7 @@ public class ManagementHome {
 				pre.setDate(2, date1_receipt_of_product);
 				pre.setString(3, "%"+product_id+"`%");
 				pre.setString(4, "%"+quantity+"`%");
+				System.out.println(pre.toString());
 				
 				try(ResultSet rs = pre.executeQuery()){
 					if(rs.next()){
@@ -590,6 +591,7 @@ public class ManagementHome {
 				pre.setString(3, "%"+product_id+"`%");
 				pre.setString(4, "%"+quantity+"`%");
 				pre.setInt(5, management_id);
+				System.out.println(pre.toString());
 				
 				try(ResultSet rs = pre.executeQuery()){
 					if(rs.next()){

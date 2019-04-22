@@ -455,6 +455,8 @@ public class ManagementAction extends ActionSupport implements ServletContextAwa
 			invoice_data.setUnit_prices(data.getUnit_prices());
 			invoice_data.setTotal_prices(data.getTotal_prices());
 			invoice_data.setSum_total_price(new BigDecimal(data.getSum_total_price()));
+			//System.out.println(data.getProduct_names());
+			//System.out.println(new Gson().toJson(invoice_data));
 
 			home.saveJobCapture(management_id, invoice_data);
 
