@@ -46,6 +46,7 @@
 
 </head>
 <body onLoad="noBack();" onpageshow="if (event.persisted) noBack();" onUnload="">
+
  <%
  
  List<InvoiceType> listInvoice =  (ArrayList<InvoiceType>) request.getAttribute("listInvoiceType");
@@ -697,10 +698,10 @@ async function saveData(){
 			  var id        =   this.getAttribute("id");
 			  var masp      =   document.getElementById("masanpham_"+id).value;
 			  var tensp     =   document.getElementById("tensanpham_"+id).value;
-			  var soluong   =   document.getElementById("soluong_"+id).value.replace(",","");
-			  var sothung   =   document.getElementById("sothung_"+id).value.replace(",","");
-			  var dongia    =   document.getElementById("dongia_"+id).value.replace(",","");
-			  var thanhtien =   document.getElementById("thanhtien_"+id).value.replace(",","");
+			  var soluong   =   document.getElementById("soluong_"+id).value.replace(/,/gi,"");
+			  var sothung   =   document.getElementById("sothung_"+id).value.replace(/,/gi,"");
+			  var dongia    =   document.getElementById("dongia_"+id).value.replace(/,/gi,"");
+			  var thanhtien =   document.getElementById("thanhtien_"+id).value.replace(/,/gi,"");
 			  if(dongia!="" && thanhtien !="" && tensp !=""){
 				 
 				  product_ids      = product_ids        +masp       +"`";
@@ -858,10 +859,10 @@ function checktable(){
 		  var id        =   this.getAttribute("id");
 		  var masp      =   document.getElementById("masanpham_"+id).value.trim();
 		  var tensp     =   document.getElementById("tensanpham_"+id).value.trim();
-		  var soluong   =   document.getElementById("soluong_"+id).value.trim().replace(",","");
-		  var sothung   =   document.getElementById("sothung_"+id).value.trim().replace(",","");
-		  var dongia    =   document.getElementById("dongia_"+id).value.trim().replace(",","");
-		  var thanhtien =   document.getElementById("thanhtien_"+id).value.trim().replace(",","");
+		  var soluong   =   document.getElementById("soluong_"+id).value.trim().replace(/,/gi,"");
+		  var sothung   =   document.getElementById("sothung_"+id).value.trim().replace(/,/gi,"");
+		  var dongia    =   document.getElementById("dongia_"+id).value.trim().replace(/,/gi,"");
+		  var thanhtien =   document.getElementById("thanhtien_"+id).value.trim().replace(/,/gi,"");
 		  if(masp!=""    || tensp!=""   ||  soluong!="" ||
 			 sothung!="" ||  dongia!="" ||  thanhtien!=""  ){
 			  
@@ -955,9 +956,9 @@ function addRow(id){
 	  var sanpham_id   = time_id; 
 	    var masp       = document.getElementById("masanpham_"+sanpham_id);
 		var tensp      = document.getElementById("tensanpham_"+sanpham_id);
-		var soluong    = document.getElementById("soluong_"+sanpham_id).replace(",","");
-		var sothung    = document.getElementById("sothung_"+sanpham_id).replace(",","");
-		var dongia     = document.getElementById("dongia_"+sanpham_id).replace(",","");
+		var soluong    = document.getElementById("soluong_"+sanpham_id).replace(/,/gi,"");
+		var sothung    = document.getElementById("sothung_"+sanpham_id).replace(/,/gi,"");
+		var dongia     = document.getElementById("dongia_"+sanpham_id).replace(/,/gi,"");
 		var sochai_1thung = document.getElementById("sochai_1thung_"+sanpham_id);
 		var sanpham_ma = new LookupKhachHang(masp, tensp, dongia, sochai_1thung,null,null,null,null, 5, {		
 			  minChars: 1,
@@ -1495,9 +1496,9 @@ function confirmwhensubmit(){
 	return true;
 }
 function tinhtong_sothung(id){
-	  var soluong   =   document.getElementById("soluong_"+id).value.replace(",","");
-	  var sothung   =   document.getElementById("sothung_"+id).value.replace(",","");
-	  var dongia    =   document.getElementById("dongia_"+id).value.replace(",","");
+	  var soluong   =   document.getElementById("soluong_"+id).value.replace(/,/gi,"");
+	  var sothung   =   document.getElementById("sothung_"+id).value.replace(/,/gi,"");
+	  var dongia    =   document.getElementById("dongia_"+id).value.replace(/,/gi,"");
 	  var sochai_1thung    =   document.getElementById("sochai_1thung_"+id).value;
 	
 	  if(sochai_1thung.trim()!="" &&  soluong.trim()!=""){
@@ -1525,8 +1526,8 @@ function tinhtong_sothung(id){
 	 
       $('#table_position > tbody  > tr').each(function() {
     	  var sanpham_id    = this.getAttribute("id"); 
-    	  soluong       = document.getElementById("soluong_"+sanpham_id).value.replace(",","");
-    	  dongia        = document.getElementById("dongia_"+sanpham_id).value.replace(",","");
+    	  soluong       = document.getElementById("soluong_"+sanpham_id).value.replace(/,/gi,"");
+    	  dongia        = document.getElementById("dongia_"+sanpham_id).value.replace(/,/gi,"");
     	  
     	  if(dongia!="" && !isNaN(dongia) ){
     		  try {				 
@@ -1569,9 +1570,9 @@ function checkParseFloat(val){
 function tinhtong(id){
 	
 	
-	  var soluong   =   document.getElementById("soluong_"+id).value.replace(",","");
-	  var sothung   =   document.getElementById("sothung_"+id).value.replace(",","");
-	  var dongia    =   document.getElementById("dongia_"+id).value.replace(",","");
+	  var soluong   =   document.getElementById("soluong_"+id).value.replace(/,/gi,"");
+	  var sothung   =   document.getElementById("sothung_"+id).value.replace(/,/gi,"");
+	  var dongia    =   document.getElementById("dongia_"+id).value.replace(/,/gi,"");
 	  //console.log("1255============="+id);
 	  if(checkParseFloat(soluong) && checkParseFloat (dongia) &&dongia.trim()!="" &&  soluong.trim()!=""){
 		  try {		
@@ -1591,8 +1592,8 @@ function tinhtong(id){
       $('#table_position > tbody  > tr').each(function() {
     	 // console.log("==1270========"+sum_thanh_tien);
     	  var sanpham_id       = this.getAttribute("id"); 
-    	  var soluong_td       = document.getElementById("soluong_"+sanpham_id).value.replace(",","");
-    	  var dongia_td        = document.getElementById("dongia_"+sanpham_id).value.replace(",","");   
+    	  var soluong_td       = document.getElementById("soluong_"+sanpham_id).value.replace(/,/gi,"");
+    	  var dongia_td        = document.getElementById("dongia_"+sanpham_id).value.replace(/,/gi,"");   
     	  if(dongia_td!="" && !isNaN(dongia_td) ){
     		  try {				 
     			  document.getElementById("dongia_"+sanpham_id).value   = parseFloat(dongia_td).toLocaleString();    			 
@@ -1732,7 +1733,12 @@ function tinhtong(id){
 	   	   });
   }
 
-
+   function close_window() {
+	   if (confirm("Close Window?")) {
+	     close();
+	   }
+	 }
+  
 </script> 
 
     
