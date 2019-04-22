@@ -530,9 +530,13 @@ function bad_images(){
 	          url     : 'badJobCaptureAction?management_id='+ management_id,	          
 	          data    : "",
 	          success : function(responseText) {	
-	        	  alert("Xóa bảng kê thành công!");
-	        	  var url = window.location.href.toString();			        	
-	      		  window.location.replace(url);
+	        	  alert("Xóa bảng kê thành công!");	        	 
+	      		   var url = window.location.href.toString();
+	        	   if(window.location.href.toString().includes("?id=")){
+	        	    	  var  url = window.location.href.toString();
+	        	    	  var  url = url.substring(0,url.lastIndexOf("?id=")); 
+	        	   }
+	        	   window.location.replace(url);
 	          }
 		   });
 

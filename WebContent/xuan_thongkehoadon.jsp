@@ -11,7 +11,7 @@ pageEncoding="UTF-8"%>
 	<div class="container">
 	
 	   <ul class="nav nav-tabs">
-	        <li class="active class-font_14"><a data-toggle="tab" href="#thongkehoadon" onclick="ThongKeHoaDon(1)">Thống kê hóa đơn</a></li>
+	        <li class="active class-font_14"><a data-toggle="tab" href="#thongkehoadon" onclick="ThongKeHoaDon(1)">Chi tiết toa</a></li>
 		    <li class=" class-font_14"><a data-toggle="tab" href="#mat_hang_cap_1"      onclick="ThongKeHoaDon(2)">Mặt hàng cấp I</a></li>
 		    <li class="class-font_14"><a data-toggle="tab" href="#tong_hop_theo_nvtt"   onclick="ThongKeHoaDon(3)">Tổng hợp theo NVTT</a></li>
 		    <li class="class-font_14"><a data-toggle="tab" href="#tong_hop_theo_cap_2"  onclick="ThongKeHoaDon(4)">Tổng hợp theo cấp 2 </a></li>
@@ -955,7 +955,7 @@ pageEncoding="UTF-8"%>
 		  	        	    		id_mages++;
 		  	        	    		table +="  <tr id ="+id_mages+" ondblclick='showDilogImages("+id_mages+")' class='table-striped'>";
 		  	        	    		
-		  	        	    	    alert(responseText[i].id);
+		  	        	    	  
 			  	        			table +="    <td> <a href='nhap.action?id="+responseText[i].id+"'  target='_blank' style ='color:blue;'>"+ stt+"</a></td>";				  	        		
 				  	            	table +="    <td>"+invoiceType +"</td>";
 				  	            	table +="    <td>"+customer_code+"</td>";
