@@ -155,6 +155,13 @@
 				<param name="root">result</param>
 			</result>
 		</action>
+		<!-- return job capture -->
+		<action name="returnJobsCatureAction" method="returnJobsCature"
+			class="com.home.action.ManagementAction">
+			<result type="json">
+				<param name="root">result</param>
+			</result>
+		</action>
 
 	</package>
 </struts>

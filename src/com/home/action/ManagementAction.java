@@ -346,6 +346,29 @@ public class ManagementAction extends ActionSupport implements ServletContextAwa
 		}
 		return SUCCESS;
 	}
+	
+	public String returnJobsCature(){
+		try {
+			int user_id;
+			try {
+				HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
+				user_id = Integer.parseInt(request.getParameter("user_id"));
+			} catch (Exception e) {
+				throw new Exception("Param: user_id invalid, " + e.toString());
+			}
+			ManagementHome home = new ManagementHome(getSessionFactory());
+			int rs = home.returnJobsCapture(user_id);
+			result = new String[]{"Reset", ""+rs};
+			System.out.println("Reset "+rs+" jobs");
+		} catch (Exception e) {
+			e.printStackTrace();
+			rsMess.setStatusError(1);
+			rsMess.setMessage(StringUtil.getError(e));
+			result = rsMess;//rsMess.toString();
+			//return ERROR;
+		}
+		return SUCCESS;
+	}
 
 	public String saveJobCapture(){
 		try {
@@ -733,5 +756,7 @@ public class ManagementAction extends ActionSupport implements ServletContextAwa
 		}
 		return SUCCESS;
 	}
+	
+	
 
 }

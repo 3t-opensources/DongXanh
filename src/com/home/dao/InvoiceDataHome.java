@@ -425,7 +425,8 @@ public class InvoiceDataHome {
 					+ " AND (0="+(staff_id<=0?0:1)+" Or (i.staff_id=?))"
 					+ " AND (0="+(customer_id<=0?0:1)+" Or (customer_id=?) OR 0="+(customer_name.length()==0?0:1)+" OR (customer_name=?))"
 					+ " AND (0="+(sent_late<=0?0:1)+" Or (date_sent_late"+(sent_late==1?">0":"=0")+"))"
-					+ " Order by date1_receipt_of_product, id";
+					//+ " Order by date1_receipt_of_product, id";
+					+ " Order by id";
 			
 			//System.out.println(sql);
 			PreparedStatement pre = conn.prepareStatement(sql);

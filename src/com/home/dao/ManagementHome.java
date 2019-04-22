@@ -332,7 +332,7 @@ public class ManagementHome {
 	}
 	
 	public List<Management> getJobCapture(int present_user, int limit) throws Exception{
-		log.debug("retrieve list Product");
+		log.debug("getJobCapture");
 		Transaction tx = null;
 		Session session = null;
 		List<Management> results = new ArrayList<Management>();
@@ -368,11 +368,11 @@ public class ManagementHome {
 			} 
 			tx.commit();
 			st.close();
-			log.debug("retrieve list Management successful, result size: " + results.size());
+			log.debug("getJobCapture, result size: " + results.size());
 			return results;
 		} catch (Exception re) {
 			re.printStackTrace();
-			log.error("retrieve list Product failed", re);
+			log.error("getJobCapture failed", re);
 			throw re;
 		} finally{
 			try {
@@ -382,6 +382,36 @@ public class ManagementHome {
 			} catch (Exception e) {
 			}
 		}
+	}
+	
+	public int returnJobsCapture(int present_user) throws Exception{
+		log.debug("returnJobCapture");
+		Transaction tx = null;
+		Session session = null;
+		int rs = 0;
+		try {
+			session = sessionFactory.openSession();
+			tx = session.beginTransaction();
+			
+			SessionImpl sessionImpl = (SessionImpl) session;
+			Connection conn = sessionImpl.connection();
+			Statement st = conn.createStatement();
+			rs = st.executeUpdate("Update management set present_user=0 Where present_user="+present_user+" and duplicate_status=0");
+			tx.commit();
+			st.close();
+		} catch (Exception re) {
+			re.printStackTrace();
+			log.error("returnJobCapture failed", re);
+			throw re;
+		} finally{
+			try {
+				if(session != null){
+					session.close();
+				}
+			} catch (Exception e) {
+			}
+		}
+		return rs;
 	}
 	
 	public void saveJobCapture(int management_id, InvoiceData data) throws Exception{
@@ -441,7 +471,7 @@ public class ManagementHome {
 	}
 	
 	public boolean isImageDuplicate(String hash_file) throws Exception {
-		log.debug("Checking Statistic duplicate with: ");
+		log.debug("isImageDuplicate: "+ hash_file);
 		Transaction tx = null;
 		Session session = null;
 		try {
@@ -464,7 +494,7 @@ public class ManagementHome {
 			tx.commit();
 			return isExist;
 		} catch (Exception re) {
-			log.error("get failed", re);
+			log.error("isImageDuplicate failed", re);
 			throw re;
 		} finally {
 			try {
@@ -492,11 +522,12 @@ public class ManagementHome {
 			SessionImpl sessionImpl = (SessionImpl) session;
 			Connection conn = sessionImpl.connection();
 			boolean isExist = false;
-			try(PreparedStatement pre = conn.prepareStatement("Select * From invoice_data "
-					+ " Where customer_id_level1=? "
-					+ " and date1_receipt_of_product=? "
-					+ " and product_ids like ? "
-					+ " and quantitys like ? "
+			try(PreparedStatement pre = conn.prepareStatement("Select d.* FROM management m JOIN invoice_data d ON m.id = d.management_id  "
+					+ " Where duplicate_status=0 "
+					+ " AND d.customer_id_level1=? "
+					+ " and d.date1_receipt_of_product=? "
+					+ " and d.product_ids like ? "
+					+ " and d.quantitys like ? "
 					+ " Limit 1")){
 				pre.setString(1, customer_id_level1);
 				pre.setDate(2, date1_receipt_of_product);
@@ -520,7 +551,7 @@ public class ManagementHome {
 			tx.commit();
 			return isExist;
 		} catch (Exception re) {
-			log.error("get failed", re);
+			log.error("checkInvoiceRecordDuplicate failed", re);
 			throw re;
 		} finally {
 			try {
@@ -546,12 +577,13 @@ public class ManagementHome {
 			SessionImpl sessionImpl = (SessionImpl) session;
 			Connection conn = sessionImpl.connection();
 			boolean isExist = false;
-			try(PreparedStatement pre = conn.prepareStatement("Select * From invoice_data "
-					+ " Where customer_id_level1=? "
-					+ " and date1_receipt_of_product=? "
-					+ " and product_ids like ? "
-					+ " and quantitys like ? "
-					+ " and management_id != ? "
+			try(PreparedStatement pre = conn.prepareStatement("Select d.* FROM management m JOIN invoice_data d ON m.id = d.management_id "
+					+ " Where duplicate_status=0 "
+					+ " AND d.customer_id_level1=? "
+					+ " and d.date1_receipt_of_product=? "
+					+ " and d.product_ids like ? "
+					+ " and d.quantitys like ? "
+					+ " and d.management_id != ? "
 					+ " Limit 1")){
 				pre.setString(1, customer_id_level1);
 				pre.setDate(2, date1_receipt_of_product);
@@ -576,7 +608,7 @@ public class ManagementHome {
 			tx.commit();
 			return isExist;
 		} catch (Exception re) {
-			log.error("get failed", re);
+			log.error("checkInvoiceRecordDuplicate failed", re);
 			throw re;
 		} finally {
 			try {
