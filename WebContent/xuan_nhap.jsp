@@ -100,7 +100,7 @@
         			  
         			  
     	                <div class="well"><p align="center">
-		    	             <!--    <a  href="homeAction" onclick="return goHome();"><button  style="width: 120px!important;" class="btn btn-success"  > Home </button></a> -->
+		    	                 <a  href="homeAction" onclick="return exit();"><button  style="width: 120px!important;" class="btn btn-success"  > Thoát </button></a> 
 				                 <button style="width: 120px!important;" title="Alt +S" type="button" id ="btn_xoabangke"  class="btn btn-success" onclick="bad_images();">Xóa toa/bảng kê</button>			  
 				            	 <button style="width: 120px!important;" title="Alt +D" id ="btn_Luubangke"  class="btn btn-success" onclick="saveData();">Lưu toa/bảng kê</button>			  
                       	</div>
@@ -515,12 +515,21 @@ function getjob(){
 
 }
 
-function goHome(){
-	var result = confirm("bạn có chắt chắn trở về trang chủ?");
+function exit(){
+	var result = confirm("bạn có chắt chắn thoát chương trình nhập?");
 	if (result) {
-		return true;
+		 $.ajax({  		
+		      type: "GET",
+	          url     : 'returnJobsCatureAction?user_id='+ document.getElementById("user_id").value ,	          
+	          data    : "",
+	          success : function(responseText) {	
+	        	  close();
+	          }
+		 });
+		
 	}
 	return false;
+	
 }
 function bad_images(){	
 	var result = confirm("bạn có chắt chắn chắn xóa hóa đơn này?");
