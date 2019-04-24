@@ -1,3 +1,4 @@
+<%@page import="com.home.model.User"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 pageEncoding="UTF-8"%> 
 <%@ taglib uri="/struts-tags" prefix="s"%> 
@@ -9,13 +10,19 @@ pageEncoding="UTF-8"%>
 <div class="right_col" role="main">
 
 	<div class="container">
-	
+	<% 
+	 User userSes                  =  ( User) request.getAttribute("userSes");	
+	 %>
+ 
+	  <input type="hidden"   id="user_id" name="user_id" value="<%= userSes.getId()%>">
+      <input type="hidden"   id="user_name" name="user_name" value="<%= userSes.getUserName()%>">
+        <input type="hidden" id="role" name="role" value="<%= userSes.getRole().getRoleName()%>">
 	   <ul class="nav nav-tabs">
-	        <li class="active class-font_14"><a data-toggle="tab" href="#thongkehoadon" onclick="ThongKeHoaDon(1)">Chi tiết toa</a></li>
-		    <li class=" class-font_14"><a data-toggle="tab" href="#mat_hang_cap_1"      onclick="ThongKeHoaDon(2)">Mặt hàng cấp I</a></li>
-		    <li class="class-font_14"><a data-toggle="tab" href="#tong_hop_theo_nvtt"   onclick="ThongKeHoaDon(3)">Tổng hợp theo NVTT</a></li>
-		    <li class="class-font_14"><a data-toggle="tab" href="#tong_hop_theo_cap_2"  onclick="ThongKeHoaDon(4)">Tổng hợp theo cấp 2 </a></li>
-		    <li class="class-font_14"><a data-toggle="tab" href="#chi_tiet_toa_cap_2"   onclick="ThongKeHoaDon(5)">Thống kê hàng ngày</a></li>
+	        <li class="active class-font_14 thongkehoadon" ><a data-toggle="tab" href="#thongkehoadon" onclick="ThongKeHoaDon(1)">Chi tiết toa</a></li>
+		    <li class="class-font_14 mat_hang_cap_1"><a data-toggle="tab" href="#mat_hang_cap_1"      onclick="ThongKeHoaDon(2)">Mặt hàng cấp I</a></li>
+		    <li class="class-font_14 tong_hop_theo_nvtt"><a data-toggle="tab" href="#tong_hop_theo_nvtt"   onclick="ThongKeHoaDon(3)">Tổng hợp theo NVTT</a></li>
+		    <li class="class-font_14 tong_hop_theo_cap_2"><a data-toggle="tab" href="#tong_hop_theo_cap_2"  onclick="ThongKeHoaDon(4)">Tổng hợp theo cấp 2 </a></li>
+		    <li class="class-font_14 chi_tiet_toa_cap_2"><a data-toggle="tab" href="#chi_tiet_toa_cap_2"   onclick="ThongKeHoaDon(5)">Thống kê hàng ngày</a></li>
 		    
 	   </ul>
 	   <div class="tab-content">
@@ -68,7 +75,7 @@ pageEncoding="UTF-8"%>
 			           <div class="title_width_8" >NVTT</div>
 				        <div class="value_width_10">
 				            <select id="cbb_nvtt" name="cbb_nvtt"  class="cbb_search" onchange="loadCusByStaffInvoiceReport();">
-				                 <option value="0">All</option>	
+				                
 			                 
 				           </select>
 				        </div>
@@ -799,10 +806,9 @@ pageEncoding="UTF-8"%>
   		      
              }); 
   		    
-  		  getInvoiceDataFilterReport();
-  		  loadStaffInvoiceReport();
   		  lookupCaptureInvoiceTypeAction();
-
+  		  
+  		  loadStaffInvoiceReport();
         });
         
         function showDilogImages(id_mages){
@@ -863,6 +869,8 @@ pageEncoding="UTF-8"%>
 		 var invoice_type          = document.getElementById("cbb_loaibangke").value;
 		 var end_day               = document.getElementById("to_date_search").value;
 		 var start_day             = document.getElementById("form_date_search").value;
+		 
+		  var user_id_dang_nhap    = document.getElementById("user_id").value ;
 	
 	   	 $.ajax({  		
 	   	       type: "GET",
@@ -955,8 +963,12 @@ pageEncoding="UTF-8"%>
 		  	        	    		id_mages++;
 		  	        	    		table +="  <tr id ="+id_mages+" ondblclick='showDilogImages("+id_mages+")' class='table-striped'>";
 		  	        	    		
-		  	        	    	  
-			  	        			table +="    <td> <a href='nhap.action?id="+responseText[i].id+"'  target='_blank' style ='color:blue;'>"+ stt+"</a></td>";				  	        		
+		  	        	    	     if(user_id_dang_nhap==user_id){
+		  	        	    	    	table +="    <td>"+ stt+"</td>";	
+		  	        	    	     }else{
+		  	        	    	    	table +="    <td> <a href='nhap.action?id="+responseText[i].id+"'  target='_blank' style ='color:blue;'>"+ stt+"</a></td>";	
+		  	        	    	     }
+			  	        						  	        		
 				  	            	table +="    <td>"+invoiceType +"</td>";
 				  	            	table +="    <td>"+customer_code+"</td>";
 				  	        		table +="     <td>"+customer_name+"</td>";
@@ -1065,12 +1077,41 @@ pageEncoding="UTF-8"%>
 	            	  var cbb_nvtt             = document.getElementById("cbb_nvtt");
 	            	  var nvtt_tonghop         = document.getElementById("cbb_nvtt_tonghop");
 	            	  var nvtt_thongkehangngay = document.getElementById("cbb_nvtt_thongkehangngay");
-	            	  for (i in responseText) {  	        		
-		  	        		console.log(responseText[i]);
-		  	        		  var option   = document.createElement("option");
+	            	  var user_id              = document.getElementById("user_id").value ;
+	            	  var role                 = document.getElementById("role").value ;
+	            	  var flaguser_id          = false;
+	            	  for (i in responseText) {  
+	            		  if(responseText[i].id==user_id && (role =='Member' || role =='member' )){
+	            			  flaguser_id =true;
+	            			  var option   = document.createElement("option");
 			            	  option.text  = responseText[i].userName;			            	 
 			            	  option.setAttribute ("value", responseText[i].id);
 			            	  cbb_nvtt.add(option);
+	  	        		  }
+	            	   } 
+	            	 
+	            	  
+	            	  if(flaguser_id==false){	            		 
+	            		  var option   = document.createElement("option");
+		            	  option.text  = "All";			            	 
+		            	  option.setAttribute ("value", "0");
+		            	  cbb_nvtt.add(option);
+	            	  }else{
+	            		  // an 1 so tab
+	            		  $(".mat_hang_cap_1").css('display','none');
+	            		  $(".tong_hop_theo_nvtt").css('display','none');
+	            		  $(".chi_tiet_toa_cap_2").css('display','none');
+	            		 
+	            	  }
+	            	  for (i in responseText) {  	        		
+		  	        		console.log(responseText[i]);
+		  	        		 if(flaguser_id==false){
+		  	        			  var option   = document.createElement("option");
+				            	  option.text  = responseText[i].userName;			            	 
+				            	  option.setAttribute ("value", responseText[i].id);
+				            	  cbb_nvtt.add(option);
+		  	        		 }
+		  	        		  
 			            	  
 			            	  var option1   = document.createElement("option");
 			            	  option1.text  = responseText[i].userName;			            	 
@@ -1083,6 +1124,7 @@ pageEncoding="UTF-8"%>
 			            	  option2.setAttribute ("value", responseText[i].id);
 			            	  nvtt_thongkehangngay.add(option1);
 	            	  }
+	            	  getInvoiceDataFilterReport();
 	              }
 	   	   });
   }
