@@ -370,13 +370,14 @@ function getJobCaptureReworkAction(id){
         		var total_boxs            = responseText.total_boxs.split("`");
         		var total_prices          = responseText.total_prices.split("`");
         		var unit_prices           = responseText.unit_prices.split("`");
-        		if(product_ids.length>10){
+        		/* if(product_ids.length>10){
         			for(var row =10 ;row < product_ids.length ;row++){
         				var time_id   = new Date().getTime();
+        				
             			addRow(time_id);
         			}
         			
-        		}
+        		} */
         		
         		var stt =0;
         		$('#table_position > tbody  > tr').each(function() {
@@ -386,7 +387,7 @@ function getJobCaptureReworkAction(id){
   				if(stt < product_ids.length-1){
   					
   	        		 var id        =   this.getAttribute("id");
-  	        	
+  	        	      
   	        		 document.getElementById("masanpham_"+id).value  =  product_ids[stt];
   	  				 document.getElementById("tensanpham_"+id).value =  product_names[stt];
   	  				 document.getElementById("soluong_"+id).value    =  parseFloat(quantitys[stt]).toLocaleString();
