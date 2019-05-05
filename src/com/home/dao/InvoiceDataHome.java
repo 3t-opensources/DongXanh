@@ -423,7 +423,7 @@ public class InvoiceDataHome {
 					+ " (0="+(start_day==null?0:1)+" Or (date1_receipt_of_product >= ? And date1_receipt_of_product <= ?))"
 					+ " AND (0="+(invoice_type<=0?0:1)+" Or (invoice_type_id=?))"
 					+ " AND (0="+(staff_id<=0?0:1)+" Or (i.staff_id=?))"
-					+ " AND (0="+(customer_id<=0?0:1)+" Or (customer_id=?) OR 0="+(customer_name.length()==0?0:1)+" OR (customer_name=?))"
+					+ " AND (0="+(customer_id<=0?0:1)+" Or (customer_id=?) OR 0="+(customer_name.length()==0?0:1)+" OR (LOWER(customer_name) like ?))"
 					+ " AND (0="+(sent_late<=0?0:1)+" Or (date_sent_late"+(sent_late==1?">0":"=0")+"))"
 					//+ " Order by date1_receipt_of_product, id";
 					+ " Order by id";
@@ -435,7 +435,7 @@ public class InvoiceDataHome {
 			pre.setInt(3, invoice_type);
 			pre.setInt(4, staff_id);
 			pre.setInt(5, customer_id);
-			pre.setString(6, customer_name);
+			pre.setString(6, "%"+customer_name.toLowerCase() + "%");
 			System.out.println(pre.toString());
 			ResultSet rs = pre.executeQuery();
 			int no = 1;
@@ -587,8 +587,8 @@ public class InvoiceDataHome {
 
 			String sql = "SELECT d.* FROM management m JOIN invoice_data d ON m.id = d.management_id "
 					+ " WHERE  duplicate_status=0 AND "
-					+ " (0="+(start_day==null?0:1)+" Or (date1_receipt_of_product >= ? And date1_receipt_of_product <= ?)) AND customer_id_level1 is not null"
-					+ " ORDER BY customer_id_level1";
+					+ " (0="+(start_day==null?0:1)+" Or (date1_receipt_of_product >= ? And date1_receipt_of_product <= ?)) AND customer_code_level1 is not null"
+					+ " ORDER BY customer_name_level1,customer_code_level1";
 			
 			//System.out.println(sql);
 			PreparedStatement pre = conn.prepareStatement(sql);
@@ -679,7 +679,7 @@ public class InvoiceDataHome {
 					+ " WHERE  duplicate_status=0 AND "
 					+ " (0="+(start_day==null?0:1)+" Or (date1_receipt_of_product >= ? And date1_receipt_of_product <= ?))  AND customer_code is not null"
 					+ " AND (0="+(customer_id<=0?0:1)+" Or (customer_id=?))"
-					+ " ORDER BY customer_id";
+					+ " ORDER BY customer_code";
 			
 			//System.out.println(sql);
 			PreparedStatement pre = conn.prepareStatement(sql);
@@ -725,7 +725,7 @@ public class InvoiceDataHome {
 					+ " WHERE  duplicate_status=0 AND "
 					+ " (0="+(start_day==null?0:1)+" Or (date1_receipt_of_product >= ? And date1_receipt_of_product <= ?))  AND customer_code is not null"
 					+ " AND (0="+(customer_id<=0?0:1)+" Or (customer_id=?))"
-					+ " ORDER BY customer_id";
+					+ " ORDER BY customer_code";
 			
 			//System.out.println(sql);
 			PreparedStatement pre = conn.prepareStatement(sql);
@@ -770,8 +770,8 @@ public class InvoiceDataHome {
 			String sql = "SELECT d.* FROM management m JOIN invoice_data d ON m.id = d.management_id "
 					+ " WHERE  duplicate_status=0 AND "
 					+ " (0="+(start_day==null?0:1)+" Or (date1_receipt_of_product >= ? And date1_receipt_of_product <= ?)) "
-					+ " AND (0="+(staff_id<=0?0:1)+" Or (d.staff_id=?)) AND staff_id is not null AND customer_id_level1 is not null"
-					+ " ORDER BY staff_id, customer_id_level1";
+					+ " AND (0="+(staff_id<=0?0:1)+" Or (d.staff_id=?)) AND staff_id is not null AND customer_code is not null"
+					+ " ORDER BY staff_id, customer_code";
 			
 			//System.out.println(sql);
 			PreparedStatement pre = conn.prepareStatement(sql);
@@ -826,7 +826,7 @@ public class InvoiceDataHome {
 			pre.setInt(3, customer_id);
 			pre.setInt(4, customer_id);
 			pre.setInt(5, customer_id);
-			System.out.println(pre.toString());
+			//System.out.println(pre.toString());
 			ResultSet rs = pre.executeQuery();
 			if(rs.next()){
 				total = rs.getLong(1);
@@ -874,7 +874,7 @@ public class InvoiceDataHome {
 			pre.setInt(2, customer1_code);
 			pre.setDate(3, start_day);
 			pre.setDate(4, end_day);
-			System.out.println(pre.toString());
+			//System.out.println(pre.toString());
 			ResultSet rs = pre.executeQuery();
 			while(rs.next()){
 				results.add(new String[]{
@@ -915,7 +915,7 @@ public class InvoiceDataHome {
 			//System.out.println(sql);
 			PreparedStatement pre = conn.prepareStatement(sql);
 			pre.setInt(1, staff_id);
-			System.out.println(pre.toString());
+			//System.out.println(pre.toString());
 			ResultSet rs = pre.executeQuery();
 			if(rs.next()){
 				total = rs.getLong(1);

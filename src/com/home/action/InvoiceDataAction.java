@@ -329,23 +329,27 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 			int total_invoices = 0;
 			BigDecimal sum_total_money = new BigDecimal(0);
 			String customer_code_temp  = "";
+			String customer_name_temp  = "";
 			InvoiceData data_temp = null;
 			StringBuilder listProductCodes = new StringBuilder();
 			StringBuilder listProductNames = new StringBuilder();
-			StringBuilder listProductQuantities = new StringBuilder();
+			//StringBuilder listProductQuantities = new StringBuilder();
+			StringBuilder listProductBoxs = new StringBuilder();
 			for (InvoiceData data : listData) {
 				String customer_code_level1 = data.getCustomer_code_level1();
 				String customer_name_level1 = data.getCustomer_name_level1();
 				String product_codes = data.getProduct_ids();
 				String product_names = data.getProduct_names();
-				String product_quantities = data.getQuantitys();
+				//String product_quantities = data.getQuantitys();
+				String product_boxs = data.getTotal_boxs();
 				
-				if(customer_code_temp.length() > 0 && !customer_code_temp.equals(customer_code_level1)){
+				if((customer_code_temp.length() > 0 && !customer_code_temp.equals(customer_code_level1)) &&
+						(customer_name_temp.length() > 0 && !customer_name_temp.equals(customer_name_level1))){
 					reportData.setTotal_cus2_follow(getTotalCustomer2FollowByCus1(data_temp.getCustomer_id_level1().getId()));
 					String[] arr_products = getProductCodeAndName(listProductCodes, listProductNames);
 					reportData.setProduct_codes(arr_products[0]);
 					reportData.setProduct_names(arr_products[1]);
-					String[] arr_total_products = getTotalProducts(date_company_received_from, data_temp.getCustomer_id_level1().getId(), listProductCodes, listProductNames, listProductQuantities);
+					String[] arr_total_products = getTotalProducts(date_company_received_from, data_temp.getCustomer_id_level1().getId(), listProductCodes, listProductNames, listProductBoxs);
 					reportData.setTotal_products_before_phase(arr_total_products[0]);
 					reportData.setTotal_products_in_phase(arr_total_products[1]);
 					reportData.setTotal_products_all_phase(arr_total_products[2]);
@@ -361,7 +365,8 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 					}
 					listProductCodes = new StringBuilder();
 					listProductNames = new StringBuilder();
-					listProductQuantities = new StringBuilder();
+					//listProductQuantities = new StringBuilder();
+					listProductBoxs = new StringBuilder();
 				}else{
 					reportData.setCustomer1_code(customer_code_level1);
 					reportData.setCustomer1_name(customer_name_level1);
@@ -373,19 +378,21 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 				}
 				listProductCodes.append(product_codes);
 				listProductNames.append(product_names);
-				listProductQuantities.append(product_quantities);
+				//listProductQuantities.append(product_quantities);
+				listProductBoxs.append(product_boxs);
 				
 				data_temp = data;
 				customer_code_temp = customer_code_level1;
+				customer_name_temp = customer_name_level1;
 				total_invoices ++;
 				sum_total_money = sum_total_money.add(data.getSum_total_price());
 			}
-			if(customer_code_temp.length() > 0){
+			if(customer_code_temp.length() > 0 || customer_name_temp.length() > 0){
 				reportData.setTotal_cus2_follow(getTotalCustomer2FollowByCus1(data_temp.getCustomer_id_level1().getId()));
 				String[] arr_products = getProductCodeAndName(listProductCodes, listProductNames);
 				reportData.setProduct_codes(arr_products[0]);
 				reportData.setProduct_names(arr_products[1]);
-				String[] arr_total_products = getTotalProducts(date_company_received_from, data_temp.getCustomer_id_level1().getId(), listProductCodes, listProductNames, listProductQuantities);
+				String[] arr_total_products = getTotalProducts(date_company_received_from, data_temp.getCustomer_id_level1().getId(), listProductCodes, listProductNames, listProductBoxs);
 				reportData.setTotal_products_before_phase(arr_total_products[0]);
 				reportData.setTotal_products_in_phase(arr_total_products[1]);
 				reportData.setTotal_products_all_phase(arr_total_products[2]);
@@ -414,11 +421,11 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 			StringBuilder resultBefore = new StringBuilder();
 			StringBuilder resultIn = new StringBuilder();
 			StringBuilder resultAll = new StringBuilder();
-			LinkedHashMap<String, Integer> mapIn = new LinkedHashMap<String, Integer>();
+			LinkedHashMap<String, Float> mapIn = new LinkedHashMap<String, Float>();
 			for (int i = 0; i < arr_code.length; i++) {
-				int q = 0;
+				float q = 0;
 				try {
-					q = Integer.parseInt(arr_quantities[i]);
+					q = Float.parseFloat(arr_quantities[i]);
 				} catch (Exception e) {}
 				if(mapIn.containsKey(arr_code[i])){
 					mapIn.put(arr_code[i], mapIn.get(arr_code[i]) + q);
@@ -435,7 +442,7 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 	            int total_products_before_phase = getTotalProductBeforePhase(date_company_received_from, customer1_code, item.getKey().toString());
 	            resultBefore.append(total_products_before_phase).append("`");
 	            resultIn.append(item.getValue()).append("`");
-	            resultAll.append(total_products_before_phase + Integer.parseInt(item.getValue().toString())).append("`");
+	            resultAll.append(total_products_before_phase + Float.parseFloat(item.getValue().toString())).append("`");
 	        }
 	        
 			return new String[]{resultBefore.toString(), resultIn.toString(), resultAll.toString()};
@@ -829,8 +836,8 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 				}else{
 					report.setStaff_name(data.getStaff_name());	
 				}
-				report.setCustomer1_codes(data.getCustomer_code_level1());
-				report.setCustomer1_names(data.getCustomer_name_level1());
+				report.setCustomer1_codes(data.getCustomer_code());
+				report.setCustomer1_names(data.getCustomer_name());
 				report.setDate1_receipt_of_product(data.getDate1_receipt_of_product());
 				report.setDate2_company_receipt_of_invoice(data.getDate2_company_receipt_of_invoice());
 				report.setTotal_moneys(StringUtil.notNull(sum_total_price));

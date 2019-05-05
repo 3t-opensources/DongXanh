@@ -372,7 +372,8 @@ public class ManagementAction extends ActionSupport implements ServletContextAwa
 
 	public String saveJobCapture(){
 		try {
-			ManagementHome home = new ManagementHome(getSessionFactory());
+			CustomerHome custHome = new CustomerHome(getSessionFactory());
+			ManagementHome managHome = new ManagementHome(getSessionFactory());
 			EntInvoiceData data = this.invoice_data;
 			int management_id = Integer.parseInt(data.getManagement_id());
 
@@ -401,10 +402,16 @@ public class ManagementAction extends ActionSupport implements ServletContextAwa
 				customer_id.setId(Integer.parseInt(data.getCustomer_id()));
 				invoice_data.setCustomer_id(customer_id);
 				if(customer_id.getId() == 0){
-					invoice_data.setCustomer_id(null);
+					//invoice_data.setCustomer_id(null);
+					System.out.println(0/0);
 				}
 			} catch (Exception e) {
-				invoice_data.setCustomer_id(null);
+				if(StringUtil.notNull(data.getCustomer_code()).length() > 0){
+					Customer customer_id = custHome.findCustomerByCode(data.getCustomer_code());
+					invoice_data.setCustomer_id(customer_id);
+				}else{
+					invoice_data.setCustomer_id(null);	
+				}
 			}
 			invoice_data.setCustomer_code(data.getCustomer_code()) ;
 			invoice_data.setCustomer_name(data.getCustomer_name()) ;
@@ -414,10 +421,16 @@ public class ManagementAction extends ActionSupport implements ServletContextAwa
 				customer_id_level1.setId(Integer.parseInt(data.getCustomer_id_level1()));
 				invoice_data.setCustomer_id_level1(customer_id_level1) ;
 				if(customer_id_level1.getId() == 0){
-					invoice_data.setCustomer_id(null);
+					//invoice_data.setCustomer_id_level1(null);
+					System.out.println(0/0);
 				}
 			} catch (Exception e) {
-				invoice_data.setCustomer_id_level1(null) ;
+				if(StringUtil.notNull(data.getCustomer_code_level1()).length() > 0){
+					Customer customer_id_level1 = custHome.findCustomerByCode(data.getCustomer_code_level1());
+					invoice_data.setCustomer_id_level1(customer_id_level1);
+				}else{
+					invoice_data.setCustomer_id_level1(null) ;	
+				}
 			}
 			invoice_data.setCustomer_code_level1(data.getCustomer_code_level1());
 			invoice_data.setCustomer_name_level1(data.getCustomer_name_level1());
@@ -458,7 +471,7 @@ public class ManagementAction extends ActionSupport implements ServletContextAwa
 			//System.out.println(data.getProduct_names());
 			//System.out.println(new Gson().toJson(invoice_data));
 
-			home.saveJobCapture(management_id, invoice_data);
+			managHome.saveJobCapture(management_id, invoice_data);
 
 			System.out.println("Save job["+management_id+"] done!");
 			rsMess.setStatusError(0);
