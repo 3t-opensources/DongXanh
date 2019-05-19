@@ -20,7 +20,14 @@ public class Management {
 	public InvoiceData invoice_data;
 	public Date date2_company_receipt_of_invoice;
 	public String owner;
+	public Timestamp index_time;
 	
+	public Timestamp getIndex_time() {
+		return index_time;
+	}
+	public void setIndex_time(Timestamp index_time) {
+		this.index_time = index_time;
+	}
 	public String getOwner() {
 		return owner;
 	}

@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.sql.Date;
@@ -29,12 +30,14 @@ import com.google.gson.Gson;
 import com.home.dao.CustomerHome;
 import com.home.dao.InvoiceDataHome;
 import com.home.dao.UserHome;
+import com.home.entities.ReportIndexDaily;
 import com.home.entities.ReportInvoiceByCus1;
 import com.home.entities.ReportInvoiceByCus2;
 import com.home.entities.ReportInvoiceByStaff;
 import com.home.entities.ReportInvoiceDaily;
 import com.home.entities.ReportInvoiceDetailByCus2;
 import com.home.model.Customer;
+import com.home.model.EventsNote;
 import com.home.model.InvoiceData;
 import com.home.model.ResultMessage;
 import com.home.model.User;
@@ -42,6 +45,7 @@ import com.home.util.DateUtils;
 import com.home.util.ExcelUtil;
 import com.home.util.HibernateUtil;
 import com.home.util.StringUtil;
+import com.home.util.SystemUtil;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -56,7 +60,11 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 	private ResultMessage rsMess = new ResultMessage();
 	private InputStream fileInputStream;
 	private Workbook workbook;
-
+	private File reportXlsIndexDaily;
+	
+	public File getReportXlsIndexDaily() {
+		return reportXlsIndexDaily;
+	}
 	public InputStream getFileInputStream() {
 		return fileInputStream;
 	}
@@ -869,6 +877,161 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 		return SUCCESS;
 	}
 	
+	
+	public String getReportIndexDaily(){
+		try {
+			List<ReportIndexDaily> reports = getDataIndexDaily(null, -1);
+			System.out.println("Total data: " + reports.size());
+			result = reports;			
+		} catch (Exception e) {
+			e.printStackTrace();
+			rsMess.setStatusError(1);
+			rsMess.setMessage(StringUtil.getError(e));
+			result = rsMess;//rsMess.toString();
+			//return ERROR;
+		}
+		return SUCCESS;
+	}
+	
+	private List<ReportIndexDaily> getDataIndexDaily(Date index_date, int present_user) throws Exception{
+		List<ReportIndexDaily> reports = new ArrayList<ReportIndexDaily>();
+		try {
+			if(index_date == null || present_user < 0){
+				HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
+				// Fetch Data from User Table
+				if(index_date == null){
+					try {
+						String day = StringUtil.notNull(request.getParameter("index_date"));
+						if(day.length() == 10){
+							index_date = new Date(DateUtils.getDateFromString(day, "dd/MM/yyyy").getTime());
+						}else{
+							index_date = new Date(DateUtils.getDateFromString(DateUtils.getStringFromDate(new java.util.Date(), "dd/MM/yyyy"), "dd/MM/yyyy").getTime()-24*60*60*1000l);
+						}				
+					} catch (Exception e) {
+						index_date = new Date(DateUtils.getDateFromString(DateUtils.getStringFromDate(new java.util.Date(), "dd/MM/yyyy"), "dd/MM/yyyy").getTime()-24*60*60*1000l);
+					}
+				}
+				if(present_user < 0){
+					try {
+						present_user =  Integer.parseInt(StringUtil.notNull(request.getParameter("present_user")));
+					} catch (Exception e) {
+						present_user = 0;
+					}
+				}
+			}
+			
+			InvoiceDataHome home = new InvoiceDataHome(getSessionFactory());
+			listData = home.getReportIndexDaily(index_date, present_user);
+			
+			int no = 1;
+			for (InvoiceData data : listData) {
+				ReportIndexDaily report = new ReportIndexDaily();
+				report.setNo(no++);
+				report.setCustomer_code(data.getCustomer_code());
+				report.setCustomer_name(data.getCustomer_name());
+				report.setCustomer1_code(data.getCustomer_code_level1());
+				report.setCustomer1_name(data.getCustomer_name_level1());
+				report.setStaff_name(data.getStaff_name());
+				report.setDate1_receipt_of_product(data.getDate1_receipt_of_product());
+				report.setProduct_ids(data.getProduct_ids());
+				report.setProduct_names(data.getProduct_names());
+				report.setTotal_boxs(data.getTotal_boxs());
+				report.setTotal_prices(data.getTotal_prices());
+				report.setSum_total_price(data.getSum_total_price());
+				report.setNotes(data.getNotes());
+				reports.add(report);
+			}
+			listData.clear();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		return reports;
+	}
+		
+	public String exportExcelIndexDaily() {
+		try {
+			String str_now = DateUtils.getStringFromDate(new java.util.Date(), "dd-MM-yyyy");
+			String str_index_date = DateUtils.getStringFromDate(new java.util.Date(new java.util.Date().getTime() - 24*60*60*1000l), "dd-MM-yyyy");
+			Date index_date = new Date(DateUtils.getDateFromString(DateUtils.getStringFromDate(new java.util.Date(), "dd/MM/yyyy"), "dd/MM/yyyy").getTime()-24*60*60*1000l);
+			List<ReportIndexDaily> listData = getDataIndexDaily(index_date, 0);
+			if(listData.size() > 0){
+				String pathname;
+				try {
+					ServletContext servletContext = ServletActionContext.getServletContext();
+					pathname = servletContext.getRealPath("/WEB-INF/template/excel/report_index_data_daily.xlsx");
+				} catch (Exception e) {
+					pathname = "/media/administrator/data_ntxuan/TTTOAN/Jee Projects/DongXanh_Proj/DongXanh_V2/DongXanh/WebContent/WEB-INF/template/excel/report_index_data_daily.xlsx";
+				}
+				File theFile = new File(pathname);
+				ExcelUtil xls = new ExcelUtil();
+
+				try (FileInputStream fis = new FileInputStream(theFile)) {
+					workbook = xls.getWorkbook(fis,
+							FilenameUtils.getExtension(theFile.getAbsolutePath()));
+					Sheet sheet = workbook.getSheetAt(0);
+					int startIndexRow = 5;
+					int startIndexCell = 0;
+					BigDecimal sum_total_money = new BigDecimal(0);
+					int no = 1;
+					for (int i = 0; i < listData.size(); i++) {
+						String[] arr1 =  StringUtil.notNull(listData.get(i).getProduct_ids()).split("`");
+						String[] arr2 =  StringUtil.notNull(listData.get(i).getProduct_names()).split("`");
+						String[] arr3 =  StringUtil.notNull(listData.get(i).getTotal_boxs()).split("`");
+						String[] arr4 =  StringUtil.notNull(listData.get(i).getTotal_prices()).split("`");
+						if(arr1.length > 0){
+							for (int j = 0; j < arr1.length; j++) {
+								if(arr1[j].length() > 0){
+									xls.addRowData(sheet, startIndexRow, startIndexCell, 
+											(no++), 
+											listData.get(i).getCustomer_code(),
+											listData.get(i).getCustomer_name(),
+											listData.get(i).getCustomer1_name(),
+											listData.get(i).getStaff_name(),
+											DateUtils.getStringFromDate(listData.get(i).getDate1_receipt_of_product(), "dd/MM/yyyy"),
+											arr1[j],
+											arr2.length > j ? arr2[j]:"",
+											arr3.length > j ? arr3[j]:"",
+											SystemUtil.format2Money(arr4.length > j ? arr4[j]:""),
+											listData.get(i).getNotes()
+									);
+									startIndexRow++;
+								}								
+							}
+						}
+						sum_total_money = sum_total_money.add(listData.get(i).getSum_total_price());
+					}
+					xls.updateRowData(sheet, 2, 2, str_now);
+					xls.updateRowData(sheet, 2, 6, str_index_date);
+					xls.updateRowData(sheet, 2, 10, SystemUtil.format2Money(sum_total_money.toString()));
+						
+					/**
+					 * write Excel for send mail
+					 */
+					reportXlsIndexDaily = new File(SystemUtil.getUserDir() + "/DX_Reports/ReportIndexData_"+str_index_date+".xlsx");
+					if(!reportXlsIndexDaily.getParentFile().exists()){
+						reportXlsIndexDaily.getParentFile().mkdirs();
+					}
+					try(FileOutputStream fileOut = new FileOutputStream(reportXlsIndexDaily)){
+						workbook.write(fileOut);	
+					}
+					
+					/**
+					 * For export Excel
+					 */
+					ByteArrayOutputStream baos = new ByteArrayOutputStream();
+					workbook.write(baos);
+					fileInputStream = new ByteArrayInputStream(baos.toByteArray());
+					workbook.close();
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ERROR;
+		}
+		return SUCCESS;
+	}
+	
 	///////////////////////////////////////////////NEW REPORT/////////////////////////////////////////////////////////
 	
 	public static void main(String[] args) {
@@ -876,8 +1039,10 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 			//new InvoiceDataAction().loadListStaff();
 			//InvoiceDataHome home = new InvoiceDataHome(new InvoiceDataAction().getSessionFactory());
 			//System.out.println(home.getReportInvoiceDataByCus1(null, null).size());
-			BigDecimal sum_total_money = new BigDecimal(0);
-			System.out.println(sum_total_money.add(new BigDecimal("3434")).toString());
+			//BigDecimal sum_total_money = new BigDecimal(0);
+			//System.out.println(SystemUtil.format2Money(sum_total_money.add(new BigDecimal("250000")).toString()));
+			//System.out.println(new Date(DateUtils.getDateFromString(DateUtils.getStringFromDate(new java.util.Date(), "dd/MM/yyyy"), "dd/MM/yyyy").getTime()-24*60*60*1000));
+			new InvoiceDataAction().exportExcelIndexDaily();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -57,6 +57,16 @@ public class UserAction extends ActionSupport implements Action, ModelDriven<Use
 		return HibernateUtil.getSessionFactory();
 	}
 
+	public static void main(String[] args) {
+		try {
+			UserHome userHome = new UserHome(HibernateUtil.getSessionFactory());
+			List<User> leaders = userHome.getListUserLeader();
+			System.out.println(leaders.size() + ", " + leaders.get(0).getEmail());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	@Override
 	public String execute() throws Exception {
 		try {
@@ -132,9 +142,11 @@ public class UserAction extends ActionSupport implements Action, ModelDriven<Use
 		}
 		return SUCCESS;
 	}
+	
 	public String addEmployee1() {
 		return SUCCESS;
 	}
+	
 	public String addEmployee() {
 		try {
 			UserHome userHome = new UserHome(getSessionFactory());

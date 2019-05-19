@@ -285,6 +285,7 @@ public class ManagementAction extends ActionSupport implements ServletContextAwa
 			management.setPresent_user(0);
 			management.setCapture_status(0);
 			management.setDuplicate_status(0);
+			management.setIndex_time(new java.sql.Timestamp(new Date().getTime()));
 			managementHome.attachDirty(management);
 			//System.out.println(management.getId());
 

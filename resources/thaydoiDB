@@ -7,3 +7,5 @@ ALTER TABLE `customer` ADD `direct_access` VARCHAR(200) CHARACTER SET utf8 COLLA
    lan 2
    
    ALTER TABLE `customer` ADD `images_signature` VARCHAR(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL AFTER `grp_cusdetail_id`;
+   
+   ALTER TABLE `management` ADD `index_time` DATETIME NULL DEFAULT NULL AFTER `present_user`;

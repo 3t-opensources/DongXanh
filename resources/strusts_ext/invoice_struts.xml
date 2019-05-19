@@ -110,6 +110,12 @@
 				<param name="root">result</param>
 			</result>
 		</action>
+		<action name="getReportIndexDailyAction" method="getReportIndexDaily"
+			class="com.home.action.InvoiceDataAction">
+			<result type="json">
+				<param name="root">result</param>
+			</result>
+		</action>
 		
 
 	</package>

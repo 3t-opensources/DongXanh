@@ -22,6 +22,7 @@ import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.internal.SessionImpl;
 
+import com.home.model.Role;
 import com.home.model.User;
 
 /**
@@ -326,6 +327,35 @@ public class UserHome {
 			}
 		}
 	}
+	
+	public List<User> getListUserLeader() {
+		log.debug("retrieve list Users");
+		Transaction tx = null;
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			tx = session.beginTransaction();
+			Role role = new Role();
+			role.setRoleId(3);
+			List<User> results = session.createCriteria(User.class).add(Restrictions.eq("role", role)).add(Restrictions.eq("isEnabled", new Short("1"))).list();
+			tx.commit();
+			log.debug("retrieve list Users successful, result size: " + results.size());
+			return results;
+		} catch (RuntimeException re) {
+			log.error("retrieve list Users failed", re);
+			throw re;
+		} finally {
+			try {
+				if (session != null) {
+					session.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	
 	public List<User> getLookupEmployee() {
 		return getLookupEmployee(-1, true);
 	}

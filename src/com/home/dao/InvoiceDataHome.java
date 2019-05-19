@@ -1035,8 +1035,7 @@ public class InvoiceDataHome {
 			}
 		}
 	}
-	
-	
+		
 	public BigDecimal getTotalRevenueBeforePhaseByCus(
 			java.sql.Date start_day, 
 			java.sql.Date end_day,
@@ -1084,5 +1083,49 @@ public class InvoiceDataHome {
 			}
 		}
 	}
-	
+		
+	//chức năng báo cáo định kỳ mỗi ngày tiến độ nhập toa
+	public List<InvoiceData> getReportIndexDaily(
+			java.sql.Date index_date,
+			int present_user) throws Exception{
+		log.debug("retrieve list getReportIndexDaily");
+		Session session = null;
+		List<InvoiceData> results = new ArrayList<InvoiceData>();
+		try {
+			session = sessionFactory.openSession();
+			SessionImpl sessionImpl = (SessionImpl) session;
+			Connection conn = sessionImpl.connection();
+
+			String sql = "SELECT d.* FROM management m JOIN invoice_data d ON m.id = d.management_id "
+					+ " WHERE  duplicate_status=0 AND step = 2 AND "
+					+ " (0="+(index_date==null?0:1)+" Or (DATE(index_time) = ?)) "
+					+ " AND (0="+(present_user<=0?0:1)+" Or (present_user=?)) "
+					+ " ORDER BY sum_total_price DESC, customer_code";
+			
+			//System.out.println(sql);
+			PreparedStatement pre = conn.prepareStatement(sql);
+			pre.setDate(1, index_date);
+			pre.setInt(2, present_user);
+			System.out.println(pre.toString());
+			ResultSet rs = pre.executeQuery();
+			while(rs.next()){
+				results.add(getInvoiceData(rs));
+			}
+			rs.close();
+			log.debug("retrieve getReportIndexDaily successful, result size: " + results.size());
+			return results;
+		} catch (Exception re) {
+			re.printStackTrace();
+			log.error("retrieve getReportIndexDaily failed", re);
+			throw re;
+		} finally{
+			try {
+				if(session != null){
+					session.flush();
+					session.close();
+				}
+			} catch (Exception e) {
+			}
+		}
+	}
 }
