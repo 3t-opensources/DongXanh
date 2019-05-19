@@ -1008,7 +1008,7 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 					/**
 					 * write Excel for send mail
 					 */
-					reportXlsIndexDaily = new File(SystemUtil.getUserDir() + "/DX_Reports/ReportIndexData_"+str_index_date+".xlsx");
+					reportXlsIndexDaily = new File(SystemUtil.getUserDir() + "/DX_Reports/IndexData_Daily"+str_index_date+".xlsx");
 					if(!reportXlsIndexDaily.getParentFile().exists()){
 						reportXlsIndexDaily.getParentFile().mkdirs();
 					}
@@ -1024,6 +1024,8 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 					fileInputStream = new ByteArrayInputStream(baos.toByteArray());
 					workbook.close();
 				}
+			}else{
+				return ERROR;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
