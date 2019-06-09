@@ -1100,7 +1100,7 @@ public class InvoiceDataHome {
 					+ " WHERE  duplicate_status=0 AND step = 2 AND "
 					+ " (0="+(index_date==null?0:1)+" Or (DATE(index_time) = ?)) "
 					+ " AND (0="+(present_user<=0?0:1)+" Or (present_user=?)) "
-					+ " ORDER BY sum_total_price DESC, customer_code";
+					+ " ORDER BY customer_name_level1, customer_code, sum_total_price DESC";
 			
 			//System.out.println(sql);
 			PreparedStatement pre = conn.prepareStatement(sql);

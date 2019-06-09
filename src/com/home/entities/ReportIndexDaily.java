@@ -20,6 +20,13 @@ public class ReportIndexDaily {
 	public Date date1_receipt_of_product;
 	public String product_ids;
 	public String product_names;
+	public String total_quantities;
+	public String getTotal_quantities() {
+		return total_quantities;
+	}
+	public void setTotal_quantities(String total_quantities) {
+		this.total_quantities = total_quantities;
+	}
 	public String total_boxs;
 	public String total_prices;
 	public BigDecimal sum_total_price;

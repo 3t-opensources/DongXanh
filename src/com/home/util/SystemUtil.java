@@ -15,6 +15,7 @@ import java.util.Properties;
 import javax.imageio.ImageIO;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
 
 public class SystemUtil {
 
@@ -105,6 +106,22 @@ public class SystemUtil {
 			}
 		}
 		return "";
+	}
+	
+	public static String format2MoneyNoVND(Object value){
+		try {
+			if(value != null){
+				ScriptEngine engine = compileScript("function format(num){var n = num.toString(), p = n.indexOf('.');return n.replace(/\\d(?=(?:\\d{3})+(?:\\.|$))/g, function($0, i){return p<0 || i<p ? ($0+',') : $0; });}");
+				String rs=StringUtil.notNull(engine.eval("format("+value+")"));	
+				if(rs.length() > 0){
+					return rs;
+				}
+			}
+			return "";
+		}catch (Exception e) {
+			e.printStackTrace();
+			return StringUtil.notNull(value);
+		}
 	}
 	
 	public static byte[] getCustomImageInBytes(File image) {

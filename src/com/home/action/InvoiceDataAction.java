@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -20,6 +21,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.poi.hssf.util.CellRangeAddress;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.struts2.ServletActionContext;
@@ -29,6 +31,7 @@ import org.hibernate.SessionFactory;
 import com.google.gson.Gson;
 import com.home.dao.CustomerHome;
 import com.home.dao.InvoiceDataHome;
+import com.home.dao.ProductHome;
 import com.home.dao.UserHome;
 import com.home.entities.ReportIndexDaily;
 import com.home.entities.ReportInvoiceByCus1;
@@ -37,8 +40,8 @@ import com.home.entities.ReportInvoiceByStaff;
 import com.home.entities.ReportInvoiceDaily;
 import com.home.entities.ReportInvoiceDetailByCus2;
 import com.home.model.Customer;
-import com.home.model.EventsNote;
 import com.home.model.InvoiceData;
+import com.home.model.Product;
 import com.home.model.ResultMessage;
 import com.home.model.User;
 import com.home.util.DateUtils;
@@ -246,6 +249,7 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 			}
 			InvoiceDataHome home = new InvoiceDataHome(getSessionFactory());
 			listData = home.getListInvoiceData(date_company_received_from, date_company_received_to, invoice_type, user_id, customer_id, customer_name, sent_late);
+			System.out.println("listData export:" + listData.size());
 			
 			ServletContext servletContext = ServletActionContext.getServletContext();
 			String pathname = servletContext.getRealPath("/WEB-INF/template/excel/blank.xlsx");
@@ -260,8 +264,6 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 						"Loại bảng kê","Mã khách hàng","Tên khách hàng","Khách hàng cấp 1","NVTT","Ngày nhận toa","Ngày nhận hàng","Số ngày gởi trể","Ghi chú","Mã sản phẩm","Tên sản phẩm","Số lượng","Số thùng","Đơn giá","Thành tiền");
 				startIndexRow++;
 				for (InvoiceData entry : listData) {
-					
-  	        		
   	        		String c1 =  StringUtil.notNull(entry.getInvoice_type_name());
 					String c2 =  StringUtil.notNull(entry.getCustomer_code());
 					String c3 =  StringUtil.notNull(entry.getCustomer_name());
@@ -282,23 +284,43 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 							for (int i = 0; i < arr1.length; i++) {
 								if(arr1[i].length() > 0){
 									xls.addRowData(sheet, startIndexRow, startIndexCell, 
-											c1,c2,c3,c4,c5,c6,c7,c8,c9,
-											arr1[i],
-											arr2[i],
-											arr3[i],
-											arr4[i],
-											arr5[i],
-											arr6[i]
+											new Object[]{c1, ""},
+											new Object[]{c2, ""},
+											new Object[]{c3, ""},
+											new Object[]{c4, ""},
+											new Object[]{c5, ""},
+											new Object[]{c6, ""},
+											new Object[]{c7, ""},
+											new Object[]{c8, 1},
+											new Object[]{c9, ""},
+											new Object[]{arr1[i], ""},
+											new Object[]{arr2[i], ""},
+											new Object[]{arr3[i], 1},
+											new Object[]{arr4[i], 1d},
+											new Object[]{arr5[i], ""},
+											new Object[]{arr6[i], ""}
+//											c1,c2,c3,c4,c5,c6,c7,c8,c9,
+//											arr1[i],
+//											arr2[i],
+//											arr3[i],
+//											arr4[i],
+//											arr5[i],
+//											arr6[i]
 									);
 									startIndexRow++;
 								}								
 							}
 						}
 					}
+					//System.out.println(new java.util.Date() + ">>>startIndexRow: " + startIndexRow);
 				}
+				xls.autoSizeColumn(sheet, 1,2,3,4,5,6,7,10,11,12,13,14,15);
+				System.out.println("init xls done!");
 				ByteArrayOutputStream baos = new ByteArrayOutputStream();
 				workbook.write(baos);
+				System.out.println("write xls done!");
 				fileInputStream = new ByteArrayInputStream(baos.toByteArray());
+				System.out.println("export xls done!");
 				if (listData.size() <= 0)
 					addActionMessage("Không tìm thấy dữ liệu!");
 				else
@@ -936,6 +958,7 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 				report.setProduct_ids(data.getProduct_ids());
 				report.setProduct_names(data.getProduct_names());
 				report.setTotal_boxs(data.getTotal_boxs());
+				report.setTotal_quantities(data.getQuantitys());
 				report.setTotal_prices(data.getTotal_prices());
 				report.setSum_total_price(data.getSum_total_price());
 				report.setNotes(data.getNotes());
@@ -949,19 +972,30 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 		return reports;
 	}
 		
-	public String exportExcelIndexDaily() {
+	public String exportExcelIndexDaily(ServletContext servletContext) {
 		try {
 			String str_now = DateUtils.getStringFromDate(new java.util.Date(), "dd-MM-yyyy");
 			String str_index_date = DateUtils.getStringFromDate(new java.util.Date(new java.util.Date().getTime() - 24*60*60*1000l), "dd-MM-yyyy");
 			Date index_date = new Date(DateUtils.getDateFromString(DateUtils.getStringFromDate(new java.util.Date(), "dd/MM/yyyy"), "dd/MM/yyyy").getTime()-24*60*60*1000l);
+			//Date index_date = new Date(DateUtils.getDateFromString("23/05/2019", "dd/MM/yyyy").getTime()-24*60*60*1000l);
 			List<ReportIndexDaily> listData = getDataIndexDaily(index_date, 0);
 			if(listData.size() > 0){
+				ProductHome proHome = new ProductHome(getSessionFactory());
+				HashMap<String, Product> hmProduct = proHome.getProduct2Export();
 				String pathname;
 				try {
-					ServletContext servletContext = ServletActionContext.getServletContext();
-					pathname = servletContext.getRealPath("/WEB-INF/template/excel/report_index_data_daily.xlsx");
+					if(servletContext != null){
+						pathname = servletContext.getRealPath("/WEB-INF/template/excel/report_index_data_daily.xlsx");
+					}else{
+						pathname = ServletActionContext.getServletContext().getRealPath("/WEB-INF/template/excel/report_index_data_daily.xlsx");
+					}
+					//pathname = ((ServletContext) ActionContext.getContext().get(StrutsStatics.SERVLET_CONTEXT)).getRealPath("/WEB-INF/template/excel/report_index_data_daily.xlsx");
 				} catch (Exception e) {
+					e.printStackTrace();
 					pathname = "/media/administrator/data_ntxuan/TTTOAN/Jee Projects/DongXanh_Proj/DongXanh_V2/DongXanh/WebContent/WEB-INF/template/excel/report_index_data_daily.xlsx";
+					if(!new File(pathname).exists()){
+						pathname = "C:/xampp/tomcat/webapps/DongXanh/WEB-INF/template/excel/report_index_data_daily.xlsx";
+					}
 				}
 				File theFile = new File(pathname);
 				ExcelUtil xls = new ExcelUtil();
@@ -972,39 +1006,96 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 					Sheet sheet = workbook.getSheetAt(0);
 					int startIndexRow = 5;
 					int startIndexCell = 0;
-					BigDecimal sum_total_money = new BigDecimal(0);
-					int no = 1;
+					//BigDecimal sum_total_money = new BigDecimal(0);
+					BigDecimal sum_total_money222 = new BigDecimal(0);
+					BigDecimal sum_total_money_by_cus1 = new BigDecimal(0);
+					int idx_start_cus1 = Integer.parseInt("" + startIndexRow);
+					int idx_end_cus1 = Integer.parseInt("" + startIndexRow);
+					int no = 0;
+					String customer_code_tmp = "";
+					String customer_name_tmp = "";
+					String customer_name1_tmp = "";
 					for (int i = 0; i < listData.size(); i++) {
+						boolean flag = true;
+						String customer_code = listData.get(i).getCustomer_code();
+						String customer_name = listData.get(i).getCustomer_name();
+						String customer1_name = listData.get(i).getCustomer1_name();
 						String[] arr1 =  StringUtil.notNull(listData.get(i).getProduct_ids()).split("`");
 						String[] arr2 =  StringUtil.notNull(listData.get(i).getProduct_names()).split("`");
 						String[] arr3 =  StringUtil.notNull(listData.get(i).getTotal_boxs()).split("`");
+						String[] arr31 =  StringUtil.notNull(listData.get(i).getTotal_quantities()).split("`");
 						String[] arr4 =  StringUtil.notNull(listData.get(i).getTotal_prices()).split("`");
+						if(customer_code_tmp.isEmpty() || customer_name_tmp.isEmpty() || (!customer_code_tmp.equals(customer_code)) && !customer_name_tmp.equals(customer_name)){
+							no++;
+						}else{
+							flag = false;
+						}
 						if(arr1.length > 0){
-							for (int j = 0; j < arr1.length; j++) {
+							int startRowIndx = Integer.parseInt("" + startIndexRow);
+							for (int j = 0; j < arr1.length; j++) {								
 								if(arr1[j].length() > 0){
+									String product_code = arr1[j];
+									String total_price = (arr4.length > j ? arr4[j]:"");
+									if(hmProduct.containsKey(product_code)){
+										double price = hmProduct.get(product_code).getUnitPrice().doubleValue();
+										try {
+											total_price = "" + (Integer.valueOf(arr31[j]) * price);
+											//System.out.println(Integer.valueOf(arr31[j])  + " x " +  price + " = " + total_price);
+										} catch (Exception e) {}
+									}
 									xls.addRowData(sheet, startIndexRow, startIndexCell, 
-											(no++), 
-											listData.get(i).getCustomer_code(),
-											listData.get(i).getCustomer_name(),
-											listData.get(i).getCustomer1_name(),
+											flag?no:"", 
+											flag?customer_code:"",
+											flag?customer_name:"",
+											customer1_name,
 											listData.get(i).getStaff_name(),
 											DateUtils.getStringFromDate(listData.get(i).getDate1_receipt_of_product(), "dd/MM/yyyy"),
-											arr1[j],
+											product_code,
 											arr2.length > j ? arr2[j]:"",
 											arr3.length > j ? arr3[j]:"",
-											SystemUtil.format2Money(arr4.length > j ? arr4[j]:""),
-											listData.get(i).getNotes()
+											SystemUtil.format2MoneyNoVND(total_price),
+											""//listData.get(i).getNotes()
 									);
 									startIndexRow++;
+									flag = false;
+									//System.out.println(customer_code + " => " + arr4[j]);
+									sum_total_money222 = sum_total_money222.add(new BigDecimal(total_price));
+									//System.out.println(customer_name1_tmp + " vs " + customer1_name);
+									if(customer_name1_tmp.length() > 0 && !customer_name1_tmp.equals(customer1_name)){
+										//Insert & new
+										xls.updateRowData(sheet, idx_start_cus1, 10, SystemUtil.format2MoneyNoVND(sum_total_money_by_cus1.toString()));
+										System.out.println(idx_start_cus1  + " - " +  (idx_end_cus1-1));
+										sheet.addMergedRegion(new CellRangeAddress(idx_start_cus1, idx_end_cus1-1, 10, 10));
+										idx_start_cus1 = Integer.parseInt("" + (idx_end_cus1));
+										idx_end_cus1++;
+										sum_total_money_by_cus1 = new BigDecimal(0);
+										sum_total_money_by_cus1 = sum_total_money_by_cus1.add(new BigDecimal(total_price));
+										customer_name1_tmp = customer1_name;
+									}else{
+										idx_end_cus1++;
+										sum_total_money_by_cus1 = sum_total_money_by_cus1.add(new BigDecimal(total_price));
+									}
 								}								
 							}
+							int endRowIndx = Integer.parseInt("" + (startIndexRow-1));
+							//System.out.println(startRowIndx + "-" + endRowIndx);
+							sheet.addMergedRegion(new CellRangeAddress(startRowIndx, endRowIndx, 0, 0));
+							sheet.addMergedRegion(new CellRangeAddress(startRowIndx, endRowIndx, 1, 1));
+							sheet.addMergedRegion(new CellRangeAddress(startRowIndx, endRowIndx, 2, 2));
 						}
-						sum_total_money = sum_total_money.add(listData.get(i).getSum_total_price());
+						//sum_total_money = sum_total_money.add(listData.get(i).getSum_total_price());
+						customer_code_tmp = customer_code;
+						customer_name_tmp = customer_name;
+						customer_name1_tmp = customer1_name;
 					}
+					//Update tong doanh thu Cus1 cuoi cung
+					xls.updateRowData(sheet, idx_start_cus1, 10, SystemUtil.format2MoneyNoVND(sum_total_money_by_cus1.toString()));
+					sheet.addMergedRegion(new CellRangeAddress(idx_start_cus1, idx_end_cus1-1, 10, 10));
+					
 					xls.updateRowData(sheet, 2, 2, str_now);
 					xls.updateRowData(sheet, 2, 6, str_index_date);
-					xls.updateRowData(sheet, 2, 10, SystemUtil.format2Money(sum_total_money.toString()));
-						
+					xls.updateRowData(sheet, 2, 10, SystemUtil.format2MoneyNoVND(sum_total_money222.toString()));
+					//System.out.println("========" + sum_total_money222);
 					/**
 					 * write Excel for send mail
 					 */
@@ -1041,10 +1132,12 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 			//new InvoiceDataAction().loadListStaff();
 			//InvoiceDataHome home = new InvoiceDataHome(new InvoiceDataAction().getSessionFactory());
 			//System.out.println(home.getReportInvoiceDataByCus1(null, null).size());
-			//BigDecimal sum_total_money = new BigDecimal(0);
-			//System.out.println(SystemUtil.format2Money(sum_total_money.add(new BigDecimal("250000")).toString()));
+			BigDecimal sum_total_money = new BigDecimal(0);
+			sum_total_money = sum_total_money.add(new BigDecimal("2500.001"));
+			System.out.println(sum_total_money);
+			System.out.println(SystemUtil.format2MoneyNoVND(sum_total_money.toString()));
 			//System.out.println(new Date(DateUtils.getDateFromString(DateUtils.getStringFromDate(new java.util.Date(), "dd/MM/yyyy"), "dd/MM/yyyy").getTime()-24*60*60*1000));
-			new InvoiceDataAction().exportExcelIndexDaily();
+			new InvoiceDataAction().exportExcelIndexDaily(null);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

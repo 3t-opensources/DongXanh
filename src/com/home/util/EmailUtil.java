@@ -36,7 +36,7 @@ public class EmailUtil {
 	 */
 	public static void main(String[] args) {
 		try {
-			final String toEmail = "tttoan@digi-texx.vn"; // can be any email id 		
+			final String toEmail = "tttoan@digi-texx.vn;tttoan@digi-texx.vn"; // can be any email id 		
 
 			EmailUtil.sendEmail(toEmail,"SSLEmail Testing Subject", "SSLEmail Testing Body");
 
@@ -99,10 +99,25 @@ public class EmailUtil {
 
 	      msg.setSentDate(new Date());
 
-	      msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail, false));
+	      if(toEmail.contains(";")){
+	    	  String[] toUsers = toEmail.split(";");
+	    	  InternetAddress[] toUserIAdds = new InternetAddress[toUsers.length];
+	    	  for (int i = 0; i < toUserIAdds.length; i++) {
+	    		  if(toUsers[i].length() > 0){
+	    			  toUserIAdds[i] = new InternetAddress(toUsers[i]);
+	    			  System.out.println("toUserIAdds["+i+"] = " + toUsers[i]);
+	    		  }
+	    	  }
+	    	  if (toUserIAdds != null && toUserIAdds.length > 0) {
+	    		  msg.setRecipients(Message.RecipientType.TO, toUserIAdds);
+	    	  }
+	      }else{
+	    	  msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail, false));
+	      }
+	      
 	      System.out.println("Message is ready");
     	  Transport.send(msg);  
-	      System.out.println("EMail Sent Successfully!!");
+	      System.out.println("EMail["+toEmail+"] Sent Successfully!!");
 	    }
 	    catch (Exception e) {
 	      e.printStackTrace();
@@ -132,13 +147,28 @@ public class EmailUtil {
 
 		     msg.setSentDate(new Date());
 
-		     msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail, false));
+		     if(toEmail.contains(";")){
+		    	 String[] toUsers = toEmail.split(";");
+		    	 InternetAddress[] toUserIAdds = new InternetAddress[toUsers.length];
+		    	 for (int i = 0; i < toUserIAdds.length; i++) {
+		    		 if(toUsers[i].length() > 0){
+		    			 toUserIAdds[i] = new InternetAddress(toUsers[i]);
+			    		 System.out.println("toUserIAdds["+i+"] = " + toUsers[i]);
+		    		 }
+		    	 }
+		    	 if (toUserIAdds != null && toUserIAdds.length > 0) {
+		    		 msg.setRecipients(Message.RecipientType.TO, toUserIAdds);
+		    	 }
+		     }else{
+		    	 msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail, false));	 
+		     }
 		      
 	         // Create the message body part
-	         BodyPart messageBodyPart = new MimeBodyPart();
+		     MimeBodyPart messageBodyPart = new MimeBodyPart();
 
 	         // Fill the message
-	         messageBodyPart.setText(body);
+	         //messageBodyPart.setText(body);
+		     messageBodyPart.setContent(body,"text/html; charset=utf-8");
 	         
 	         // Create a multipart message for attachment
 	         Multipart multipart = new MimeMultipart();
@@ -158,7 +188,7 @@ public class EmailUtil {
 
 	         // Send message
 	         Transport.send(msg);
-	         System.out.println("EMail Sent Successfully with attachment!!");
+	         System.out.println("EMail["+toEmail+"] Sent Successfully with attachment!!");
 	      }catch (MessagingException e) {
 	         e.printStackTrace();
 	         throw e;

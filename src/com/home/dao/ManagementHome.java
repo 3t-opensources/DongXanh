@@ -424,7 +424,9 @@ public class ManagementHome {
 			Management management = (Management)session.get(Management.class, management_id);
 			management.setStep(2);
 			management.setCapture_status(0);
-			management.setIndex_time(new java.sql.Timestamp(new Date().getTime()));
+			if(management.getIndex_time() == null || management.getIndex_time() == management.getCreated_time()){
+				management.setIndex_time(new java.sql.Timestamp(new Date().getTime()));	
+			}
 			
 			session.update(management);
 			session.update(data);

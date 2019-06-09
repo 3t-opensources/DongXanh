@@ -9,6 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -303,6 +304,36 @@ public class ProductHome {
 			tx.commit();
 			log.debug("find by example successful, result size: " + results.size());
 			return results;
+		} catch (RuntimeException re) {
+			log.error("find by example failed", re);
+			throw re;
+		} finally {
+			try {
+				if (session != null) {
+					session.close();
+				}
+			} catch (Exception e) {
+			}
+		}
+	}
+	
+	public HashMap<String, Product> getProduct2Export() {
+		log.debug("finding Product instance by example");
+		Transaction tx = null;
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			tx = session.beginTransaction();
+			List<Product> results = session.createCriteria(Product.class).list();
+			tx.commit();
+			HashMap<String, Product> hm = new HashMap<String, Product>();
+			if(results != null){
+				for (Product product : results) {
+					hm.put(product.getProductCode(), product);
+				}
+			}
+			log.debug("getProduct2Export: " + hm.size());
+			return hm;
 		} catch (RuntimeException re) {
 			log.error("find by example failed", re);
 			throw re;

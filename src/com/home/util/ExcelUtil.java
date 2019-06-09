@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -102,7 +103,7 @@ public class ExcelUtil {
 			Cell cell = row.createCell(startIndexCell + i);
 			cell.setCellType(Cell.CELL_TYPE_STRING);
 			cell.setCellValue(valPerCells[i]);
-			sheet.autoSizeColumn(startIndexCell + i);
+			//sheet.autoSizeColumn(startIndexCell + i);
 		}
 	}
 	
@@ -123,6 +124,63 @@ public class ExcelUtil {
 			else
 				cell.setCellValue(valPerCells[i]+"");
 			//sheet.autoSizeColumn(startIndexCell + i);
+		}
+	}
+	
+	public void addRowData(Sheet sheet, int startIndexRow, int startIndexCell, Object[]... valPerCells) throws Exception{
+		Row row = sheet.createRow(startIndexRow);
+		for (int i = 0; i<valPerCells.length;i++) {
+			Cell cell = row.createCell(startIndexCell + i);			
+			try {
+				Object value = valPerCells[i][0];
+				Object type = valPerCells[i][1];
+				if(type instanceof Integer ){
+					try {
+						cell.setCellType(Cell.CELL_TYPE_NUMERIC);
+						cell.setCellValue((Integer.valueOf(StringUtil.notNull(value))));
+					} catch (Exception e) {
+						cell.setCellType(Cell.CELL_TYPE_STRING);
+						cell.setCellValue(StringUtil.notNull(value));
+					}
+				}
+				else if(type instanceof Double ){
+					try {
+						cell.setCellType(Cell.CELL_TYPE_NUMERIC);
+						cell.setCellValue(Double.valueOf(StringUtil.notNull(value)));
+					} catch (Exception e) {
+						cell.setCellType(Cell.CELL_TYPE_STRING);
+						cell.setCellValue(StringUtil.notNull(value));
+					}
+				}
+				else{
+					cell.setCellType(Cell.CELL_TYPE_STRING);
+					cell.setCellValue(StringUtil.notNull(value));
+				}
+			} catch (Exception e) {
+				cell.setCellType(Cell.CELL_TYPE_STRING);
+				cell.setCellValue(StringUtil.notNull(valPerCells[i][0]));
+			}
+			//sheet.autoSizeColumn(startIndexCell + i);
+		}
+	}
+	
+	public static void main(String[] args) {
+		Object[] arr = new Object[2];
+		arr[0] = new Integer(0);
+		arr[1] = new Date();
+		System.out.println(arr[0] instanceof Integer);
+	}
+	
+	public void autoSizeColumn(Sheet sheet, int ...cell_idxs){
+		try {
+			for (int i : cell_idxs) {
+				try {
+					sheet.autoSizeColumn(i);
+				} catch (Exception e) {}
+				
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 	

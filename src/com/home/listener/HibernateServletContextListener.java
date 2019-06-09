@@ -26,7 +26,7 @@ public class HibernateServletContextListener implements ServletContextListener {
 	@Override
 	public void contextInitialized(ServletContextEvent sce) {
 		initMyConfig();
-		Scheduler.getInstance().scheduleSendEmailDailyIndexData();
+		Scheduler.getInstance().scheduleSendEmailDailyIndexData(sce.getServletContext());
 //		URL url = HibernateServletContextListener.class.getResource("/hibernate.cfg.xml");
 //		Configuration config = new Configuration();
 //		config.configure(url);
