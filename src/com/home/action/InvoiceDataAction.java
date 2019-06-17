@@ -261,7 +261,7 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 				int startIndexRow = 0;
 				int startIndexCell = 0;
 				xls.addRowData(sheet, startIndexRow, startIndexCell, 
-						"Loại bảng kê","Mã khách hàng","Tên khách hàng","Khách hàng cấp 1","NVTT","Ngày nhận toa","Ngày nhận hàng","Số ngày gởi trể","Ghi chú","Mã sản phẩm","Tên sản phẩm","Số lượng","Số thùng","Đơn giá","Thành tiền");
+						"Loại bảng kê","Mã khách hàng","Tên khách hàng","Khách hàng cấp 1","NVTT","Ngày nhận toa","Ngày nhận hàng","Ngày cấp1 giao toa","Số ngày gửi trể","Ghi chú","Mã sản phẩm","Tên sản phẩm","Số lượng","Số thùng","Đơn giá","Thành tiền");
 				startIndexRow++;
 				for (InvoiceData entry : listData) {
   	        		String c1 =  StringUtil.notNull(entry.getInvoice_type_name());
@@ -271,6 +271,7 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 					String c5 =  StringUtil.notNull(entry.getStaff_name());
 					String c6 =  StringUtil.notNull(entry.getDate2_company_receipt_of_invoice());
 					String c7 =  StringUtil.notNull(entry.getDate1_receipt_of_product());
+					String c71 =  StringUtil.notNull(entry.getDate3_cus1_delivery_invoice());
 					String c8 =  StringUtil.notNull(entry.getDate_sent_late());
 					String c9 =  StringUtil.notNull(entry.getNotes());
 					if(c1.length() > 0){
@@ -291,6 +292,7 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 											new Object[]{c5, ""},
 											new Object[]{c6, ""},
 											new Object[]{c7, ""},
+											new Object[]{c71, ""},
 											new Object[]{c8, 1},
 											new Object[]{c9, ""},
 											new Object[]{arr1[i], ""},
@@ -962,6 +964,7 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 				report.setTotal_prices(data.getTotal_prices());
 				report.setSum_total_price(data.getSum_total_price());
 				report.setNotes(data.getNotes());
+				report.setDate_sent_late(data.getDate_sent_late());
 				reports.add(report);
 			}
 			listData.clear();
@@ -1020,6 +1023,8 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 						String customer_code = listData.get(i).getCustomer_code();
 						String customer_name = listData.get(i).getCustomer_name();
 						String customer1_name = listData.get(i).getCustomer1_name();
+						String notes = listData.get(i).getNotes();
+						int date_sent_late = listData.get(i).getDate_sent_late();
 						String[] arr1 =  StringUtil.notNull(listData.get(i).getProduct_ids()).split("`");
 						String[] arr2 =  StringUtil.notNull(listData.get(i).getProduct_names()).split("`");
 						String[] arr3 =  StringUtil.notNull(listData.get(i).getTotal_boxs()).split("`");
@@ -1037,8 +1042,8 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 									String product_code = arr1[j];
 									String total_price = (arr4.length > j ? arr4[j]:"");
 									if(hmProduct.containsKey(product_code)){
-										double price = hmProduct.get(product_code).getUnitPrice().doubleValue();
 										try {
+											long price = hmProduct.get(product_code).getUnitPrice().longValue();
 											total_price = "" + (Integer.valueOf(arr31[j]) * price);
 											//System.out.println(Integer.valueOf(arr31[j])  + " x " +  price + " = " + total_price);
 										} catch (Exception e) {}
@@ -1054,7 +1059,9 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 											arr2.length > j ? arr2[j]:"",
 											arr3.length > j ? arr3[j]:"",
 											SystemUtil.format2MoneyNoVND(total_price),
-											""//listData.get(i).getNotes()
+											"",
+											flag?notes:"",
+											flag?date_sent_late:""
 									);
 									startIndexRow++;
 									flag = false;
@@ -1082,6 +1089,8 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 							sheet.addMergedRegion(new CellRangeAddress(startRowIndx, endRowIndx, 0, 0));
 							sheet.addMergedRegion(new CellRangeAddress(startRowIndx, endRowIndx, 1, 1));
 							sheet.addMergedRegion(new CellRangeAddress(startRowIndx, endRowIndx, 2, 2));
+							sheet.addMergedRegion(new CellRangeAddress(startRowIndx, endRowIndx, 11, 11));
+							sheet.addMergedRegion(new CellRangeAddress(startRowIndx, endRowIndx, 12, 12));
 						}
 						//sum_total_money = sum_total_money.add(listData.get(i).getSum_total_price());
 						customer_code_tmp = customer_code;
@@ -1137,7 +1146,67 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 			System.out.println(sum_total_money);
 			System.out.println(SystemUtil.format2MoneyNoVND(sum_total_money.toString()));
 			//System.out.println(new Date(DateUtils.getDateFromString(DateUtils.getStringFromDate(new java.util.Date(), "dd/MM/yyyy"), "dd/MM/yyyy").getTime()-24*60*60*1000));
-			new InvoiceDataAction().exportExcelIndexDaily(null);
+			//new InvoiceDataAction().exportExcelIndexDaily(null);
+			new InvoiceDataAction().updateLaiGiaAndThanhTien();
+			//System.out.println((167800 * 100));
+			//System.out.println((167800l * 100));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void updateLaiGiaAndThanhTien(){
+		try {
+			ProductHome proHome = new ProductHome(getSessionFactory());
+			HashMap<String, Product> hmProduct = proHome.getProduct2Export();
+			
+			InvoiceDataHome invoiceHome = new InvoiceDataHome(getSessionFactory());
+			List<InvoiceData> listData = invoiceHome.getReportIndexDaily(null, 0);
+			if(listData.size() > 0){
+				List<InvoiceData> results = new ArrayList<InvoiceData>();
+				for (int i = 0; i < listData.size(); i++) {
+					int id = listData.get(i).getId();
+					String customer_code = listData.get(i).getCustomer_code();
+					System.out.println("+++> id["+id+"]["+customer_code+"]["+listData.get(i).getQuantitys()+"]["+listData.get(i).getUnit_prices()+"]["+listData.get(i).getTotal_prices()+"]");
+					String[] arr1 =  StringUtil.notNull(listData.get(i).getProduct_ids()).split("`");
+					String[] arr2 =  StringUtil.notNull(listData.get(i).getUnit_prices()).split("`");
+					String[] arr31 =  StringUtil.notNull(listData.get(i).getQuantitys()).split("`");
+					String[] arr4 =  StringUtil.notNull(listData.get(i).getTotal_prices()).split("`");
+					
+					String unit_prices = "";
+					String total_prices = "";
+					BigDecimal sum_of_total_prices = new BigDecimal("0");
+					if(arr1.length > 0){
+						for (int j = 0; j < arr1.length; j++) {	
+							String product_code = arr1[j];
+							String unit_price = (arr2.length > j ? arr2[j]:"");
+							String total_price = (arr4.length > j ? arr4[j]:"");
+							//System.out.println("product_code=["+product_code+"]");
+							if(hmProduct.containsKey(product_code)){
+								try {
+									long price = hmProduct.get(product_code).getUnitPrice().longValue();							
+									total_price = "" + (price * Long.valueOf(arr31[j]));
+									//System.out.println("============> " + price + " >>> " + total_price);
+									sum_of_total_prices = sum_of_total_prices.add(new BigDecimal(total_price));
+									unit_price = "" + price;
+								} catch (Exception e) {}
+							}
+							//System.out.println("product_code["+product_code+"]unit_price["+unit_price+"]total_price["+total_price+"]");
+							unit_prices += unit_price + "`";
+							total_prices += total_price + "`";
+						}
+						
+						//System.out.println("===> id["+id+"]["+customer_code+"]["+listData.get(i).getQuantitys()+"]["+unit_prices+"]["+total_prices+"]["+sum_of_total_prices+"]");
+						InvoiceData e = new InvoiceData();
+						e.setId(id);
+						e.setUnit_prices(unit_prices);
+						e.setTotal_prices(total_prices);
+						e.setSum_total_price(sum_of_total_prices);
+						results.add(e);
+					}
+				}
+				invoiceHome.updateUnitPriceAndTotalMoneys(results);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

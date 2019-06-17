@@ -1128,4 +1128,43 @@ public class InvoiceDataHome {
 			}
 		}
 	}
+	
+	
+	
+	/**
+	 * For update manual do tinh tien sai
+	 */
+	public void updateUnitPriceAndTotalMoneys(List<InvoiceData> listData) throws Exception{
+		log.debug("retrieve list updateUnitPriceAndTotalMoneys");
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			SessionImpl sessionImpl = (SessionImpl) session;
+			Connection conn = sessionImpl.connection();
+			conn.setAutoCommit(false);
+			String sql = "Update invoice_data set unit_prices=?, total_prices=?, sum_total_price=? where id=?";
+			PreparedStatement pre = conn.prepareStatement(sql);
+			for (InvoiceData data : listData) {
+				pre.setString(1, data.getUnit_prices());
+				pre.setString(2, data.getTotal_prices());
+				pre.setBigDecimal(3, data.getSum_total_price());
+				pre.setInt(4, data.getId());
+				System.out.println(pre.toString());
+				pre.executeUpdate();
+			}
+			conn.commit();
+		} catch (Exception re) {
+			re.printStackTrace();
+			log.error("retrieve updateUnitPriceAndTotalMoneys failed", re);
+			throw re;
+		} finally{
+			try {
+				if(session != null){
+					session.flush();
+					session.close();
+				}
+			} catch (Exception e) {
+			}
+		}
+	}
 }

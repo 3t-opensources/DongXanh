@@ -100,9 +100,9 @@
         			  
         			  
     	                <div class="well"><p align="center">
-		    	                 <a  href="homeAction" onclick="return exit();"><button  style="width: 120px!important;" class="btn btn-success"  > Thoát </button></a> 
-				                 <button style="width: 120px!important;" title="Alt +S" type="button" id ="btn_xoabangke"  class="btn btn-success" onclick="bad_images();">Xóa toa/bảng kê</button>			  
-				            	 <button style="width: 120px!important;" title="Alt +D" id ="btn_Luubangke"  class="btn btn-success" onclick="saveData();">Lưu toa/bảng kê</button>			  
+				            	 <button style="width: 120px!important;" title="Alt +S" id ="btn_Luubangke"  class="btn-success" onclick="saveData();">Lưu toa/bảng kê</button>			  
+				                 <button style="width: 120px!important;" title="Alt +D" type="button" id ="btn_xoabangke"  class="btn-warning" onclick="bad_images();">Xóa toa/bảng kê</button>			  
+		    	                 <a  href="homeAction" onclick="return exit();"><button  style="width: 120px!important;" class="btn-danger"  > Thoát </button></a> 
                       	</div>
 						<div id="wrapper" style="width : 100%; height : 100%; float: right">
 							<!-- <div class="panel-heading" style="color: blue;font-weight: bold;">META DATA </div> -->

@@ -31,6 +31,14 @@ public class ReportIndexDaily {
 	public String total_prices;
 	public BigDecimal sum_total_price;
 	public String notes;
+	public Integer date_sent_late; 
+	
+	public Integer getDate_sent_late() {
+		return date_sent_late;
+	}
+	public void setDate_sent_late(Integer date_sent_late) {
+		this.date_sent_late = date_sent_late;
+	}
 	public int getNo() {
 		return no;
 	}

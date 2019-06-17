@@ -129,7 +129,7 @@ pageEncoding="UTF-8"%>
 		                <th class="table-th" style="text-align: center;width:11%">Khách hàng cấp 1</th>		
 		                <th class="table-th" style="text-align: center;width:11%">NVTT</th>		                                
 		                <th class="table-th" style="text-align: center;width:11%">Ngày nhận hàng</th>
-		                <th class="table-th" style="text-align: center;width:11%">Số ngày gởi trể</th>
+		                <th class="table-th" style="text-align: center;width:11%">Số ngày gửi trể</th>
 		                
 		              
 		                <th class="table-th" style="text-align: center;width:11%">Ghi chú</th>
@@ -896,7 +896,8 @@ pageEncoding="UTF-8"%>
 	  	        		
 	  	        		table +="   <th class='table-th' style='text-align: center;width:10%'>Ngày nhận toa</th>	";
 	  	        		table +="   <th class='table-th' style='text-align: center;width:10%'>Ngày nhận hàng</th>	";
-	  	        		table +="   <th class='table-th' style='text-align: center;width:10%'>Số ngày gởi trể</th>	";
+	  	        		table +="   <th class='table-th' style='text-align: center;width:10%'>Ngày cấp1 giao toa</th>	";
+	  	        		table +="   <th class='table-th' style='text-align: center;width:10%'>Số ngày gửi trể</th>	";
 	  	        		table +="   <th class='table-th' style='text-align: center;width:10%'>Ghi chú</th>	";
 	  	        		table +="   <th class='table-th' style='text-align: center;width:10%'>Mã sản phẩm</th>	";
 	  	        		table +="   <th class='table-th' style='text-align: center;width:10%'>Tên sản phẩm	</th>	";
@@ -921,14 +922,27 @@ pageEncoding="UTF-8"%>
 	  	        		
 	  	        		var date1_receipt_of_product =responseText[i].date1_receipt_of_product;
 	  	        		var date2_company_receipt_of_invoice =responseText[i].date2_company_receipt_of_invoice;
+	  	        		var date3_cus1_delivery_invoice =responseText[i].date3_cus1_delivery_invoice;
 	  	        	
 	  	        		var date_sent_late        =responseText[i].date_sent_late;
 	  	        		var notes                 =responseText[i].notes;
 	  	        		if(date1_receipt_of_product!=null && date1_receipt_of_product.length>10){
 	  	        			date1_receipt_of_product = date1_receipt_of_product.substring(8,10)+"/"+date1_receipt_of_product.substring(5,7)+"/"+date1_receipt_of_product.substring(0,4);
 	  	        		}
+	  	        		else if(date1_receipt_of_product==null){
+	  	        			date1_receipt_of_product = "";
+	  	        		}
 	  	        		if(date2_company_receipt_of_invoice!=null && date2_company_receipt_of_invoice.length>10){
 	  	        			date2_company_receipt_of_invoice = date2_company_receipt_of_invoice.substring(8,10)+"/"+date2_company_receipt_of_invoice.substring(5,7)+"/"+date2_company_receipt_of_invoice.substring(0,4);
+	  	        		}
+	  	        		else if(date1_receipt_of_product==null){
+	  	        			date1_receipt_of_product = "";
+	  	        		}
+	  	        		if(date3_cus1_delivery_invoice!=null && date3_cus1_delivery_invoice.length>10){
+	  	        			date3_cus1_delivery_invoice = date3_cus1_delivery_invoice.substring(8,10)+"/"+date3_cus1_delivery_invoice.substring(5,7)+"/"+date3_cus1_delivery_invoice.substring(0,4);
+	  	        		}
+	  	        		else if(date3_cus1_delivery_invoice==null){
+	  	        			date3_cus1_delivery_invoice = "";
 	  	        		}
 	  	        		if(responseText[i].product_ids!=null){
 	  	        			var product_ids           = responseText[i].product_ids.split("`");
@@ -976,6 +990,7 @@ pageEncoding="UTF-8"%>
 				  	        		table +="     <td>"+staff_name+"</td>";
 				  	        		table +="     <td class='right'>"+date2_company_receipt_of_invoice+"</td>";
 				  	            	table +="     <td class='right'>"+date1_receipt_of_product+"</td>";
+				  	            	table +="     <td class='right'>"+date3_cus1_delivery_invoice+"</td>";
 				  	        		table +="     <td>"+date_sent_late+"</td>";
 				  	        		table +="     <td>"+notes+"</td>";  
 				  	        		
