@@ -10,6 +10,9 @@ import java.util.TimerTask;
 
 import javax.servlet.ServletContext;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.home.action.InvoiceDataAction;
 import com.home.dao.UserHome;
 import com.home.model.User;
@@ -19,7 +22,7 @@ import com.home.util.StringUtil;
 import com.opensymphony.xwork2.Action;
 
 public class Scheduler{
-	
+	private static final Log log = LogFactory.getLog(Scheduler.class);
 	//create an object of SingleObject
 	private static Scheduler instance = new Scheduler();
 	private Timer timer = new Timer(true);
@@ -88,6 +91,7 @@ public class Scheduler{
 			timer.schedule(new RemindTask(servletContext), startTime(), 24*60*60*1000l); // period: 1 day
 		} catch (Exception e) {
 			e.printStackTrace();
+			log.error(e);
 		}
 	}
 	
@@ -109,24 +113,41 @@ public class Scheduler{
 					UserHome userHome = new UserHome(HibernateUtil.getSessionFactory());
 					List<User> leaders = userHome.getListUserLeader();
 					if(leaders != null){
-						StringBuilder listEmail = new StringBuilder();
-						for (User user : leaders) {
-							if(StringUtil.notNull(user.getEmail()).length() > 0){
-								try {
-									EmailUtil.sendAttachmentEmail(user.getEmail(), subject, body, fileAttachment);	
-									listEmail.append(user.getEmail()).append(";");
-								} catch (Exception e) {
-									e.printStackTrace();
+						int retry = 0;
+						while(retry < 5){
+							try {
+								StringBuilder listEmail = new StringBuilder();
+								for (User user : leaders) {
+									if(StringUtil.notNull(user.getEmail()).length() > 0){
+										listEmail.append(user.getEmail()).append(";");
+									}
 								}
+								try {
+									if(listEmail.length() > 0){
+										EmailUtil.sendAttachmentEmail(listEmail.toString(), subject, body, fileAttachment);	
+									}
+								} catch (Exception e) {
+									for (User user : leaders) {
+										if(StringUtil.notNull(user.getEmail()).length() > 0){
+											EmailUtil.sendAttachmentEmail(user.getEmail(), subject, body, fileAttachment);
+										}
+									}
+								}
+								retry = 5;
+								break;
+							} catch (Exception e) {
+								e.printStackTrace();
+								log.error(e);
+								Thread.sleep(5*60000);
+							} finally{
+								retry++;
 							}
-						}
-						if(listEmail.length() > 0){
-							EmailUtil.sendAttachmentEmail(listEmail.toString(), subject, body, fileAttachment);	
 						}
 					}
 				}	
 			} catch (Exception e) {
 				e.printStackTrace();
+				log.error(e);
 			}
 		}
 	}
