@@ -10,6 +10,8 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -21,7 +23,12 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.util.CellRangeAddress;
+import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.struts2.ServletActionContext;
@@ -39,6 +46,7 @@ import com.home.entities.ReportInvoiceByCus2;
 import com.home.entities.ReportInvoiceByStaff;
 import com.home.entities.ReportInvoiceDaily;
 import com.home.entities.ReportInvoiceDetailByCus2;
+import com.home.entities.ReportProductDaily;
 import com.home.model.Customer;
 import com.home.model.InvoiceData;
 import com.home.model.Product;
@@ -54,6 +62,7 @@ import com.opensymphony.xwork2.ActionSupport;
 
 public class InvoiceDataAction extends ActionSupport implements ServletContextAware {
 	private static final long serialVersionUID = 5109187855480607759L;
+	private final Log log = LogFactory.getLog(InvoiceDataAction.class);
 	//servletcontext for getting the context
 	private ServletContext servletContext;
 	private List<InvoiceData> listData = new ArrayList<InvoiceData>();
@@ -1105,6 +1114,12 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 					xls.updateRowData(sheet, 2, 6, str_index_date);
 					xls.updateRowData(sheet, 2, 10, SystemUtil.format2MoneyNoVND(sum_total_money222.toString()));
 					//System.out.println("========" + sum_total_money222);
+					
+					/**
+					 * Report product daily
+					 */
+					genarateSheetDataProductDaily(xls, workbook, getDataProductDaily(index_date), str_now, str_index_date);
+					
 					/**
 					 * write Excel for send mail
 					 */
@@ -1123,6 +1138,7 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 					workbook.write(baos);
 					fileInputStream = new ByteArrayInputStream(baos.toByteArray());
 					workbook.close();
+					System.out.println("Report Done!");
 				}
 			}else{
 				return ERROR;
@@ -1134,6 +1150,196 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 		return SUCCESS;
 	}
 	
+	private void genarateSheetDataProductDaily(ExcelUtil xls, Workbook workbook, LinkedHashMap<String, LinkedHashMap<String, ReportProductDaily>> products, String str_now, String str_index_date){
+		try {
+			CellStyle cell_style1 = workbook.createCellStyle();            
+            cell_style1.setBorderTop(HSSFCellStyle.BORDER_THIN);
+            cell_style1.setBorderLeft(HSSFCellStyle.BORDER_THIN);
+            cell_style1.setBorderBottom(HSSFCellStyle.BORDER_THIN);
+            cell_style1.setBorderRight(HSSFCellStyle.BORDER_THIN);
+            //cell_style.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+            cell_style1.setFillForegroundColor(HSSFColor.PALE_BLUE.index);
+    		cell_style1.setFillBackgroundColor(HSSFColor.PALE_BLUE.index);
+    		cell_style1.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+    		
+    		CellStyle cell_style2 = workbook.createCellStyle();            
+    		cell_style2.setBorderTop(HSSFCellStyle.BORDER_THIN);
+    		cell_style2.setBorderLeft(HSSFCellStyle.BORDER_THIN);
+    		cell_style2.setBorderBottom(HSSFCellStyle.BORDER_THIN);
+    		cell_style2.setBorderRight(HSSFCellStyle.BORDER_THIN);
+            
+            Sheet sheet = workbook.getSheetAt(1);
+			int startIndexRow = 6;
+			int startIndexCell = 0;
+			for (String product_code : products.keySet()) {
+				LinkedHashMap<String, ReportProductDaily> customers = products.get(product_code);
+				List<ReportProductDaily> listCus = new ArrayList<ReportProductDaily>(customers.values());
+				/**
+				 * Sort data
+				 */
+				Collections.sort(listCus, new Comparator<ReportProductDaily>() {
+					@Override
+					public int compare(ReportProductDaily o1, ReportProductDaily o2) {
+						try {
+							return Float.compare(o1.getTotal_box_in_year(), o2.getTotal_box_in_year());
+						} catch (Exception e) {
+							return 0;
+						}
+					}
+				});
+				Collections.reverse(listCus);
+				float total_box_in_year_by_product = 0;
+				float total_box_in_day_by_product = 0;
+				for (ReportProductDaily cus : listCus) {
+					xls.addRowData(sheet, startIndexRow, startIndexCell, cell_style2,
+							product_code,
+							cus.getCustomer1_name(),
+							SystemUtil.format2MoneyNoVND(cus.getTotal_box_in_year()),
+							cus.getTotal_box_in_day() > 0? SystemUtil.format2MoneyNoVND(cus.getTotal_box_in_day()):""
+					);
+					startIndexRow ++;
+					total_box_in_year_by_product += cus.getTotal_box_in_year();
+					total_box_in_day_by_product += cus.getTotal_box_in_day();
+				}
+				xls.addRowData(sheet, startIndexRow, startIndexCell, cell_style1,
+						product_code + " Tổng cộng:",
+						"",
+						SystemUtil.format2MoneyNoVND(total_box_in_year_by_product),
+						SystemUtil.format2MoneyNoVND(total_box_in_day_by_product)
+				);
+				startIndexRow += 2;
+			}
+			xls.updateRowData(sheet, 2, 1, str_now);
+			xls.updateRowData(sheet, 2, 3, str_index_date);
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error(e);
+		}
+	}
+	
+	///////////////////////////////////////REPORT BY PRODUCT DAILY////////////////////////////////////////////////////
+	
+	private LinkedHashMap<String, LinkedHashMap<String, ReportProductDaily>> getDataProductDaily(Date index_date) throws Exception{
+		LinkedHashMap<String, LinkedHashMap<String, ReportProductDaily>> results = new LinkedHashMap<String, LinkedHashMap<String,ReportProductDaily>>();
+		try {
+			if(index_date == null){
+				HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
+				// Fetch Data from User Table
+				if(index_date == null){
+					try {
+						String day = StringUtil.notNull(request.getParameter("index_date"));
+						if(day.length() == 10){
+							index_date = new Date(DateUtils.getDateFromString(day, "dd/MM/yyyy").getTime());
+						}else{
+							index_date = new Date(DateUtils.getDateFromString(DateUtils.getStringFromDate(new java.util.Date(), "dd/MM/yyyy"), "dd/MM/yyyy").getTime()-24*60*60*1000l);
+						}				
+					} catch (Exception e) {
+						index_date = new Date(DateUtils.getDateFromString(DateUtils.getStringFromDate(new java.util.Date(), "dd/MM/yyyy"), "dd/MM/yyyy").getTime()-24*60*60*1000l);
+					}
+				}
+			}
+			
+			/**
+			 * Get start day-end day, from 1/10 -> current day
+			 */
+			
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(index_date);
+			int year = cal.get(Calendar.YEAR);
+			int month = cal.get(Calendar.MONTH);
+			if(month < 10){
+				year = year -1;
+			}
+			java.sql.Date start_day = new Date(DateUtils.getDateFromString("01/10/"+(year), "dd/MM/yyyy").getTime());
+			java.sql.Date end_day = new Date(index_date.getTime());				
+			
+			
+			InvoiceDataHome home = new InvoiceDataHome(getSessionFactory());
+			listData = home.getReportProductDaily(start_day, end_day);
+			
+			List<ReportProductDaily> reports = new ArrayList<ReportProductDaily>();
+			for (InvoiceData data : listData) {
+				String customer1_name = data.getCustomer_name_level1();
+				java.util.Date index_time = data.getIndex_time();
+				String[] arrPid =  StringUtil.notNull(data.getProduct_ids()).split("`");
+				String[] arrBox =  StringUtil.notNull(data.getTotal_boxs()).split("`");
+				if(arrPid.length > 0 && arrBox.length > 0){
+					for (int j = 0; j < arrPid.length; j++) {	
+						String product_code = arrPid[j];
+						float total_box = Float.valueOf(arrBox[j]);
+						total_box = (float) Math.round(total_box * 100.0f) / 100.0f;
+						if(product_code.length() > 0){
+							if(product_code.length() > 5){
+								product_code = product_code.substring(0, 5);
+								product_code = product_code.replace("DO4S1", "DO48S").replace("DI8W1", "DI80W");
+							}
+							ReportProductDaily report = new ReportProductDaily();
+							report.setCustomer1_name(customer1_name);
+							report.setProduct_id(product_code);
+							report.setIndex_date(index_time);
+							report.setTotal_box(total_box);
+							reports.add(report);
+						}
+						
+					}
+				}
+			}
+			listData.clear();
+			
+			/**
+			 * Sort data
+			 */
+			Collections.sort(reports, new Comparator<ReportProductDaily>() {
+				@Override
+				public int compare(ReportProductDaily o1, ReportProductDaily o2) {
+					try {
+						int v1 = o1.getIndex_date().compareTo(o2.getIndex_date());
+						if(v1 == 0){
+							return o1.getProduct_id().compareTo(o2.getProduct_id());						
+						}
+						return v1;
+					} catch (Exception e) {
+						return 0;
+					}
+				}
+			});
+			Collections.reverse(reports);
+			for (ReportProductDaily r : reports) {
+				//System.out.println(r.getIndex_date() + "#" + r.getProduct_id() + "#" + r.getCustomer1_name() + "#" + r.getTotal_box());
+				String product_code = r.getProduct_id();
+				String customer1_name = r.getCustomer1_name();
+				float box = r.getTotal_box();
+				boolean isCurrentDay = DateUtils.formmatStringDate(end_day, "ddMMyyyy").equals(DateUtils.formmatStringDate(r.getIndex_date(), "ddMMyyyy"));
+				
+				if(results.containsKey(product_code)){
+					if(results.get(product_code).containsKey(customer1_name)){
+						results.get(product_code).get(customer1_name).addTotal_box_in_day(isCurrentDay?box:0);
+						results.get(product_code).get(customer1_name).addTotal_box_in_year((box));
+					}else{
+						ReportProductDaily rp = new ReportProductDaily();
+						rp.setCustomer1_name(customer1_name);
+						rp.setProduct_id(product_code);
+						rp.setTotal_box_in_day(isCurrentDay?box:0);
+						rp.setTotal_box_in_year(box);						
+						results.get(product_code).put(customer1_name, rp);
+					}
+				}else{
+					ReportProductDaily rp = new ReportProductDaily();
+					rp.setCustomer1_name(customer1_name);
+					rp.setProduct_id(product_code);
+					rp.setTotal_box_in_day(isCurrentDay?box:0);
+					rp.setTotal_box_in_year(box);
+					results.put(product_code, new LinkedHashMap<String, ReportProductDaily>());
+					results.get(product_code).put(customer1_name, rp);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		return results;
+	}
+	
 	///////////////////////////////////////////////NEW REPORT/////////////////////////////////////////////////////////
 	
 	public static void main(String[] args) {
@@ -1141,15 +1347,16 @@ public class InvoiceDataAction extends ActionSupport implements ServletContextAw
 			//new InvoiceDataAction().loadListStaff();
 			//InvoiceDataHome home = new InvoiceDataHome(new InvoiceDataAction().getSessionFactory());
 			//System.out.println(home.getReportInvoiceDataByCus1(null, null).size());
-			BigDecimal sum_total_money = new BigDecimal(0);
-			sum_total_money = sum_total_money.add(new BigDecimal("2500.001"));
-			System.out.println(sum_total_money);
-			System.out.println(SystemUtil.format2MoneyNoVND(sum_total_money.toString()));
+//			BigDecimal sum_total_money = new BigDecimal(0);
+//			sum_total_money = sum_total_money.add(new BigDecimal("2500.001"));
+//			System.out.println(sum_total_money);
+//			System.out.println(SystemUtil.format2MoneyNoVND(sum_total_money.toString()));
 			//System.out.println(new Date(DateUtils.getDateFromString(DateUtils.getStringFromDate(new java.util.Date(), "dd/MM/yyyy"), "dd/MM/yyyy").getTime()-24*60*60*1000));
-			//new InvoiceDataAction().exportExcelIndexDaily(null);
-			new InvoiceDataAction().updateLaiGiaAndThanhTien();
+			new InvoiceDataAction().exportExcelIndexDaily(null);
+			//new InvoiceDataAction().updateLaiGiaAndThanhTien();
 			//System.out.println((167800 * 100));
 			//System.out.println((167800l * 100));
+			//new InvoiceDataAction().getDataProductDaily(new Date(new java.util.Date().getTime()));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

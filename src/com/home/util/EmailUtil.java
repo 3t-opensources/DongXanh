@@ -24,9 +24,9 @@ import javax.mail.internet.MimeMultipart;
 public class EmailUtil {
 
 	public static String MAIL_ACCOUNT = "infor@dongxanhvn.com";
-	public static String MAIL_PASSWORD = "dongxanhMAIL!23";
-	public static String MAIL_HOST = "112.78.4.14";
-	public static String MAIL_PORT = "465";
+	public static String MAIL_PASSWORD = "dongxanh123@#";
+	public static String MAIL_HOST = "108.177.125.109";//smtp.gmail.com
+	public static String MAIL_PORT = "587";
 
 	/**
 	   Outgoing Mail (SMTP) Server
@@ -36,7 +36,7 @@ public class EmailUtil {
 	 */
 	public static void main(String[] args) {
 		try {
-			final String toEmail = "tttoan@digi-texx.vn;tttoan@digi-texx.vn"; // can be any email id 		
+			final String toEmail = "tttoan@digi-texx.vn"; // can be any email id 		
 
 			EmailUtil.sendEmail(toEmail,"SSLEmail Testing Subject", "SSLEmail Testing Body");
 
@@ -56,13 +56,16 @@ public class EmailUtil {
 	
 	private static Session createSession(){
 		Properties props = new Properties();
+		//props.put("mail.smtp.localhost", "www.dongxanhvn.com");
 		props.put("mail.smtp.host", MAIL_HOST); //SMTP Host
-		props.put("mail.smtp.socketFactory.port",MAIL_PORT); //SSL Port
-		props.put("mail.smtp.socketFactory.class",
-				"javax.net.ssl.SSLSocketFactory"); //SSL Factory Class
+		props.put("mail.smtp.socketFactory.port", MAIL_PORT); //SSL Port
+		props.put("mail.smtp.socketFactory.class",	"javax.net.ssl.SSLSocketFactory"); //SSL Factory Class
 		props.put("mail.smtp.port", MAIL_PORT); //SMTP Host
 		props.put("mail.smtp.auth", "true"); //SMTP Host
 		props.put("mail.smtp.starttls.enable", "true"); //SMTP Host
+		//props.put("mail.debug", "true");
+		props.put("mail.smtp.user", MAIL_ACCOUNT);
+	    props.put("mail.smtp.password", MAIL_PASSWORD);
 		Authenticator auth = new Authenticator() {
 			//override the getPasswordAuthentication method
 			protected PasswordAuthentication getPasswordAuthentication() {

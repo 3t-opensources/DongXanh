@@ -14,6 +14,7 @@ import com.home.dao.UserHome;
 import com.home.entities.UserAware;
 import com.home.model.Role;
 import com.home.model.User;
+import com.home.model.UserStatus;
 import com.home.util.HibernateUtil;
 import com.home.util.StringUtil;
 import com.opensymphony.xwork2.Action;
@@ -33,6 +34,7 @@ public class UserAction extends ActionSupport implements Action, ModelDriven<Use
 	public Role role = new Role();
 	public List<User> listEmployee = new ArrayList<>();
 	private List<Role> listRole = new ArrayList<>();
+	private List<UserStatus> listUserStatus = new ArrayList<>();
 	private ServletContext ctx;
 	public String genUserName = "sss";
 	private User userSes;
@@ -60,8 +62,36 @@ public class UserAction extends ActionSupport implements Action, ModelDriven<Use
 	public static void main(String[] args) {
 		try {
 			UserHome userHome = new UserHome(HibernateUtil.getSessionFactory());
-			List<User> leaders = userHome.getListUserLeader();
-			System.out.println(leaders.size() + ", " + leaders.get(0).getEmail());
+			List<User> leaders = userHome.getListUser();
+			for (User user : leaders) {
+				System.out.println(user.getId() + " - " +  user.getUserName() + " - " + user.getFullName() + " - " + user.getIsEnabled() + " - " + user.getPassword());
+//				if(user.getUserName().equals("Unknown")){
+//					user.setFullName("Unknown");
+//					user.setIsEnabled(Short.valueOf("0"));
+//					userHome.updateDirty(user);	
+//				}
+//				if(user.getUserName().equals("PVHùng")){
+//					user.setFullName("PVHùng");
+//					userHome.updateDirty(user);	
+//				}
+//				if(user.getUserName().equals("thongcm")){
+//					user.setIsEnabled(Short.valueOf("1"));
+//					userHome.updateDirty(user);	
+//				}
+				if(user.getUserName().equals("NPĐằng") || user.getUserName().equals("NPDang")){
+					user.setUserName("NPĐằng");
+					user.setFullName("Nguyễn Phúc Đằng");
+					user.setPassword("123456");
+					user.setIsEnabled(Short.valueOf("1"));
+					userHome.updateDirty(user);	
+				}
+//				if(user.getUserName().equals("CDNang")){
+//					user.setUserName("CDNăng");
+//					userHome.updateDirty(user);	
+//				}				
+			}
+			
+			System.out.println(userHome.getUserByCredentials("npdang", "123456"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -123,6 +153,9 @@ public class UserAction extends ActionSupport implements Action, ModelDriven<Use
 		try {
 			RoleHome roleHome = new RoleHome(getSessionFactory());
 			listRole = roleHome.findAllRole();
+			listUserStatus = new ArrayList<UserStatus>();
+			listUserStatus.add(new UserStatus(Short.valueOf("1"), "Đang hoạt động"));
+			listUserStatus.add(new UserStatus(Short.valueOf("0"), "Ngưng hoạt động"));
 			return SUCCESS;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -256,5 +289,13 @@ public class UserAction extends ActionSupport implements Action, ModelDriven<Use
 
 	public void setVarbirthDate(String varbirthDate) {
 		this.varbirthDate = varbirthDate;
+	}
+	
+	public List<UserStatus> getListUserStatus() {
+		return listUserStatus;
+	}
+
+	public void setListUserStatus(List<UserStatus> listUserStatus) {
+		this.listUserStatus = listUserStatus;
 	}
 }

@@ -40,7 +40,7 @@ public class User implements java.io.Serializable {
 	private Date lastPasswordChangedDate;
 	private Integer failedPasswordCount;
 	private String remarks;
-	private short isEnabled;
+	private short isEnabled = Short.valueOf("1");
 	private Set<Customer> customers = new HashSet<Customer>(0);
 	private Set<Statistic> statistics = new HashSet<Statistic>(0);
 	private Set<WorkingPlan> workingPlans = new HashSet<WorkingPlan>(0);

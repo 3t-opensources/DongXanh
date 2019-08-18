@@ -32,7 +32,14 @@ public class InvoiceData {
 	public String unit_prices;
 	public String total_prices;
 	public BigDecimal sum_total_price;
+	public Date index_time;
 	
+	public Date getIndex_time() {
+		return index_time;
+	}
+	public void setIndex_time(Date index_time) {
+		this.index_time = index_time;
+	}
 	public String getUnit_prices() {
 		return unit_prices;
 	}

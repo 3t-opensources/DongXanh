@@ -231,7 +231,19 @@ public class UserHome {
 		try {
 			session = sessionFactory.openSession();
 			tx = session.beginTransaction();
-			User result = (User) session.createCriteria(User.class).add(Restrictions.eq("userName", userName)).add(Restrictions.eq("password", password)).uniqueResult();
+			User result = (User) session.createCriteria(User.class).
+					add(Restrictions.eq("userName", userName)).
+					add(Restrictions.eq("password", password)).
+					add(Restrictions.eq("isEnabled", Short.valueOf("1"))).
+					uniqueResult();
+			if(result == null && userName.toLowerCase().contains("d")){
+				userName = userName.toLowerCase().replace("d", "đ");
+				result = (User) session.createCriteria(User.class).
+						add(Restrictions.eq("userName", userName)).
+						add(Restrictions.eq("password", password)).
+						add(Restrictions.eq("isEnabled", Short.valueOf("1"))).
+						uniqueResult();
+			}
 			tx.commit();
 			return result;
 		} catch (RuntimeException re) {
@@ -310,7 +322,8 @@ public class UserHome {
 		try {
 			session = sessionFactory.openSession();
 			tx = session.beginTransaction();
-			List<User> results = session.createCriteria(User.class).list();
+			//List<User> results = session.createCriteria(User.class).add(Restrictions.eq("isEnabled", Short.valueOf("1"))).list();
+			List<User> results = session.createCriteria(User.class).add(Restrictions.gt("id", 0)).list();
 			tx.commit();
 			log.debug("retrieve list Users successful, result size: " + results.size());
 			return results;

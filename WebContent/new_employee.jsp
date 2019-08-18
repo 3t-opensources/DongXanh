@@ -57,8 +57,8 @@
 								</label>
 								<div class="col-md-6 col-sm-6 col-xs-12">
 									<input id="userName" type="text" name="userName" readonly
-										data-validate-length-range="1,20" value="${user.userName}"
-										class="form-control col-md-7 col-xs-12">
+											data-validate-length-range="1,20" value="${user.userName}"
+											class="form-control col-md-7 col-xs-12">								
 								</div>
 							</div>
 							<div class="item form-group">
@@ -133,8 +133,18 @@
 									<s:select id="roleId" name="roleId" showDownArrow="false"
 										autoComplete="true" value="%{user.role.roleId}"
 										cssClass="form-control col-md-7 col-xs-12" list="listRole"
-										disabled="%{userSes.role.roleId != 1}"
 										listKey="roleId" listValue="roleName" />
+								</div>
+							</div>
+							<div class="item form-group">
+								<label class="control-label col-md-3 col-sm-3 col-xs-12"
+									for="roleId">Tình trạng<span class="required">*</span>
+								</label>
+								<div class="col-md-6 col-sm-6 col-xs-12">
+									<s:select id="isEnabled" name="isEnabled" showDownArrow="false"
+										autoComplete="true" value="%{user.isEnabled}"
+										cssClass="form-control col-md-7 col-xs-12" list="listUserStatus"
+										listKey="status" listValue="description" />
 								</div>
 							</div>
 							<div class="ln_solid"></div>

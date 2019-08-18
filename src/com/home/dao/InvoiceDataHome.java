@@ -1129,7 +1129,55 @@ public class InvoiceDataHome {
 		}
 	}
 	
-	
+	public List<InvoiceData> getReportProductDaily(
+			java.sql.Date start_day, 
+			java.sql.Date end_day) throws Exception{
+		log.debug("retrieve list getReportProductDaily");
+		Session session = null;
+		List<InvoiceData> results = new ArrayList<InvoiceData>();
+		try {
+			session = sessionFactory.openSession();
+			SessionImpl sessionImpl = (SessionImpl) session;
+			Connection conn = sessionImpl.connection();
+
+			String sql = "SELECT customer_code_level1,customer_name_level1,product_ids,total_boxs,DATE(index_time) as index_time"
+					+ " FROM management m JOIN invoice_data d ON m.id = d.management_id "
+					+ " WHERE  duplicate_status=0 AND step = 2 AND "
+					+ " (0="+(start_day==null?0:1)+" Or (DATE(index_time) >= ? And DATE(index_time) <= ?)) "
+					+ " ORDER BY index_time DESC";
+			
+			//System.out.println(sql);
+			PreparedStatement pre = conn.prepareStatement(sql);
+			pre.setDate(1, start_day);
+			pre.setDate(2, end_day);
+			System.out.println(pre.toString());
+			ResultSet rs = pre.executeQuery();
+			while(rs.next()){
+				InvoiceData invoice = new InvoiceData();
+				invoice.setIndex_time(rs.getDate("index_time"));
+				invoice.setCustomer_code_level1(rs.getString("customer_code_level1"));
+				invoice.setCustomer_name_level1(rs.getString("customer_name_level1"));
+				invoice.setProduct_ids(rs.getString("product_ids"));
+				invoice.setTotal_boxs(rs.getString("total_boxs"));
+				results.add(invoice);
+			}
+			rs.close();
+			log.debug("retrieve getReportProductDaily successful, result size: " + results.size());
+			return results;
+		} catch (Exception re) {
+			re.printStackTrace();
+			log.error("retrieve getReportProductDaily failed", re);
+			throw re;
+		} finally{
+			try {
+				if(session != null){
+					session.flush();
+					session.close();
+				}
+			} catch (Exception e) {
+			}
+		}
+	}
 	
 	/**
 	 * For update manual do tinh tien sai

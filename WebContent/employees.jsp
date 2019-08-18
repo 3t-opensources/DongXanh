@@ -25,6 +25,7 @@
 							<th>Ngày sinh</th>
 							<th>Điện thoại</th>
 							<th>Nhóm quyền</th>
+							<th>Còn hoạt động</th>
 							<s:if test="%{#rId == 1}">
 								<th class=" no-link last"><span class="nobr"></span></th>
 							</s:if>
@@ -44,6 +45,7 @@
 
 								<td class=""><a class="btn btn-success btn-xs" style="width: 80px"><i
 										class="fa"></i> <s:property value="%{role.roleName}" /> </a></td>
+								<td class=""><s:property value="isEnabled" /></td>
 								<s:if test="%{#rId == 1}">
 									<td class="last">
 									<s:url action="move_to_add_employee"

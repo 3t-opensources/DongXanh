@@ -17,6 +17,7 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -104,6 +105,23 @@ public class ExcelUtil {
 			cell.setCellType(Cell.CELL_TYPE_STRING);
 			cell.setCellValue(valPerCells[i]);
 			//sheet.autoSizeColumn(startIndexCell + i);
+		}
+	}
+	
+	public void addRowData(Sheet sheet, int startIndexRow, int startIndexCell, CellStyle style, String... valPerCells) throws Exception{
+		Row row = sheet.createRow(startIndexRow);
+		int markIndex = 0;
+		for (int i = 0; i<valPerCells.length;i++) {
+			//If value is null. That mean is merge cell
+			if(valPerCells[i] == null){
+				sheet.addMergedRegion(new CellRangeAddress(startIndexRow, startIndexRow, markIndex, i));
+				continue;
+			}
+			markIndex = i;
+			Cell cell = row.createCell(startIndexCell + i);
+			cell.setCellType(Cell.CELL_TYPE_STRING);
+			cell.setCellValue(valPerCells[i]);
+			cell.setCellStyle(style);
 		}
 	}
 	
